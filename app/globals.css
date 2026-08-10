@@ -1,26 +1,256 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ---------------------------------------------------------------------------
+   Design tokens
+   ---------------------------------------------------------------------------
+   Every color, radius, and duration on this site resolves to a --ck-* token.
+   Nothing in a component may hard-code a hex value. See CLAUDE.md.
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+   Theming works in three states, and the order below matters:
+     1. :root                       -> the complete light palette (the baseline)
+     2. prefers-color-scheme: dark  -> system dark, unless explicitly set light
+     3. [data-theme="dark"]         -> explicit choice always wins
+   A token must always have its baseline value on bare :root, so that no color
+   exists only inside a media query.
+--------------------------------------------------------------------------- */
+
+:root {
+  /* Surfaces — cool grey paper, not warm cream. */
+  --ck-paper: #e9ebed;
+  --ck-paper-raised: #f4f5f6;
+  --ck-paper-sunken: #dcdfe2;
+
+  /* Ink — near-black, never pure #000. */
+  --ck-ink: #15171b;
+  --ck-ink-muted: #565d66;
+  --ck-ink-faint: #858c95;
+  --ck-ink-inverse: #f4f5f6;
+
+  /* Structure */
+  --ck-rule: #ccd1d5;
+  --ck-rule-strong: #aeb5bc;
+
+  /* Accent — violet. One accent, used sparingly. */
+  --ck-accent: #5b3df5;
+  --ck-accent-hover: #4a2fe0;
+  --ck-accent-ink: #ffffff;
+  --ck-accent-soft: #e4dffe;
+
+  /* Status */
+  --ck-status-live: #178a5a;
+  --ck-status-building: #5b3df5;
+  --ck-status-idle: #858c95;
+  --ck-danger: #b3261e;
+
+  /* Focus — must stay visible against every surface above. */
+  --ck-focus: #5b3df5;
+  --ck-focus-offset: var(--ck-paper);
+
+  /* Geometry */
+  --ck-radius-sm: 2px;
+  --ck-radius-md: 4px;
+  --ck-radius-lg: 8px;
+  --ck-hairline: 1px;
+
+  /* Motion — referenced by every animation, zeroed under reduced motion. */
+  --ck-duration-fast: 120ms;
+  --ck-duration-base: 320ms;
+  --ck-duration-slow: 640ms;
+  --ck-ease: cubic-bezier(0.2, 0.6, 0.2, 1);
+
+  /* Type scale */
+  --ck-measure: 62ch;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  :root:not([data-theme="light"]) {
+    --ck-paper: #0e1013;
+    --ck-paper-raised: #171a1f;
+    --ck-paper-sunken: #08090b;
+
+    --ck-ink: #e9ebed;
+    --ck-ink-muted: #99a1ab;
+    --ck-ink-faint: #6b737d;
+    --ck-ink-inverse: #15171b;
+
+    --ck-rule: #272c33;
+    --ck-rule-strong: #3a4149;
+
+    --ck-accent: #a78bfa;
+    --ck-accent-hover: #bda5fb;
+    --ck-accent-ink: #15171b;
+    --ck-accent-soft: #251d47;
+
+    --ck-status-live: #4ade80;
+    --ck-status-building: #a78bfa;
+    --ck-status-idle: #6b737d;
+    --ck-danger: #f87171;
+
+    --ck-focus: #a78bfa;
+    --ck-focus-offset: var(--ck-paper);
   }
 }
 
+/* Explicit choice wins over the system preference, in both directions. */
+:root[data-theme="dark"] {
+  --ck-paper: #0e1013;
+  --ck-paper-raised: #171a1f;
+  --ck-paper-sunken: #08090b;
+
+  --ck-ink: #e9ebed;
+  --ck-ink-muted: #99a1ab;
+  --ck-ink-faint: #6b737d;
+  --ck-ink-inverse: #15171b;
+
+  --ck-rule: #272c33;
+  --ck-rule-strong: #3a4149;
+
+  --ck-accent: #a78bfa;
+  --ck-accent-hover: #bda5fb;
+  --ck-accent-ink: #15171b;
+  --ck-accent-soft: #251d47;
+
+  --ck-status-live: #4ade80;
+  --ck-status-building: #a78bfa;
+  --ck-status-idle: #6b737d;
+  --ck-danger: #f87171;
+
+  --ck-focus: #a78bfa;
+  --ck-focus-offset: var(--ck-paper);
+}
+
+/* ---------------------------------------------------------------------------
+   Tailwind bridge
+   ---------------------------------------------------------------------------
+   Maps the tokens above into Tailwind's utility namespace, so `bg-paper`,
+   `text-ink-muted`, and `border-rule` all resolve to the same variables.
+   Add a token above, expose it here, use the utility in components.
+--------------------------------------------------------------------------- */
+
+@theme inline {
+  --color-paper: var(--ck-paper);
+  --color-paper-raised: var(--ck-paper-raised);
+  --color-paper-sunken: var(--ck-paper-sunken);
+
+  --color-ink: var(--ck-ink);
+  --color-ink-muted: var(--ck-ink-muted);
+  --color-ink-faint: var(--ck-ink-faint);
+  --color-ink-inverse: var(--ck-ink-inverse);
+
+  --color-rule: var(--ck-rule);
+  --color-rule-strong: var(--ck-rule-strong);
+
+  --color-accent: var(--ck-accent);
+  --color-accent-hover: var(--ck-accent-hover);
+  --color-accent-ink: var(--ck-accent-ink);
+  --color-accent-soft: var(--ck-accent-soft);
+
+  --color-status-live: var(--ck-status-live);
+  --color-status-building: var(--ck-status-building);
+  --color-status-idle: var(--ck-status-idle);
+  --color-danger: var(--ck-danger);
+
+  --radius-sm: var(--ck-radius-sm);
+  --radius-md: var(--ck-radius-md);
+  --radius-lg: var(--ck-radius-lg);
+
+  /* Archivo carries display type; IBM Plex Mono carries everything else. */
+  --font-display: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, "SF Mono", monospace;
+  --font-sans: var(--font-plex-mono), ui-monospace, "SF Mono", monospace;
+}
+
+/* ---------------------------------------------------------------------------
+   Base
+--------------------------------------------------------------------------- */
+
+html {
+  /* The viewer paints its own ground behind the page; be explicit. */
+  background-color: var(--ck-paper);
+  color-scheme: light dark;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--ck-paper);
+  color: var(--ck-ink);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* A visible focus ring is non-negotiable. Never set outline: none without
+   supplying an equally visible replacement. */
+:focus-visible {
+  outline: 2px solid var(--ck-focus);
+  outline-offset: 2px;
+  border-radius: var(--ck-radius-sm);
+}
+
+::selection {
+  background-color: var(--ck-accent);
+  color: var(--ck-accent-ink);
+}
+
+/* ---------------------------------------------------------------------------
+   Motion
+   ---------------------------------------------------------------------------
+   Entrance animations are opt-in via .ck-enter, and staggered by setting
+   --ck-enter-index on the element. Everything here collapses to a no-op under
+   prefers-reduced-motion — content must never depend on an animation to
+   become visible.
+--------------------------------------------------------------------------- */
+
+@keyframes ck-rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes ck-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(0.82);
+  }
+}
+
+.ck-enter {
+  opacity: 0;
+  animation: ck-rise var(--ck-duration-slow) var(--ck-ease) forwards;
+  animation-delay: calc(var(--ck-enter-index, 0) * 90ms);
+}
+
+.ck-pulse {
+  animation: ck-pulse 2.4s var(--ck-ease) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ck-enter {
+    opacity: 1;
+    animation: none;
+  }
+
+  .ck-pulse {
+    animation: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
