@@ -1,0 +1,34 @@
+---
+title: One login for three platforms
+role: Product design, cross-platform
+year: 2024
+platforms: [Web, iOS, Android, Desktop]
+summary: Replaced three platform-specific flows with one. Account-creation support tickets dropped by over 80%.
+weight: medium
+---
+
+## Problem
+
+Vimocity runs on web, mobile, and desktop, and each had its own login and
+account creation flow. Three codebases meant three sets of bugs, three things to
+update, and inconsistent experiences. Account creation was also our most common
+support issue.
+
+## What I did
+
+- Designed a single web-based login and account creation flow.
+- Surfaced it inside the mobile and desktop apps through a web view, so all
+  three platforms use the same flow without duplicating it.
+- Added multi-factor authentication and modern security handling.
+- Reworked the flow itself based on where people were getting stuck.
+
+## Outcome
+
+- Account creation support tickets dropped by over 80%.
+- Three flows became one to maintain.
+- Consistent sign-in across every platform.
+- Security improved without adding friction.
+
+> **Trade-off worth naming:** a web view is not a native experience. We accepted
+> slightly less native polish in exchange for one flow instead of three — the
+> right call for a small team, and worth revisiting at a larger one.

@@ -17,4 +17,5 @@ export {
 } from "./card";
 export { SpecList, SpecRow } from "./spec-list";
 export { StatusDot } from "./status-dot";
+export { ThemeSwitcher } from "./theme-switcher";
 export { cn } from "./lib/cn";

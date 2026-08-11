@@ -1,0 +1,45 @@
+---
+title: Design rules that enforce themselves
+role: Design systems, AI tooling
+year: 2025–2026
+platforms: [Web, iOS, Android, Desktop]
+summary: One standard, enforced three ways — written for people, checked by automation, loaded for AI.
+weight: large
+---
+
+## Problem
+
+A design system only works if people follow it. Ours was well built but
+drifting: components got used incorrectly, raw color values slipped into code,
+and catching it depended on me reviewing everything. That made design the
+bottleneck. AI coding tools made it worse — they generated plausible code fast,
+and none of it knew our rules.
+
+## What I did
+
+- Wrote the component standards down in one place, covering structure, tokens,
+  typing, accessibility, documentation, and versioning.
+- Extended the same approach to the product itself, with page-level rules
+  covering token use, accessibility requirements, loading states, and responsive
+  breakpoints.
+- Turned both sets of standards into automated checks that run before code
+  merges, so violations are caught by the system rather than by a person.
+- Loaded the same standards into our AI coding tools, so generated components
+  and pages follow the rules by default.
+- Kept all of it in sync from a single source, and maintain it as the system
+  changes.
+
+## Outcome
+
+- One standard, enforced three ways: written for people, checked by automation,
+  loaded for AI.
+- Design stopped being a bottleneck — the full team can build production-quality
+  interfaces.
+- Reliance on outside design help dropped substantially.
+- Prototyping opened up to people who aren't designers.
+
+## Why it matters
+
+Most teams are adding AI to their workflow without deciding what "correct" means
+first. Writing the standard is the hard part. Enforcing it is what makes it
+hold.

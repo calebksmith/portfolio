@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Archivo, IBM_Plex_Mono } from "next/font/google";
 
+import { ThemeScript } from "@/components/theme-script";
 import { site } from "@/lib/site";
 
 import "./globals.css";
@@ -69,6 +70,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
     >
       <body className="flex min-h-full flex-col bg-background text-foreground">
+        {/* First child of <body> so it executes before any content paints. */}
+        <ThemeScript />
         {children}
       </body>
     </html>

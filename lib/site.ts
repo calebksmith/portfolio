@@ -27,4 +27,10 @@ export const site = {
     { label: "LinkedIn", href: "https://www.linkedin.com/in/calebksmith" },
     { label: "VimUI — design system", href: "https://vimui.vimocity.com" },
   ],
+
+  /**
+   * TODO(caleb): public Vimocity playlist URL. The bento card is skipped
+   * entirely while this is empty rather than shipping a dead link.
+   */
+  playlistUrl: "",
 } as const;
