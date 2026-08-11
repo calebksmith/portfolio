@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { Badge } from "@/components/cksui";
@@ -38,17 +37,10 @@ export default async function CaseStudyPage({
   const study = getCaseStudy(slug);
   if (!study) notFound();
 
+  // No breadcrumb in the page — the site header carries the path, and the Work
+  // crumb in it lists the other case studies.
   return (
-    <main className="mx-auto w-full max-w-3xl px-6 py-18 sm:px-10">
-      <nav aria-label="Breadcrumb" className="mb-10">
-        <Link
-          href="/"
-          className="inline-flex min-h-tap items-center text-xs uppercase tracking-[0.14em] text-muted-foreground underline decoration-input underline-offset-4 hover:text-foreground hover:decoration-primary"
-        >
-          ← All work
-        </Link>
-      </nav>
-
+    <main className="mx-auto w-full max-w-3xl px-6 py-14 sm:px-10">
       <article>
         <header className="border-b border-border pb-8">
           <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">

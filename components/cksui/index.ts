@@ -15,7 +15,7 @@ export {
   CardHeader,
   CardTitle,
 } from "./card";
-export { SettingsMenu } from "./settings-menu";
+export { SiteHeader, type WorkItem } from "./site-header";
 export { SpecList, SpecRow } from "./spec-list";
 export { StatusDot } from "./status-dot";
 export { ThemeSwitcher } from "./theme-switcher";
