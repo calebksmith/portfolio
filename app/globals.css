@@ -366,6 +366,58 @@ body {
   animation: ck-pulse 2.4s var(--ck-ease) infinite;
 }
 
+/* ===========================================================================
+   Print
+   ===========================================================================
+   The résumé's "PDF" is the browser's own print-to-PDF, rendering from the same
+   data as the page. Forces the light palette regardless of theme — printing a
+   dark theme wastes a cartridge and reads badly — and drops the chrome that
+   means nothing on paper.
+=========================================================================== */
+
+@media print {
+  :root,
+  :root[data-theme="ember"],
+  :root[data-theme="contrast"],
+  :root[data-mode="dark"] {
+    --ck-background: #ffffff;
+    --ck-foreground: #000000;
+    --ck-card: #ffffff;
+    --ck-card-foreground: #000000;
+    --ck-muted: #ffffff;
+    --ck-muted-foreground: #1a1a1a;
+    --ck-primary: #000000;
+    --ck-primary-foreground: #ffffff;
+    --ck-accent: #ffffff;
+    --ck-accent-foreground: #000000;
+    --ck-border: #999999;
+    --ck-input: #333333;
+  }
+
+  [data-slot="site-header"],
+  [data-slot="control-bar"],
+  [popover] {
+    display: none !important;
+  }
+
+  body {
+    font-size: 10.5pt;
+    line-height: 1.45;
+  }
+
+  /* Print the destination of a link the reader cannot click. */
+  main a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.85em;
+    color: #333333;
+    word-break: break-all;
+  }
+
+  @page {
+    margin: 14mm;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .ck-enter {
     opacity: 1;

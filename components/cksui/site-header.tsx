@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { ControlBar, ControlButton } from "./control-bar";
 import { cn } from "./lib/cn";
 import { ThemeSwitcher } from "./theme-switcher";
 
@@ -32,7 +33,7 @@ export type WorkItem = { slug: string; title: string };
 /** Labels for top-level segments. Anything absent falls back to the segment. */
 const SEGMENT_LABELS: Record<string, string> = {
   work: "Work",
-  themes: "Themes",
+  "style-guide": "Style guide",
   colophon: "Colophon",
   resume: "Résumé",
   "sign-in": "Sign in",
@@ -140,11 +141,11 @@ export function SiteHeader({ work }: { work: WorkItem[] }) {
           </ol>
         </nav>
 
-        {/* Instruments — bordered controls, visually distinct from the path.
-            The inspector overlay toggle joins this cluster at build step 9. */}
-        <div className="flex shrink-0 items-center gap-2">
+        {/* Instruments — one bounded control surface, visually distinct from
+            the path. The inspector toggle joins this cluster at step 9. */}
+        <ControlBar className="shrink-0">
           <AppearanceMenu />
-        </div>
+        </ControlBar>
       </div>
     </header>
   );
@@ -193,17 +194,11 @@ function WorkMenu({ work }: { work: WorkItem[] }) {
 function AppearanceMenu() {
   return (
     <>
-      <button
-        type="button"
+      <ControlButton
         popoverTarget="ck-settings"
-        data-slot="settings-trigger"
-        className="inline-flex min-h-tap items-center justify-center gap-2 rounded-md border border-input bg-background px-2.5 text-foreground transition-colors hover:bg-muted hover:text-muted-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring sm:px-3"
-      >
-        <SlidersIcon />
-        <span className="sr-only text-xs uppercase tracking-[0.14em] sm:not-sr-only">
-          Appearance
-        </span>
-      </button>
+        icon={<SlidersIcon />}
+        label="Appearance"
+      />
 
       <div
         id="ck-settings"
@@ -220,7 +215,7 @@ function AppearanceMenu() {
 
         <p className="mt-5 border-t border-border pt-4 text-xs text-muted-foreground">
           <Link
-            href="/themes"
+            href="/style-guide#contrast"
             className="underline decoration-input underline-offset-4 hover:text-foreground hover:decoration-primary"
           >
             Measured contrast for every pair →
