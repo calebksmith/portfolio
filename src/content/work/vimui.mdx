@@ -1,0 +1,37 @@
+---
+title: VimUI, a design system across four platforms
+role: Design systems
+year: 2022–present
+platforms: [Web, iOS, Android, Desktop]
+summary: 51 components covering web, iOS, Android, and Windows desktop, plus the standards and release process behind them.
+weight: large
+---
+
+## Problem
+
+Vimocity ships a web app, iOS and Android apps, and a Windows desktop app. Each
+had drifted into its own patterns. The design system lived in Figma, which meant
+designers had one source of truth and engineers had another.
+
+## What I did
+
+- Moved the system out of Figma and into the codebase, where the components
+  engineers use are the components the system defines.
+- Built 51 components organized as atoms, molecules, and organisms, documented
+  in Storybook.
+- Established tokens for color, type, spacing, and sizing, and removed
+  hardcoded values from the frontend.
+- Made accessibility a property of the system rather than a per-feature task:
+  keyboard support, contrast in light and dark modes, minimum touch targets, and
+  reduced-motion support built into the components themselves.
+- Set up versioned releases so consuming apps can test changes before they land.
+
+## Outcome
+
+- Reusable component use went from about 10% to 80–90% of frontend code.
+- Token use went from 0% to 99%.
+- One visual language across four platforms.
+- Building a new page became assembly rather than construction.
+
+**See it:** the component library is public at
+[vimui.vimocity.com](https://vimui.vimocity.com).

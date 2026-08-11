@@ -1,0 +1,31 @@
+---
+title: Rebuilding the web app
+role: Front-end, platform migration
+year: 2024–2025
+platforms: [Web]
+summary: Moved the entire web application off a legacy codebase onto Next.js, TypeScript, and Tailwind — page by page, while the product kept running.
+weight: medium
+---
+
+## Problem
+
+Our web application had been built up piecemeal over years. The code was
+inconsistent, slow to change, and increasingly hard to keep visually coherent.
+Rebuilding it meant rebuilding every page — and the product had to keep running
+the whole time.
+
+## What I did
+
+- Rebuilt each existing page and feature on Next.js, TypeScript, and Tailwind,
+  using the component library.
+- Connected the new pages to existing APIs so behavior stayed intact.
+- Worked page by page rather than all at once, so the migration could ship in
+  pieces.
+- Handed each rebuilt section to engineering for review and hardening.
+
+## Outcome
+
+- The entire web app now runs on one modern, consistent codebase.
+- Visual consistency with the mobile and desktop apps.
+- Faster to build on: new features assemble from existing components.
+- The migration ran alongside normal product work rather than replacing it.
