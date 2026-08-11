@@ -44,25 +44,32 @@ that link 404s in preview. It is the next thing to build.
 
 ## Open items needing Caleb
 
-1. **Years of production frontend.** `PROJECT-CONTEXT.md` and the copy deck both
-   say "nine years in design, five writing production frontend." He said *three*
-   in conversation. Both documents agree, so they were left as written — but it
-   lands on the résumé.
-2. **`docs/PROJECT-CONTEXT.md` and `docs/copy-deck.md` are not in the repo.**
-   `CLAUDE.md` references them. Drop them in and the references resolve. They
-   were deliberately not transcribed — retyping approved copy risks introducing
-   errors into the one thing that should have none.
-3. **`site.playlistUrl` is empty** in `lib/site.ts`. The bento card is skipped
+1. **Click the Appearance button.** The settings popover uses the native Popover
+   API, so it needs no JavaScript to open — but there is no browser automation in
+   this repo, so it was verified structurally (markup, ids, CSS) and never
+   actually clicked. React emits `popoverTarget` in camelCase; HTML attribute
+   names are case-insensitive so it parses correctly, but confirm it opens.
+2. **`site.playlistUrl` is empty** in `lib/site.ts`. The bento card is skipped
    entirely while it is, rather than shipping a dead link.
-4. **The `case_study` table should be dropped.** ADR 0004 was superseded — case
+3. **The `case_study` table should be dropped.** ADR 0004 was superseded — case
    studies are MDX files now — but the Drizzle schema and the first migration
    still define the table. Nothing reads it. Removing it means editing
    `lib/db/schema/content.ts`, deleting `lib/repositories/case-studies.ts`, and
    regenerating the migration (it has never been applied anywhere, so it can be
    regenerated rather than migrated).
-5. **The admin / OAuth / tailored-CV system is parked**, not cut. It does not
+4. **The admin / OAuth / tailored-CV system is parked**, not cut. It does not
    appear in `PROJECT-CONTEXT.md`'s content architecture. The code is in the
    repo, 404'd in production, and untouched since. Decide whether it stays.
+
+### Resolved
+
+- **Years of production frontend: five.** Confirmed. Both documents already said
+  five; the conversational "three" was the outlier.
+- **`docs/PROJECT-CONTEXT.md` and `docs/copy-deck.md` are in the repo.**
+  PROJECT-CONTEXT carries a "Notes on deviations" section at the end recording
+  where the codebase intentionally differs from it.
+- **Theme controls moved out of the bento** into a site-wide settings menu,
+  fixed to the corner of every public route.
 
 ## Verifying
 
