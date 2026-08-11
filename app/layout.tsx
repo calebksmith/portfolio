@@ -31,8 +31,8 @@ const plexMono = IBM_Plex_Mono({
  * description borrows the Focus row so search results carry a little more than
  * the single line the page itself shows.
  */
-const pageTitle = `${site.name} — ${site.title}`;
-const pageDescription = `${site.positioning} ${site.spec[0].value}.`;
+const pageTitle = `${site.name} — ${site.role}`;
+const pageDescription = `${site.lede} ${site.spec[0].value}.`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -68,7 +68,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${archivo.variable} ${plexMono.variable} h-full`}
       suppressHydrationWarning
     >
-      <body className="flex min-h-full flex-col bg-paper text-ink">
+      <body className="flex min-h-full flex-col bg-background text-foreground">
         {children}
       </body>
     </html>

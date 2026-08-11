@@ -1,178 +1,280 @@
 @import "tailwindcss";
 
-/* ---------------------------------------------------------------------------
-   Design tokens
-   ---------------------------------------------------------------------------
-   Every color, radius, and duration on this site resolves to a --ck-* token.
-   Nothing in a component may hard-code a hex value. See CLAUDE.md.
+/* ===========================================================================
+   Token layer
+   ===========================================================================
+   Colors are not a flat palette. Every surface has a paired foreground, so a
+   component written as `bg-card text-card-foreground` is legible in every
+   theme without anyone remembering which text color goes where. Adding a theme
+   means redefining these pairs — nothing else.
 
-   Theming works in three states, and the order below matters:
-     1. :root                       -> the complete light palette (the baseline)
-     2. prefers-color-scheme: dark  -> system dark, unless explicitly set light
-     3. [data-theme="dark"]         -> explicit choice always wins
-   A token must always have its baseline value on bare :root, so that no color
-   exists only inside a media query.
---------------------------------------------------------------------------- */
+   Two independent axes, both on <html>:
+     data-theme  default (absent) | ember | contrast
+     data-mode   system (absent)  | light | dark
+
+   Every pair in every theme/mode combination is verified by
+   `npm run check:contrast`. The high-contrast theme is held to AAA.
+   Do not edit a value here without re-running it.
+=========================================================================== */
+
+/* --- default · light (the baseline) --------------------------------------- */
 
 :root {
-  /* Surfaces — cool grey paper, not warm cream. */
-  --ck-paper: #e9ebed;
-  --ck-paper-raised: #f4f5f6;
-  --ck-paper-sunken: #dcdfe2;
+  --ck-background: #eef0f2;
+  --ck-foreground: #14161b;
+  --ck-card: #f9fafb;
+  --ck-card-foreground: #14161b;
+  --ck-muted: #dde1e6;
+  --ck-muted-foreground: #4c535c;
+  --ck-primary: #4a2ce0;
+  --ck-primary-foreground: #ffffff;
+  --ck-accent: #e5e0fd;
+  --ck-accent-foreground: #2c1a8c;
 
-  /* Ink — near-black, never pure #000. */
-  --ck-ink: #15171b;
-  --ck-ink-muted: #565d66;
-  --ck-ink-faint: #858c95;
-  --ck-ink-inverse: #f4f5f6;
+  /* Decorative hairline. Not held to 3:1 — WCAG 1.4.11 governs control
+     boundaries, not rules between rows. That is what --ck-input is for. */
+  --ck-border: #c9ced4;
+  /* Control boundary. Held to 3:1 against the background. */
+  --ck-input: #6f767e;
+  --ck-ring: #4a2ce0;
 
-  /* Structure */
-  --ck-rule: #ccd1d5;
-  --ck-rule-strong: #aeb5bc;
-
-  /* Accent — violet. One accent, used sparingly. */
-  --ck-accent: #5b3df5;
-  --ck-accent-hover: #4a2fe0;
-  --ck-accent-ink: #ffffff;
-  --ck-accent-soft: #e4dffe;
-
-  /* Status */
-  --ck-status-live: #178a5a;
-  --ck-status-building: #5b3df5;
-  --ck-status-idle: #858c95;
-  --ck-danger: #b3261e;
-
-  /* Focus — must stay visible against every surface above. */
-  --ck-focus: #5b3df5;
-  --ck-focus-offset: var(--ck-paper);
-
-  /* Geometry */
+  /* --- Non-color tokens. Theme-independent. --- */
   --ck-radius-sm: 2px;
   --ck-radius-md: 4px;
   --ck-radius-lg: 8px;
-  --ck-hairline: 1px;
 
-  /* Motion — referenced by every animation, zeroed under reduced motion. */
   --ck-duration-fast: 120ms;
   --ck-duration-base: 320ms;
   --ck-duration-slow: 640ms;
   --ck-ease: cubic-bezier(0.2, 0.6, 0.2, 1);
 
-  /* Type scale */
+  /* Minimum touch target. Non-negotiable; see CLAUDE.md. */
+  --ck-tap: 44px;
   --ck-measure: 62ch;
 }
 
+/* --- default · dark ------------------------------------------------------- */
+
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --ck-paper: #0e1013;
-    --ck-paper-raised: #171a1f;
-    --ck-paper-sunken: #08090b;
-
-    --ck-ink: #e9ebed;
-    --ck-ink-muted: #99a1ab;
-    --ck-ink-faint: #6b737d;
-    --ck-ink-inverse: #15171b;
-
-    --ck-rule: #272c33;
-    --ck-rule-strong: #3a4149;
-
-    --ck-accent: #a78bfa;
-    --ck-accent-hover: #bda5fb;
-    --ck-accent-ink: #15171b;
-    --ck-accent-soft: #251d47;
-
-    --ck-status-live: #4ade80;
-    --ck-status-building: #a78bfa;
-    --ck-status-idle: #6b737d;
-    --ck-danger: #f87171;
-
-    --ck-focus: #a78bfa;
-    --ck-focus-offset: var(--ck-paper);
+  :root:not([data-mode="light"]) {
+    --ck-background: #0e1013;
+    --ck-foreground: #e9ebee;
+    --ck-card: #171a1f;
+    --ck-card-foreground: #e9ebee;
+    --ck-muted: #232830;
+    --ck-muted-foreground: #9aa2ac;
+    --ck-primary: #a78bfa;
+    --ck-primary-foreground: #14161b;
+    --ck-accent: #241c46;
+    --ck-accent-foreground: #c9b8fd;
+    --ck-border: #2a3038;
+    --ck-input: #6b737d;
+    --ck-ring: #a78bfa;
   }
 }
 
-/* Explicit choice wins over the system preference, in both directions. */
-:root[data-theme="dark"] {
-  --ck-paper: #0e1013;
-  --ck-paper-raised: #171a1f;
-  --ck-paper-sunken: #08090b;
-
-  --ck-ink: #e9ebed;
-  --ck-ink-muted: #99a1ab;
-  --ck-ink-faint: #6b737d;
-  --ck-ink-inverse: #15171b;
-
-  --ck-rule: #272c33;
-  --ck-rule-strong: #3a4149;
-
-  --ck-accent: #a78bfa;
-  --ck-accent-hover: #bda5fb;
-  --ck-accent-ink: #15171b;
-  --ck-accent-soft: #251d47;
-
-  --ck-status-live: #4ade80;
-  --ck-status-building: #a78bfa;
-  --ck-status-idle: #6b737d;
-  --ck-danger: #f87171;
-
-  --ck-focus: #a78bfa;
-  --ck-focus-offset: var(--ck-paper);
+:root[data-mode="dark"] {
+  --ck-background: #0e1013;
+  --ck-foreground: #e9ebee;
+  --ck-card: #171a1f;
+  --ck-card-foreground: #e9ebee;
+  --ck-muted: #232830;
+  --ck-muted-foreground: #9aa2ac;
+  --ck-primary: #a78bfa;
+  --ck-primary-foreground: #14161b;
+  --ck-accent: #241c46;
+  --ck-accent-foreground: #c9b8fd;
+  --ck-border: #2a3038;
+  --ck-input: #6b737d;
+  --ck-ring: #a78bfa;
 }
 
-/* ---------------------------------------------------------------------------
+/* --- ember · light -------------------------------------------------------- */
+
+:root[data-theme="ember"] {
+  --ck-background: #f1efee;
+  --ck-foreground: #1a1614;
+  --ck-card: #fbfaf9;
+  --ck-card-foreground: #1a1614;
+  --ck-muted: #e3dedb;
+  --ck-muted-foreground: #57504b;
+  --ck-primary: #b03a10;
+  --ck-primary-foreground: #ffffff;
+  --ck-accent: #fbe3d8;
+  --ck-accent-foreground: #7a2708;
+  --ck-border: #d5cec9;
+  --ck-input: #78716c;
+  --ck-ring: #b03a10;
+}
+
+/* --- ember · dark --------------------------------------------------------- */
+
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="ember"]:not([data-mode="light"]) {
+    --ck-background: #12100f;
+    --ck-foreground: #ece8e6;
+    --ck-card: #1c1917;
+    --ck-card-foreground: #ece8e6;
+    --ck-muted: #292421;
+    --ck-muted-foreground: #a89f99;
+    --ck-primary: #f08a5d;
+    --ck-primary-foreground: #1a1614;
+    --ck-accent: #3a1f12;
+    --ck-accent-foreground: #f6b393;
+    --ck-border: #332c28;
+    --ck-input: #7a726c;
+    --ck-ring: #f08a5d;
+  }
+}
+
+:root[data-theme="ember"][data-mode="dark"] {
+  --ck-background: #12100f;
+  --ck-foreground: #ece8e6;
+  --ck-card: #1c1917;
+  --ck-card-foreground: #ece8e6;
+  --ck-muted: #292421;
+  --ck-muted-foreground: #a89f99;
+  --ck-primary: #f08a5d;
+  --ck-primary-foreground: #1a1614;
+  --ck-accent: #3a1f12;
+  --ck-accent-foreground: #f6b393;
+  --ck-border: #332c28;
+  --ck-input: #7a726c;
+  --ck-ring: #f08a5d;
+}
+
+/* --- contrast · light (AAA on every text pair) ---------------------------- */
+
+:root[data-theme="contrast"] {
+  --ck-background: #ffffff;
+  --ck-foreground: #000000;
+  --ck-card: #ffffff;
+  --ck-card-foreground: #000000;
+  --ck-muted: #ebebeb;
+  --ck-muted-foreground: #1a1a1a;
+  --ck-primary: #00006b;
+  --ck-primary-foreground: #ffffff;
+  --ck-accent: #ffffff;
+  --ck-accent-foreground: #00006b;
+  /* In high contrast the hairline stops being decorative and carries
+     structure, so it matches the control boundary. */
+  --ck-border: #000000;
+  --ck-input: #000000;
+  --ck-ring: #00006b;
+}
+
+/* --- contrast · dark ------------------------------------------------------ */
+
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="contrast"]:not([data-mode="light"]) {
+    --ck-background: #000000;
+    --ck-foreground: #ffffff;
+    --ck-card: #000000;
+    --ck-card-foreground: #ffffff;
+    --ck-muted: #141414;
+    --ck-muted-foreground: #ededed;
+    --ck-primary: #eaeaff;
+    --ck-primary-foreground: #000000;
+    --ck-accent: #000000;
+    --ck-accent-foreground: #eaeaff;
+    --ck-border: #ffffff;
+    --ck-input: #ffffff;
+    --ck-ring: #eaeaff;
+  }
+}
+
+:root[data-theme="contrast"][data-mode="dark"] {
+  --ck-background: #000000;
+  --ck-foreground: #ffffff;
+  --ck-card: #000000;
+  --ck-card-foreground: #ffffff;
+  --ck-muted: #141414;
+  --ck-muted-foreground: #ededed;
+  --ck-primary: #eaeaff;
+  --ck-primary-foreground: #000000;
+  --ck-accent: #000000;
+  --ck-accent-foreground: #eaeaff;
+  --ck-border: #ffffff;
+  --ck-input: #ffffff;
+  --ck-ring: #eaeaff;
+}
+
+/* ===========================================================================
    Tailwind bridge
-   ---------------------------------------------------------------------------
-   Maps the tokens above into Tailwind's utility namespace, so `bg-paper`,
-   `text-ink-muted`, and `border-rule` all resolve to the same variables.
-   Add a token above, expose it here, use the utility in components.
---------------------------------------------------------------------------- */
+   ===========================================================================
+   Exposes the tokens as utilities. Add a token above, expose it here, use the
+   utility in a component. A component never sees a hex value.
+=========================================================================== */
 
 @theme inline {
-  --color-paper: var(--ck-paper);
-  --color-paper-raised: var(--ck-paper-raised);
-  --color-paper-sunken: var(--ck-paper-sunken);
-
-  --color-ink: var(--ck-ink);
-  --color-ink-muted: var(--ck-ink-muted);
-  --color-ink-faint: var(--ck-ink-faint);
-  --color-ink-inverse: var(--ck-ink-inverse);
-
-  --color-rule: var(--ck-rule);
-  --color-rule-strong: var(--ck-rule-strong);
-
+  --color-background: var(--ck-background);
+  --color-foreground: var(--ck-foreground);
+  --color-card: var(--ck-card);
+  --color-card-foreground: var(--ck-card-foreground);
+  --color-muted: var(--ck-muted);
+  --color-muted-foreground: var(--ck-muted-foreground);
+  --color-primary: var(--ck-primary);
+  --color-primary-foreground: var(--ck-primary-foreground);
   --color-accent: var(--ck-accent);
-  --color-accent-hover: var(--ck-accent-hover);
-  --color-accent-ink: var(--ck-accent-ink);
-  --color-accent-soft: var(--ck-accent-soft);
-
-  --color-status-live: var(--ck-status-live);
-  --color-status-building: var(--ck-status-building);
-  --color-status-idle: var(--ck-status-idle);
-  --color-danger: var(--ck-danger);
+  --color-accent-foreground: var(--ck-accent-foreground);
+  --color-border: var(--ck-border);
+  --color-input: var(--ck-input);
+  --color-ring: var(--ck-ring);
 
   --radius-sm: var(--ck-radius-sm);
   --radius-md: var(--ck-radius-md);
   --radius-lg: var(--ck-radius-lg);
 
-  /* Archivo carries display type; IBM Plex Mono carries everything else. */
   --font-display: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-plex-mono), ui-monospace, "SF Mono", monospace;
   --font-sans: var(--font-plex-mono), ui-monospace, "SF Mono", monospace;
 }
 
-/* ---------------------------------------------------------------------------
+/* ===========================================================================
+   Utilities
+   ===========================================================================
+   The 44px minimum touch target, as a named utility.
+
+   Declared with @utility rather than as a `--spacing-*` theme key: Tailwind v4's
+   spacing scale is a single multiplier (`--spacing: .25rem`), not a named map,
+   so a `--spacing-tap` entry silently generates nothing. Silently is the problem
+   — a floor that doesn't apply is worse than no floor.
+=========================================================================== */
+
+@utility min-h-tap {
+  min-height: var(--ck-tap);
+}
+
+@utility min-w-tap {
+  min-width: var(--ck-tap);
+}
+
+@utility size-tap {
+  min-width: var(--ck-tap);
+  min-height: var(--ck-tap);
+}
+
+/* ===========================================================================
    Base
---------------------------------------------------------------------------- */
+=========================================================================== */
 
 html {
-  /* The viewer paints its own ground behind the page; be explicit. */
-  background-color: var(--ck-paper);
+  /* The browser paints its own ground behind the document; be explicit. */
+  background-color: var(--ck-background);
   color-scheme: light dark;
 }
 
+:root[data-mode="light"] {
+  color-scheme: light;
+}
+
+:root[data-mode="dark"] {
+  color-scheme: dark;
+}
+
 body {
-  background-color: var(--ck-paper);
-  color: var(--ck-ink);
+  background-color: var(--ck-background);
+  color: var(--ck-foreground);
   font-family: var(--font-mono);
   font-size: 0.875rem;
   line-height: 1.6;
@@ -180,27 +282,27 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-/* A visible focus ring is non-negotiable. Never set outline: none without
-   supplying an equally visible replacement. */
+/* Visible focus is non-negotiable. Never set outline:none without an equally
+   visible replacement. --ck-ring clears 3:1 against the background in every
+   theme; the offset keeps it legible on top of a filled control. */
 :focus-visible {
-  outline: 2px solid var(--ck-focus);
+  outline: 2px solid var(--ck-ring);
   outline-offset: 2px;
   border-radius: var(--ck-radius-sm);
 }
 
 ::selection {
-  background-color: var(--ck-accent);
-  color: var(--ck-accent-ink);
+  background-color: var(--ck-primary);
+  color: var(--ck-primary-foreground);
 }
 
-/* ---------------------------------------------------------------------------
+/* ===========================================================================
    Motion
-   ---------------------------------------------------------------------------
-   Entrance animations are opt-in via .ck-enter, and staggered by setting
-   --ck-enter-index on the element. Everything here collapses to a no-op under
-   prefers-reduced-motion — content must never depend on an animation to
-   become visible.
---------------------------------------------------------------------------- */
+   ===========================================================================
+   Entrance animations are opt-in via .ck-enter, staggered with --ck-enter-index.
+   Everything collapses to a no-op under prefers-reduced-motion — content must
+   never depend on an animation to become visible.
+=========================================================================== */
 
 @keyframes ck-rise {
   from {

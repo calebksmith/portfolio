@@ -78,15 +78,15 @@ export default async function SharedCvPage({
 
   return (
     <main className="mx-auto w-full max-w-3xl px-6 py-16 sm:px-10">
-      <header className="border-b border-rule pb-8">
-        <h1 className="font-display text-4xl font-semibold tracking-[-0.03em] text-ink">
+      <header className="border-b border-border pb-8">
+        <h1 className="font-display text-4xl font-semibold tracking-[-0.03em] text-foreground">
           {site.name}
         </h1>
         {resume.headline ? (
-          <p className="mt-3 text-lg text-ink-muted">{resume.headline}</p>
+          <p className="mt-3 text-lg text-muted-foreground">{resume.headline}</p>
         ) : null}
         {resume.targetRole ? (
-          <p className="mt-4 text-xs uppercase tracking-[0.14em] text-ink-faint">
+          <p className="mt-4 text-xs uppercase tracking-[0.14em] text-muted-foreground">
             Prepared for {resume.targetRole}
             {resume.targetCompany ? ` · ${resume.targetCompany}` : ""}
           </p>
@@ -101,14 +101,14 @@ export default async function SharedCvPage({
 
       {resume.skills.length > 0 ? (
         <section className="pt-10">
-          <h2 className="text-xs uppercase tracking-[0.14em] text-ink-faint">
+          <h2 className="text-xs uppercase tracking-[0.14em] text-muted-foreground">
             Selected skills
           </h2>
           <ul className="mt-4 flex flex-wrap gap-2">
             {resume.skills.map((entry) => (
               <li
                 key={entry.skillId}
-                className="rounded-sm border border-rule px-2 py-1 text-xs text-ink-muted"
+                className="rounded-sm border border-border px-2 py-1 text-xs text-muted-foreground"
               >
                 {entry.skill.name}
               </li>
@@ -119,7 +119,7 @@ export default async function SharedCvPage({
 
       {resume.positions.length > 0 ? (
         <section className="pt-12">
-          <h2 className="text-xs uppercase tracking-[0.14em] text-ink-faint">
+          <h2 className="text-xs uppercase tracking-[0.14em] text-muted-foreground">
             Experience
           </h2>
 
@@ -134,23 +134,23 @@ export default async function SharedCvPage({
 
             return (
               <article key={entry.positionId} className="mt-8">
-                <h3 className="font-display text-lg font-semibold tracking-tight text-ink">
+                <h3 className="font-display text-lg font-semibold tracking-tight text-foreground">
                   {entry.position.title}
-                  <span className="text-ink-faint"> · {entry.position.organization}</span>
+                  <span className="text-muted-foreground"> · {entry.position.organization}</span>
                 </h3>
-                <p className="mt-1 text-xs uppercase tracking-[0.14em] text-ink-faint">
+                <p className="mt-1 text-xs uppercase tracking-[0.14em] text-muted-foreground">
                   {formatRange(entry.position.startDate, entry.position.endDate)}
                   {entry.position.location ? ` · ${entry.position.location}` : ""}
                 </p>
 
                 {(entry.summaryOverride ?? entry.position.summary) ? (
-                  <p className="mt-3 max-w-[62ch] text-ink-muted">
+                  <p className="mt-3 max-w-[62ch] text-muted-foreground">
                     {entry.summaryOverride ?? entry.position.summary}
                   </p>
                 ) : null}
 
                 {bullets.length > 0 ? (
-                  <ul className="mt-3 list-disc space-y-1.5 pl-5 text-ink-muted">
+                  <ul className="mt-3 list-disc space-y-1.5 pl-5 text-muted-foreground">
                     {bullets.map((bullet) => (
                       <li key={bullet.highlightId}>{bullet.highlight.content}</li>
                     ))}
@@ -164,16 +164,16 @@ export default async function SharedCvPage({
 
       {resume.caseStudies.length > 0 ? (
         <section className="pt-12">
-          <h2 className="text-xs uppercase tracking-[0.14em] text-ink-faint">
+          <h2 className="text-xs uppercase tracking-[0.14em] text-muted-foreground">
             Selected work
           </h2>
 
           {resume.caseStudies.map((entry) => (
             <article key={entry.caseStudyId} className="mt-6">
-              <h3 className="font-display text-lg font-semibold tracking-tight text-ink">
+              <h3 className="font-display text-lg font-semibold tracking-tight text-foreground">
                 {entry.caseStudy.title}
               </h3>
-              <p className="mt-2 max-w-[62ch] text-ink-muted">
+              <p className="mt-2 max-w-[62ch] text-muted-foreground">
                 {entry.blurbOverride ?? entry.caseStudy.summary}
               </p>
             </article>

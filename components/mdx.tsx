@@ -12,53 +12,61 @@ import { MDXRemote } from "next-mdx-remote/rsc";
  * structure; this file decides appearance.
  */
 const components = {
-  h2: (props: React.ComponentProps<"h2">) => (
+  // Headings and links destructure `children` rather than spreading it, so the
+  // content is statically visible to jsx-a11y as well as to a reader.
+  h2: ({ children, ...props }: React.ComponentProps<"h2">) => (
     <h2
-      className="mt-12 font-display text-2xl font-semibold tracking-tight text-ink"
+      className="mt-12 font-display text-2xl font-semibold tracking-tight text-foreground"
       {...props}
-    />
+    >
+      {children}
+    </h2>
   ),
-  h3: (props: React.ComponentProps<"h3">) => (
+  h3: ({ children, ...props }: React.ComponentProps<"h3">) => (
     <h3
-      className="mt-8 font-display text-lg font-semibold tracking-tight text-ink"
+      className="mt-8 font-display text-lg font-semibold tracking-tight text-foreground"
       {...props}
-    />
+    >
+      {children}
+    </h3>
   ),
   p: (props: React.ComponentProps<"p">) => (
-    <p className="mt-4 max-w-[62ch] text-pretty text-ink-muted" {...props} />
+    <p className="mt-4 max-w-[62ch] text-pretty text-muted-foreground" {...props} />
   ),
   ul: (props: React.ComponentProps<"ul">) => (
-    <ul className="mt-4 list-disc space-y-2 pl-5 text-ink-muted" {...props} />
+    <ul className="mt-4 list-disc space-y-2 pl-5 text-muted-foreground" {...props} />
   ),
   ol: (props: React.ComponentProps<"ol">) => (
-    <ol className="mt-4 list-decimal space-y-2 pl-5 text-ink-muted" {...props} />
+    <ol className="mt-4 list-decimal space-y-2 pl-5 text-muted-foreground" {...props} />
   ),
-  a: (props: React.ComponentProps<"a">) => (
+  a: ({ children, ...props }: React.ComponentProps<"a">) => (
     <a
-      className="text-accent underline underline-offset-4 hover:text-accent-hover"
+      className="text-primary underline underline-offset-4 hover:opacity-80"
       {...props}
-    />
+    >
+      {children}
+    </a>
   ),
   blockquote: (props: React.ComponentProps<"blockquote">) => (
     <blockquote
-      className="mt-6 border-l-2 border-accent pl-4 text-ink-muted italic"
+      className="mt-6 border-l-2 border-primary pl-4 text-muted-foreground italic"
       {...props}
     />
   ),
   code: (props: React.ComponentProps<"code">) => (
     <code
-      className="rounded-sm bg-paper-sunken px-1.5 py-0.5 text-[0.9em] text-ink"
+      className="rounded-sm bg-muted px-1.5 py-0.5 text-[0.9em] text-foreground"
       {...props}
     />
   ),
   pre: (props: React.ComponentProps<"pre">) => (
     <pre
-      className="mt-6 overflow-x-auto rounded-md border border-rule bg-paper-raised p-4 text-xs"
+      className="mt-6 overflow-x-auto rounded-md border border-border bg-card p-4 text-xs"
       {...props}
     />
   ),
   hr: (props: React.ComponentProps<"hr">) => (
-    <hr className="mt-10 border-rule" {...props} />
+    <hr className="mt-10 border-border" {...props} />
   ),
 };
 

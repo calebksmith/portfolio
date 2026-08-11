@@ -25,17 +25,28 @@ moment `any` is allowed to leak out of the data layer.
 here: the `--ck-*` design tokens and the Tailwind utility namespace are defined
 in the same file, twelve lines apart, so they cannot drift.
 
-**No component library on the public site.** The design is deliberately not the
-consensus portfolio look, and a component library's purpose is to converge on
-the consensus. There is also very little to build — a spec table and some type.
+**No installed UI library. A library we own instead: cksUI.**
 
-**A component library is expected for the admin surface**, where the real UI
-lives: forms, reorderable lists, multi-selects, dialogs. shadcn/ui is the
-intended choice, because it is copied into the repository as owned source rather
-than installed as a dependency, which means its classes can be rewritten onto
-the `--ck-*` tokens instead of running a second parallel design system. Radix
-underneath handles the expensive part — focus management, keyboard interaction,
-ARIA.
+*Superseded an earlier version of this ADR that proposed adopting shadcn/ui for
+the admin surface. `PROJECT-CONTEXT.md` is explicit — "no UI component library;
+the point of this site is that he builds the UI" — and that constraint is
+correct for a portfolio whose central claim is owning a design system.*
+
+The distinction that resolves it: shadcn/ui is not a library you install. It is
+source you copy in and own. So `components/cksui/` is built on its patterns —
+Radix primitives for behavior, `cva` for variants, `data-slot` on every
+component — with every visual value rewritten onto the `--ck-*` pairs. No
+`node_modules` package ships anyone else's UI, and there is no second design
+system running alongside the first.
+
+Radix is a dependency, and a justified one: it supplies focus management,
+keyboard interaction, and ARIA, which is the expensive part to get right and the
+part where a subtle mistake is invisible until it reaches someone using a screen
+reader.
+
+The side benefit is that cksUI stands in the same relation to this site that
+VimUI does to Vimocity's product — which makes the portfolio itself an example
+of the thing it claims.
 
 **Cache Components is not enabled.** Next 16 ships `cacheComponents: true`,
 which turns on Partial Prerendering and requires every uncached read to sit

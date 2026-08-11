@@ -42,28 +42,28 @@ export default async function AdminDashboard() {
 
   return (
     <>
-      <h1 className="font-display text-2xl font-semibold tracking-tight text-ink">
+      <h1 className="font-display text-2xl font-semibold tracking-tight text-foreground">
         Overview
       </h1>
 
-      <dl className="mt-8 grid gap-px overflow-hidden rounded-md border border-rule bg-rule sm:grid-cols-2 lg:grid-cols-4">
+      <dl className="mt-8 grid gap-px overflow-hidden rounded-md border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
         {stats.map((stat) => (
-          <div key={stat.label} className="bg-paper-raised p-5">
-            <dt className="text-xs uppercase tracking-[0.14em] text-ink-faint">
+          <div key={stat.label} className="bg-card p-5">
+            <dt className="text-xs uppercase tracking-[0.14em] text-muted-foreground">
               {stat.label}
             </dt>
-            <dd className="mt-2 font-display text-3xl font-semibold text-ink">
+            <dd className="mt-2 font-display text-3xl font-semibold text-foreground">
               {stat.value}
             </dd>
-            <dd className="mt-1 text-xs text-ink-faint">{stat.note}</dd>
+            <dd className="mt-1 text-xs text-muted-foreground">{stat.note}</dd>
           </div>
         ))}
       </dl>
 
-      <p className="mt-10 max-w-[62ch] text-ink-muted">
+      <p className="mt-10 max-w-[62ch] text-muted-foreground">
         Editing screens are not built yet. The schema, repositories, and this
         gate are in place, so each one is a form wired to a Server Action that
-        calls into <code className="text-ink">lib/repositories/</code>.
+        calls into <code className="text-foreground">lib/repositories/</code>.
       </p>
     </>
   );
