@@ -13,7 +13,9 @@ keyed off `VERCEL_ENV`, so there is nothing to configure or switch back.
 |---|---|---|
 | `/` | coming-soon | bento index |
 | `/work/[slug]` | 404 | 5 case studies, prerendered |
-| `/themes` | 404 | theme switcher + live contrast readout |
+| `/resume` | 404 | résumé, with print-to-PDF |
+| `/style-guide` | 404 | tokens, type, contrast, live components |
+| `/themes` | 308 | permanent redirect to `/style-guide` |
 | `/colophon` | 404 | architecture writeup |
 | `/sign-in`, `/admin`, `/cv/[token]` | 404 | need a database and OAuth app |
 
@@ -29,18 +31,24 @@ From `PROJECT-CONTEXT.md` §10:
 - [x] 3 · Themes page with live contrast readout
 - [x] 4 · Guardrails case study
 - [x] 5 · VimUI case study
-- [ ] 6 · **Résumé page + PDF** ← next
+- [x] 6 · Résumé page + PDF (browser print-to-PDF, not a committed file)
 - [x] 7 · Remaining case studies (all five are written)
 - [x] 8 · Colophon
-- [ ] 9 · Inspector overlay
+- [ ] 9 · **Inspector overlay** ← next. `ControlToggle` and a slot in the
+      header's control cluster are already built and documented in the style
+      guide; it needs the overlay itself and the `[data-slot]` walker.
 - [ ] 10 · Playlist and live cards
 - [ ] 11 · Starter repo (separate repo)
+
+Added beyond the original order: **`/style-guide`** — a Storybook substitute
+inside the site. Components are imported from cksUI and rendered live, so a
+broken component breaks visibly there, and every measured value is read from the
+running page rather than transcribed. It absorbed the old `/themes` page.
 
 Case studies came in early because the copy deck already had approved text for
 all five. **Applications can start now** — steps 4 and 5 are done.
 
-`/resume` is linked from the bento's largest card and does not exist yet, so
-that link 404s in preview. It is the next thing to build.
+Every link on the bento index now resolves.
 
 ## Open items needing Caleb
 

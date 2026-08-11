@@ -268,10 +268,10 @@ export function Bento() {
           />
 
           <PointerCard
-            href="/themes"
+            href="/style-guide"
             eyebrow="About this site"
-            title="Themes and contrast"
-            description="Every token pair, measured live against WCAG AA and AAA."
+            title="Style guide"
+            description="Tokens, type, and every component — measured live, in whichever theme you are viewing."
             className="lg:col-span-2"
           />
 

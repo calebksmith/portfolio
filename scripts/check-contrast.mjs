@@ -17,7 +17,19 @@ import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
-const css = readFileSync(join(root, "app/globals.css"), "utf8");
+const source = readFileSync(join(root, "app/globals.css"), "utf8");
+
+/**
+ * Only the screen token layer is checked.
+ *
+ * The `@media print` block redefines the same `:root[...]` selectors to force a
+ * light palette on paper. Without this cut, a selector lookup could match the
+ * print declarations instead of the real ones and report contrast for a palette
+ * nobody sees on screen — silently, and always passing, since print is black on
+ * white. Print output is not gated here; it is black on white by construction.
+ */
+const printIndex = source.indexOf("@media print");
+const css = printIndex === -1 ? source : source.slice(0, printIndex);
 
 /* --- WCAG math ------------------------------------------------------------ */
 
