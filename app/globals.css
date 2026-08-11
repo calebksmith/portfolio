@@ -241,6 +241,19 @@
    — a floor that doesn't apply is worse than no floor.
 =========================================================================== */
 
+/* The UA stylesheet centres [popover] with `inset: 0; margin: auto`. Anchor the
+   settings panel above its trigger instead. Overriding requires real CSS —
+   a utility class loses to the UA rule's specificity on the popover element. */
+[data-slot="settings-panel"] {
+  position: fixed;
+  inset: auto 1rem 4.75rem auto;
+  margin: 0;
+}
+
+[data-slot="settings-panel"]::backdrop {
+  background: transparent;
+}
+
 @utility min-h-tap {
   min-height: var(--ck-tap);
 }
