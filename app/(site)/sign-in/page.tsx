@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { Button } from "@/components/cksui";
 import { signIn } from "@/lib/auth";
 import { showFullSite } from "@/lib/flags";
 
@@ -24,10 +25,10 @@ export default async function SignInPage() {
   return (
     <main className="flex flex-1 items-center px-6 py-20">
       <div className="mx-auto w-full max-w-sm">
-        <h1 className="font-display text-3xl font-semibold tracking-tight text-ink">
+        <h1 className="font-display text-3xl font-semibold tracking-tight text-foreground">
           Sign in
         </h1>
-        <p className="mt-3 text-ink-muted">
+        <p className="mt-3 text-muted-foreground">
           This area is restricted to the site owner.
         </p>
 
@@ -38,12 +39,9 @@ export default async function SignInPage() {
             await signIn("github", { redirectTo: "/admin" });
           }}
         >
-          <button
-            type="submit"
-            className="w-full rounded-md bg-accent px-4 py-2.5 font-medium text-accent-ink transition-colors hover:bg-accent-hover"
-          >
+          <Button type="submit" className="w-full">
             Continue with GitHub
-          </button>
+          </Button>
         </form>
       </div>
     </main>

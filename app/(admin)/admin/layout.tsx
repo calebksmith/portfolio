@@ -23,24 +23,24 @@ export default async function AdminLayout({
   const user = await requireAdmin();
 
   return (
-    <div className="flex min-h-full flex-1 flex-col bg-paper">
-      <header className="border-b border-rule">
+    <div className="flex min-h-full flex-1 flex-col bg-background">
+      <header className="border-b border-border">
         <div className="mx-auto flex w-full max-w-5xl items-center justify-between gap-4 px-6 py-4">
           <Link
             href="/admin"
-            className="font-display text-sm font-semibold tracking-tight text-ink"
+            className="font-display text-sm font-semibold tracking-tight text-foreground"
           >
             Admin
           </Link>
 
-          <nav className="flex items-center gap-5 text-xs uppercase tracking-[0.14em] text-ink-muted">
-            <Link className="hover:text-ink" href="/admin/case-studies">
+          <nav className="flex items-center gap-5 text-xs uppercase tracking-[0.14em] text-muted-foreground">
+            <Link className="hover:text-foreground" href="/admin/case-studies">
               Case studies
             </Link>
-            <Link className="hover:text-ink" href="/admin/positions">
+            <Link className="hover:text-foreground" href="/admin/positions">
               History
             </Link>
-            <Link className="hover:text-ink" href="/admin/resumes">
+            <Link className="hover:text-foreground" href="/admin/resumes">
               CVs
             </Link>
           </nav>
@@ -53,7 +53,7 @@ export default async function AdminLayout({
           >
             <button
               type="submit"
-              className="text-xs uppercase tracking-[0.14em] text-ink-faint hover:text-ink"
+              className="text-xs uppercase tracking-[0.14em] text-muted-foreground hover:text-foreground"
             >
               Sign out {user.name ? `(${user.name})` : ""}
             </button>

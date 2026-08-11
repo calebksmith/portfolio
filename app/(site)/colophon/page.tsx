@@ -23,7 +23,7 @@ function Section({
 }) {
   return (
     <section className="pt-13">
-      <h2 className="mb-5 font-display text-xl font-semibold tracking-[-0.02em] text-balance text-ink">
+      <h2 className="mb-5 font-display text-xl font-semibold tracking-[-0.02em] text-balance text-foreground">
         {title}
       </h2>
       {children}
@@ -39,8 +39,8 @@ function Decision({
   children: React.ReactNode;
 }) {
   return (
-    <article className="mt-7 border-t border-rule pt-6 first:mt-0">
-      <h3 className="mb-2.5 font-display text-base font-semibold tracking-[-0.01em] text-balance text-ink">
+    <article className="mt-7 border-t border-border pt-6 first:mt-0">
+      <h3 className="mb-2.5 font-display text-base font-semibold tracking-[-0.01em] text-balance text-foreground">
         {title}
       </h3>
       {children}
@@ -49,12 +49,12 @@ function Decision({
 }
 
 function P({ children }: { children: React.ReactNode }) {
-  return <p className="mb-3.5 max-w-[62ch] text-pretty text-ink-muted">{children}</p>;
+  return <p className="mb-3.5 max-w-[62ch] text-pretty text-muted-foreground">{children}</p>;
 }
 
 function Pull({ children }: { children: React.ReactNode }) {
   return (
-    <blockquote className="my-4 border-l-2 border-accent pl-3.5 text-pretty text-ink">
+    <blockquote className="my-4 border-l-2 border-primary pl-3.5 text-pretty text-foreground">
       {children}
     </blockquote>
   );
@@ -69,20 +69,20 @@ function Verdict({
   rejected: { what: string; why: string };
 }) {
   return (
-    <div className="my-4 grid gap-px overflow-hidden rounded-md border border-rule bg-rule sm:grid-cols-2">
-      <div className="bg-paper-raised p-3.5">
-        <span className="mb-1.5 block text-[0.625rem] uppercase tracking-[0.16em] text-status-live">
+    <div className="my-4 grid gap-px overflow-hidden rounded-md border border-border bg-border sm:grid-cols-2">
+      <div className="bg-card p-3.5">
+        <span className="mb-1.5 block text-[0.625rem] uppercase tracking-[0.16em] text-foreground">
           Chosen
         </span>
-        <span className="mb-0.5 block font-medium text-ink">{chosen.what}</span>
-        <p className="text-xs text-ink-muted">{chosen.why}</p>
+        <span className="mb-0.5 block font-medium text-foreground">{chosen.what}</span>
+        <p className="text-xs text-muted-foreground">{chosen.why}</p>
       </div>
-      <div className="bg-paper-raised p-3.5">
-        <span className="mb-1.5 block text-[0.625rem] uppercase tracking-[0.16em] text-danger">
+      <div className="bg-card p-3.5">
+        <span className="mb-1.5 block text-[0.625rem] uppercase tracking-[0.16em] text-foreground">
           Rejected
         </span>
-        <span className="mb-0.5 block font-medium text-ink">{rejected.what}</span>
-        <p className="text-xs text-ink-muted">{rejected.why}</p>
+        <span className="mb-0.5 block font-medium text-foreground">{rejected.what}</span>
+        <p className="text-xs text-muted-foreground">{rejected.why}</p>
       </div>
     </div>
   );
@@ -102,21 +102,24 @@ function Node({
   return (
     <div
       className={[
-        "rounded-sm border p-2.5 text-xs leading-snug text-ink",
+        "rounded-sm border p-2.5 text-xs leading-snug",
         wide ? "col-span-full" : "",
-        keystone ? "border-accent bg-accent-soft" : "border-rule-strong bg-paper",
+        // Pairs travel together: an accent surface takes accent-foreground.
+        keystone
+          ? "border-primary bg-accent text-accent-foreground"
+          : "border-input bg-background text-foreground",
       ].join(" ")}
     >
       {label}
       {sub ? (
-        <span className="mt-0.5 block text-[0.6875rem] text-ink-faint">{sub}</span>
+        <span className="mt-0.5 block text-[0.6875rem] text-muted-foreground">{sub}</span>
       ) : null}
     </div>
   );
 }
 
 function Arrow() {
-  return <div className="py-1 text-center text-sm text-ink-faint">↓</div>;
+  return <div className="py-1 text-center text-sm text-muted-foreground">↓</div>;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -175,14 +178,14 @@ export default async function ColophonPage() {
 
   return (
     <main className="mx-auto w-full max-w-[66ch] px-6 pb-24">
-      <header className="border-b border-rule pt-18 pb-8">
-        <p className="mb-5 text-[0.6875rem] uppercase tracking-[0.16em] text-ink-faint">
+      <header className="border-b border-border pt-18 pb-8">
+        <p className="mb-5 text-[0.6875rem] uppercase tracking-[0.16em] text-muted-foreground">
           Colophon · {site.name}
         </p>
-        <h1 className="font-display text-[clamp(2rem,6vw,3rem)] font-semibold leading-[1.03] tracking-[-0.03em] text-balance text-ink">
+        <h1 className="font-display text-[clamp(2rem,6vw,3rem)] font-semibold leading-[1.03] tracking-[-0.03em] text-balance text-foreground">
           How this site is built, and why
         </h1>
-        <p className="mt-5 max-w-[52ch] text-pretty text-ink-muted">
+        <p className="mt-5 max-w-[52ch] text-pretty text-muted-foreground">
           A stack list says what I installed. This says what the alternatives
           were, and what each choice cost.
         </p>
@@ -190,7 +193,7 @@ export default async function ColophonPage() {
           {stack.map((item) => (
             <li
               key={item}
-              className="rounded-sm border border-rule px-1.5 py-0.5 text-xs text-ink-muted"
+              className="rounded-sm border border-border px-1.5 py-0.5 text-xs text-muted-foreground"
             >
               {item}
             </li>
@@ -199,29 +202,29 @@ export default async function ColophonPage() {
       </header>
 
       <Section title="Three surfaces">
-        <div className="grid gap-px overflow-hidden rounded-md border border-rule bg-rule sm:grid-cols-3">
+        <div className="grid gap-px overflow-hidden rounded-md border border-border bg-border sm:grid-cols-3">
           {surfaces.map((surface) => (
             <div
               key={surface.name}
-              className="flex flex-col gap-1 bg-paper-raised p-4"
+              className="flex flex-col gap-1 bg-card p-4"
             >
-              <span className="text-[0.6875rem] uppercase tracking-[0.12em] text-ink-faint">
+              <span className="text-[0.6875rem] uppercase tracking-[0.12em] text-muted-foreground">
                 {surface.who}
               </span>
-              <span className="font-display text-sm font-semibold text-ink">
+              <span className="font-display text-sm font-semibold text-foreground">
                 {surface.name}
               </span>
-              <span className="text-xs text-ink-muted">{surface.need}</span>
+              <span className="text-xs text-muted-foreground">{surface.need}</span>
             </div>
           ))}
         </div>
-        <p className="mt-4 text-ink-muted">
+        <p className="mt-4 text-muted-foreground">
           The third one shaped most of what follows.
         </p>
       </Section>
 
       <Section title="Shape">
-        <div className="overflow-x-auto rounded-md border border-rule bg-paper-raised p-4">
+        <div className="overflow-x-auto rounded-md border border-border bg-card p-4">
           <div className="grid grid-cols-3 gap-1.5">
             <Node label="Visitor" />
             <Node label="Recruiter" sub="holds a link" />
@@ -274,22 +277,29 @@ export default async function ColophonPage() {
           </Pull>
         </Decision>
 
-        <Decision title="No component library on the public site">
+        <Decision title="A component library I own, not one I installed">
           <Verdict
             chosen={{
-              what: "Hand-rolled on tokens",
-              why: "The design is deliberately not the consensus look, and there's little to build.",
+              what: "cksUI, in this repo",
+              why: "Built on shadcn's patterns — Radix for behavior, source copied in — with every value rewritten onto these tokens.",
             }}
             rejected={{
-              what: "A library everywhere",
-              why: "A component library's job is to converge on the consensus.",
+              what: "An installed UI library",
+              why: "It would ship someone else's UI and run a second design system alongside this one.",
             }}
           />
           <P>
-            shadcn/ui is intended for the admin panel only — copied in as owned
-            source, so its classes get rewritten onto the same tokens rather than
-            running two design systems. Radix handles focus and ARIA, the
-            expensive part.
+            shadcn/ui isn&rsquo;t a library you install; it&rsquo;s source you
+            copy in and own. That&rsquo;s what makes it compatible with the
+            constraint that I build the UI here. Radix stays a dependency, and a
+            justified one — it handles focus management, keyboard interaction,
+            and ARIA, where a subtle mistake is invisible until it reaches
+            someone using a screen reader.
+          </P>
+          <P>
+            cksUI stands in the same relation to this site that VimUI does to the
+            product I work on, which makes the portfolio an example of the thing
+            it claims rather than a description of it.
           </P>
         </Decision>
 
@@ -311,7 +321,7 @@ export default async function ColophonPage() {
             UI and file storage.
           </P>
           <P>
-            <strong className="font-semibold text-ink">
+            <strong className="font-semibold text-foreground">
               Drizzle over Prisma
             </strong>{" "}
             — lighter runtime, no codegen in the deploy path, migrations as plain
@@ -384,11 +394,11 @@ export default async function ColophonPage() {
             Accepted honestly: anyone with the link can read and forward it.
             It&rsquo;s a CV — a document meant for strangers — so exposure is
             bounded by what it already is. Mitigations: revoke, rotate, expire,{" "}
-            <code className="rounded-sm bg-paper-sunken px-1.5 py-0.5 text-[0.9em] text-ink">
+            <code className="rounded-sm bg-muted px-1.5 py-0.5 text-[0.9em] text-foreground">
               noindex
             </code>
             , and an{" "}
-            <strong className="font-semibold text-ink">identical 404</strong> for
+            <strong className="font-semibold text-foreground">identical 404</strong> for
             revoked, expired, draft, and nonexistent alike, so a recipient
             can&rsquo;t learn a link was turned off — or that a company was ever
             sent one.
@@ -417,16 +427,16 @@ export default async function ColophonPage() {
           {pending.map((item) => (
             <li
               key={item.thing}
-              className="grid gap-0.5 border-t border-rule py-3"
+              className="grid gap-0.5 border-t border-border py-3"
             >
-              <span className="font-medium text-ink">{item.thing}</span>
-              <span className="text-xs text-ink-muted">{item.why}</span>
+              <span className="font-medium text-foreground">{item.thing}</span>
+              <span className="text-xs text-muted-foreground">{item.why}</span>
             </li>
           ))}
         </ul>
       </Section>
 
-      <footer className="mt-16 border-t border-rule pt-5 text-xs text-ink-faint">
+      <footer className="mt-16 border-t border-border pt-5 text-xs text-muted-foreground">
         Per-decision records live in{" "}
         <code>docs/decisions/</code>. The rules the codebase is held to live in{" "}
         <code>CLAUDE.md</code> — which exists so the standard is applied by

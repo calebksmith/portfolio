@@ -1,81 +1,124 @@
 @AGENTS.md
 
-# calebksmith.com — working rules
+# calebksmith.com
 
-This file encodes how this site is built. It exists so the standard is applied
-by default rather than corrected after the fact. If a rule here conflicts with a
-habit from another codebase, this file wins.
+Personal portfolio for Caleb Smith — product designer and design engineer.
+Positioning: design systems, production frontend, and AI guardrails for
+design-to-code.
 
-Architecture rationale lives in `docs/decisions/`. Read the relevant ADR before
-changing anything it covers.
+The site is a work sample. Every decision should survive the question:
+*would an engineer interviewing me respect this?*
 
-## The non-negotiables
-
-1. **Every color, radius, and duration resolves to a `--ck-*` token.** No hex
-   values, no `rgb()`, no arbitrary `text-[#333]` in a component. Add the token
-   to `app/globals.css`, expose it in the `@theme inline` block, use the utility.
-2. **Focus is always visible.** Never `outline: none` without an equally visible
-   replacement. The global `:focus-visible` rule is the floor, not the ceiling.
-3. **Motion is decorative and always optional.** Content must be fully legible
-   with animations disabled. Anything animated goes through `.ck-enter` or
-   `.ck-pulse`, both of which no-op under `prefers-reduced-motion`.
-4. **Dark mode is not an afterthought.** A token defined only inside a media
-   query is a bug. Define the light value on bare `:root`, then override it in
-   both the `prefers-color-scheme: dark` block and the `[data-theme="dark"]`
-   block.
-5. **No database query outside `lib/repositories/`.** Pages and Server Actions
-   call repository functions. This is what keeps the vendor swappable and the
-   published/draft filter in one place.
-6. **Authorization happens next to the data, not in a proxy.** Every admin route
-   and every mutating Server Action calls `requireAdmin()` itself.
+Project background and build order: `docs/PROJECT-CONTEXT.md`.
+Approved copy for every page: `docs/copy-deck.md` — use it, don't rewrite it.
+Architecture rationale: `docs/decisions/`.
 
 ## Stack
 
-- Next.js 16 App Router, React 19, TypeScript strict.
-- Tailwind v4 — CSS-first config via `@theme inline`. There is no
-  `tailwind.config.js` and there should not be one.
-- Drizzle ORM against Neon Postgres. Migrations are committed SQL.
-- Auth.js v5 (`next-auth@beta`), GitHub OAuth, database sessions.
-- No component library on the public site. See `docs/decisions/0001`.
+Next.js 16 (App Router) · React 19 · TypeScript strict · Tailwind v4 ·
+deployed on Vercel from `main`.
+
+## Rules
+
+These are the same kind of guardrails I maintain on VimUI at work. Follow them.
+
+### Tokens
+
+- All color, type-size, and spacing values resolve to a `--ck-*` custom property
+  defined in `app/globals.css`. No raw hex, no `rgb()`, no arbitrary `[13px]`.
+- Need a value that doesn't exist? Add it to the token block first, then use it.
+- **Colors are paired, not flat.** Every surface has a foreground:
+  `background/foreground`, `card/card-foreground`, `muted/muted-foreground`,
+  `primary/primary-foreground`, `accent/accent-foreground`. A surface class
+  always travels with its foreground — `bg-card text-card-foreground`, never
+  `bg-card text-foreground`. This is what makes a new theme a value swap.
+- `--ck-border` is the decorative hairline; `--ck-input` is a control boundary
+  and is held to 3:1. They are separate tokens for that reason.
+- Themes are alternate value sets for the same names, applied via `data-theme`
+  on `<html>`. Light/dark via `data-mode`, defaulting to `prefers-color-scheme`.
+  Every dark theme is declared twice — in the media query and under
+  `[data-mode="dark"]` — and the two must stay identical.
+- `npm run check:contrast` proves every pair clears AA (AAA for high contrast)
+  in all three themes and both modes. It reads `globals.css` directly. Run it
+  after touching a color.
+
+### Components
+
+- **cksUI (`components/cksui/`) is this site's component library.** Built on
+  shadcn/ui patterns — copied-in source, Radix for behavior, `cva` for variants
+  — restyled onto the `--ck-*` pairs. It is source we own, not a dependency.
+  See `components/cksui/README.md` before adding to it.
+- Reach for cksUI before writing a one-off. If it isn't there, add it there.
+- Function components. Named files in kebab-case.
+- Every component sets `data-slot`, so the inspector overlay can report what it
+  is. Same attribute and meaning as the VimUI convention.
+- No hardcoded user-facing strings inside reusable components — pass via props.
+  Page-level content as literal text is fine.
+
+### Accessibility — non-negotiable
+
+- Semantic HTML. No click handlers on non-interactive elements.
+- Everything keyboard-operable, with a visible `:focus-visible` style.
+- WCAG AA contrast in every theme and both modes.
+- Touch targets ≥ 44px — use `min-h-tap` / `min-w-tap`.
+- Honor `prefers-reduced-motion` for every animation and transition.
+- `eslint-plugin-jsx-a11y` (strict) runs on lint; do not disable rules to pass.
+
+### Content
+
+- Case studies live as MDX in `src/content/work/*.mdx` with frontmatter:
+  `title, role, year, platforms, summary, weight`.
+- Adding a case study should mean adding a file, not editing components.
+- The content layer must accept structured data, not just prose.
 
 ## Next.js 16 specifics
 
 This version differs from older App Router code in ways that matter:
 
 - `params` and `searchParams` are **Promises**. Await them.
-- Use the generated `PageProps<"/route">` and `LayoutProps<"/route">` global
-  types rather than hand-writing prop types.
-- **Middleware is called Proxy** and lives in `proxy.ts`. There is currently no
-  `proxy.ts` in this project, deliberately — see rule 6.
-- Cache Components (`use cache`, `cacheLife`, `cacheTag`) is **not** enabled.
-  Turning it on is a considered future step, not an oversight; see
-  `docs/decisions/0001`.
+- Use the generated `PageProps<"/route">` and `LayoutProps<"/route">` types
+  rather than hand-writing prop types.
+- **Middleware is called Proxy** and lives in `proxy.ts`. There is deliberately
+  no `proxy.ts` here — authorization sits next to the data in `requireAdmin()`.
+- Cache Components (`use cache`) is **not** enabled. That is considered, not an
+  oversight; see `docs/decisions/0001`.
 - Consult `node_modules/next/dist/docs/` before writing framework code. It is
   the version actually installed.
 
-## Conventions
+## What is published
 
-- Route groups carry chrome: `(site)` is public, `(admin)` is authenticated.
-  `/cv/[token]` sits outside both because it is neither.
-- Server Components by default. Add `"use client"` only when an interaction
-  genuinely requires it, and push it to the leaf.
-- Repository functions that can return unpublished content are named
-  `...ForAdmin`, so an unauthorized call site is visible in review.
-- Read environment variables through `lib/env.ts`, never `process.env` directly.
-- Content prose cannot style itself. MDX from the database renders through the
-  component map in `components/mdx.tsx`; add an element there rather than
-  allowing raw HTML through.
+`lib/flags.ts` decides. Production serves the landing page only; preview and
+development serve everything. Routes that aren't published call `notFound()`.
 
-## Before saying a change works
+## Voice
 
-Run all three. A passing build alone is not verification.
+Plain and specific. Active voice, sentence case. Say what a thing does rather
+than selling it. No filler adjectives. If a sentence could appear on any
+designer's portfolio, cut or rewrite it.
+
+Fine to use: double diamond, atomic design, generative and evaluative research,
+design tokens, component library. Avoid `cva`, `semver`, and other library- or
+spec-level terms in user-facing copy — say "style variants," "versioned
+releases."
+
+Metrics in copy are approved and defensible. Do not invent or extrapolate.
+
+## Before opening a PR
 
 ```
+npm run check:contrast
 npm run typecheck
 npm run lint
 npm run build
 ```
 
-Routes touching the database need `DATABASE_URL`; without it they fail with a
-deliberate, descriptive error from `lib/env.ts`. That is correct behavior, not
-a bug to work around.
+Then: dark mode checked with the theme flipped, keyboard pass through every
+interactive element, Lighthouse accessibility and performance ≥ 95.
+
+## Do not
+
+- Add a dependency without a clear reason it beats writing it.
+- Use `localStorage` or any browser storage. Cookies or server state only.
+- Install a UI library. cksUI is the UI — copied-in source we own is the point.
+- Use product screenshots from behind Vimocity's paywall. The public Storybook
+  at vimui.vimocity.com is the interactive proof; link and embed from it.
