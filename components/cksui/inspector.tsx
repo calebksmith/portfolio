@@ -130,9 +130,23 @@ function InspectorOverlay() {
       */}
       <aside
         data-inspector-chrome=""
-        aria-label="Inspector"
+        /* Labelled by the visible heading rather than a duplicate aria-label,
+           so the name a screen reader announces is the one on screen. */
+        aria-labelledby="ck-inspector-title"
         className="fixed inset-y-0 right-0 z-30 w-[min(21rem,100vw)] overflow-y-auto border-l border-input bg-card p-5 pt-20 text-card-foreground shadow-lg"
       >
+        <header className="mb-5 border-b border-border pb-3">
+          <h2
+            id="ck-inspector-title"
+            className="font-display text-sm font-semibold tracking-[-0.01em]"
+          >
+            Inspector
+          </h2>
+          <p className="mt-1 text-xs text-pretty text-muted-foreground">
+            What each element is, and which tokens it resolves to.
+          </p>
+        </header>
+
         {/*
           Announced politely: the panel changes as the pointer moves, and an
           assertive region would interrupt continuously.
