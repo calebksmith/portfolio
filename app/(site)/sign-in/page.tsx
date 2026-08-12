@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 
 import { Button } from "@/components/cksui";
 import { signIn } from "@/lib/auth";
-import { showFullSite } from "@/lib/flags";
+import { showLetters } from "@/lib/flags";
 
 export const metadata: Metadata = {
   title: "Sign in",
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
  */
 export default async function SignInPage() {
   // No published admin yet, so no published door to it. See lib/flags.ts.
-  if (!showFullSite()) notFound();
+  if (!showLetters()) notFound();
 
   return (
     <main className="flex flex-1 items-center px-6 py-20">

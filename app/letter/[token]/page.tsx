@@ -6,7 +6,7 @@ import { after } from "next/server";
 
 import { Mdx } from "@/components/mdx";
 import { getCaseStudy } from "@/lib/content/work";
-import { showFullSite } from "@/lib/flags";
+import { showLetters } from "@/lib/flags";
 import {
   getSharedLetterByToken,
   recordLetterView,
@@ -40,7 +40,7 @@ export default async function SharedLetterPage({
 }: PageProps<"/letter/[token]">) {
   // No database in production yet, so this would only ever 500. Same 404 as
   // every other miss. See lib/flags.ts.
-  if (!showFullSite()) notFound();
+  if (!showLetters()) notFound();
 
   const { token } = await params;
   const letter = await getSharedLetterByToken(token);

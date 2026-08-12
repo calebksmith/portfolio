@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
 
 import { PrintButton } from "@/components/cksui";
 import { resume } from "@/lib/content/resume";
-import { showFullSite } from "@/lib/flags";
 
 export const metadata: Metadata = {
   title: "Résumé",
@@ -23,8 +21,6 @@ export const metadata: Metadata = {
  * changes here. See the @media print block in globals.css.
  */
 export default async function ResumePage() {
-  if (!showFullSite()) notFound();
-
   return (
     <main className="mx-auto w-full max-w-3xl px-6 py-14 sm:px-10 print:max-w-none print:px-0 print:py-0">
       <header className="border-b border-border pb-6">
