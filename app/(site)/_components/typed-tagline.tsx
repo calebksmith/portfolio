@@ -20,16 +20,27 @@ import { site } from "@/lib/site";
  */
 
 /**
- * Lifted from docs/copy-deck.md where possible — "define what gets built" and
- * "prototype in real components" are its words, so the tagline and the résumé
- * make the same claim in the same language. Each names an act rather than a
- * category: "interview customers" over "do research".
+ * Three lines, not five.
+ *
+ * An earlier pass gave each phase its own sentence, which asked the reader to
+ * hold four claims plus a summary. Pairing them halves that without losing a
+ * verb — and the pairs are not arbitrary: research and define are the first
+ * diamond, prototype and test are the second. The structure of the work is in
+ * the line breaks.
+ *
+ * Line one is deliberately business-framed. "What's worth building" is a
+ * judgement about value, not a description of gathering input — which is the
+ * difference between a designer who runs research and one who decides scope.
+ *
+ * Line two pairs "real components" with "real customers" on purpose: neither is
+ * a proxy for the thing. It is also the copy deck's own language, so the
+ * tagline and the résumé make the same claim in the same words.
+ *
+ * The last line is the approved lede, and it is what remains.
  */
 const LINES = [
-  "I interview customers.",
-  "I define what gets built.",
-  "I prototype in real components.",
-  "I test features with real people.",
+  "I research and define what's worth building.",
+  "I prototype in real components and test with real customers.",
   site.lede,
 ] as const;
 
