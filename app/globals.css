@@ -50,6 +50,17 @@
 
   /* Minimum touch target. Non-negotiable; see CLAUDE.md. */
   --ck-tap: 44px;
+
+  /* The site header's height, derived rather than measured: its content is a
+     single row of tap-sized controls, plus its bottom rule. Anything that has
+     to sit flush beneath the header reads this instead of hardcoding a value
+     that silently drifts when the header changes. */
+  --ck-header-height: calc(var(--ck-tap) + 1px);
+
+  /* Width of the docked inspector. Read by the panel itself, by the body
+     padding that gives the page its width back, and by the appearance popover
+     that has to clear it — one value, three consumers, no drift. */
+  --ck-inspector-width: 21rem;
   --ck-measure: 62ch;
 }
 
@@ -275,8 +286,20 @@
    most of the viewport and shifting the layout would leave nothing to inspect. */
 @media (min-width: 1024px) {
   :root[data-inspect="on"] body {
-    padding-right: 21rem;
+    padding-right: var(--ck-inspector-width);
   }
+
+  /* The appearance panel is a native popover, so it renders in the top layer
+     and paints above the inspector no matter what z-index either carries.
+     Z-index cannot fix that; moving it can. While inspecting, it clears the
+     dock and opens over the page — which is what it is describing. */
+  :root[data-inspect="on"] [data-slot="settings-panel"] {
+    right: calc(var(--ck-inspector-width) + 1rem);
+  }
+}
+
+@utility h-tap {
+  height: var(--ck-tap);
 }
 
 @utility min-h-tap {

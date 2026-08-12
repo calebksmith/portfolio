@@ -103,7 +103,10 @@ export function SiteHeader({ work }: { work: WorkItem[] }) {
       data-slot="site-header"
       className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur-sm"
     >
-      <div className="mx-auto flex w-full max-w-5xl items-center gap-4 px-6 sm:px-10">
+      {/* Height is pinned to --ck-header-height so anything docking beneath the
+          header stays flush with it. The row is tap-sized either way; making it
+          explicit is what lets other components read the value. */}
+      <div className="mx-auto flex h-tap w-full max-w-5xl items-center gap-4 px-6 sm:px-10">
         {/* Path — wayfinding. Plain text; scrolls rather than wrapping.
             On the index there is no trail, so a spacer holds the instruments
             to the right instead. */}
