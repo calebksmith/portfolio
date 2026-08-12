@@ -554,8 +554,37 @@ body {
   }
 }
 
+/**
+ * The block caret, in two states.
+ *
+ * Solid while text is actually being written or erased, and shimmering while
+ * the line is between revisions — the difference between a machine typing and a
+ * machine deciding. A hard blink would read as an idle terminal; the soft
+ * oscillation reads as thinking.
+ */
+@keyframes ck-think {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+  50% {
+    opacity: 0.3;
+    transform: scaleY(0.86);
+  }
+}
+
 .ck-caret {
   animation: ck-blink 1.1s steps(1, end) infinite;
+}
+
+.ck-caret-writing {
+  opacity: 1;
+}
+
+.ck-caret-thinking {
+  transform-origin: center;
+  animation: ck-think 1.15s var(--ck-ease) infinite;
 }
 
 /* --- B · line that bends into a cycle ------------------------------------ */
@@ -643,7 +672,8 @@ body {
     display: none;
   }
 
-  .ck-caret {
+  .ck-caret,
+  .ck-caret-thinking {
     animation: none;
   }
 

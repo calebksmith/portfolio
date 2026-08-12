@@ -4,10 +4,8 @@ import { Badge, Button, cn } from "@/components/cksui";
 import { caseStudies, type Weight } from "@/lib/content/work";
 import { site } from "@/lib/site";
 
-import { CodeToUi } from "./code-to-ui";
-import { ProcessBuild } from "./process-build";
-import { ProcessDiamond } from "./process-diamond";
-import { ProcessLoop } from "./process-loop";
+import { TypedTagline } from "./typed-tagline";
+
 
 /**
  * The bento index.
@@ -218,67 +216,10 @@ export function Bento() {
           {site.name}
         </h1>
 
-        <p className="mt-4 max-w-[46ch] text-lg text-pretty text-muted-foreground">
-          {site.lede}
-        </p>
-
-        <div className="mt-6">
-          <Button asChild variant="outline">
-            <Link href="/resume">Résumé and full background →</Link>
-          </Button>
-        </div>
-      </section>
-
-      {/*
-        TEMPORARY — two candidate hero graphics, side by side for comparison.
-        Pick one, move it into the hero section above, and delete the other
-        along with this wrapper. See docs/HANDOFF.md.
-      */}
-      <section aria-labelledby="process-options" className="pb-24">
-        <h2
-          id="process-options"
-          className="text-xs uppercase tracking-[0.16em] text-muted-foreground"
-        >
-          Process graphic — pick one
-        </h2>
-
-        <p className="mt-2 max-w-[52ch] text-pretty text-muted-foreground">
-          D · The double diamond, built rather than drawn. Each phase types the
-          code that produces it; the widths do the diverging and converging.
-        </p>
-
-        <div className="mt-12">
-          <ProcessBuild />
-        </div>
-
-        <details className="mt-16 rounded-lg border border-border bg-card p-6">
-          <summary className="cursor-pointer text-xs uppercase tracking-[0.14em] text-muted-foreground">
-            Earlier attempts — A, B, C
-          </summary>
-
-          <div className="mt-8 space-y-10">
-            <div>
-              <p className="mb-4 text-xs uppercase tracking-[0.14em] text-muted-foreground">
-                C · Code becomes UI, live
-              </p>
-              <CodeToUi />
-            </div>
-            <div className="grid gap-10 lg:grid-cols-2">
-              <div>
-                <p className="mb-4 text-xs uppercase tracking-[0.14em] text-muted-foreground">
-                  A · Double diamond that loops
-                </p>
-                <ProcessDiamond />
-              </div>
-              <div>
-                <p className="mb-4 text-xs uppercase tracking-[0.14em] text-muted-foreground">
-                  B · Line that bends into a cycle
-                </p>
-                <ProcessLoop />
-              </div>
-            </div>
-          </div>
-        </details>
+        {/* The lede writes and rewrites itself. Min-height reserves the space
+            the finished sentence needs, so the section below never jumps as the
+            line grows. */}
+        <TypedTagline className="mt-4 min-h-[4.5em] max-w-[46ch] text-lg text-pretty text-muted-foreground sm:min-h-[3.5em]" />
       </section>
 
       <section aria-labelledby="selected-work" className="pb-24">
@@ -353,6 +294,30 @@ export function Bento() {
             description="Background, roles, and the longer version of all this."
             className="lg:col-span-2"
           />
+        </div>
+      </section>
+
+      {/* The CTA closes the page rather than competing with the hero, where the
+          tagline is doing the work. Someone who has read this far is the person
+          most likely to want the résumé. */}
+      <section
+        aria-labelledby="full-background"
+        className="border-t border-border py-20 text-center"
+      >
+        <h2
+          id="full-background"
+          className="font-display text-2xl font-semibold tracking-[-0.02em] text-balance text-foreground"
+        >
+          The full background
+        </h2>
+        <p className="mx-auto mt-3 max-w-[46ch] text-pretty text-muted-foreground">
+          Nine years in design, five writing production frontend. Roles, dates,
+          and the work behind each of these.
+        </p>
+        <div className="mt-7 flex justify-center">
+          <Button asChild size="lg">
+            <Link href="/resume">Résumé →</Link>
+          </Button>
         </div>
       </section>
     </main>
