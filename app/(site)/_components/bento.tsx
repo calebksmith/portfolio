@@ -216,10 +216,9 @@ export function Bento() {
           {site.name}
         </h1>
 
-        {/* The lede writes and rewrites itself. Min-height reserves the space
-            the finished sentence needs, so the section below never jumps as the
-            line grows. */}
-        <TypedTagline className="mt-4 min-h-[4.5em] max-w-[46ch] text-lg text-pretty text-muted-foreground sm:min-h-[3.5em]" />
+        {/* The lines accumulate as they type. Min-height reserves the space the
+            finished set needs, so nothing below shifts while it fills in. */}
+        <TypedTagline className="mt-6 min-h-[13em] max-w-[46ch] text-lg text-pretty sm:min-h-[10.5em]" />
       </section>
 
       <section aria-labelledby="selected-work" className="pb-24">

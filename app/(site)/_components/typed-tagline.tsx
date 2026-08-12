@@ -6,53 +6,48 @@ import { usePrefersReducedMotion } from "@/components/cksui/lib/use-reduced-moti
 import { site } from "@/lib/site";
 
 /**
- * The tagline, written and rewritten.
+ * The tagline, written a line at a time and then resolved into one.
  *
- * "I ___ products" holds as a fixed frame while the verb slot cycles. Each verb
- * types, is struck through, and is deleted — so the sentence is edited in front
- * of you rather than retyped, and the revision is legible as a revision. The
- * last verb stays, the rest of the line types on, and the finished sentence is
- * the approved lede.
+ * Four lines accumulate — nothing is struck through and nothing is erased while
+ * they build, because an earlier version struck each line out and that reads as
+ * a mind being changed: "I research; scratch that, I define." The claim is the
+ * opposite. All of it is the same job.
  *
- * It lands on `design` last on purpose: after research, define, prototype, and
- * test, ending on design says that all of them *are* design. That is the
- * argument the sequence exists to make.
- *
- * Then it disassembles — the tail deletes, `design` is struck, and it begins
- * again. The cycle is the point, and it never needed a diagram.
+ * When the fifth line lands, the four above it collapse away and it rises to
+ * the top alone. That is the resolution: the process is not discarded, it is
+ * absorbed into the sentence that summarises it — which happens to be the
+ * approved lede.
  */
 
-const PREFIX = "I ";
-const NOUN = " products";
-const VERBS = ["research", "define", "prototype", "test", "design"] as const;
-const TAIL = " and write the frontend code they're built from.";
+/**
+ * Lifted from docs/copy-deck.md where possible — "define what gets built" and
+ * "prototype in real components" are its words, so the tagline and the résumé
+ * make the same claim in the same language. Each names an act rather than a
+ * category: "interview customers" over "do research".
+ */
+const LINES = [
+  "I interview customers.",
+  "I define what gets built.",
+  "I prototype in real components.",
+  "I test features with real people.",
+  site.lede,
+] as const;
 
-const TYPE_MS = 34;
-const DELETE_MS = 16;
-const HOLD_MS = 700;
-const STRIKE_MS = 380;
-const REST_MS = 5200;
+const LAST = LINES.length - 1;
 
-type Stage =
-  | "verb-typing"
-  | "verb-hold"
-  | "verb-strike"
-  | "verb-delete"
-  | "tail-typing"
-  | "rest"
-  | "tail-delete"
-  | "final-strike";
+const TYPE_MS = 26;
+const LINE_PAUSE_MS = 420;
+const SETTLE_MS = 900;
+const COLLAPSE_MS = 600;
+const REST_MS = 4200;
+
+type Phase = "typing" | "collapsing" | "resting";
 
 export function TypedTagline({ className }: { className?: string }) {
   const reduced = usePrefersReducedMotion();
-  const [stage, setStage] = useState<Stage>("verb-typing");
-  const [verbIndex, setVerbIndex] = useState(0);
-  const [verb, setVerb] = useState("");
-  const [tail, setTail] = useState("");
-
-  const target = VERBS[verbIndex];
-  const isLastVerb = verbIndex === VERBS.length - 1;
-  const struck = stage === "verb-strike" || stage === "final-strike";
+  const [line, setLine] = useState(0);
+  const [typed, setTyped] = useState("");
+  const [phase, setPhase] = useState<Phase>("typing");
 
   useEffect(() => {
     if (reduced) return;
@@ -65,117 +60,95 @@ export function TypedTagline({ className }: { className?: string }) {
       }, ms);
     };
 
-    switch (stage) {
-      case "verb-typing":
-        if (verb.length < target.length) {
-          later(() => setVerb(target.slice(0, verb.length + 1)), TYPE_MS);
-        } else {
-          later(() => setStage("verb-hold"), HOLD_MS);
-        }
-        break;
+    if (phase === "typing") {
+      const target = LINES[line];
 
-      case "verb-hold":
-        // The last verb is never struck — the sentence completes around it.
-        later(() => setStage(isLastVerb ? "tail-typing" : "verb-strike"), 0);
-        break;
-
-      case "verb-strike":
-        later(() => setStage("verb-delete"), STRIKE_MS + 180);
-        break;
-
-      case "verb-delete":
-        if (verb.length > 0) {
-          later(() => setVerb(verb.slice(0, -1)), DELETE_MS);
-        } else {
-          later(() => {
-            setVerbIndex((index) => index + 1);
-            setStage("verb-typing");
-          }, 120);
-        }
-        break;
-
-      case "tail-typing":
-        if (tail.length < TAIL.length) {
-          later(() => setTail(TAIL.slice(0, tail.length + 1)), TYPE_MS);
-        } else {
-          later(() => setStage("rest"), 0);
-        }
-        break;
-
-      case "rest":
-        later(() => setStage("tail-delete"), REST_MS);
-        break;
-
-      case "tail-delete":
-        if (tail.length > 0) {
-          later(() => setTail(tail.slice(0, -1)), DELETE_MS);
-        } else {
-          later(() => setStage("final-strike"), 200);
-        }
-        break;
-
-      case "final-strike":
+      if (typed.length < target.length) {
+        later(() => setTyped(target.slice(0, typed.length + 1)), TYPE_MS);
+      } else if (line === LAST) {
+        // Let the finished set be read before it resolves.
+        later(() => setPhase("collapsing"), SETTLE_MS);
+      } else {
         later(() => {
-          setVerbIndex(0);
-          setVerb("");
-          setTail("");
-          setStage("verb-typing");
-        }, STRIKE_MS + 260);
-        break;
+          setLine((current) => current + 1);
+          setTyped("");
+        }, LINE_PAUSE_MS);
+      }
+    }
+
+    if (phase === "collapsing") {
+      later(() => setPhase("resting"), COLLAPSE_MS);
+    }
+
+    if (phase === "resting") {
+      later(() => {
+        setLine(0);
+        setTyped("");
+        setPhase("typing");
+      }, REST_MS);
     }
 
     return () => {
       cancelled = true;
       clearTimeout(timer);
     };
-  }, [reduced, stage, verb, tail, target, isLastVerb]);
+  }, [reduced, line, typed, phase]);
 
-  /**
-   * The caret is always present; only its state changes. Solid while characters
-   * are actually appearing or disappearing, shimmering while the line is
-   * between revisions — the difference between writing and deciding, which is
-   * what makes it read as something composing rather than a terminal idling.
-   */
-  const writing =
-    stage === "verb-typing" ||
-    stage === "verb-delete" ||
-    stage === "tail-typing" ||
-    stage === "tail-delete";
+  /** After the last line lands, the four above it fold away. */
+  const collapsed = phase === "collapsing" || phase === "resting";
 
   return (
-    <p className={className}>
-      {/* The real content, announced once. The animation below is decorative. */}
+    <div className={className}>
+      {/* The real content, announced once. The animation is decorative. */}
       <span className="sr-only">{site.lede}</span>
 
-      <span aria-hidden="true">
-        {reduced ? (
-          site.lede
-        ) : (
-          <>
-            {PREFIX}
-            <span className="relative inline-block whitespace-pre">
-              {verb}
-              {/* The strike sweeps across the verb it is replacing. */}
-              <span
-                className="pointer-events-none absolute inset-y-0 left-0 flex items-center overflow-hidden transition-[width] ease-out"
-                style={{
-                  width: struck ? "100%" : "0%",
-                  transitionDuration: `${STRIKE_MS}ms`,
-                }}
-              >
-                <span className="h-[0.08em] w-full bg-primary" />
-              </span>
-            </span>
-            {NOUN}
-            {tail}
-            <span
-              className={`ml-[0.1em] inline-block h-[1.05em] w-[0.5em] rounded-[1px] bg-primary align-[-0.2em] ${
-                writing ? "ck-caret-writing" : "ck-caret-thinking"
-              }`}
-            />
-          </>
-        )}
-      </span>
-    </p>
+      {/*
+        The lines below are typed by the client, so without JavaScript the hero
+        would be visually empty. The sr-only lede above covers assistive
+        technology and crawlers; this covers someone actually looking at it.
+      */}
+      <noscript>
+        <p className="text-foreground">{site.lede}</p>
+      </noscript>
+
+      <ul aria-hidden="true" className="flex flex-col">
+        {LINES.map((text, index) => {
+          const isFinal = index === LAST;
+          const finished = reduced || index < line || collapsed;
+          const active = !reduced && index === line && phase === "typing";
+          if (!finished && !active) return null;
+
+          // Only the process lines fold; the final line stays and rises.
+          const folding = collapsed && !isFinal;
+
+          return (
+            <li
+              key={text}
+              className={[
+                "overflow-hidden transition-all ease-out",
+                isFinal ? "text-foreground" : "text-muted-foreground",
+                folding ? "mb-0 max-h-0 opacity-0" : "mb-1 max-h-[6em] opacity-100",
+              ].join(" ")}
+              style={{ transitionDuration: `${COLLAPSE_MS}ms` }}
+            >
+              {finished ? text : typed}
+
+              {/* The caret sits at the end of whatever is being written, and
+                  shimmers rather than blinks while the line rests. */}
+              {active || (isFinal && collapsed) ? (
+                <span
+                  className={[
+                    "ml-[0.1em] inline-block h-[1.05em] w-[0.5em] rounded-[1px] bg-primary align-[-0.2em]",
+                    active && typed.length < text.length
+                      ? "ck-caret-writing"
+                      : "ck-caret-thinking",
+                  ].join(" ")}
+                />
+              ) : null}
+            </li>
+          );
+        })}
+      </ul>
+    </div>
   );
 }
