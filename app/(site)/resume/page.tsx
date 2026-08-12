@@ -15,8 +15,7 @@ export const metadata: Metadata = {
  * The résumé.
  *
  * Rendered from structured data (lib/content/resume.ts), not prose, so the same
- * records can drive this page, the print stylesheet, and a tailored CV without
- * three copies drifting.
+ * records drive this page and the print stylesheet without two copies drifting.
  *
  * "PDF download" is the browser's own print-to-PDF rather than a generated
  * file. A print stylesheet is a single source of truth that cannot go stale;

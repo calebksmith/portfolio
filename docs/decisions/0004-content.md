@@ -34,10 +34,15 @@ Reasons the file wins here that the earlier reasoning undervalued:
 - The site can be cloned and run with no database at all, which matters for a
   repo that may be public as a work sample.
 
-**Structured data stays in Postgres.** Job history, skills, and tailored CVs are
-records, not prose, and the CV feature needs runtime writes. The context
+**Structured data stays out of prose.** Job history and skills are records, not
+paragraphs, so they live in `lib/content/resume.ts` as typed data. The context
 document anticipates this — "design the content layer to accept structured data,
 not just prose."
+
+*Amended by ADR 0005: this originally said the structured data stayed in
+Postgres, because it existed to assemble tailored CVs. That requirement was a
+misreading. With cover letters there is nothing to assemble, so job history and
+skills are committed data rather than rows, and the tables were deleted.*
 
 **A CV references a case study by slug, not foreign key.** That is the cost of
 the split: the database cannot enforce that a referenced case study exists. A

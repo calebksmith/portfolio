@@ -220,7 +220,7 @@ Vimocity ships a web app, iOS and Android apps, and a Windows desktop app. Each 
 ---
 
 ## 4.3 — Rebuilding the web app
-*Front-end · Platform migration · 2024–2025*
+*Front-end · Platform migration · 2026*
 
 **Problem**
 Our web application had been built up piecemeal over years. The code was inconsistent, slow to change, and increasingly hard to keep visually coherent. Rebuilding it meant rebuilding every page — and the product had to keep running the whole time.
@@ -240,7 +240,7 @@ Our web application had been built up piecemeal over years. The code was inconsi
 ---
 
 ## 4.4 — One login for three platforms
-*Product design · Cross-platform · 2024*
+*Product design · Cross-platform · 2025*
 
 **Problem**
 Vimocity runs on web, mobile, and desktop, and each had its own login and account creation flow. Three codebases meant three sets of bugs, three things to update, and inconsistent experiences. Account creation was also our most common support issue.

@@ -14,16 +14,16 @@ codebase is held to: [`CLAUDE.md`](../CLAUDE.md).
 |---|---|---|
 | Public portfolio | Anyone | Fast, static, indexable |
 | Admin | Me | Authenticated, write-heavy |
-| Tailored CVs | One recruiter, by link | Private, unguessable, per-opening |
+| Cover letters | One hiring manager, by link | Private, unguessable, one per opening |
 
 The third one shaped most of what follows.
 
 ## Shape
 
 ```
-Visitor          Recruiter (link)      Me (admin)
+Visitor       Hiring mgr (link)      Me (admin)
    │                   │                   │
-(site)            /cv/[token]           (admin)
+(site)         /letter/[token]        (admin)
 static           per request,          gated per route
                    noindex                 │
    │                   │            requireAdmin()
@@ -49,15 +49,23 @@ resolves to a token — a hex value in a component is a reviewable error. Dark
 mode is defined per token, not retrofitted. Focus rings always visible.
 Animations no-op under `prefers-reduced-motion`.
 
-**No component library on the public site.** The design is deliberately not the
-consensus look, and a component library's job is to converge on it. shadcn/ui is
-intended for the admin panel only — copied in as owned source, so its classes
-get rewritten onto the same tokens rather than running two design systems.
+**A component library I own, not one I installed.** cksUI lives in this repo,
+built on shadcn/ui's patterns — copied-in source, Radix for behavior — with
+every visual value rewritten onto the `--ck-*` pairs. shadcn isn't a library you
+install; it's source you copy in and own, which is what makes it compatible with
+the constraint that I build the UI here. Radix stays a justified dependency: it
+handles focus management, keyboard interaction, and ARIA, where a subtle mistake
+is invisible until it reaches someone using a screen reader.
+
+`/style-guide` documents it by importing the real components and rendering them
+live, with every measured value read off the running page. A broken component
+breaks visibly there, and documentation that keeps its own copy of the values is
+documentation that can lie.
 
 **Neon over Supabase.** Supabase's real advantage is Auth + row-level security,
 unused here since auth is Auth.js. And free-tier Supabase pauses after ~a week
-idle — the worst possible failure for a recruiter opening a CV link three days
-late. Gave up: a table-editing UI and file storage.
+idle — the worst possible failure for a hiring manager opening a letter three
+days late. Gave up: a table-editing UI and file storage.
 
 **Drizzle over Prisma.** Lighter runtime, no codegen in the deploy path,
 migrations as plain SQL committed and reviewable. Postgres doesn't index foreign
@@ -84,31 +92,35 @@ account never gets a session. No proxy-level guard: Next's docs say that layer
 suits optimistic checks and real authorization belongs next to the data, so
 every admin route calls the guard itself.
 
-**A tailored CV is a view, not a document.** Over a job search you write many
-CVs that overlap heavily. Copy-and-edit rots: fix a typo in a job title and
-every copy already in someone's inbox stays wrong.
+**Deleting six tables when the requirement changed.** The database was built for
+"tailored CVs" — a CV assembled per opening from reusable parts. That was a
+misreading of the requirement, and it survived long enough to become a schema:
+positions, achievement bullets, skills, tags, and case studies, all joined per
+opening with overrides.
 
-So a CV stores only what's specific to one opening — target role, headline,
-summary. Everything else is a join: which positions appear and in what order,
-which bullets, which case studies, which skills. That's why achievement bullets
-are one row each rather than a text blob — a design-systems CV takes three
-bullets from a job, a platform CV takes a different three, with nothing
-duplicated.
+The actual need was cover letters. A CV is a document assembled from parts; a
+letter is prose addressed to one reader. There is nothing to select and reorder,
+so all of that machinery was elaborate infrastructure around a `text` column.
 
-> Fix a job title once, and every CV ever shared shows the correction.
+So six tables were deleted rather than migrated. Case studies are files (ADR
+0004) and the résumé is structured data, so none of them had a reader left.
+Unused schema is a claim about the future that has to be maintained and
+explained. Sixteen tables became seven.
 
-Cost: more tables, join-heavy reads. Free at this scale, and indexed.
+> The most useful thing I did to this database was take most of it out.
 
-**The URL is the credential.** No login, because asking a recruiter to register
-to read a CV is a good way to not have it read. The boundary is token entropy:
-32 bytes from a CSPRNG, generated in the repository layer, never accepted as an
-argument.
+**The URL is the credential.** No login, because asking a hiring manager to
+register to read a cover letter is a good way to not have it read. The boundary
+is token entropy: 32 bytes from a CSPRNG, generated in the repository layer,
+never accepted as an argument.
 
-Accepted honestly: anyone with the link can read and forward it. It's a CV — a
-document meant for strangers — so exposure is bounded by what it already is.
-Mitigations: revoke, rotate, expire, `noindex`, and an **identical 404** for
-revoked, expired, draft, and nonexistent alike, so a recipient can't learn a
-link was turned off or that a company was ever sent one.
+Accepted honestly: anyone with the link can read and forward it. It's a letter
+written to be handed to someone I have never met, so exposure is bounded by what
+it already is. It is also HTML only — a downloadable copy would be a second
+artifact of the same content, stale the moment a sentence changes. Mitigations:
+revoke, rotate, expire, `noindex`, and an **identical 404** for revoked,
+expired, draft, and nonexistent alike, so a recipient can't learn a link was
+turned off or that a company was ever written to.
 
 **View logging, minimal on purpose.** "Did they open it" is useful, but the
 visitor is a counterparty in a hiring process who consented to nothing. No
@@ -122,13 +134,13 @@ after the response is sent and swallows its errors.
 Stated explicitly, because unfinished and overlooked look identical from
 outside.
 
-- **Admin editing screens** — schema, repositories, and the gate exist; each
-  screen is a form wired to a server action.
-- **Public case study routes** — read layer exists. The site is still a landing
-  page on purpose.
+- **Admin editing screens for cover letters** — schema, repositories, and the
+  auth gate exist; each screen is a form wired to a server action.
+- **The inspector overlay** — the toggle, its slot in the header, and the
+  `data-slot` convention every component follows are all in place; what is
+  missing is the overlay and the element walker.
 - **Cache Components** — off until DB-backed routes exist and can be verified
   against it. The code is already written in the shape it wants.
-- **PDF export** — should render this same view, not a second divergent one.
 
 ## Running it
 

@@ -2,6 +2,11 @@
 
 **Status:** accepted · **Date:** 2026-08-10
 
+> **Note.** The context below describes "tailored CVs", which was a misreading of
+> the requirement — corrected to cover letters in ADR 0005, along with the
+> deletion of six tables. The database and ORM choices here still stand; only
+> what is stored in them changed.
+
 ## Context
 
 The site needs durable, relational, runtime-writable data: case studies, job
