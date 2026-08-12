@@ -13,6 +13,15 @@
 export const THEME_COOKIE = "ck-theme";
 export const MODE_COOKIE = "ck-mode";
 
+/**
+ * The inspector's mode, stamped on <html> like theme and mode.
+ *
+ * Deliberately not persisted to a cookie: inspecting is something you do for a
+ * minute, not a preference. Restoring it on the next visit would leave a
+ * debugging overlay covering a portfolio a recruiter just opened.
+ */
+export const INSPECT_ATTRIBUTE = "data-inspect";
+
 /** A year. The preference is not sensitive and should outlive the session. */
 export const THEME_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
 

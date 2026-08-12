@@ -16,6 +16,7 @@ export {
   CardTitle,
 } from "./card";
 export { ControlBar, ControlButton, ControlToggle } from "./control-bar";
+export { Inspector } from "./inspector";
 export { PrintButton } from "./print-button";
 export { SiteHeader, type WorkItem } from "./site-header";
 export { SpecList, SpecRow } from "./spec-list";

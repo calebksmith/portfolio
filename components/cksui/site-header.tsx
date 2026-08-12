@@ -3,8 +3,11 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { ControlBar, ControlButton } from "./control-bar";
+import { INSPECT_ATTRIBUTE } from "@/lib/theme";
+
+import { ControlBar, ControlButton, ControlToggle } from "./control-bar";
 import { cn } from "./lib/cn";
+import { useHtmlAttribute } from "./lib/use-html-attribute";
 import { ThemeSwitcher } from "./theme-switcher";
 
 /**
@@ -144,6 +147,7 @@ export function SiteHeader({ work }: { work: WorkItem[] }) {
         {/* Instruments — one bounded control surface, visually distinct from
             the path. The inspector toggle joins this cluster at step 9. */}
         <ControlBar className="shrink-0">
+          <InspectToggle />
           <AppearanceMenu />
         </ControlBar>
       </div>
@@ -188,6 +192,29 @@ function WorkMenu({ work }: { work: WorkItem[] }) {
         </ul>
       </div>
     </>
+  );
+}
+
+/**
+ * Turns the inspector on and off.
+ *
+ * The mode lives on <html> rather than in React state, same as theme — the
+ * overlay is a sibling, not a child, and the attribute is what both read.
+ */
+function InspectToggle() {
+  const active = useHtmlAttribute<"on" | "off">(INSPECT_ATTRIBUTE, "off") === "on";
+
+  return (
+    <ControlToggle
+      icon={<CrosshairIcon />}
+      label="Inspect"
+      pressed={active}
+      onClick={() => {
+        const root = document.documentElement;
+        if (active) root.removeAttribute(INSPECT_ATTRIBUTE);
+        else root.setAttribute(INSPECT_ATTRIBUTE, "on");
+      }}
+    />
   );
 }
 
@@ -240,6 +267,24 @@ function Chevron() {
       strokeLinejoin="round"
     >
       <path d="m4 6 4 4 4-4" />
+    </svg>
+  );
+}
+
+function CrosshairIcon() {
+  return (
+    <svg
+      aria-hidden="true"
+      focusable="false"
+      viewBox="0 0 16 16"
+      className="size-4"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.4"
+      strokeLinecap="round"
+    >
+      <circle cx="8" cy="8" r="4.25" />
+      <path d="M8 .75v2.5M8 12.75v2.5M.75 8h2.5M12.75 8h2.5" />
     </svg>
   );
 }

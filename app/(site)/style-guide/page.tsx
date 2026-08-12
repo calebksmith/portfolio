@@ -165,9 +165,27 @@ export default async function StyleGuidePage() {
               shadcn/ui&rsquo;s patterns as source copied in and owned, not as an
               installed dependency, with every value rewritten onto the tokens
               above. Every component declares a <Code>data-slot</Code>, the same
-              convention VimUI uses, which is what the inspector overlay will
-              read.
+              convention VimUI uses.
             </p>
+
+            <div className="mt-6 rounded-lg border border-input bg-card p-5">
+              <p className="text-xs uppercase tracking-[0.16em] text-muted-foreground">
+                Try the inspector
+              </p>
+              <p className="mt-2 max-w-[62ch] text-pretty text-card-foreground">
+                Hit <strong className="font-semibold">Inspect</strong> in the
+                header and point at anything on this page — or tab through it,
+                which works the same way. It reports the component, the tokens
+                its rendered values resolve back to, and the rule behind them.
+              </p>
+              <p className="mt-3 max-w-[62ch] text-pretty text-xs text-muted-foreground">
+                Values are read with <Code>getComputedStyle</Code> and resolved{" "}
+                <em>backwards</em> to token names, so it reports on the token
+                layer rather than dumping CSS. Anything resolving to no token is
+                a violation of the rule in <Code>CLAUDE.md</Code>, and the panel
+                says so rather than hiding it.
+              </p>
+            </div>
 
             <div className="mt-8 space-y-10">
               {specimens.map((specimen) => (
