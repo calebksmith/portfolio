@@ -4,6 +4,9 @@ import { Badge, Button, cn } from "@/components/cksui";
 import { caseStudies, type Weight } from "@/lib/content/work";
 import { site } from "@/lib/site";
 
+import { ProcessDiamond } from "./process-diamond";
+import { ProcessLoop } from "./process-loop";
+
 /**
  * The bento index.
  *
@@ -221,6 +224,44 @@ export function Bento() {
           <Button asChild variant="outline">
             <Link href="/resume">Résumé and full background →</Link>
           </Button>
+        </div>
+      </section>
+
+      {/*
+        TEMPORARY — two candidate hero graphics, side by side for comparison.
+        Pick one, move it into the hero section above, and delete the other
+        along with this wrapper. See docs/HANDOFF.md.
+      */}
+      <section aria-labelledby="process-options" className="pb-24">
+        <h2
+          id="process-options"
+          className="text-xs uppercase tracking-[0.16em] text-muted-foreground"
+        >
+          Process graphic — pick one
+        </h2>
+
+        <div className="mt-4 grid gap-8 lg:grid-cols-2">
+          <div className="rounded-lg border border-border bg-card p-6">
+            <p className="mb-4 text-xs uppercase tracking-[0.14em] text-primary">
+              A · Double diamond that loops
+            </p>
+            <ProcessDiamond />
+            <p className="mt-4 text-xs text-pretty text-muted-foreground">
+              Reads instantly to a design audience. The dot never crosses the
+              dashed line into Launch — it returns to Discover instead.
+            </p>
+          </div>
+
+          <div className="rounded-lg border border-border bg-card p-6">
+            <p className="mb-4 text-xs uppercase tracking-[0.14em] text-primary">
+              B · Line that bends into a cycle
+            </p>
+            <ProcessLoop />
+            <p className="mt-4 text-xs text-pretty text-muted-foreground">
+              Opens as the pipeline everyone shows, then becomes a ring. The
+              transition is the argument.
+            </p>
+          </div>
         </div>
       </section>
 
