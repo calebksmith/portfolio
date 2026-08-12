@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 
 import { requireAdmin } from "@/lib/auth-guard";
 import { signOut } from "@/lib/auth";
-import { showFullSite } from "@/lib/flags";
+import { showLetters } from "@/lib/flags";
 
 /**
  * Admin chrome, and the gate.
@@ -18,7 +18,7 @@ export default async function AdminLayout({
 }: LayoutProps<"/admin">) {
   // Not published yet — 404 rather than redirect, so production reveals nothing
   // about an admin area existing at all.
-  if (!showFullSite()) notFound();
+  if (!showLetters()) notFound();
 
   const user = await requireAdmin();
 

@@ -4,7 +4,6 @@ import { notFound } from "next/navigation";
 import { Badge } from "@/components/cksui";
 import { Mdx } from "@/components/mdx";
 import { caseStudies, getCaseStudy } from "@/lib/content/work";
-import { showFullSite } from "@/lib/flags";
 
 /**
  * Prerender every case study at build time. The content comes from files in the
@@ -31,8 +30,6 @@ export async function generateMetadata({
 export default async function CaseStudyPage({
   params,
 }: PageProps<"/work/[slug]">) {
-  if (!showFullSite()) notFound();
-
   const { slug } = await params;
   const study = getCaseStudy(slug);
   if (!study) notFound();

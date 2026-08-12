@@ -1,27 +1,37 @@
 import "server-only";
 
 /**
- * What the site exposes, per environment.
+ * What the site exposes.
  *
- * Production is currently the landing page and nothing else. The colophon,
- * sign-in, admin, and shared-CV routes all exist and all work — they are simply
- * not published yet, because the database and OAuth app they depend on aren't
- * set up.
- *
- * The environment decides, so there is nothing to configure and nothing to
- * remember to switch back:
- *
- *   development  -> everything (NODE_ENV)
- *   preview      -> everything (VERCEL_ENV, set automatically on branch deploys)
- *   production   -> landing page only
- *
- * SITE_STAGE=full is the manual override, for showing a production build the
- * full site before it is genuinely published.
+ * Two flags, because the site has two halves with different readiness:
+ * the portfolio is finished and published, while the cover letter system is
+ * written but has no database or OAuth app behind it.
  */
-export function showFullSite(): boolean {
+
+/**
+ * The public portfolio: index, case studies, résumé, style guide, colophon.
+ *
+ * Published 2026-08-12. Everything it needs is committed — content is MDX and
+ * structured data, nothing reaches for a service that isn't there.
+ */
+export function showPortfolio(): boolean {
+  return true;
+}
+
+/**
+ * Sign-in, admin, and shared cover letters.
+ *
+ * These need `DATABASE_URL` and a GitHub OAuth app. Gating on the presence of
+ * the connection string rather than on a hardcoded flag means production lights
+ * them up the moment the environment is configured, with no code change and no
+ * chance of publishing a sign-in page that leads nowhere.
+ *
+ * Development is exempt so the routes can be worked on; without a database they
+ * fail with the deliberate error from lib/env.ts, which is the correct behavior
+ * rather than a bug.
+ */
+export function showLetters(): boolean {
   return (
-    process.env.NODE_ENV === "development" ||
-    process.env.VERCEL_ENV === "preview" ||
-    process.env.SITE_STAGE === "full"
+    Boolean(process.env.DATABASE_URL) || process.env.NODE_ENV === "development"
   );
 }

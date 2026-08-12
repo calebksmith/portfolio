@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
 
-import { showFullSite } from "@/lib/flags";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -169,9 +167,6 @@ const pending = [
 /* -------------------------------------------------------------------------- */
 
 export default async function ColophonPage() {
-  // Written, but not published yet. See lib/flags.ts.
-  if (!showFullSite()) notFound();
-
   return (
     <main className="mx-auto w-full max-w-[66ch] px-6 pb-24">
       <header className="border-b border-border pt-18 pb-8">

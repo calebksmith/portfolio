@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 
 import { Badge, ThemeSwitcher } from "@/components/cksui";
-import { showFullSite } from "@/lib/flags";
-import { notFound } from "next/navigation";
 
 import { ContrastTable } from "./contrast-table";
 import { specimens } from "./_components";
@@ -36,8 +34,6 @@ const SECTIONS = [
 ] as const;
 
 export default async function StyleGuidePage() {
-  if (!showFullSite()) notFound();
-
   return (
     <main className="mx-auto w-full max-w-6xl px-6 py-14 sm:px-10">
       <header className="border-b border-border pb-8">
