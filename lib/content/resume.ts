@@ -3,8 +3,8 @@
  *
  * Deliberately not prose or MDX: these are records with a shape — roles have
  * periods, bullets belong to sections, work items have outcomes. Keeping the
- * shape means the same data can render as a page, a print stylesheet, and
- * eventually a tailored CV, without three copies drifting apart.
+ * shape means the same data renders as a page and as a print stylesheet without
+ * two copies drifting apart.
  *
  * Copy is the approved text from docs/copy-deck.md §3. Do not rewrite it to fit
  * a layout — change the layout. Metrics here are approved and defensible; do
