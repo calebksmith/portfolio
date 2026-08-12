@@ -5,6 +5,7 @@ import { caseStudies, type Weight } from "@/lib/content/work";
 import { site } from "@/lib/site";
 
 import { CodeToUi } from "./code-to-ui";
+import { ProcessBuild } from "./process-build";
 import { ProcessDiamond } from "./process-diamond";
 import { ProcessLoop } from "./process-loop";
 
@@ -241,23 +242,28 @@ export function Bento() {
           Process graphic — pick one
         </h2>
 
-        <div className="mt-4 space-y-10">
-          <div>
-            <p className="mb-2 text-xs uppercase tracking-[0.14em] text-primary">
-              C · Code becomes UI, live
-            </p>
-            <p className="mb-6 max-w-[52ch] text-pretty text-muted-foreground">
-              A product designer who works in code — shown rather than claimed.
-            </p>
-            <CodeToUi />
-          </div>
+        <p className="mt-2 max-w-[52ch] text-pretty text-muted-foreground">
+          D · The double diamond, built rather than drawn. Each phase types the
+          code that produces it; the widths do the diverging and converging.
+        </p>
 
-          <details className="rounded-lg border border-border bg-card p-6">
-            <summary className="cursor-pointer text-xs uppercase tracking-[0.14em] text-muted-foreground">
-              Earlier attempts — A and B
-            </summary>
+        <div className="mt-12">
+          <ProcessBuild />
+        </div>
 
-            <div className="mt-8 grid gap-10 lg:grid-cols-2">
+        <details className="mt-16 rounded-lg border border-border bg-card p-6">
+          <summary className="cursor-pointer text-xs uppercase tracking-[0.14em] text-muted-foreground">
+            Earlier attempts — A, B, C
+          </summary>
+
+          <div className="mt-8 space-y-10">
+            <div>
+              <p className="mb-4 text-xs uppercase tracking-[0.14em] text-muted-foreground">
+                C · Code becomes UI, live
+              </p>
+              <CodeToUi />
+            </div>
+            <div className="grid gap-10 lg:grid-cols-2">
               <div>
                 <p className="mb-4 text-xs uppercase tracking-[0.14em] text-muted-foreground">
                   A · Double diamond that loops
@@ -271,8 +277,8 @@ export function Bento() {
                 <ProcessLoop />
               </div>
             </div>
-          </details>
-        </div>
+          </div>
+        </details>
       </section>
 
       <section aria-labelledby="selected-work" className="pb-24">
