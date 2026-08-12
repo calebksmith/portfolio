@@ -133,7 +133,14 @@ function InspectorOverlay() {
         /* Labelled by the visible heading rather than a duplicate aria-label,
            so the name a screen reader announces is the one on screen. */
         aria-labelledby="ck-inspector-title"
-        className="fixed inset-y-0 right-0 z-30 w-[min(21rem,100vw)] overflow-y-auto border-l border-input bg-card p-5 pt-20 text-card-foreground shadow-lg"
+        /* Starts flush beneath the header rather than padding itself down past
+           it, so the title sits on the header's own baseline and the panel
+           tracks the header if its height ever changes. */
+        style={{
+          top: "var(--ck-header-height)",
+          width: "min(var(--ck-inspector-width), 100vw)",
+        }}
+        className="fixed right-0 bottom-0 z-30 overflow-y-auto border-l border-input bg-card p-5 text-card-foreground shadow-lg"
       >
         <header className="mb-5 border-b border-border pb-3">
           <h2
