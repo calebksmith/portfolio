@@ -1,42 +1,35 @@
 import Link from "next/link";
 
-import { Badge, cn } from "@/components/cksui";
+import { Badge, Button, cn } from "@/components/cksui";
 import { caseStudies, type Weight } from "@/lib/content/work";
 import { site } from "@/lib/site";
 
 /**
  * The bento index.
  *
- * Three kinds of card, deliberately not interchangeable:
+ * Three kinds of block, deliberately not interchangeable:
  *
- *   identity    who this is — the top of the hierarchy, one per page
- *   case study  work with a story behind it, grouped under a heading and
- *               marked with an accent edge and a "Read case study" affordance
- *   pointer     a utility page or an outside example; visually lighter, and
- *               external ones say so rather than surprising you with a new tab
+ *   hero        who this is. Not a card — plain type on the page ground, with
+ *               a single CTA as the only interactive element.
+ *   case study  work with a story behind it. A filled surface, an accent
+ *               "Case study" label, and a read affordance.
+ *   pointer     a utility page or an outside example. No fill, muted label, no
+ *               CTA — it reads as navigation rather than as work. External ones
+ *               say so rather than surprising you with a new tab.
  *
- * Hierarchy is carried by type scale and padding, not only by column span.
- * Span collapses to one column on a phone, so a layout that leans on span alone
- * flattens to nine identical boxes exactly where the reading order matters most.
+ * Hierarchy is carried by type scale, fill, and label, not by column span.
+ * Span collapses to one column on a phone, so a layout leaning on span alone
+ * flattens to identical boxes exactly where reading order matters most.
  */
 
 /** Column span out of 6, and the type scale that survives the collapse. */
-const CASE_STUDY_STYLE: Record<Weight, { span: string; title: string; pad: string }> = {
-  large: {
-    span: "lg:col-span-3",
-    title: "text-xl sm:text-2xl",
-    pad: "p-6",
-  },
-  medium: {
-    span: "lg:col-span-2",
-    title: "text-base sm:text-lg",
-    pad: "p-5",
-  },
-  small: {
-    span: "lg:col-span-2",
-    title: "text-base",
-    pad: "p-5",
-  },
+const CASE_STUDY_STYLE: Record<
+  Weight,
+  { span: string; title: string; pad: string }
+> = {
+  large: { span: "lg:col-span-3", title: "text-xl sm:text-2xl", pad: "p-6 sm:p-7" },
+  medium: { span: "lg:col-span-2", title: "text-base sm:text-lg", pad: "p-6" },
+  small: { span: "lg:col-span-2", title: "text-base", pad: "p-6" },
 };
 
 function ExternalIcon() {
@@ -82,16 +75,21 @@ function CaseStudyCard({
       data-slot="case-study-card"
       className={cn(
         "group relative flex flex-col gap-3 rounded-lg border border-border bg-card text-card-foreground transition-colors",
-        // The accent edge is what says "case study" at a glance, at every width.
-        "border-l-2 border-l-primary",
-        "hover:border-input hover:border-l-primary focus-within:border-input focus-within:border-l-primary",
+        "hover:border-input focus-within:border-input",
         style.span,
         style.pad,
         "sm:col-span-2",
       )}
     >
-      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">
-        {role} · {year}
+      {/* The kind of thing this is, said outright. Replaces the accent edge:
+          a label survives the single-column collapse and says what a colored
+          border could only imply. */}
+      <p className="flex items-center gap-2 text-xs uppercase tracking-[0.16em] text-primary">
+        Case study
+        <span aria-hidden="true" className="text-muted-foreground">
+          ·
+        </span>
+        <span className="text-muted-foreground">{year}</span>
       </p>
 
       <h3
@@ -113,6 +111,8 @@ function CaseStudyCard({
 
       <p className="text-pretty text-muted-foreground">{summary}</p>
 
+      <p className="text-xs text-muted-foreground">{role}</p>
+
       {platforms.length > 0 ? (
         <ul className="flex flex-wrap gap-1.5">
           {platforms.map((platform) => (
@@ -123,15 +123,15 @@ function CaseStudyCard({
         </ul>
       ) : null}
 
-      <p className="mt-auto pt-2 text-xs text-primary">Read case study →</p>
+      <p className="mt-auto pt-3 text-xs text-primary">Read case study →</p>
     </article>
   );
 }
 
 /**
  * A pointer to somewhere else — a utility page on this site, or an outside
- * example. Lighter than a case study on purpose: no card fill, no accent edge,
- * so it reads as navigation rather than as work.
+ * example. No fill and no read affordance, so it reads as navigation rather
+ * than as work.
  */
 function PointerCard({
   href,
@@ -157,11 +157,11 @@ function PointerCard({
     <div
       data-slot="pointer-card"
       className={cn(
-        "group relative flex flex-col gap-2 rounded-lg border border-border bg-background p-5 transition-colors hover:border-input focus-within:border-input sm:col-span-2",
+        "group relative flex flex-col gap-2 rounded-lg border border-border bg-background p-6 transition-colors hover:border-input focus-within:border-input sm:col-span-2",
         className,
       )}
     >
-      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">
+      <p className="text-xs uppercase tracking-[0.16em] text-muted-foreground">
         {eyebrow}
       </p>
 
@@ -191,31 +191,40 @@ function PointerCard({
 
 export function Bento() {
   return (
-    <main className="mx-auto w-full max-w-5xl px-6 py-16 sm:px-10">
-      <h1 className="sr-only">
-        {site.name} — {site.role}
-      </h1>
+    <main className="mx-auto w-full max-w-5xl px-6 sm:px-10">
+      {/*
+        Hero. Not a card: type on the page ground, with the CTA as the only
+        interactive element. Sized so the "Selected work" heading below sits
+        just at the fold — enough of it visible to read as an invitation to
+        scroll without the hero feeling cropped.
 
-      {/* Identity — the top of the hierarchy, and the only card at this scale. */}
-      <div
-        data-slot="identity-card"
-        className="group relative flex flex-col gap-4 rounded-lg border border-input bg-card p-6 text-card-foreground transition-colors hover:border-primary focus-within:border-primary sm:p-8"
-      >
+        `svh` rather than `vh` so mobile browser chrome doesn't push the next
+        section off screen.
+      */}
+      <section className="flex min-h-[80svh] flex-col justify-center py-16">
         <p className="text-xs uppercase tracking-[0.16em] text-primary">
           {site.role}
         </p>
-        <p className="font-display text-[clamp(1.75rem,5vw,2.75rem)] font-semibold leading-[1.05] tracking-[-0.03em] text-balance">
-          <Link href="/resume" className={cn(STRETCH, "hover:underline decoration-primary underline-offset-4")}>
-            {site.name}
-          </Link>
-        </p>
-        <p className="max-w-[52ch] text-lg text-pretty text-muted-foreground">
+
+        {/* Tight internal rhythm: role, name, lede, and CTA read as one block.
+            The section's own height is what gives the hero room — spacing
+            inside it would only pull the group apart. */}
+        <h1 className="mt-3 font-display text-[clamp(2.5rem,9vw,4.5rem)] font-semibold leading-[0.95] tracking-[-0.03em] text-balance text-foreground">
+          {site.name}
+        </h1>
+
+        <p className="mt-4 max-w-[46ch] text-lg text-pretty text-muted-foreground">
           {site.lede}
         </p>
-        <p className="text-xs text-primary">Résumé and full background →</p>
-      </div>
 
-      <section aria-labelledby="selected-work" className="mt-10">
+        <div className="mt-6">
+          <Button asChild variant="outline">
+            <Link href="/resume">Résumé and full background →</Link>
+          </Button>
+        </div>
+      </section>
+
+      <section aria-labelledby="selected-work" className="pb-24">
         <h2
           id="selected-work"
           className="text-xs uppercase tracking-[0.16em] text-muted-foreground"
@@ -223,14 +232,18 @@ export function Bento() {
           Selected work
         </h2>
 
-        <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-4 lg:grid-cols-6">
+        {/* Half the gap the grid uses: the heading belongs to the grid it
+            labels, so it sits closer to it than the cards sit to each other. */}
+        <div className="mt-4 grid grid-cols-1 gap-8 sm:grid-cols-4 lg:grid-cols-6">
           {caseStudies.map((study) => (
             <CaseStudyCard key={study.slug} {...study} />
           ))}
         </div>
       </section>
 
-      <section aria-labelledby="elsewhere" className="mt-10">
+      {/* No rule between the sections — the section padding already separates
+          them, and a border on top of that is a second boundary. */}
+      <section aria-labelledby="elsewhere" className="pb-24">
         <h2
           id="elsewhere"
           className="text-xs uppercase tracking-[0.16em] text-muted-foreground"
@@ -238,7 +251,7 @@ export function Bento() {
           Elsewhere
         </h2>
 
-        <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-4 lg:grid-cols-6">
+        <div className="mt-4 grid grid-cols-1 gap-8 sm:grid-cols-4 lg:grid-cols-6">
           <PointerCard
             href={site.links[1].href}
             external
