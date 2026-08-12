@@ -450,6 +450,176 @@ body {
   }
 }
 
+/* ===========================================================================
+   Process diagrams
+   ===========================================================================
+   Two candidate hero graphics. Both are inline SVG driven from here, with no
+   animation library — the whole effect is a stroke being drawn and a dot riding
+   an offset-path.
+
+   Under reduced motion each collapses to its finished state rather than
+   stopping mid-draw: the completed path, all labels lit, no dot. The meaning is
+   in the shape and the labels, never in the movement.
+=========================================================================== */
+
+/* --- A · double diamond that loops --------------------------------------- */
+
+@keyframes ck-trace {
+  0% {
+    stroke-dashoffset: var(--ck-path-length);
+  }
+  55%,
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes ck-ride {
+  0% {
+    offset-distance: 0%;
+    opacity: 0;
+  }
+  4%,
+  52% {
+    opacity: 1;
+  }
+  55%,
+  100% {
+    offset-distance: 100%;
+    opacity: 0;
+  }
+}
+
+/** Each phase label brightens as the dot passes it, then settles back. */
+@keyframes ck-phase {
+  0%,
+  8% {
+    opacity: 0.35;
+  }
+  14%,
+  22% {
+    opacity: 1;
+  }
+  32%,
+  100% {
+    opacity: 0.55;
+  }
+}
+
+.ck-trace {
+  stroke-dasharray: var(--ck-path-length);
+  animation: ck-trace 12s var(--ck-ease) infinite;
+}
+
+.ck-ride {
+  offset-path: var(--ck-path);
+  offset-rotate: 0deg;
+  animation: ck-ride 12s var(--ck-ease) infinite;
+}
+
+.ck-phase {
+  opacity: 0.55;
+  animation: ck-phase 12s var(--ck-ease) infinite;
+  animation-delay: calc(var(--ck-phase-index, 0) * 1.1s);
+}
+
+/* --- B · line that bends into a cycle ------------------------------------ */
+
+@keyframes ck-linear-in {
+  0% {
+    opacity: 0;
+  }
+  6%,
+  38% {
+    opacity: 1;
+  }
+  48%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes ck-ring-in {
+  0%,
+  40% {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  54%,
+  94% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+
+@keyframes ck-orbit {
+  0%,
+  46% {
+    opacity: 0;
+    offset-distance: 0%;
+  }
+  54% {
+    opacity: 1;
+  }
+  92% {
+    opacity: 1;
+    offset-distance: 100%;
+  }
+  100% {
+    opacity: 0;
+    offset-distance: 100%;
+  }
+}
+
+.ck-linear {
+  animation: ck-linear-in 14s var(--ck-ease) infinite;
+}
+
+.ck-ring {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ck-ring-in 14s var(--ck-ease) infinite;
+}
+
+.ck-orbit {
+  offset-path: var(--ck-path);
+  offset-rotate: 0deg;
+  animation: ck-orbit 14s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Finished state, held. Not a paused animation — a completed one. */
+  .ck-trace {
+    stroke-dashoffset: 0;
+    animation: none;
+  }
+
+  .ck-phase {
+    opacity: 1;
+    animation: none;
+  }
+
+  .ck-ride,
+  .ck-orbit {
+    display: none;
+  }
+
+  /* B resolves to the cycle, since that is the point it is making. */
+  .ck-linear {
+    display: none;
+  }
+
+  .ck-ring {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .ck-enter {
     opacity: 1;
