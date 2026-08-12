@@ -4,6 +4,7 @@ import { Badge, Button, cn } from "@/components/cksui";
 import { caseStudies, type Weight } from "@/lib/content/work";
 import { site } from "@/lib/site";
 
+import { CodeToUi } from "./code-to-ui";
 import { ProcessDiamond } from "./process-diamond";
 import { ProcessLoop } from "./process-loop";
 
@@ -240,27 +241,37 @@ export function Bento() {
           Process graphic — pick one
         </h2>
 
-        <div className="mt-4 grid gap-8 lg:grid-cols-2">
-          <div className="rounded-lg border border-border bg-card p-6">
+        <div className="mt-4 space-y-10">
+          <div>
             <p className="mb-2 text-xs uppercase tracking-[0.14em] text-primary">
-              A · Double diamond that loops
+              C · Code becomes UI, live
             </p>
-            <p className="mb-6 max-w-[46ch] text-pretty text-muted-foreground">
-              Research through refinement — everything except the launch.
+            <p className="mb-6 max-w-[52ch] text-pretty text-muted-foreground">
+              A product designer who works in code — shown rather than claimed.
             </p>
-            <ProcessDiamond />
+            <CodeToUi />
           </div>
 
-          <div className="rounded-lg border border-border bg-card p-6">
-            <p className="mb-4 text-xs uppercase tracking-[0.14em] text-primary">
-              B · Line that bends into a cycle
-            </p>
-            <ProcessLoop />
-            <p className="mt-4 text-xs text-pretty text-muted-foreground">
-              Opens as the pipeline everyone shows, then becomes a ring. The
-              transition is the argument.
-            </p>
-          </div>
+          <details className="rounded-lg border border-border bg-card p-6">
+            <summary className="cursor-pointer text-xs uppercase tracking-[0.14em] text-muted-foreground">
+              Earlier attempts — A and B
+            </summary>
+
+            <div className="mt-8 grid gap-10 lg:grid-cols-2">
+              <div>
+                <p className="mb-4 text-xs uppercase tracking-[0.14em] text-muted-foreground">
+                  A · Double diamond that loops
+                </p>
+                <ProcessDiamond />
+              </div>
+              <div>
+                <p className="mb-4 text-xs uppercase tracking-[0.14em] text-muted-foreground">
+                  B · Line that bends into a cycle
+                </p>
+                <ProcessLoop />
+              </div>
+            </div>
+          </details>
         </div>
       </section>
 

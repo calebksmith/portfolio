@@ -541,6 +541,23 @@ body {
   animation-delay: calc(var(--ck-phase-index, 0) * 1.1s);
 }
 
+/* --- Typewriter caret ----------------------------------------------------- */
+
+@keyframes ck-blink {
+  0%,
+  45% {
+    opacity: 1;
+  }
+  55%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.ck-caret {
+  animation: ck-blink 1.1s steps(1, end) infinite;
+}
+
 /* --- B · line that bends into a cycle ------------------------------------ */
 
 @keyframes ck-linear-in {
@@ -624,6 +641,10 @@ body {
   .ck-ride,
   .ck-orbit {
     display: none;
+  }
+
+  .ck-caret {
+    animation: none;
   }
 
   /* B resolves to the cycle, since that is the point it is making. */
