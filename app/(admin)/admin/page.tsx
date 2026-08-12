@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 
 import { requireAdmin } from "@/lib/auth-guard";
-import { listAllCaseStudiesForAdmin } from "@/lib/repositories/case-studies";
-import { listAllPositionsForAdmin } from "@/lib/repositories/positions";
-import { listResumesForAdmin } from "@/lib/repositories/resumes";
+import { caseStudies } from "@/lib/content/work";
+import { listLettersForAdmin } from "@/lib/repositories/cover-letters";
 
 export const metadata: Metadata = {
   title: "Admin",
@@ -20,24 +19,20 @@ export const dynamic = "force-dynamic";
 export default async function AdminDashboard() {
   await requireAdmin();
 
-  // Independent reads, so issue them together rather than in sequence.
-  const [caseStudies, positions, resumes] = await Promise.all([
-    listAllCaseStudiesForAdmin(),
-    listAllPositionsForAdmin(),
-    listResumesForAdmin(),
-  ]);
+  const letters = await listLettersForAdmin();
 
-  const published = caseStudies.filter(
-    (study) => study.status === "published",
-  ).length;
-  const shared = resumes.filter((resume) => resume.status === "shared").length;
-  const views = resumes.reduce((total, resume) => total + resume.views.length, 0);
+  const shared = letters.filter((letter) => letter.status === "shared").length;
+  const opened = letters.filter((letter) => letter.views.length > 0).length;
 
   const stats = [
-    { label: "Case studies", value: caseStudies.length, note: `${published} published` },
-    { label: "Positions", value: positions.length, note: "job history entries" },
-    { label: "Tailored CVs", value: resumes.length, note: `${shared} shared` },
-    { label: "Recent views", value: views, note: "last 5 per CV" },
+    { label: "Cover letters", value: letters.length, note: `${shared} shared` },
+    { label: "Opened", value: opened, note: "letters with at least one view" },
+    {
+      label: "Case studies",
+      value: caseStudies.length,
+      // Files, not rows — nothing to edit here. See ADR 0004.
+      note: "MDX files in src/content/work",
+    },
   ];
 
   return (
@@ -46,7 +41,7 @@ export default async function AdminDashboard() {
         Overview
       </h1>
 
-      <dl className="mt-8 grid gap-px overflow-hidden rounded-md border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
+      <dl className="mt-8 grid gap-px overflow-hidden rounded-md border border-border bg-border sm:grid-cols-3">
         {stats.map((stat) => (
           <div key={stat.label} className="bg-card p-5">
             <dt className="text-xs uppercase tracking-[0.14em] text-muted-foreground">
@@ -59,6 +54,45 @@ export default async function AdminDashboard() {
           </div>
         ))}
       </dl>
+
+      {letters.length > 0 ? (
+        <table className="mt-10 w-full border-collapse text-sm">
+          <caption className="sr-only">
+            Cover letters, with their most recent views
+          </caption>
+          <thead>
+            <tr className="border-b border-input text-left">
+              <th scope="col" className="py-2 pr-4 font-medium">
+                Letter
+              </th>
+              <th scope="col" className="py-2 pr-4 font-medium">
+                Status
+              </th>
+              <th scope="col" className="py-2 text-right font-medium">
+                Recent views
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {letters.map((letter) => (
+              <tr key={letter.id} className="border-b border-border">
+                <th scope="row" className="py-3 pr-4 font-normal">
+                  {letter.title}
+                  <span className="block text-xs text-muted-foreground">
+                    {letter.role} · {letter.company}
+                  </span>
+                </th>
+                <td className="py-3 pr-4 text-muted-foreground">
+                  {letter.status}
+                </td>
+                <td className="py-3 text-right tabular-nums text-muted-foreground">
+                  {letter.views.length}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : null}
 
       <p className="mt-10 max-w-[62ch] text-muted-foreground">
         Editing screens are not built yet. The schema, repositories, and this

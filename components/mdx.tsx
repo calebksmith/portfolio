@@ -3,7 +3,7 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 /**
  * Renders MDX that came out of the database.
  *
- * Case study bodies and tailored CV summaries are stored as MDX source and
+ * Cover letters are stored as MDX source and
  * compiled here, in a Server Component, so no MDX runtime ships to the browser.
  *
  * The component map is the guardrail: prose written in the admin panel cannot

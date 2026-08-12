@@ -26,7 +26,11 @@ export function ControlBar({
       role="group"
       aria-label={label}
       className={cn(
-        "flex items-stretch divide-x divide-border overflow-hidden rounded-md border border-input bg-background",
+        // No borders at all — not around the cluster, not between items. The
+        // header already carries a bottom rule, and any edge here reads as a
+        // second barrier stacked on it. Grouping comes from proximity and the
+        // shared hover treatment, which is enough for a handful of controls.
+        "flex items-stretch gap-1",
         className,
       )}
       {...props}
@@ -36,9 +40,17 @@ export function ControlBar({
   );
 }
 
+/**
+ * Ghost by default — no border, no fill until hovered. Instruments live in a
+ * header that already carries a rule, so an outlined control there stacks
+ * barriers. Presence comes from the label and the hover surface instead.
+ *
+ * The focus ring is inset (`-outline-offset`) so it never spills past the
+ * header's own edge.
+ */
 const CONTROL_ITEM = [
   "inline-flex min-h-tap items-center justify-center gap-2 px-2.5 sm:px-3",
-  "text-xs uppercase tracking-[0.14em] transition-colors",
+  "text-xs uppercase tracking-[0.14em] transition-colors rounded-sm",
   "focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring",
 ].join(" ");
 
@@ -53,7 +65,10 @@ export function ControlButton({
   label,
   className,
   ...props
-}: ComponentProps<"button"> & { icon: ReactNode; label: string }) {
+}: ComponentProps<"button"> & {
+  icon: ReactNode;
+  label: string;
+}) {
   return (
     <button
       type="button"
@@ -98,7 +113,7 @@ export function ControlToggle({
         CONTROL_ITEM,
         pressed
           ? "bg-accent text-accent-foreground"
-          : "text-foreground hover:bg-muted hover:text-muted-foreground",
+          : "bg-background text-foreground hover:bg-muted hover:text-muted-foreground",
         className,
       )}
       {...props}
