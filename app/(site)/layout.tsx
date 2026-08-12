@@ -1,4 +1,4 @@
-import { SiteHeader } from "@/components/cksui";
+import { Inspector, SiteHeader } from "@/components/cksui";
 import { caseStudies } from "@/lib/content/work";
 
 /**
@@ -19,6 +19,7 @@ export default function SiteLayout({ children }: LayoutProps<"/">) {
     <div className="flex min-h-full flex-1 flex-col">
       <SiteHeader work={work} />
       {children}
+      <Inspector />
     </div>
   );
 }

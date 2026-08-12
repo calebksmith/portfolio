@@ -5,19 +5,22 @@ where things stand.
 
 ## What's live
 
-`calebksmith.com` serves the coming-soon page and nothing else. Everything else
-404s in production and works in preview and development — `lib/flags.ts` decides,
-keyed off `VERCEL_ENV`, so there is nothing to configure or switch back.
+**The portfolio is published.** `calebksmith.com` serves the whole site.
+`lib/flags.ts` holds two flags: `showPortfolio()` is unconditional, and
+`showLetters()` gates the private half on the presence of `DATABASE_URL` — so
+sign-in and admin light up when the environment is configured, and cannot be
+published as doors that lead nowhere.
 
-| Route | Production | Preview / dev |
-|---|---|---|
-| `/` | coming-soon | bento index |
-| `/work/[slug]` | 404 | 5 case studies, prerendered |
-| `/resume` | 404 | résumé, with print-to-PDF |
-| `/style-guide` | 404 | tokens, type, contrast, live components |
-| `/themes` | 308 | permanent redirect to `/style-guide` |
-| `/colophon` | 404 | architecture writeup |
-| `/sign-in`, `/admin`, `/letter/[token]` | 404 | need a database and OAuth app |
+| Route | Status |
+|---|---|
+| `/` | live — bento index |
+| `/work/[slug]` | live — 5 case studies, prerendered |
+| `/resume` | live — with print-to-PDF |
+| `/style-guide` | live — tokens, type, contrast, live components, inspector |
+| `/colophon` | live — architecture writeup |
+| `/themes` | 308 → `/style-guide` |
+| `/robots.txt`, `/sitemap.xml` | live — private routes disallowed |
+| `/sign-in`, `/admin`, `/letter/[token]` | 404 until `DATABASE_URL` is set |
 
 Preview: `portfolio-git-develop-calebksmith1.vercel.app` (SSO-protected).
 
@@ -33,9 +36,9 @@ From `PROJECT-CONTEXT.md` §10:
 - [x] 6 · Résumé page + PDF (browser print-to-PDF, not a committed file)
 - [x] 7 · Remaining case studies (all five are written)
 - [x] 8 · Colophon
-- [ ] 9 · **Inspector overlay** ← next
+- [x] 9 · Inspector overlay
 - [ ] 10 · Playlist and live cards
-- [ ] 11 · Starter repo (separate repo)
+- [ ] 11 · **Starter repo** (separate repo) — wanted; base it on this repo
 
 Added beyond the original order: **`/style-guide`**, a Storybook substitute
 inside the site, which absorbed the old `/themes` page.
@@ -49,57 +52,78 @@ bento index resolves.
 
 Ordered by what unblocks applying for jobs, not by what is most interesting.
 
-### 1 · Publish the site (half a day) — **highest value, not in the build order**
+### 1 · ~~Publish the site~~ — done 2026-08-12
 
-Everything is written and gated. Production still serves only the landing page.
-Flipping it is a one-line change to `lib/flags.ts`, but do these first:
+The portfolio is live at calebksmith.com. `showPortfolio()` is unconditional;
+`showLetters()` still gates sign-in, admin, and letters on `DATABASE_URL`.
 
-- Set `site.playlistUrl` or accept that the card stays hidden.
-- Decide the contact method — `PROJECT-CONTEXT.md` §12 leaves it open between
-  LinkedIn-only and a form. The bento currently links LinkedIn.
-- Run Lighthouse on a preview deploy; the quality floor is ≥ 95 for both
-  accessibility and performance and has never actually been measured.
-- Keyboard pass over the header, the Work menu, the appearance popover, and the
-  bento cards.
+Still outstanding from that step, and worth doing soon:
 
-Nothing about the site gets better while it is unpublished.
+- **Lighthouse has never actually been measured.** The floor is ≥ 95 for both
+  accessibility and performance. Run it against the live site.
+- **Contact method** is still open — `PROJECT-CONTEXT.md` §12. The bento links
+  LinkedIn, which may be enough.
+- **A keyboard pass** over the header, Work menu, appearance popover, inspector,
+  and bento cards.
 
-### 2 · Inspector overlay (step 9, one to two days)
+### 2 · ~~Inspector overlay~~ — done 2026-08-12
 
-The toggle, its slot in the header, and the `data-slot` convention every
-component already declares are done. What is missing:
+`components/cksui/inspector.tsx` plus `lib/inspect.ts`. Toggle lives in the
+header control cluster; mode is `data-inspect` on `<html>`, deliberately not
+persisted — a debugging overlay should not greet a recruiter on their next
+visit.
 
-- A client component that toggles a page mode and stores it in the same
-  cookie-plus-`data-` attribute pattern the theme uses.
-- A walker that finds the nearest `[data-slot]` from pointer or focus.
-- A panel reporting component name, resolved tokens (via `getComputedStyle`, the
-  same rule the style guide follows), and the governing rule.
-- **Keyboard operability is the hard requirement.** An inspector that only
-  answers a mouse, on an accessibility-forward site, undercuts its own argument.
+The part worth pointing at in an interview: it resolves rendered values
+*backwards* to token names, so it reports on the token layer rather than dumping
+CSS, and it names anything that resolves to no token as a violation. While it is
+on, every `[data-slot]` becomes a tab stop, and the previous `tabindex` is
+recorded and restored on exit.
 
-This is the strongest remaining portfolio piece: it demonstrates the guardrails
-claim rather than asserting it.
+### 3 · Admin: see the data before writing it (one day)
 
-### 3 · Cover letter admin (one to two days)
+Caleb is not ready to send cover letters, but wants to see and manage what is in
+the database. That is a smaller and more useful first step than the full editor,
+and it is what makes the database real rather than theoretical.
 
-Only worth doing once you actually want to send one. Needs, in order:
+Build the read side first:
 
 - A Neon database and a GitHub OAuth app — see `.env.example`. Two OAuth apps,
   since a GitHub OAuth App allows exactly one callback URL.
 - `npm run db:migrate`.
-- Three screens at `/admin/letters`: list, create/edit, and a share panel with
-  copy-link, rotate, revoke, and the view log.
-- All writes are Server Actions calling `lib/repositories/cover-letters.ts`, and
-  every one calls `requireAdmin()` itself.
+- `/admin` already lists letters and view counts; extend it to a browsable view
+  of every table — rows, columns, and the view log per letter.
+- Read-only to begin with. Writing comes with the editor, and a viewer that
+  cannot corrupt anything is a safe thing to have running while the schema is
+  still settling.
 
-The read path — `/letter/[token]`, the view log, revoke, rotate, expiry — is
-already built and unused.
+Then, when there is actually a letter to send: create/edit screens and a share
+panel with copy-link, rotate, revoke. All writes are Server Actions calling
+`lib/repositories/cover-letters.ts`, and every one calls `requireAdmin()`
+itself. The read path — `/letter/[token]`, the view log, revoke, rotate,
+expiry — is already built and unused.
 
 ### 4 · Starter repo (step 11, separate repo)
 
-Write from scratch. `PROJECT-CONTEXT.md` §5b is explicit that the VimUI
-guidelines and lint rules are Vimocity work product and must not be copied or
-closely derived. Worth a conversation with leadership before publishing.
+**Caleb wants this, and it should be based on this portfolio rather than on
+VimUI.** That is both the safer and the better call: `PROJECT-CONTEXT.md` §5b is
+explicit that the VimUI guidelines are Vimocity work product, and this
+repository already contains a complete, generic instance of the same pattern
+that is his to publish.
+
+What extracts cleanly, all of it already written here:
+
+- The paired-token layer in `app/globals.css`, with themes as value swaps
+- `scripts/check-contrast.mjs` — a gate that reads the stylesheet rather than
+  keeping its own copy of the values
+- `eslint-plugin-jsx-a11y` at strict, wired without re-registering the plugin
+- `CLAUDE.md` as the AI context file, which is the piece that makes it a
+  *guardrails* starter rather than a component starter
+- The `data-slot` convention plus the inspector that reads it
+- `/style-guide` as a Storybook substitute that cannot drift from the code
+
+The argument the template makes: one standard, written for people, checked by
+automation, and loaded for AI. Same claim as the guardrails case study, in a
+form someone can clone.
 
 ### 5 · Deferred, with reasons
 
