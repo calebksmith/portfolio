@@ -216,9 +216,9 @@ export function Bento() {
           {site.name}
         </h1>
 
-        {/* The lines accumulate as they type. Min-height reserves the space the
-            finished set needs, so nothing below shifts while it fills in. */}
-        <TypedTagline className="mt-6 min-h-[13em] max-w-[46ch] text-lg text-pretty sm:min-h-[10.5em]" />
+        {/* Min-height reserves the space the finished pair needs, so nothing
+            below shifts while it types or when the first line folds away. */}
+        <TypedTagline className="mt-6 min-h-[12em] max-w-[46ch] text-lg text-pretty sm:min-h-[8.5em]" />
       </section>
 
       <section aria-labelledby="selected-work" className="pb-24">
