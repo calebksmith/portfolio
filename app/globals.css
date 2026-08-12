@@ -270,6 +270,15 @@
   background: transparent;
 }
 
+/* While the inspector is docked, give the page the width back — the same thing
+   docked browser devtools do. Only from `lg`, because below that the panel is
+   most of the viewport and shifting the layout would leave nothing to inspect. */
+@media (min-width: 1024px) {
+  :root[data-inspect="on"] body {
+    padding-right: 21rem;
+  }
+}
+
 @utility min-h-tap {
   min-height: var(--ck-tap);
 }

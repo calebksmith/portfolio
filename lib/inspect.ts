@@ -35,7 +35,7 @@ const COLOR_TOKENS = [
   "ring",
 ] as const;
 
-/** The CSS properties worth reporting, and what to call them. */
+/** The color properties worth reporting, and what to call them. */
 const INSPECTED_PROPERTIES: { property: string; label: string }[] = [
   { property: "background-color", label: "Surface" },
   { property: "color", label: "Text" },
@@ -79,10 +79,23 @@ export type ResolvedToken = {
   token: string | null;
 };
 
+export type TypeFacts = {
+  family: string;
+  size: string;
+  weight: string;
+  lineHeight: string;
+};
+
 export type Inspection = {
-  slot: string;
   tag: string;
+  /** The element's own slot, when it declares one. */
+  slot: string | null;
+  /** The component this element sits inside, when it is not one itself. */
+  owner: string | null;
   tokens: ResolvedToken[];
+  /** Present for elements that actually render text. */
+  type: TypeFacts | null;
+  /** Only components carry rules; a paragraph inside one does not. */
   rule: string | null;
 };
 
@@ -117,12 +130,60 @@ const RULES: Record<string, string> = {
   "bento-tile": "Span follows content weight; hierarchy also carried by type scale.",
 };
 
-/** Reads one element's slot, resolved tokens, and rule. */
+/** Elements that render text directly, rather than only arranging children. */
+const TEXT_TAGS = new Set([
+  "p",
+  "h1",
+  "h2",
+  "h3",
+  "h4",
+  "h5",
+  "h6",
+  "span",
+  "a",
+  "li",
+  "dt",
+  "dd",
+  "strong",
+  "em",
+  "code",
+  "label",
+  "legend",
+  "blockquote",
+  "caption",
+  "th",
+  "td",
+  "figcaption",
+  "button",
+]);
+
+/**
+ * Which family a computed font-family string belongs to.
+ *
+ * Matching the head of the stack is enough: the browser returns the whole
+ * fallback list, and only the first name was ever chosen deliberately.
+ */
+function familyName(fontFamily: string): string {
+  const head = fontFamily.split(",")[0]?.replace(/["']/g, "").trim() ?? "";
+  if (/archivo/i.test(head)) return "Archivo — display";
+  if (/plex mono/i.test(head)) return "IBM Plex Mono — body";
+  return head || "unknown";
+}
+
+/**
+ * Reads one element: its own slot if it has one, the component it sits in if it
+ * does not, its resolved tokens, and — for text — the type facts.
+ *
+ * Inspecting the element rather than climbing to the nearest component is the
+ * point. A heading inside a card has its own color and its own type; reporting
+ * the card's would be reporting something the visitor is not looking at.
+ */
 export function inspectElement(
   element: HTMLElement,
   index: Map<string, string>,
 ): Inspection {
   const styles = getComputedStyle(element);
+  const tag = element.tagName.toLowerCase();
 
   const tokens = INSPECTED_PROPERTIES.map(({ property, label }) => {
     const value = styles.getPropertyValue(property).trim();
@@ -142,18 +203,44 @@ export function inspectElement(
         entry.value !== "transparent",
     );
 
-  const slot = element.dataset.slot ?? "unknown";
+  const slot = element.dataset.slot ?? null;
+
+  // The owning component, only when the element is not one itself.
+  const owner = slot
+    ? null
+    : (element.parentElement?.closest<HTMLElement>("[data-slot]")?.dataset
+        .slot ?? null);
+
+  const type = TEXT_TAGS.has(tag)
+    ? {
+        family: familyName(styles.fontFamily),
+        size: styles.fontSize,
+        weight: styles.fontWeight,
+        lineHeight: styles.lineHeight,
+      }
+    : null;
 
   return {
+    tag,
     slot,
-    tag: element.tagName.toLowerCase(),
+    owner,
     tokens,
-    rule: RULES[slot] ?? null,
+    type,
+    rule: slot ? (RULES[slot] ?? null) : null,
   };
 }
 
-/** The nearest ancestor that declares a slot, including the element itself. */
-export function nearestSlot(target: EventTarget | null): HTMLElement | null {
-  if (!(target instanceof Element)) return null;
-  return target.closest<HTMLElement>("[data-slot]");
+/**
+ * The element to inspect: whatever is actually under the pointer or focus.
+ *
+ * The inspector's own chrome is excluded — pointing at the panel should not
+ * inspect the panel, and the highlight is aria-hidden decoration.
+ */
+export function inspectTarget(target: EventTarget | null): HTMLElement | null {
+  if (!(target instanceof HTMLElement)) return null;
+  if (target.closest("[data-inspector-chrome]")) return null;
+  if (target === document.body || target === document.documentElement) {
+    return null;
+  }
+  return target;
 }
