@@ -242,14 +242,13 @@ export function Bento() {
 
         <div className="mt-4 grid gap-8 lg:grid-cols-2">
           <div className="rounded-lg border border-border bg-card p-6">
-            <p className="mb-4 text-xs uppercase tracking-[0.14em] text-primary">
+            <p className="mb-2 text-xs uppercase tracking-[0.14em] text-primary">
               A · Double diamond that loops
             </p>
-            <ProcessDiamond />
-            <p className="mt-4 text-xs text-pretty text-muted-foreground">
-              Reads instantly to a design audience. The dot never crosses the
-              dashed line into Launch — it returns to Discover instead.
+            <p className="mb-6 max-w-[46ch] text-pretty text-muted-foreground">
+              Research through refinement — everything except the launch.
             </p>
+            <ProcessDiamond />
           </div>
 
           <div className="rounded-lg border border-border bg-card p-6">

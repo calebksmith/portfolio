@@ -30,6 +30,8 @@
   --ck-primary-foreground: #ffffff;
   --ck-accent: #e5e0fd;
   --ck-accent-foreground: #2c1a8c;
+  --ck-gradient-from: #4a2ce0;
+  --ck-gradient-to: #c026a8;
 
   /* Decorative hairline. Not held to 3:1 — WCAG 1.4.11 governs control
      boundaries, not rules between rows. That is what --ck-input is for. */
@@ -78,6 +80,8 @@
     --ck-primary-foreground: #14161b;
     --ck-accent: #241c46;
     --ck-accent-foreground: #c9b8fd;
+  --ck-gradient-from: #a78bfa;
+  --ck-gradient-to: #f2a8e4;
     --ck-border: #2a3038;
     --ck-input: #6b737d;
     --ck-ring: #a78bfa;
@@ -95,6 +99,8 @@
   --ck-primary-foreground: #14161b;
   --ck-accent: #241c46;
   --ck-accent-foreground: #c9b8fd;
+  --ck-gradient-from: #a78bfa;
+  --ck-gradient-to: #f2a8e4;
   --ck-border: #2a3038;
   --ck-input: #6b737d;
   --ck-ring: #a78bfa;
@@ -113,6 +119,8 @@
   --ck-primary-foreground: #ffffff;
   --ck-accent: #fbe3d8;
   --ck-accent-foreground: #7a2708;
+  --ck-gradient-from: #b03a10;
+  --ck-gradient-to: #d98014;
   --ck-border: #d5cec9;
   --ck-input: #78716c;
   --ck-ring: #b03a10;
@@ -132,6 +140,8 @@
     --ck-primary-foreground: #1a1614;
     --ck-accent: #3a1f12;
     --ck-accent-foreground: #f6b393;
+  --ck-gradient-from: #f08a5d;
+  --ck-gradient-to: #f5c46b;
     --ck-border: #332c28;
     --ck-input: #7a726c;
     --ck-ring: #f08a5d;
@@ -149,6 +159,8 @@
   --ck-primary-foreground: #1a1614;
   --ck-accent: #3a1f12;
   --ck-accent-foreground: #f6b393;
+  --ck-gradient-from: #f08a5d;
+  --ck-gradient-to: #f5c46b;
   --ck-border: #332c28;
   --ck-input: #7a726c;
   --ck-ring: #f08a5d;
@@ -167,6 +179,8 @@
   --ck-primary-foreground: #ffffff;
   --ck-accent: #ffffff;
   --ck-accent-foreground: #00006b;
+  --ck-gradient-from: #00006b;
+  --ck-gradient-to: #00006b;
   /* In high contrast the hairline stops being decorative and carries
      structure, so it matches the control boundary. */
   --ck-border: #000000;
@@ -188,6 +202,8 @@
     --ck-primary-foreground: #000000;
     --ck-accent: #000000;
     --ck-accent-foreground: #eaeaff;
+  --ck-gradient-from: #eaeaff;
+  --ck-gradient-to: #eaeaff;
     --ck-border: #ffffff;
     --ck-input: #ffffff;
     --ck-ring: #eaeaff;
@@ -205,6 +221,8 @@
   --ck-primary-foreground: #000000;
   --ck-accent: #000000;
   --ck-accent-foreground: #eaeaff;
+  --ck-gradient-from: #eaeaff;
+  --ck-gradient-to: #eaeaff;
   --ck-border: #ffffff;
   --ck-input: #ffffff;
   --ck-ring: #eaeaff;
