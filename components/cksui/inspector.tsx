@@ -5,7 +5,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import {
   buildTokenIndex,
   inspectElement,
-  nearestSlot,
+  inspectTarget,
   type Inspection,
 } from "@/lib/inspect";
 import { INSPECT_ATTRIBUTE } from "@/lib/theme";
@@ -78,8 +78,8 @@ function InspectorOverlay() {
   /** Pointer and focus both drive inspection; Escape leaves. */
   useEffect(() => {
     const onPointerOver = (event: PointerEvent) =>
-      inspect(nearestSlot(event.target));
-    const onFocusIn = (event: FocusEvent) => inspect(nearestSlot(event.target));
+      inspect(inspectTarget(event.target));
+    const onFocusIn = (event: FocusEvent) => inspect(inspectTarget(event.target));
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key !== "Escape") return;
@@ -112,7 +112,8 @@ function InspectorOverlay() {
       {rect ? (
         <div
           aria-hidden="true"
-          className="pointer-events-none fixed z-[70] rounded-sm outline-2 outline-offset-2 outline-ring"
+          data-inspector-chrome=""
+          className="pointer-events-none fixed z-30 rounded-sm outline-2 outline-offset-2 outline-ring"
           style={{
             top: rect.top,
             left: rect.left,
@@ -122,10 +123,15 @@ function InspectorOverlay() {
         />
       ) : null}
 
+      {/*
+        Docked right, the way browser devtools dock — out of the reading column
+        rather than sitting on top of it. Below the header in z-order, so the
+        Inspect toggle stays reachable and you are never trapped in the mode.
+      */}
       <aside
-        data-slot="inspector-panel"
+        data-inspector-chrome=""
         aria-label="Inspector"
-        className="fixed bottom-4 left-4 z-[71] w-[min(22rem,calc(100vw-2rem))] rounded-lg border border-input bg-card p-4 text-card-foreground shadow-lg"
+        className="fixed inset-y-0 right-0 z-30 w-[min(21rem,100vw)] overflow-y-auto border-l border-input bg-card p-5 pt-20 text-card-foreground shadow-lg"
       >
         {/*
           Announced politely: the panel changes as the pointer moves, and an
@@ -134,44 +140,64 @@ function InspectorOverlay() {
         <div aria-live="polite">
           {inspection ? (
             <>
-              <p className="text-[0.625rem] uppercase tracking-[0.16em] text-muted-foreground">
-                Component
-              </p>
+              <Label>{inspection.slot ? "Component" : "Element"}</Label>
               <p className="mt-1 font-display text-base font-semibold tracking-[-0.01em]">
-                {inspection.slot}
-                <span className="ml-2 text-xs font-normal text-muted-foreground">
-                  &lt;{inspection.tag}&gt;
-                </span>
+                {inspection.slot ?? `<${inspection.tag}>`}
+                {inspection.slot ? (
+                  <span className="ml-2 text-xs font-normal text-muted-foreground">
+                    &lt;{inspection.tag}&gt;
+                  </span>
+                ) : null}
               </p>
 
-              <p className="mt-4 text-[0.625rem] uppercase tracking-[0.16em] text-muted-foreground">
-                Tokens
-              </p>
-              <ul className="mt-1 space-y-1">
-                {inspection.tokens.map((entry) => (
-                  <li
-                    key={entry.property}
-                    className="flex items-baseline justify-between gap-3 text-xs"
-                  >
-                    <span className="text-muted-foreground">{entry.label}</span>
-                    {entry.token ? (
-                      <span className="text-right">--ck-{entry.token}</span>
-                    ) : (
-                      // Saying so is the point: an unresolvable value is a
-                      // violation of the token rule, not a gap in the tool.
-                      <span className="text-right text-muted-foreground">
-                        {entry.value} — no token
-                      </span>
-                    )}
-                  </li>
-                ))}
-              </ul>
+              {inspection.owner ? (
+                <p className="mt-1 text-xs text-muted-foreground">
+                  inside {inspection.owner}
+                </p>
+              ) : null}
+
+              {inspection.tokens.length > 0 ? (
+                <>
+                  <Label className="mt-5">Tokens</Label>
+                  <ul className="mt-1 space-y-1">
+                    {inspection.tokens.map((entry) => (
+                      <li
+                        key={entry.property}
+                        className="flex items-baseline justify-between gap-3 text-xs"
+                      >
+                        <span className="text-muted-foreground">
+                          {entry.label}
+                        </span>
+                        {entry.token ? (
+                          <span className="text-right">--ck-{entry.token}</span>
+                        ) : (
+                          // Saying so is the point: an unresolvable value is a
+                          // violation of the token rule, not a gap in the tool.
+                          <span className="text-right text-muted-foreground">
+                            {entry.value} — no token
+                          </span>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              ) : null}
+
+              {inspection.type ? (
+                <>
+                  <Label className="mt-5">Type</Label>
+                  <ul className="mt-1 space-y-1 text-xs">
+                    <Row label="Family" value={inspection.type.family} />
+                    <Row label="Size" value={inspection.type.size} />
+                    <Row label="Weight" value={inspection.type.weight} />
+                    <Row label="Leading" value={inspection.type.lineHeight} />
+                  </ul>
+                </>
+              ) : null}
 
               {inspection.rule ? (
                 <>
-                  <p className="mt-4 text-[0.625rem] uppercase tracking-[0.16em] text-muted-foreground">
-                    Rule
-                  </p>
+                  <Label className="mt-5">Rule</Label>
                   <p className="mt-1 text-xs text-pretty text-muted-foreground">
                     {inspection.rule}
                   </p>
@@ -185,10 +211,35 @@ function InspectorOverlay() {
           )}
         </div>
 
-        <p className="mt-4 border-t border-border pt-3 text-[0.625rem] uppercase tracking-[0.16em] text-muted-foreground">
+        <p className="mt-6 border-t border-border pt-3 text-[0.625rem] uppercase tracking-[0.16em] text-muted-foreground">
           Esc to exit
         </p>
       </aside>
     </>
+  );
+}
+
+function Label({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <p
+      className={`text-[0.625rem] uppercase tracking-[0.16em] text-muted-foreground ${className}`}
+    >
+      {children}
+    </p>
+  );
+}
+
+function Row({ label, value }: { label: string; value: string }) {
+  return (
+    <li className="flex items-baseline justify-between gap-3">
+      <span className="text-muted-foreground">{label}</span>
+      <span className="text-right tabular-nums">{value}</span>
+    </li>
   );
 }
