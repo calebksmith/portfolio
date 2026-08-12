@@ -1,7 +1,5 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
-
 import {
   DEFAULT_MODE,
   DEFAULT_THEME,
@@ -15,6 +13,7 @@ import {
 } from "@/lib/theme";
 
 import { cn } from "./lib/cn";
+import { useHtmlAttribute } from "./lib/use-html-attribute";
 
 /**
  * Theme and mode controls.
@@ -29,34 +28,6 @@ import { cn } from "./lib/cn";
 
 function writeCookie(name: string, value: string) {
   document.cookie = `${name}=${value}; path=/; max-age=${THEME_COOKIE_MAX_AGE}; samesite=lax`;
-}
-
-/**
- * Reads an attribute off <html> as a reactive value.
- *
- * The `<html>` element is the source of truth here, not React state — the
- * pre-paint script in `<body>` sets it before React exists, and the stylesheet
- * reads it directly. So this subscribes to the DOM rather than mirroring it
- * into state, which is what `useSyncExternalStore` is for and why there is no
- * effect writing state on mount.
- *
- * The server snapshot is the default, which is also what the server-rendered
- * markup shows — so hydration matches, then the store corrects it if the
- * visitor has a saved preference.
- */
-function useHtmlAttribute<T extends string>(attribute: string, fallback: T): T {
-  return useSyncExternalStore(
-    (onStoreChange) => {
-      const observer = new MutationObserver(onStoreChange);
-      observer.observe(document.documentElement, {
-        attributes: true,
-        attributeFilter: [attribute],
-      });
-      return () => observer.disconnect();
-    },
-    () => (document.documentElement.getAttribute(attribute) as T | null) ?? fallback,
-    () => fallback,
-  );
 }
 
 export function ThemeSwitcher({ className }: { className?: string }) {

@@ -1,5 +1,5 @@
 {
-  "id": "8106f0e4-e83c-4477-a368-75f2479bc296",
+  "id": "7a3ec782-04ff-4d5e-815b-cf477d712bac",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -272,479 +272,21 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.case_study": {
-      "name": "case_study",
+    "public.cover_letter_case_study": {
+      "name": "cover_letter_case_study",
       "schema": "",
       "columns": {
-        "id": {
-          "name": "id",
+        "letter_id": {
+          "name": "letter_id",
           "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
+          "primaryKey": false,
+          "notNull": true
         },
         "slug": {
           "name": "slug",
           "type": "text",
           "primaryKey": false,
           "notNull": true
-        },
-        "title": {
-          "name": "title",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "summary": {
-          "name": "summary",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "body": {
-          "name": "body",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "client": {
-          "name": "client",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "role": {
-          "name": "role",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "year_start": {
-          "name": "year_start",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "year_end": {
-          "name": "year_end",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "cover_image_url": {
-          "name": "cover_image_url",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "position_id": {
-          "name": "position_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "status": {
-          "name": "status",
-          "type": "publish_status",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'draft'"
-        },
-        "featured": {
-          "name": "featured",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true,
-          "default": false
-        },
-        "sort_order": {
-          "name": "sort_order",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 0
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "published_at": {
-          "name": "published_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {
-        "case_study_status_idx": {
-          "name": "case_study_status_idx",
-          "columns": [
-            {
-              "expression": "status",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "featured",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "sort_order",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "case_study_position_idx": {
-          "name": "case_study_position_idx",
-          "columns": [
-            {
-              "expression": "position_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "case_study_position_id_position_id_fk": {
-          "name": "case_study_position_id_position_id_fk",
-          "tableFrom": "case_study",
-          "tableTo": "position",
-          "columnsFrom": [
-            "position_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "case_study_slug_unique": {
-          "name": "case_study_slug_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "slug"
-          ]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.case_study_tag": {
-      "name": "case_study_tag",
-      "schema": "",
-      "columns": {
-        "case_study_id": {
-          "name": "case_study_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "tag_id": {
-          "name": "tag_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {
-        "case_study_tag_tag_idx": {
-          "name": "case_study_tag_tag_idx",
-          "columns": [
-            {
-              "expression": "tag_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "case_study_tag_case_study_id_case_study_id_fk": {
-          "name": "case_study_tag_case_study_id_case_study_id_fk",
-          "tableFrom": "case_study_tag",
-          "tableTo": "case_study",
-          "columnsFrom": [
-            "case_study_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "case_study_tag_tag_id_tag_id_fk": {
-          "name": "case_study_tag_tag_id_tag_id_fk",
-          "tableFrom": "case_study_tag",
-          "tableTo": "tag",
-          "columnsFrom": [
-            "tag_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "case_study_tag_case_study_id_tag_id_pk": {
-          "name": "case_study_tag_case_study_id_tag_id_pk",
-          "columns": [
-            "case_study_id",
-            "tag_id"
-          ]
-        }
-      },
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.position_highlight": {
-      "name": "position_highlight",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "position_id": {
-          "name": "position_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "content": {
-          "name": "content",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "sort_order": {
-          "name": "sort_order",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 0
-        }
-      },
-      "indexes": {
-        "position_highlight_position_idx": {
-          "name": "position_highlight_position_idx",
-          "columns": [
-            {
-              "expression": "position_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "sort_order",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "position_highlight_position_id_position_id_fk": {
-          "name": "position_highlight_position_id_position_id_fk",
-          "tableFrom": "position_highlight",
-          "tableTo": "position",
-          "columnsFrom": [
-            "position_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.position": {
-      "name": "position",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "organization": {
-          "name": "organization",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "title": {
-          "name": "title",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "employment_type": {
-          "name": "employment_type",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "location": {
-          "name": "location",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "start_date": {
-          "name": "start_date",
-          "type": "date",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "end_date": {
-          "name": "end_date",
-          "type": "date",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "summary": {
-          "name": "summary",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "status": {
-          "name": "status",
-          "type": "publish_status",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'draft'"
-        },
-        "sort_order": {
-          "name": "sort_order",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 0
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {
-        "position_status_start_idx": {
-          "name": "position_status_start_idx",
-          "columns": [
-            {
-              "expression": "status",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "start_date",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.skill": {
-      "name": "skill",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "category": {
-          "name": "category",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
         },
         "sort_order": {
           "name": "sort_order",
@@ -755,407 +297,37 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "skill_name_unique": {
-          "name": "skill_name_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "name"
-          ]
+      "foreignKeys": {
+        "cover_letter_case_study_letter_id_cover_letter_id_fk": {
+          "name": "cover_letter_case_study_letter_id_cover_letter_id_fk",
+          "tableFrom": "cover_letter_case_study",
+          "tableTo": "cover_letter",
+          "columnsFrom": [
+            "letter_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.tag": {
-      "name": "tag",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "slug": {
-          "name": "slug",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "tag_slug_unique": {
-          "name": "tag_slug_unique",
-          "nullsNotDistinct": false,
+      "compositePrimaryKeys": {
+        "cover_letter_case_study_letter_id_slug_pk": {
+          "name": "cover_letter_case_study_letter_id_slug_pk",
           "columns": [
+            "letter_id",
             "slug"
           ]
         }
       },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.resume_case_study": {
-      "name": "resume_case_study",
-      "schema": "",
-      "columns": {
-        "resume_id": {
-          "name": "resume_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "case_study_id": {
-          "name": "case_study_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "sort_order": {
-          "name": "sort_order",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 0
-        },
-        "blurb_override": {
-          "name": "blurb_override",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {
-        "resume_case_study_case_study_idx": {
-          "name": "resume_case_study_case_study_idx",
-          "columns": [
-            {
-              "expression": "case_study_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "resume_case_study_resume_id_resume_id_fk": {
-          "name": "resume_case_study_resume_id_resume_id_fk",
-          "tableFrom": "resume_case_study",
-          "tableTo": "resume",
-          "columnsFrom": [
-            "resume_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "resume_case_study_case_study_id_case_study_id_fk": {
-          "name": "resume_case_study_case_study_id_case_study_id_fk",
-          "tableFrom": "resume_case_study",
-          "tableTo": "case_study",
-          "columnsFrom": [
-            "case_study_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "resume_case_study_resume_id_case_study_id_pk": {
-          "name": "resume_case_study_resume_id_case_study_id_pk",
-          "columns": [
-            "resume_id",
-            "case_study_id"
-          ]
-        }
-      },
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.resume_highlight": {
-      "name": "resume_highlight",
-      "schema": "",
-      "columns": {
-        "resume_id": {
-          "name": "resume_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "highlight_id": {
-          "name": "highlight_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "sort_order": {
-          "name": "sort_order",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 0
-        }
-      },
-      "indexes": {
-        "resume_highlight_highlight_idx": {
-          "name": "resume_highlight_highlight_idx",
-          "columns": [
-            {
-              "expression": "highlight_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "resume_highlight_resume_id_resume_id_fk": {
-          "name": "resume_highlight_resume_id_resume_id_fk",
-          "tableFrom": "resume_highlight",
-          "tableTo": "resume",
-          "columnsFrom": [
-            "resume_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "resume_highlight_highlight_id_position_highlight_id_fk": {
-          "name": "resume_highlight_highlight_id_position_highlight_id_fk",
-          "tableFrom": "resume_highlight",
-          "tableTo": "position_highlight",
-          "columnsFrom": [
-            "highlight_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "resume_highlight_resume_id_highlight_id_pk": {
-          "name": "resume_highlight_resume_id_highlight_id_pk",
-          "columns": [
-            "resume_id",
-            "highlight_id"
-          ]
-        }
-      },
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.resume_position": {
-      "name": "resume_position",
-      "schema": "",
-      "columns": {
-        "resume_id": {
-          "name": "resume_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "position_id": {
-          "name": "position_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "sort_order": {
-          "name": "sort_order",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 0
-        },
-        "summary_override": {
-          "name": "summary_override",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {
-        "resume_position_position_idx": {
-          "name": "resume_position_position_idx",
-          "columns": [
-            {
-              "expression": "position_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "resume_position_resume_id_resume_id_fk": {
-          "name": "resume_position_resume_id_resume_id_fk",
-          "tableFrom": "resume_position",
-          "tableTo": "resume",
-          "columnsFrom": [
-            "resume_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "resume_position_position_id_position_id_fk": {
-          "name": "resume_position_position_id_position_id_fk",
-          "tableFrom": "resume_position",
-          "tableTo": "position",
-          "columnsFrom": [
-            "position_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "resume_position_resume_id_position_id_pk": {
-          "name": "resume_position_resume_id_position_id_pk",
-          "columns": [
-            "resume_id",
-            "position_id"
-          ]
-        }
-      },
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.resume_skill": {
-      "name": "resume_skill",
-      "schema": "",
-      "columns": {
-        "resume_id": {
-          "name": "resume_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "skill_id": {
-          "name": "skill_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "sort_order": {
-          "name": "sort_order",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 0
-        }
-      },
-      "indexes": {
-        "resume_skill_skill_idx": {
-          "name": "resume_skill_skill_idx",
-          "columns": [
-            {
-              "expression": "skill_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "resume_skill_resume_id_resume_id_fk": {
-          "name": "resume_skill_resume_id_resume_id_fk",
-          "tableFrom": "resume_skill",
-          "tableTo": "resume",
-          "columnsFrom": [
-            "resume_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "resume_skill_skill_id_skill_id_fk": {
-          "name": "resume_skill_skill_id_skill_id_fk",
-          "tableFrom": "resume_skill",
-          "tableTo": "skill",
-          "columnsFrom": [
-            "skill_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "resume_skill_resume_id_skill_id_pk": {
-          "name": "resume_skill_resume_id_skill_id_pk",
-          "columns": [
-            "resume_id",
-            "skill_id"
-          ]
-        }
-      },
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.resume_view": {
-      "name": "resume_view",
+    "public.cover_letter_view": {
+      "name": "cover_letter_view",
       "schema": "",
       "columns": {
         "id": {
@@ -1165,8 +337,8 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "resume_id": {
-          "name": "resume_id",
+        "letter_id": {
+          "name": "letter_id",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
@@ -1198,11 +370,11 @@
         }
       },
       "indexes": {
-        "resume_view_resume_idx": {
-          "name": "resume_view_resume_idx",
+        "cover_letter_view_letter_idx": {
+          "name": "cover_letter_view_letter_idx",
           "columns": [
             {
-              "expression": "resume_id",
+              "expression": "letter_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -1221,12 +393,12 @@
         }
       },
       "foreignKeys": {
-        "resume_view_resume_id_resume_id_fk": {
-          "name": "resume_view_resume_id_resume_id_fk",
-          "tableFrom": "resume_view",
-          "tableTo": "resume",
+        "cover_letter_view_letter_id_cover_letter_id_fk": {
+          "name": "cover_letter_view_letter_id_cover_letter_id_fk",
+          "tableFrom": "cover_letter_view",
+          "tableTo": "cover_letter",
           "columnsFrom": [
-            "resume_id"
+            "letter_id"
           ],
           "columnsTo": [
             "id"
@@ -1241,8 +413,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.resume": {
-      "name": "resume",
+    "public.cover_letter": {
+      "name": "cover_letter",
       "schema": "",
       "columns": {
         "id": {
@@ -1258,29 +430,29 @@
           "primaryKey": false,
           "notNull": true
         },
-        "target_role": {
-          "name": "target_role",
+        "role": {
+          "name": "role",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "company": {
+          "name": "company",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "recipient": {
+          "name": "recipient",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "target_company": {
-          "name": "target_company",
+        "body": {
+          "name": "body",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
-        },
-        "headline": {
-          "name": "headline",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "summary": {
-          "name": "summary",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "share_token": {
           "name": "share_token",
@@ -1290,7 +462,7 @@
         },
         "status": {
           "name": "status",
-          "type": "resume_status",
+          "type": "letter_status",
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
@@ -1317,12 +489,28 @@
           "default": "now()"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "cover_letter_status_idx": {
+          "name": "cover_letter_status_idx",
+          "columns": [
+            {
+              "expression": "status",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "resume_share_token_unique": {
-          "name": "resume_share_token_unique",
+        "cover_letter_share_token_unique": {
+          "name": "cover_letter_share_token_unique",
           "nullsNotDistinct": false,
           "columns": [
             "share_token"
@@ -1335,17 +523,8 @@
     }
   },
   "enums": {
-    "public.publish_status": {
-      "name": "publish_status",
-      "schema": "public",
-      "values": [
-        "draft",
-        "published",
-        "archived"
-      ]
-    },
-    "public.resume_status": {
-      "name": "resume_status",
+    "public.letter_status": {
+      "name": "letter_status",
       "schema": "public",
       "values": [
         "draft",

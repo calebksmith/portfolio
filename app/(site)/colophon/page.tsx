@@ -145,9 +145,9 @@ const surfaces = [
   },
   { who: "Me", name: "Admin", need: "Authenticated, write-heavy" },
   {
-    who: "One recruiter, by link",
-    name: "Tailored CVs",
-    need: "Private, unguessable, per-opening",
+    who: "One hiring manager, by link",
+    name: "Cover letters",
+    need: "Private, unguessable, one per opening",
   },
 ];
 
@@ -163,10 +163,6 @@ const pending = [
   {
     thing: "Cache Components",
     why: "Off until DB-backed routes exist and can be verified against it. The code is already written in the shape it wants.",
-  },
-  {
-    thing: "PDF export",
-    why: "Should render this same view, not a second divergent one.",
   },
 ];
 
@@ -227,13 +223,13 @@ export default async function ColophonPage() {
         <div className="overflow-x-auto rounded-md border border-border bg-card p-4">
           <div className="grid grid-cols-3 gap-1.5">
             <Node label="Visitor" />
-            <Node label="Recruiter" sub="holds a link" />
+            <Node label="Hiring manager" sub="holds a link" />
             <Node label="Me" sub="admin" />
           </div>
           <Arrow />
           <div className="grid grid-cols-3 gap-1.5">
             <Node label={<code>(site)</code>} sub="static" />
-            <Node label={<code>/cv/[token]</code>} sub="per request, noindex" />
+            <Node label={<code>/letter/[token]</code>} sub="per request, noindex" />
             <Node label={<code>(admin)</code>} sub="gated per route" />
           </div>
           <Arrow />
@@ -316,8 +312,8 @@ export default async function ColophonPage() {
           />
           <P>
             The decider was practical: free-tier Supabase pauses after about a
-            week idle, and the worst possible moment for that is a recruiter
-            opening a CV link three days after I sent it. Gave up a table-editing
+            week idle, and the worst possible moment for that is a hiring manager
+            opening a letter three days after I sent it. Gave up a table-editing
             UI and file storage.
           </P>
           <P>
@@ -361,39 +357,54 @@ export default async function ColophonPage() {
           </P>
         </Decision>
 
-        <Decision title="A tailored CV is a view, not a document">
+        <Decision title="Deleting six tables when the requirement changed">
           <P>
-            Over a job search you write many CVs that overlap heavily.
-            Copy-and-edit rots: fix a typo in a job title and every copy already
-            in someone&rsquo;s inbox stays wrong.
+            The database was built for &ldquo;tailored CVs&rdquo; — a CV
+            assembled per opening from reusable parts. That was a misreading of
+            the requirement, and it survived long enough to become a schema:
+            positions, achievement bullets, skills, tags, and case studies, all
+            joined per opening with overrides.
           </P>
           <P>
-            So a CV stores only what&rsquo;s specific to one opening — target
-            role, headline, summary. Everything else is a join: which positions,
-            which bullets, which case studies, which skills. That&rsquo;s why
-            bullets are one row each rather than a text blob — a design-systems
-            CV takes three bullets from a job, a platform CV takes a different
-            three, nothing duplicated.
+            The actual need was cover letters. A CV is a document assembled from
+            parts; a letter is prose addressed to one reader. There is nothing to
+            select and reorder.
           </P>
+          <Verdict
+            chosen={{
+              what: "Delete the six tables",
+              why: "Case studies are files and the résumé is structured data, so none of them had a reader left.",
+            }}
+            rejected={{
+              what: "Keep them for later",
+              why: "Unused schema is a claim about the future that has to be maintained and explained.",
+            }}
+          />
           <Pull>
-            Fix a job title once, and every CV ever shared shows the correction.
+            The most useful thing I did to this database was take most of it out.
           </Pull>
           <P>
-            Cost: more tables, join-heavy reads. Free at this scale, and indexed.
+            What remains is auth and cover letters. That is a much better match
+            for the actual problem than what it replaced — and the migration had
+            never been applied anywhere, so it was regenerated rather than
+            migrated.
           </P>
         </Decision>
 
         <Decision title="The URL is the credential">
           <P>
-            No login, because asking a recruiter to register to read a CV is a
-            good way to not have it read. The boundary is token entropy: 32 bytes
-            from a CSPRNG, generated in the repository layer, never accepted as
-            an argument.
+            No login, because asking a hiring manager to register to read a cover
+            letter is a good way to not have it read. The boundary is token
+            entropy: 32 bytes from a CSPRNG, generated in the repository layer,
+            never accepted as an argument.
           </P>
           <P>
             Accepted honestly: anyone with the link can read and forward it.
-            It&rsquo;s a CV — a document meant for strangers — so exposure is
-            bounded by what it already is. Mitigations: revoke, rotate, expire,{" "}
+            It&rsquo;s a letter written to be handed to someone I have never met,
+            so exposure is bounded by what it already is. It is also HTML only —
+            a downloadable copy would be a second artifact of the same content,
+            stale the moment a sentence changes. Mitigations: revoke, rotate,
+            expire,{" "}
             <code className="rounded-sm bg-muted px-1.5 py-0.5 text-[0.9em] text-foreground">
               noindex
             </code>

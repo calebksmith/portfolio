@@ -33,15 +33,12 @@ export default async function AdminLayout({
             Admin
           </Link>
 
+          {/* Cover letters are the only thing the database holds that anyone
+              edits. Case studies are MDX files and the résumé is structured
+              data in lib/content/ — both are edited in the repo, not here. */}
           <nav className="flex items-center gap-5 text-xs uppercase tracking-[0.14em] text-muted-foreground">
-            <Link className="hover:text-foreground" href="/admin/case-studies">
-              Case studies
-            </Link>
-            <Link className="hover:text-foreground" href="/admin/positions">
-              History
-            </Link>
-            <Link className="hover:text-foreground" href="/admin/resumes">
-              CVs
+            <Link className="hover:text-foreground" href="/admin/letters">
+              Cover letters
             </Link>
           </nav>
 
