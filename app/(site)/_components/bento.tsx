@@ -4,6 +4,7 @@ import { Badge, Button, cn } from "@/components/cksui";
 import { caseStudies, type Weight } from "@/lib/content/work";
 import { site } from "@/lib/site";
 
+import { Reveal } from "./reveal";
 import { TypedTagline } from "./typed-tagline";
 
 
@@ -76,12 +77,12 @@ function CaseStudyCard({
   return (
     <article
       data-slot="case-study-card"
+      // Grid placement lives on the Reveal wrapper, since that is what the grid
+      // actually lays out. `h-full` keeps the card filling its cell.
       className={cn(
-        "group relative flex flex-col gap-3 rounded-lg border border-border bg-card text-card-foreground transition-colors",
+        "group relative flex h-full flex-col gap-3 rounded-lg border border-border bg-card text-card-foreground transition-colors",
         "hover:border-input focus-within:border-input",
-        style.span,
         style.pad,
-        "sm:col-span-2",
       )}
     >
       {/* The kind of thing this is, said outright. Replaces the accent edge:
@@ -160,7 +161,7 @@ function PointerCard({
     <div
       data-slot="pointer-card"
       className={cn(
-        "group relative flex flex-col gap-2 rounded-lg border border-border bg-background p-6 transition-colors hover:border-input focus-within:border-input sm:col-span-2",
+        "group relative flex h-full flex-col gap-2 rounded-lg border border-border bg-background p-6 transition-colors hover:border-input focus-within:border-input",
         className,
       )}
     >
@@ -197,7 +198,7 @@ export function Bento() {
     <main className="mx-auto w-full max-w-5xl px-6 sm:px-10">
       {/*
         Hero. Not a card: type on the page ground, with the CTA as the only
-        interactive element. Sized so the "Selected work" heading below sits
+        interactive element. Sized so the section heading below sits
         just at the fold — enough of it visible to read as an invitation to
         scroll without the hero feeling cropped.
 
@@ -216,9 +217,12 @@ export function Bento() {
           {site.name}
         </h1>
 
-        {/* Min-height reserves the space the finished pair needs, so nothing
-            below shifts while it types or when the first line folds away. */}
-        <TypedTagline className="mt-6 min-h-[12em] max-w-[46ch] text-lg text-pretty sm:min-h-[8.5em]" />
+        {/* The body face is monospace, so `ch` is close to literal characters:
+            the lede is 65 of them and 64ch orphaned its last word. 70ch clears
+            all three lines with margin. Min-height reserves the finished set's
+            space so nothing below shifts while it types or when the first two
+            lines fold away. */}
+        <TypedTagline className="mt-6 min-h-[11em] max-w-[70ch] text-lg text-pretty sm:min-h-[6.5em]" />
       </section>
 
       <section aria-labelledby="selected-work" className="pb-24">
@@ -226,14 +230,20 @@ export function Bento() {
           id="selected-work"
           className="text-xs uppercase tracking-[0.16em] text-muted-foreground"
         >
-          Selected work
+          A few things I&rsquo;ve designed, built, or created
         </h2>
 
         {/* Half the gap the grid uses: the heading belongs to the grid it
             labels, so it sits closer to it than the cards sit to each other. */}
         <div className="mt-4 grid grid-cols-1 gap-8 sm:grid-cols-4 lg:grid-cols-6">
-          {caseStudies.map((study) => (
-            <CaseStudyCard key={study.slug} {...study} />
+          {caseStudies.map((study, index) => (
+            <Reveal
+              key={study.slug}
+              index={index}
+              className={cn(CASE_STUDY_STYLE[study.weight].span, "sm:col-span-2")}
+            >
+              <CaseStudyCard {...study} />
+            </Reveal>
           ))}
         </div>
       </section>
@@ -245,54 +255,65 @@ export function Bento() {
           id="elsewhere"
           className="text-xs uppercase tracking-[0.16em] text-muted-foreground"
         >
-          Elsewhere
+          If you&rsquo;re curious
         </h2>
 
+        {/* Built from a list so the reveal stagger indexes stay correct when the
+            playlist card is absent. */}
         <div className="mt-4 grid grid-cols-1 gap-8 sm:grid-cols-4 lg:grid-cols-6">
-          <PointerCard
-            href={site.links[1].href}
-            external
-            eyebrow="Storybook"
-            title="VimUI, live"
-            description="The public component library — 51 components across four platforms."
-            className="lg:col-span-2"
-          />
-
-          {site.playlistUrl ? (
-            <PointerCard
-              href={site.playlistUrl}
-              external
-              eyebrow="Vimocity"
-              title="A playlist I built"
-              description="Content collections, shareable across an organization and embeddable in company intranets."
-              className="lg:col-span-2"
-            />
-          ) : null}
-
-          <PointerCard
-            href="/colophon"
-            eyebrow="About this site"
-            title="Colophon"
-            description="The stack, the alternatives that lost, and what each choice cost."
-            className="lg:col-span-2"
-          />
-
-          <PointerCard
-            href="/style-guide"
-            eyebrow="About this site"
-            title="Style guide"
-            description="Tokens, type, and every component — measured live, in whichever theme you are viewing."
-            className="lg:col-span-2"
-          />
-
-          <PointerCard
-            href={site.links[0].href}
-            external
-            eyebrow="Profile"
-            title="LinkedIn"
-            description="Background, roles, and the longer version of all this."
-            className="lg:col-span-2"
-          />
+          {[
+            {
+              href: site.links[1].href,
+              external: true,
+              eyebrow: "Storybook",
+              title: "VimUI, live",
+              description:
+                "Vimocity's design system, public — 51 components across four platforms.",
+            },
+            ...(site.playlistUrl
+              ? [
+                  {
+                    href: site.playlistUrl,
+                    external: true,
+                    eyebrow: "Vimocity",
+                    title: "A playlist I built",
+                    description:
+                      "Content collections, shareable across an organization and embeddable in company intranets.",
+                  },
+                ]
+              : []),
+            {
+              href: "/colophon",
+              external: false,
+              eyebrow: "About this site",
+              title: "Colophon",
+              description:
+                "The stack, the alternatives that lost, and what each choice cost.",
+            },
+            {
+              href: "/style-guide",
+              external: false,
+              eyebrow: "About this site",
+              title: "Style guide",
+              description:
+                "Tokens, type, and every component — measured live, in whichever theme you are viewing.",
+            },
+            {
+              href: site.links[0].href,
+              external: true,
+              eyebrow: "Profile",
+              title: "LinkedIn",
+              description: "Background, roles, and the longer version of all this.",
+            },
+          ].map((card, index) => (
+            <Reveal
+              key={card.href}
+              index={index}
+              className="sm:col-span-2 lg:col-span-2"
+            >
+              <PointerCard {...card} />
+            </Reveal>
+          ))}
         </div>
       </section>
 
@@ -300,23 +321,39 @@ export function Bento() {
           tagline is doing the work. Someone who has read this far is the person
           most likely to want the résumé. */}
       <section
-        aria-labelledby="full-background"
+        aria-labelledby="more-about-me"
         className="border-t border-border py-20 text-center"
       >
         <h2
-          id="full-background"
+          id="more-about-me"
           className="font-display text-2xl font-semibold tracking-[-0.02em] text-balance text-foreground"
         >
-          The full background
+          TL;DR about me
         </h2>
-        <p className="mx-auto mt-3 max-w-[46ch] text-pretty text-muted-foreground">
-          Nine years in design, five writing production frontend. Roles, dates,
-          and the work behind each of these.
+
+        {/* Every figure here is approved copy from the deck — 51 components,
+            four platforms, nine and five years. Nothing extrapolated. */}
+        {/* Vimocity comes first: VimUI is a system I own *there*, not a product
+            of my own, and naming the employer is what makes that legible to
+            someone who has never heard of either. */}
+        <p className="mx-auto mt-4 max-w-[58ch] text-pretty text-muted-foreground">
+          I&rsquo;m a design engineer at Vimocity in Seattle, a workplace health
+          platform on web, iOS, Android, and Windows desktop. I own VimUI, our
+          design system — 51 components — along with the standards and automated
+          checks that keep design and code in sync. I define what gets built,
+          then build the frontend it ships on.
         </p>
-        <div className="mt-7 flex justify-center">
+        <p className="mx-auto mt-3 max-w-[58ch] text-pretty text-muted-foreground">
+          Nine years in design, five writing production frontend.
+        </p>
+
+        <div className="mt-8 flex flex-col items-center gap-3">
           <Button asChild size="lg">
-            <Link href="/resume">Résumé →</Link>
+            <Link href="/resume">Full résumé →</Link>
           </Button>
+          <p className="text-xs text-muted-foreground">
+            The roles, the dates, and the work behind all of it.
+          </p>
         </div>
       </section>
     </main>

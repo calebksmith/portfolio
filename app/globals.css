@@ -582,6 +582,28 @@ body {
   opacity: 1;
 }
 
+/**
+ * An underline that draws itself left to right.
+ *
+ * A background gradient rather than a positioned bar or a border, because those
+ * force the phrase to `inline-block` — which stops it wrapping and can push it
+ * whole to the next line on a narrow screen. A background follows the text
+ * across line breaks the way a real underline does.
+ *
+ * Width comes from an inline `background-size`, so the component controls both
+ * the trigger and the per-phrase stagger.
+ */
+.ck-mark {
+  background-image: linear-gradient(var(--ck-primary), var(--ck-primary));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 0.08em;
+  padding-bottom: 0.1em;
+  transition-property: background-size;
+  transition-duration: 460ms;
+  transition-timing-function: var(--ck-ease);
+}
+
 .ck-caret-thinking {
   transform-origin: center;
   animation: ck-think 1.15s var(--ck-ease) infinite;
