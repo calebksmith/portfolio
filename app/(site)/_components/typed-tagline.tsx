@@ -8,49 +8,77 @@ import { site } from "@/lib/site";
 /**
  * The tagline, written a line at a time and then resolved into one.
  *
- * Four lines accumulate — nothing is struck through and nothing is erased while
- * they build, because an earlier version struck each line out and that reads as
- * a mind being changed: "I research; scratch that, I define." The claim is the
+ * Lines accumulate — nothing is struck through and nothing is erased while they
+ * build, because an earlier version struck each line out and that reads as a
+ * mind being changed: "I research; scratch that, I define." The claim is the
  * opposite. All of it is the same job.
  *
- * When the fifth line lands, the four above it collapse away and it rises to
- * the top alone. That is the resolution: the process is not discarded, it is
- * absorbed into the sentence that summarises it — which happens to be the
- * approved lede.
+ * Each key phrase underlines itself the moment it finishes typing, and the
+ * typing waits for it. So the emphasis happens mid-sentence, the way someone
+ * marking up their own writing would do it — not as a pass applied afterwards.
+ *
+ * When the last line lands, the two above it fold away and it rises to the top
+ * alone. The process is not discarded, it is absorbed into the sentence that
+ * summarises it — which is the approved lede.
  */
 
+type Segment = { text: string; mark?: boolean };
+
 /**
- * Three lines, not five.
+ * Three lines, not five. An earlier pass gave each phase its own sentence,
+ * which asked the reader to hold four claims plus a summary. Pairing them
+ * halves that without losing a verb, and the pairs are not arbitrary: research
+ * and define are the first diamond, prototype and test are the second.
  *
- * An earlier pass gave each phase its own sentence, which asked the reader to
- * hold four claims plus a summary. Pairing them halves that without losing a
- * verb — and the pairs are not arbitrary: research and define are the first
- * diamond, prototype and test are the second. The structure of the work is in
- * the line breaks.
+ * Line one is business-framed on purpose. "Worth building" is a judgement about
+ * value rather than a description of gathering input — the difference between a
+ * designer who runs research and one who decides scope.
  *
- * Line one is deliberately business-framed. "What's worth building" is a
- * judgement about value, not a description of gathering input — which is the
- * difference between a designer who runs research and one who decides scope.
- *
- * Line two pairs "real components" with "real customers" on purpose: neither is
- * a proxy for the thing. It is also the copy deck's own language, so the
- * tagline and the résumé make the same claim in the same words.
- *
- * The last line is the approved lede, and it is what remains.
+ * "Real components" and "real customers" are both marked because they are the
+ * same argument twice: neither is a proxy for the thing. Both are the copy
+ * deck's own words.
  */
-const LINES = [
-  "I research and define what's worth building.",
-  "I prototype in real components and test with real customers.",
-  site.lede,
-] as const;
+const LINES: Segment[][] = [
+  [
+    { text: "I research and define features that are " },
+    { text: "worth building", mark: true },
+    { text: "." },
+  ],
+  [
+    { text: "I prototype in " },
+    { text: "real components", mark: true },
+    { text: " and test with " },
+    { text: "real customers", mark: true },
+    { text: "." },
+  ],
+  [{ text: site.lede }],
+];
 
 const LAST = LINES.length - 1;
 
 const TYPE_MS = 26;
-const LINE_PAUSE_MS = 420;
-const SETTLE_MS = 900;
+/** Must match the transition the marks are given below. */
+const MARK_DRAW_MS = 460;
+/** A beat after the underline lands, before writing resumes. */
+const MARK_HOLD_MS = 240;
+const LINE_END_MS = 650;
+const SETTLE_MS = 1400;
 const COLLAPSE_MS = 600;
 const REST_MS = 4200;
+
+const lineText = (segments: Segment[]) =>
+  segments.map((segment) => segment.text).join("");
+
+/** Character offsets at which a marked phrase finishes. */
+function markEnds(segments: Segment[]) {
+  const ends: number[] = [];
+  let offset = 0;
+  for (const segment of segments) {
+    offset += segment.text.length;
+    if (segment.mark) ends.push(offset);
+  }
+  return ends;
+}
 
 type Phase = "typing" | "collapsing" | "resting";
 
@@ -59,6 +87,14 @@ export function TypedTagline({ className }: { className?: string }) {
   const [line, setLine] = useState(0);
   const [typed, setTyped] = useState("");
   const [phase, setPhase] = useState<Phase>("typing");
+
+  const segments = LINES[line];
+  const full = lineText(segments);
+  /** True exactly while a just-completed phrase is drawing its underline. */
+  const drawing =
+    phase === "typing" &&
+    typed.length < full.length &&
+    markEnds(segments).includes(typed.length);
 
   useEffect(() => {
     if (reduced) return;
@@ -72,18 +108,20 @@ export function TypedTagline({ className }: { className?: string }) {
     };
 
     if (phase === "typing") {
-      const target = LINES[line];
-
-      if (typed.length < target.length) {
-        later(() => setTyped(target.slice(0, typed.length + 1)), TYPE_MS);
+      if (typed.length < full.length) {
+        // Having just finished a marked phrase, wait for its underline before
+        // writing on — the emphasis should not be racing the next words.
+        later(
+          () => setTyped(full.slice(0, typed.length + 1)),
+          drawing ? MARK_DRAW_MS + MARK_HOLD_MS : TYPE_MS,
+        );
       } else if (line === LAST) {
-        // Let the finished set be read before it resolves.
         later(() => setPhase("collapsing"), SETTLE_MS);
       } else {
         later(() => {
           setLine((current) => current + 1);
           setTyped("");
-        }, LINE_PAUSE_MS);
+        }, LINE_END_MS);
       }
     }
 
@@ -103,9 +141,8 @@ export function TypedTagline({ className }: { className?: string }) {
       cancelled = true;
       clearTimeout(timer);
     };
-  }, [reduced, line, typed, phase]);
+  }, [reduced, line, typed, phase, full, drawing]);
 
-  /** After the last line lands, the four above it fold away. */
   const collapsed = phase === "collapsing" || phase === "resting";
 
   return (
@@ -123,18 +160,19 @@ export function TypedTagline({ className }: { className?: string }) {
       </noscript>
 
       <ul aria-hidden="true" className="flex flex-col">
-        {LINES.map((text, index) => {
+        {LINES.map((lineSegments, index) => {
           const isFinal = index === LAST;
-          const finished = reduced || index < line || collapsed;
+          const lineFull = lineText(lineSegments);
+          const done = reduced || index < line || collapsed;
           const active = !reduced && index === line && phase === "typing";
-          if (!finished && !active) return null;
+          if (!done && !active) return null;
 
-          // Only the process lines fold; the final line stays and rises.
+          const shown = done ? lineFull.length : typed.length;
           const folding = collapsed && !isFinal;
 
           return (
             <li
-              key={text}
+              key={lineFull}
               className={[
                 "overflow-hidden transition-all ease-out",
                 isFinal ? "text-foreground" : "text-muted-foreground",
@@ -142,15 +180,15 @@ export function TypedTagline({ className }: { className?: string }) {
               ].join(" ")}
               style={{ transitionDuration: `${COLLAPSE_MS}ms` }}
             >
-              {finished ? text : typed}
+              <Line segments={lineSegments} shown={shown} />
 
-              {/* The caret sits at the end of whatever is being written, and
-                  shimmers rather than blinks while the line rests. */}
               {active || (isFinal && collapsed) ? (
                 <span
                   className={[
                     "ml-[0.1em] inline-block h-[1.05em] w-[0.5em] rounded-[1px] bg-primary align-[-0.2em]",
-                    active && typed.length < text.length
+                    // Solid while characters are appearing; shimmering while the
+                    // line pauses for an underline or rests at the end.
+                    active && typed.length < lineFull.length && !drawing
                       ? "ck-caret-writing"
                       : "ck-caret-thinking",
                   ].join(" ")}
@@ -161,5 +199,47 @@ export function TypedTagline({ className }: { className?: string }) {
         })}
       </ul>
     </div>
+  );
+}
+
+/**
+ * Renders a line up to `shown` characters. Each marked phrase underlines itself
+ * as soon as its own last character has been typed, independently of the rest
+ * of the line.
+ */
+function Line({ segments, shown }: { segments: Segment[]; shown: number }) {
+  // Offsets are derived rather than accumulated in a counter during the map —
+  // render must not depend on mutation part-way through.
+  const bounds = segments.map((_, index) => {
+    const start = segments
+      .slice(0, index)
+      .reduce((total, segment) => total + segment.text.length, 0);
+    return { start, end: start + segments[index].text.length };
+  });
+
+  return (
+    <>
+      {segments.map((segment, index) => {
+        const { start, end } = bounds[index];
+
+        const visible = segment.text.slice(0, Math.max(0, shown - start));
+        if (!visible) return null;
+
+        if (!segment.mark) return <span key={index}>{visible}</span>;
+
+        return (
+          <span
+            key={index}
+            className="ck-mark"
+            style={{
+              backgroundSize: shown >= end ? "100% 0.08em" : "0% 0.08em",
+              transitionDuration: `${MARK_DRAW_MS}ms`,
+            }}
+          >
+            {visible}
+          </span>
+        );
+      })}
+    </>
   );
 }
