@@ -333,15 +333,17 @@ export function Bento() {
 
         {/* Every figure here is approved copy from the deck — 51 components,
             four platforms, nine and five years. Nothing extrapolated. */}
-        {/* Vimocity comes first: VimUI is a system I own *there*, not a product
-            of my own, and naming the employer is what makes that legible to
-            someone who has never heard of either. */}
+        {/* Vimocity comes first: VimUI is a system built *there*, not a
+            product of his own, and naming the employer is what makes that
+            legible to someone who has never heard of either. "Built and lead"
+            rather than "own" — more precise and a stronger claim. */}
         <p className="mx-auto mt-4 max-w-[58ch] text-pretty text-muted-foreground">
           I&rsquo;m a design engineer at Vimocity in Seattle, a workplace health
-          platform on web, iOS, Android, and Windows desktop. I own VimUI, our
-          design system — 51 components — along with the standards and automated
-          checks that keep design and code in sync. I define what gets built,
-          then build the frontend it ships on.
+          platform on web, iOS, Android, and Windows desktop. I lead design
+          there. I built our design system, VimUI — 51 components — and I
+          maintain the standards and automated checks that keep design and code
+          in sync. I define what gets built, then build the frontend it ships
+          on.
         </p>
         <p className="mx-auto mt-3 max-w-[58ch] text-pretty text-muted-foreground">
           Nine years in design, five writing production frontend.

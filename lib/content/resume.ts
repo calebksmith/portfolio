@@ -45,7 +45,7 @@ export const resume = {
   ],
 
   summary:
-    "Product designer who works in code. I define what gets built — customer research, product briefs, prototypes — and build the frontend in React and TypeScript. I own a design system covering four platforms and the automated checks that keep design and code in sync. Nine years in design, five writing production frontend.",
+    "Product designer who works in code. I define what gets built — customer research, product briefs, prototypes — and build the frontend in React and TypeScript. I built the design system covering our four platforms, and the automated checks that keep design and code in sync. Nine years in design, five writing production frontend.",
 
   skills: [
     {
@@ -96,7 +96,7 @@ export const resume = {
         {
           heading: "Design system",
           bullets: [
-            "Own VimUI: 51 components covering our web, iOS, Android, and Windows desktop apps, built in a shared codebase with Storybook documentation.",
+            "Built VimUI and lead its growth: 51 components covering our web, iOS, Android, and Windows desktop apps, in a shared codebase with Storybook documentation.",
             "Raised reusable component use from about 10% to 80–90% of frontend code, and design token use from 0% to 99%.",
             "Wrote the standards that govern the system — structure, tokens, typing, accessibility, documentation, and versioning — and maintain them as the reference the whole team builds against.",
             "Run the system as a versioned package: semantic versioning, a changelog entry per change, and beta releases sent to the apps that consume it before anything breaking ships.",

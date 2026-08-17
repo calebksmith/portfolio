@@ -40,7 +40,7 @@ Voice: plain, specific, active. Say what a thing does. No filler.
 
 > Design engineering and product design for a workplace health platform used by about 50,000 people across 30+ organizations. Web, iOS, Android, and Windows desktop.
 >
-> • Own VimUI, our design system: 51 components in a shared codebase, plus the standards, documentation, and release process behind it
+> • Built VimUI, our design system, and lead its growth: 51 components in a shared codebase, plus the standards, documentation, and release process behind it
 > • Took reusable component use from about 10% to 80–90% of our frontend code, and design tokens from 0% to 99%
 > • Built the automated checks that keep design and code in sync — rules for how components get built and how pages get built, covering token use, accessibility, loading states, and responsive breakpoints, run before every merge and loaded into our AI coding tools
 > • Define what gets built: customer interviews, product briefs, and prototypes built in real components rather than mockups
@@ -99,7 +99,7 @@ Seattle, WA · calebksmith.com · linkedin.com/in/calebksmith
 
 ### SUMMARY
 
-Product designer who works in code. I define what gets built — customer research, product briefs, prototypes — and build the frontend in React and TypeScript. I own a design system covering four platforms and the automated checks that keep design and code in sync. Nine years in design, five writing production frontend.
+Product designer who works in code. I define what gets built — customer research, product briefs, prototypes — and build the frontend in React and TypeScript. I built the design system covering our four platforms, and the automated checks that keep design and code in sync. Nine years in design, five writing production frontend.
 
 ### SKILLS
 
@@ -119,7 +119,7 @@ Product Designer · May 2022 – Aug 2024
 Multimedia Designer · May 2021 – Apr 2022
 
 **Design system**
-- Own VimUI: 51 components covering our web, iOS, Android, and Windows desktop apps, built in a shared codebase with Storybook documentation.
+- Built VimUI and lead its growth: 51 components covering our web, iOS, Android, and Windows desktop apps, in a shared codebase with Storybook documentation.
 - Raised reusable component use from about 10% to 80–90% of frontend code, and design token use from 0% to 99%.
 - Wrote the standards that govern the system — structure, tokens, typing, accessibility, documentation, and versioning — and maintain them as the reference the whole team builds against.
 - Run the system as a versioned package: semantic versioning, a changelog entry per change, and beta releases sent to the apps that consume it before anything breaking ships.

@@ -20,7 +20,7 @@ The one-line version:
 
 The differentiator, in the order it should be argued:
 
-1. **Design systems** — owns VimUI at Vimocity: 51 components across web, iOS, Android, and Windows desktop, living in a shared codebase with Storybook, plus the written standards and release process behind it.
+1. **Design systems** — built VimUI at Vimocity and leads its growth: 51 components across web, iOS, Android, and Windows desktop, living in a shared codebase with Storybook, plus the written standards and release process behind it.
 2. **AI guardrails** — wrote the component standards, turned them into automated checks that run before every merge, and loaded the same standards into the team's AI coding tools. *One standard, enforced three ways: written for people, checked by automation, loaded for AI.* This is the strongest and least common thing about him.
 3. **Production frontend** — designs and builds directly in the product codebase in TypeScript/React/Next.js. Reviews and approves frontend pull requests.
 4. **Product definition** — runs discovery: customer interviews, product briefs, prototype-led iteration. Not just execution.
