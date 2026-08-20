@@ -17,7 +17,7 @@ import { site } from "@/lib/site";
 export default function sitemap(): MetadataRoute.Sitemap {
   const pages = [
     { path: "", priority: 1 },
-    { path: "/resume", priority: 0.9 },
+    { path: "/experience", priority: 0.9 },
     { path: "/style-guide", priority: 0.6 },
     { path: "/colophon", priority: 0.6 },
   ];

@@ -115,7 +115,7 @@ export function ContrastTable() {
                   <span className="flex items-center gap-2.5">
                     <span
                       aria-hidden="true"
-                      className="inline-flex size-6 shrink-0 items-center justify-center rounded-sm border border-border text-[0.625rem]"
+                      className="inline-flex size-6 shrink-0 items-center justify-center rounded-sm border border-border text-label-sm"
                       style={{
                         background: row.surfaceValue,
                         color: row.foregroundValue,

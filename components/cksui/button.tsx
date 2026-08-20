@@ -20,8 +20,13 @@ const button = cva(
   {
     variants: {
       variant: {
-        primary: "bg-primary text-primary-foreground hover:opacity-90",
-        secondary: "bg-accent text-accent-foreground hover:opacity-90",
+        // Every variant hovers by changing its background, never its opacity.
+        // Opacity is not one of the properties `transition-colors` animates, so
+        // the old `hover:opacity-90` snapped rather than faded — and it dimmed
+        // the label along with the fill, giving up contrast at the one moment
+        // someone is definitely looking.
+        primary: "bg-primary text-primary-foreground hover:bg-primary-hover",
+        secondary: "bg-accent text-accent-foreground hover:bg-accent-hover",
         outline:
           "border border-input bg-background text-foreground hover:bg-muted hover:text-muted-foreground",
         ghost: "text-foreground hover:bg-muted hover:text-muted-foreground",

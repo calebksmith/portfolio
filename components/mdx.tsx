@@ -31,13 +31,22 @@ const components = {
     </h3>
   ),
   p: (props: React.ComponentProps<"p">) => (
-    <p className="mt-4 max-w-[62ch] text-pretty text-muted-foreground" {...props} />
+    <p className="mt-4 max-w-measure-wide text-pretty text-muted-foreground" {...props} />
   ),
+  // The measure lives here rather than on a container around the article: there
+  // is no content container on this site, so anything made of sentences carries
+  // its own line length. 62ch is --ck-measure.
   ul: (props: React.ComponentProps<"ul">) => (
-    <ul className="mt-4 list-disc space-y-2 pl-5 text-muted-foreground" {...props} />
+    <ul
+      className="mt-4 max-w-measure-wide list-disc space-y-2 pl-5 text-muted-foreground"
+      {...props}
+    />
   ),
   ol: (props: React.ComponentProps<"ol">) => (
-    <ol className="mt-4 list-decimal space-y-2 pl-5 text-muted-foreground" {...props} />
+    <ol
+      className="mt-4 max-w-measure-wide list-decimal space-y-2 pl-5 text-muted-foreground"
+      {...props}
+    />
   ),
   a: ({ children, ...props }: React.ComponentProps<"a">) => (
     <a
@@ -49,7 +58,7 @@ const components = {
   ),
   blockquote: (props: React.ComponentProps<"blockquote">) => (
     <blockquote
-      className="mt-6 border-l-2 border-primary pl-4 text-muted-foreground italic"
+      className="mt-6 max-w-measure-wide border-l-2 border-primary pl-4 text-muted-foreground italic"
       {...props}
     />
   ),

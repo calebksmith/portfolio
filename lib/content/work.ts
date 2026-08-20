@@ -27,7 +27,8 @@ export type CaseStudy = {
   title: string;
   role: string;
   year: string;
-  platforms: string[];
+  /** What it was built with. Badges name a stack, not a device list. */
+  stack: string[];
   summary: string;
   weight: Weight;
   /** The MDX body, compiled at render time by components/mdx.tsx. */
@@ -105,14 +106,14 @@ function load(): CaseStudy[] {
       );
     }
 
-    const platforms = data.platforms;
+    const stack = data.stack;
 
     return {
       slug: file.replace(/\.mdx$/, ""),
       title: required(data, "title", file),
       role: required(data, "role", file),
       year: required(data, "year", file),
-      platforms: Array.isArray(platforms) ? platforms : [],
+      stack: Array.isArray(stack) ? stack : [],
       summary: required(data, "summary", file),
       weight: weight as Weight,
       body,

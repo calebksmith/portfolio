@@ -1,16 +1,21 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { PrintButton } from "@/components/cksui";
+import { Eyebrow, PrintButton } from "@/components/cksui";
 import { resume } from "@/lib/content/resume";
 
 export const metadata: Metadata = {
-  title: "Résumé",
+  title: "Experience",
   description: resume.summary,
 };
 
 /**
- * The résumé.
+ * The experience page — a résumé by structure, not by name.
+ *
+ * "Résumé" is a document you are handed; this is a page you read, and the site
+ * says so. The data module underneath is still `resume.ts` because that is what
+ * the records are, and renaming a private module to match a label would be
+ * churn.
  *
  * Rendered from structured data (lib/content/resume.ts), not prose, so the same
  * records drive this page and the print stylesheet without two copies drifting.
@@ -20,18 +25,16 @@ export const metadata: Metadata = {
  * a committed PDF is a second artifact that silently rots the moment a bullet
  * changes here. See the @media print block in globals.css.
  */
-export default async function ResumePage() {
+export default async function ExperiencePage() {
   return (
-    <main className="mx-auto w-full max-w-3xl px-6 py-14 sm:px-10 print:max-w-none print:px-0 print:py-0">
-      <header className="border-b border-border pb-6">
+    <main className="w-full px-6 py-14 sm:px-10 print:px-0 print:py-0">
+      <header className="border-b border-border pb-8">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <h1 className="font-display text-[clamp(2rem,5vw,2.75rem)] font-semibold leading-[1.05] tracking-[-0.03em] text-foreground">
+            <h1 className="font-display text-[clamp(2rem,6vw,3rem)] font-semibold leading-[1.03] tracking-[-0.03em] text-foreground">
               {resume.name}
             </h1>
-            <p className="mt-2 text-sm uppercase tracking-[0.16em] text-primary">
-              {resume.title}
-            </p>
+            <Eyebrow tone="primary" className="mt-2">{resume.title}</Eyebrow>
           </div>
 
           <PrintButton className="print:hidden" />
@@ -63,9 +66,9 @@ export default async function ResumePage() {
         <dl className="grid gap-x-6 gap-y-2 sm:grid-cols-[10rem_1fr]">
           {resume.skills.map((skill) => (
             <div key={skill.label} className="contents">
-              <dt className="text-xs uppercase tracking-[0.14em] text-muted-foreground">
-                {skill.label}
-              </dt>
+              <Eyebrow asChild>
+                <dt>{skill.label}</dt>
+              </Eyebrow>
               <dd className="text-pretty text-foreground">{skill.value}</dd>
             </div>
           ))}
@@ -83,9 +86,7 @@ export default async function ResumePage() {
                 {position.org}
                 <span className="text-muted-foreground"> · {position.location}</span>
               </h3>
-              <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">
-                {position.period}
-              </p>
+              <Eyebrow>{position.period}</Eyebrow>
             </div>
 
             {position.note ? (
@@ -112,10 +113,10 @@ export default async function ResumePage() {
 
             {position.sections?.map((section) => (
               <div key={section.heading} className="mt-5 break-inside-avoid">
-                <h4 className="text-xs uppercase tracking-[0.14em] text-muted-foreground">
-                  {section.heading}
-                </h4>
-                <ul className="mt-2 list-disc space-y-1.5 pl-5 text-pretty text-muted-foreground">
+                <Eyebrow asChild>
+                  <h4>{section.heading}</h4>
+                </Eyebrow>
+                <ul className="mt-2 max-w-measure list-disc space-y-1.5 pl-5 text-pretty text-muted-foreground">
                   {section.bullets.map((bullet) => (
                     <li key={bullet}>{bullet}</li>
                   ))}
@@ -124,7 +125,7 @@ export default async function ResumePage() {
             ))}
 
             {position.bullets ? (
-              <ul className="mt-3 list-disc space-y-1.5 pl-5 text-pretty text-muted-foreground">
+              <ul className="mt-3 max-w-measure list-disc space-y-1.5 pl-5 text-pretty text-muted-foreground">
                 {position.bullets.map((bullet) => (
                   <li key={bullet}>{bullet}</li>
                 ))}
@@ -177,9 +178,9 @@ function Section({
 }) {
   return (
     <section className="mt-10 break-inside-avoid">
-      <h2 className="mb-4 border-b border-input pb-1 text-xs uppercase tracking-[0.16em] text-foreground">
-        {title}
-      </h2>
+      <Eyebrow asChild tone="strong" className="mb-4 border-b border-input pb-1">
+        <h2>{title}</h2>
+      </Eyebrow>
       {children}
     </section>
   );

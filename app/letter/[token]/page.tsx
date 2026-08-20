@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { after } from "next/server";
 
+import { Eyebrow } from "@/components/cksui";
 import { Mdx } from "@/components/mdx";
 import { getCaseStudy } from "@/lib/content/work";
 import { showLetters } from "@/lib/flags";
@@ -71,9 +72,9 @@ export default async function SharedLetterPage({
   return (
     <main className="mx-auto w-full max-w-2xl px-6 py-16 sm:px-10">
       <header className="border-b border-border pb-8">
-        <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">
+        <Eyebrow>
           {letter.role} · {letter.company}
-        </p>
+        </Eyebrow>
         <h1 className="mt-4 font-display text-3xl font-semibold tracking-[-0.03em] text-balance text-foreground">
           {site.name}
         </h1>
@@ -90,9 +91,9 @@ export default async function SharedLetterPage({
 
       {referenced.length > 0 ? (
         <section className="mt-14 border-t border-border pt-8">
-          <h2 className="text-xs uppercase tracking-[0.14em] text-muted-foreground">
-            Most relevant work
-          </h2>
+          <Eyebrow asChild>
+            <h2>Most relevant work</h2>
+          </Eyebrow>
 
           <ul className="mt-4 space-y-4">
             {referenced.map((study) => (

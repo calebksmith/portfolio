@@ -50,9 +50,29 @@ export function ControlBar({
  */
 const CONTROL_ITEM = [
   "inline-flex min-h-tap items-center justify-center gap-2 px-2.5 sm:px-3",
-  "text-xs uppercase tracking-[0.14em] transition-colors rounded-sm",
+  "text-label uppercase tracking-label transition-colors rounded-sm",
   "focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring",
 ].join(" ");
+
+/**
+ * The three states every instrument has, in one place so the two components
+ * cannot drift apart.
+ *
+ *   rest    nothing. The header is a translucent, blurred bar; an instrument
+ *           that paints its own opaque fill at rest shows as a patch whose
+ *           edges move as content scrolls underneath it. That is what the
+ *           unpressed toggle used to do, with `bg-background`, and it is why a
+ *           line appeared to come and go along its bottom edge.
+ *   hover   the muted surface. Present on the active state too — a control
+ *           that stops responding once it is on has stopped saying it is a
+ *           control.
+ *   active  the accent pair, deepening one step on hover. Same `accent-hover`
+ *           token the secondary button uses, so "on" responds to the pointer
+ *           the way every other filled surface on the site does.
+ */
+const CONTROL_REST = "text-foreground hover:bg-muted hover:text-muted-foreground";
+const CONTROL_ACTIVE =
+  "bg-accent text-accent-foreground hover:bg-accent-hover";
 
 /**
  * An instrument that opens something — a panel, a menu.
@@ -63,19 +83,29 @@ const CONTROL_ITEM = [
 export function ControlButton({
   icon,
   label,
+  active = false,
   className,
   ...props
 }: ComponentProps<"button"> & {
   icon: ReactNode;
   label: string;
+  /**
+   * Whether the thing it opens is currently open. A trigger that looks
+   * untouched while its panel is on screen makes the panel look like it
+   * belongs to something else.
+   */
+  active?: boolean;
 }) {
   return (
     <button
       type="button"
       data-slot="control-button"
+      // Not aria-pressed: this opens a panel rather than turning a mode on, and
+      // the panel's own visibility is what assistive technology follows.
+      data-state={active ? "open" : "closed"}
       className={cn(
         CONTROL_ITEM,
-        "text-foreground hover:bg-muted hover:text-muted-foreground",
+        active ? CONTROL_ACTIVE : CONTROL_REST,
         className,
       )}
       {...props}
@@ -111,9 +141,7 @@ export function ControlToggle({
       aria-pressed={pressed}
       className={cn(
         CONTROL_ITEM,
-        pressed
-          ? "bg-accent text-accent-foreground"
-          : "bg-background text-foreground hover:bg-muted hover:text-muted-foreground",
+        pressed ? CONTROL_ACTIVE : CONTROL_REST,
         className,
       )}
       {...props}

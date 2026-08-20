@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 
-import { Badge, ThemeSwitcher } from "@/components/cksui";
+import { Eyebrow, ThemeSwitcher } from "@/components/cksui";
 
 import { ContrastTable } from "./contrast-table";
-import { specimens } from "./_components";
+import { Playground } from "./playground";
+import { SectionNav } from "./section-nav";
 import { TokenTable } from "./token-table";
 
 export const metadata: Metadata = {
@@ -35,12 +36,12 @@ const SECTIONS = [
 
 export default async function StyleGuidePage() {
   return (
-    <main className="mx-auto w-full max-w-6xl px-6 py-14 sm:px-10">
+    <main className="w-full px-6 py-14 sm:px-10">
       <header className="border-b border-border pb-8">
         <h1 className="font-display text-[clamp(2rem,6vw,3rem)] font-semibold leading-[1.03] tracking-[-0.03em] text-balance text-foreground">
           Style guide
         </h1>
-        <p className="mt-5 max-w-[58ch] text-pretty text-muted-foreground">
+        <p className="mt-5 max-w-measure-wide text-pretty text-muted-foreground">
           Every color on this site comes from a token, and every token pair is
           measured. Switch themes or modes and the numbers below update —
           including the ones that would fail. Components are rendered from the
@@ -49,29 +50,14 @@ export default async function StyleGuidePage() {
       </header>
 
       <div className="mt-10 gap-10 lg:grid lg:grid-cols-[12rem_1fr]">
-        {/* Sticky index. A <nav> of in-page links, so it works without JS and
-            reading order stays sensible on a phone, where it sits above. */}
-        <nav
-          aria-label="Style guide sections"
-          className="mb-8 lg:sticky lg:top-20 lg:mb-0 lg:self-start"
-        >
-          <ul className="flex flex-wrap gap-x-4 gap-y-1 lg:flex-col lg:gap-y-1">
-            {SECTIONS.map((section) => (
-              <li key={section.id}>
-                <a
-                  href={`#${section.id}`}
-                  className="inline-flex min-h-tap items-center text-xs uppercase tracking-[0.14em] text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
-                >
-                  {section.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
+        {/* Sticky index. In-page links, so they work without JS; the section
+            you are reading is marked once JS is there. Reading order stays
+            sensible on a phone, where it sits above the content. */}
+        <SectionNav sections={SECTIONS} />
 
         <div className="min-w-0 space-y-16">
           <Section id="theme" title="Theme">
-            <p className="max-w-[62ch] text-pretty text-muted-foreground">
+            <p className="max-w-measure-wide text-pretty text-muted-foreground">
               Three themes across light and dark, applied with{" "}
               <Code>data-theme</Code> and <Code>data-mode</Code> on{" "}
               <Code>&lt;html&gt;</Code>. Each is the same token names with
@@ -85,7 +71,7 @@ export default async function StyleGuidePage() {
           </Section>
 
           <Section id="color" title="Color">
-            <p className="max-w-[62ch] text-pretty text-muted-foreground">
+            <p className="max-w-measure-wide text-pretty text-muted-foreground">
               Colors are not a flat palette. Every surface has a paired
               foreground, so a component written as{" "}
               <Code>bg-card text-card-foreground</Code> is legible in every theme
@@ -96,14 +82,14 @@ export default async function StyleGuidePage() {
           </Section>
 
           <Section id="contrast" title="Contrast">
-            <p className="max-w-[62ch] text-pretty text-muted-foreground">
+            <p className="max-w-measure-wide text-pretty text-muted-foreground">
               Contrast is measured between a surface and the text or icon drawn
               on it, not between individual colors. WCAG AA requires 4.5:1 for
               body text and 3:1 for large text. AAA requires 7:1. The
               high-contrast theme is built to clear AAA on every pair.
             </p>
             <ContrastTable />
-            <p className="mt-6 max-w-[62ch] text-xs text-muted-foreground">
+            <p className="mt-6 max-w-measure-wide text-xs text-muted-foreground">
               The same math runs at build time in{" "}
               <Code>npm run check:contrast</Code>, reading{" "}
               <Code>globals.css</Code> directly, so this page and the gate cannot
@@ -114,7 +100,7 @@ export default async function StyleGuidePage() {
           </Section>
 
           <Section id="typography" title="Typography">
-            <p className="max-w-[62ch] text-pretty text-muted-foreground">
+            <p className="max-w-measure-wide text-pretty text-muted-foreground">
               Archivo carries display type — headings and the name. IBM Plex Mono
               carries everything else: body copy, labels, tables, UI. The
               inversion of the usual serif-on-cream portfolio is deliberate.
@@ -132,7 +118,7 @@ export default async function StyleGuidePage() {
                   label: "Heading · Archivo 600",
                   className:
                     "font-display text-lg font-semibold tracking-[-0.01em]",
-                  sample: "VimUI, a design system across four platforms",
+                  sample: "VimUI, a design system in code",
                 },
                 {
                   label: "Body · IBM Plex Mono 400",
@@ -143,7 +129,7 @@ export default async function StyleGuidePage() {
                 {
                   label: "Label · IBM Plex Mono 400, uppercase, 0.14em",
                   className:
-                    "text-xs uppercase tracking-[0.14em] text-muted-foreground",
+                    "text-label uppercase tracking-label text-muted-foreground",
                   sample: "Selected work",
                 },
               ].map((row) => (
@@ -160,7 +146,7 @@ export default async function StyleGuidePage() {
           </Section>
 
           <Section id="components" title="Components">
-            <p className="max-w-[62ch] text-pretty text-muted-foreground">
+            <p className="max-w-measure-wide text-pretty text-muted-foreground">
               cksUI — this site&rsquo;s component library. Built on
               shadcn/ui&rsquo;s patterns as source copied in and owned, not as an
               installed dependency, with every value rewritten onto the tokens
@@ -169,16 +155,14 @@ export default async function StyleGuidePage() {
             </p>
 
             <div className="mt-6 rounded-lg border border-input bg-card p-5">
-              <p className="text-xs uppercase tracking-[0.16em] text-muted-foreground">
-                Try the inspector
-              </p>
-              <p className="mt-2 max-w-[62ch] text-pretty text-card-foreground">
+              <Eyebrow>Try the inspector</Eyebrow>
+              <p className="mt-2 max-w-measure-wide text-pretty text-card-foreground">
                 Hit <strong className="font-semibold">Inspect</strong> in the
                 header and point at anything on this page — or tab through it,
                 which works the same way. It reports the component, the tokens
                 its rendered values resolve back to, and the rule behind them.
               </p>
-              <p className="mt-3 max-w-[62ch] text-pretty text-xs text-muted-foreground">
+              <p className="mt-3 max-w-measure-wide text-pretty text-xs text-muted-foreground">
                 Values are read with <Code>getComputedStyle</Code> and resolved{" "}
                 <em>backwards</em> to token names, so it reports on the token
                 layer rather than dumping CSS. Anything resolving to no token is
@@ -187,38 +171,19 @@ export default async function StyleGuidePage() {
               </p>
             </div>
 
-            <div className="mt-8 space-y-10">
-              {specimens.map((specimen) => (
-                <article
-                  key={specimen.id}
-                  id={specimen.id}
-                  className="scroll-mt-20 border-t border-border pt-6"
-                >
-                  <div className="flex flex-wrap items-baseline gap-3">
-                    <h3 className="font-display text-lg font-semibold tracking-[-0.01em] text-foreground">
-                      {specimen.name}
-                    </h3>
-                    <Badge>data-slot=&quot;{specimen.slot}&quot;</Badge>
-                  </div>
-
-                  <p className="mt-2 max-w-[62ch] text-pretty text-muted-foreground">
-                    {specimen.description}
-                  </p>
-
-                  {specimen.notes ? (
-                    <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-muted-foreground">
-                      {specimen.notes.map((note) => (
-                        <li key={note}>{note}</li>
-                      ))}
-                    </ul>
-                  ) : null}
-
-                  <div className="mt-5 rounded-lg border border-border bg-card p-5">
-                    {specimen.demo}
-                  </div>
-                </article>
-              ))}
+            <div className="mt-8">
+              <Playground />
             </div>
+
+            <p className="mt-4 max-w-measure-wide text-pretty text-xs text-muted-foreground">
+              The source panel is not a code sample kept beside a demo. Each
+              specimen is one tree, projected twice — once through{" "}
+              <Code>createElement</Code> into the components on the left, once
+              through a printer into the JSX on the right. There is no way to
+              write code here that renders something else, which is the same
+              reason the contrast table reads <Code>globals.css</Code> instead of
+              keeping its own palette.
+            </p>
           </Section>
         </div>
       </div>

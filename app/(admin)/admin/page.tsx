@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { Eyebrow } from "@/components/cksui";
 import { requireAdmin } from "@/lib/auth-guard";
 import { caseStudies } from "@/lib/content/work";
 import { listLettersForAdmin } from "@/lib/repositories/cover-letters";
@@ -44,9 +45,9 @@ export default async function AdminDashboard() {
       <dl className="mt-8 grid gap-px overflow-hidden rounded-md border border-border bg-border sm:grid-cols-3">
         {stats.map((stat) => (
           <div key={stat.label} className="bg-card p-5">
-            <dt className="text-xs uppercase tracking-[0.14em] text-muted-foreground">
-              {stat.label}
-            </dt>
+            <Eyebrow asChild>
+              <dt>{stat.label}</dt>
+            </Eyebrow>
             <dd className="mt-2 font-display text-3xl font-semibold text-foreground">
               {stat.value}
             </dd>
@@ -94,7 +95,7 @@ export default async function AdminDashboard() {
         </table>
       ) : null}
 
-      <p className="mt-10 max-w-[62ch] text-muted-foreground">
+      <p className="mt-10 max-w-measure text-muted-foreground">
         Editing screens are not built yet. The schema, repositories, and this
         gate are in place, so each one is a form wired to a Server Action that
         calls into <code className="text-foreground">lib/repositories/</code>.

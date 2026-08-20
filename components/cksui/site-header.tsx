@@ -8,6 +8,7 @@ import { INSPECT_ATTRIBUTE } from "@/lib/theme";
 import { ControlBar, ControlButton, ControlToggle } from "./control-bar";
 import { cn } from "./lib/cn";
 import { useHtmlAttribute } from "./lib/use-html-attribute";
+import { usePopoverOpen } from "./lib/use-popover-open";
 import { ThemeSwitcher } from "./theme-switcher";
 
 /**
@@ -38,11 +39,12 @@ const SEGMENT_LABELS: Record<string, string> = {
   work: "Work",
   "style-guide": "Style guide",
   colophon: "Colophon",
-  resume: "Résumé",
+  experience: "Experience",
   "sign-in": "Sign in",
 };
 
 type Crumb =
+  | { kind: "mark"; label: string; href: string }
   | { kind: "link"; label: string; href: string }
   | { kind: "menu"; label: string }
   | { kind: "current"; label: string };
@@ -50,9 +52,13 @@ type Crumb =
 function buildCrumbs(pathname: string, work: WorkItem[]): Crumb[] {
   const segments = pathname.split("/").filter(Boolean);
 
-  // No trail on the index: you are already home, and the page states the name
-  // at full size directly below. A crumb there is redundancy, not orientation.
-  if (segments.length === 0) return [];
+  // The index gets a monogram rather than a trail. There is nowhere to go back
+  // to, and the page states the name at full size directly below — but the
+  // corner was empty, and an empty corner opposite a cluster of instruments
+  // reads as a bar that failed to load rather than as restraint.
+  if (segments.length === 0) {
+    return [{ kind: "mark", label: "CS", href: "/" }];
+  }
 
   const crumbs: Crumb[] = [
     { kind: "link", label: "Caleb Smith", href: "/" },
@@ -92,11 +98,14 @@ function buildCrumbs(pathname: string, work: WorkItem[]): Crumb[] {
 }
 
 const CRUMB =
-  "inline-flex min-h-tap items-center text-xs uppercase tracking-[0.14em] whitespace-nowrap";
+  "inline-flex min-h-tap items-center text-label uppercase tracking-label whitespace-nowrap";
 
 export function SiteHeader({ work }: { work: WorkItem[] }) {
   const pathname = usePathname();
   const crumbs = buildCrumbs(pathname ?? "/", work);
+
+  // Which case study is open, if any — so the Work menu can mark it.
+  const currentSlug = pathname?.match(/^\/work\/([^/]+)/)?.[1] ?? null;
 
   return (
     <header
@@ -106,16 +115,9 @@ export function SiteHeader({ work }: { work: WorkItem[] }) {
       {/* Height is pinned to --ck-header-height so anything docking beneath the
           header stays flush with it. The row is tap-sized either way; making it
           explicit is what lets other components read the value. */}
-      <div className="mx-auto flex h-tap w-full max-w-5xl items-center gap-4 px-6 sm:px-10">
-        {/* Path — wayfinding. Plain text; scrolls rather than wrapping.
-            On the index there is no trail, so a spacer holds the instruments
-            to the right instead. */}
-        {crumbs.length === 0 ? <div className="flex-1" /> : null}
-
-        <nav
-          aria-label="Breadcrumb"
-          className={cn("min-w-0 flex-1 overflow-x-auto", crumbs.length === 0 && "hidden")}
-        >
+      <div className="flex h-tap w-full items-center gap-4 px-6 sm:px-10">
+        {/* Path — wayfinding. Plain text; scrolls rather than wrapping. */}
+        <nav aria-label="Breadcrumb" className="min-w-0 flex-1 overflow-x-auto">
           <ol className="flex items-center gap-2">
             {crumbs.map((crumb, index) => (
               <li key={`${crumb.label}-${index}`} className="flex items-center gap-2">
@@ -125,18 +127,34 @@ export function SiteHeader({ work }: { work: WorkItem[] }) {
                   </span>
                 ) : null}
 
-                {crumb.kind === "link" ? (
+                {crumb.kind === "mark" ? (
+                  /* The display face and a heavier weight, so it reads as a
+                     mark rather than as the first word of a path. It links to
+                     the page it is on, which is what a logo does — so it says
+                     so rather than pretending to navigate. */
+                  <Link
+                    href={crumb.href}
+                    aria-current="page"
+                    aria-label="Caleb Smith — home"
+                    className={cn(
+                      CRUMB,
+                      "rounded-sm font-display text-sm font-semibold tracking-[-0.01em] text-foreground transition-colors hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+                    )}
+                  >
+                    {crumb.label}
+                  </Link>
+                ) : crumb.kind === "link" ? (
                   <Link
                     href={crumb.href}
                     className={cn(
                       CRUMB,
-                      "text-muted-foreground underline-offset-4 hover:text-foreground hover:underline",
+                      "text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline",
                     )}
                   >
                     {crumb.label}
                   </Link>
                 ) : crumb.kind === "menu" ? (
-                  <WorkMenu work={work} />
+                  <WorkMenu work={work} currentSlug={currentSlug} />
                 ) : (
                   <span className={cn(CRUMB, "text-foreground")} aria-current="page">
                     {crumb.label}
@@ -148,30 +166,50 @@ export function SiteHeader({ work }: { work: WorkItem[] }) {
         </nav>
 
         {/* Instruments — one bounded control surface, visually distinct from
-            the path. The inspector toggle joins this cluster at step 9. */}
+            the path.
+
+            Inspect sits last, hard against the right edge, because that is
+            where its panel docks. The toggle ends up directly above the thing
+            it opens, and the pair reads as one object rather than as a button
+            that happens to have a side effect somewhere else on the page. */}
         <ControlBar className="shrink-0">
-          <InspectToggle />
           <AppearanceMenu />
+          <InspectToggle />
         </ControlBar>
       </div>
     </header>
   );
 }
 
-function WorkMenu({ work }: { work: WorkItem[] }) {
+function WorkMenu({
+  work,
+  currentSlug,
+}: {
+  work: WorkItem[];
+  currentSlug: string | null;
+}) {
+  const open = usePopoverOpen("ck-work-menu");
+
   return (
     <>
       <button
         type="button"
         popoverTarget="ck-work-menu"
         data-slot="work-menu-trigger"
+        data-state={open ? "open" : "closed"}
+        // Open state on the trigger, not only on the chevron. A rotating arrow
+        // is a detail you notice after you already know what happened; the
+        // crumb going solid is what tells you which control the panel came from.
         className={cn(
           CRUMB,
-          "gap-1 text-muted-foreground underline-offset-4 hover:text-foreground hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+          "gap-1 rounded-sm px-1.5 underline-offset-4 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+          open
+            ? "bg-muted text-foreground"
+            : "text-muted-foreground hover:bg-muted hover:text-foreground",
         )}
       >
         Work
-        <Chevron />
+        <Chevron open={open} />
       </button>
 
       <div
@@ -181,17 +219,37 @@ function WorkMenu({ work }: { work: WorkItem[] }) {
         aria-label="Case studies"
         className="w-[min(22rem,calc(100vw-2rem))] rounded-lg border border-input bg-card p-2 text-card-foreground shadow-lg"
       >
+        {/* An arrow on every row, not only the hovered one. Five wrapped titles
+            with nothing between them read as a paragraph; a repeated glyph at a
+            fixed right edge is what makes them a list of destinations. It is
+            aria-hidden — the link already announces itself as a link.
+
+            The page you are on takes the same "current" treatment the rest of
+            the site uses, and loses its arrow: an arrow means "go here", and
+            you are already here. It keeps a dot in the arrow's place so the
+            right edge stays a column rather than developing a gap. */}
         <ul>
-          {work.map((item) => (
-            <li key={item.slug}>
-              <Link
-                href={`/work/${item.slug}`}
-                className="flex min-h-tap items-center rounded-md px-3 text-sm text-pretty hover:bg-muted hover:text-muted-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-              >
-                {item.title}
-              </Link>
-            </li>
-          ))}
+          {work.map((item) => {
+            const current = item.slug === currentSlug;
+
+            return (
+              <li key={item.slug}>
+                <Link
+                  href={`/work/${item.slug}`}
+                  aria-current={current ? "page" : undefined}
+                  className={cn(
+                    "group flex min-h-tap items-center justify-between gap-3 rounded-md px-3 text-sm text-pretty transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+                    current
+                      ? "bg-muted font-medium text-foreground"
+                      : "hover:bg-muted hover:text-muted-foreground",
+                  )}
+                >
+                  {item.title}
+                  {current ? <CurrentDot /> : <ArrowRight />}
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       </div>
     </>
@@ -222,12 +280,15 @@ function InspectToggle() {
 }
 
 function AppearanceMenu() {
+  const open = usePopoverOpen("ck-settings");
+
   return (
     <>
       <ControlButton
         popoverTarget="ck-settings"
         icon={<SlidersIcon />}
         label="Appearance"
+        active={open}
       />
 
       <div
@@ -243,12 +304,15 @@ function AppearanceMenu() {
 
         <ThemeSwitcher />
 
+        {/* Names where it goes. The old text — "Measured contrast for every
+            pair" — was a claim about the site, and a claim is not a
+            destination: nothing in it said a page was on the other side. */}
         <p className="mt-5 border-t border-border pt-4 text-xs text-muted-foreground">
           <Link
             href="/style-guide#contrast"
-            className="underline decoration-input underline-offset-4 hover:text-foreground hover:decoration-primary"
+            className="underline decoration-input underline-offset-4 transition-colors hover:text-foreground hover:decoration-primary"
           >
-            Measured contrast for every pair →
+            Style guide: tokens, type, and contrast →
           </Link>
         </p>
       </div>
@@ -256,13 +320,13 @@ function AppearanceMenu() {
   );
 }
 
-function Chevron() {
+function Chevron({ open }: { open: boolean }) {
   return (
     <svg
       aria-hidden="true"
       focusable="false"
       viewBox="0 0 16 16"
-      className="size-3"
+      className={cn("size-3 transition-transform", open && "rotate-180")}
       fill="none"
       stroke="currentColor"
       strokeWidth="1.75"
@@ -270,6 +334,38 @@ function Chevron() {
       strokeLinejoin="round"
     >
       <path d="m4 6 4 4 4-4" />
+    </svg>
+  );
+}
+
+/**
+ * Sits where the arrow would be on the page you are already on. Decorative —
+ * `aria-current="page"` is what actually announces it.
+ */
+function CurrentDot() {
+  return (
+    <span
+      aria-hidden="true"
+      className="size-1.5 shrink-0 rounded-full bg-primary"
+    />
+  );
+}
+
+/** Marks each menu row as a destination. Decorative — the link says the rest. */
+function ArrowRight() {
+  return (
+    <svg
+      aria-hidden="true"
+      focusable="false"
+      viewBox="0 0 16 16"
+      className="size-3.5 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M3 8h10M9 4l4 4-4 4" />
     </svg>
   );
 }

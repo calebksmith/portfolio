@@ -72,6 +72,20 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="flex min-h-full flex-col bg-background text-foreground">
         {/* First child of <body> so it executes before any content paints. */}
         <ThemeScript />
+
+        {/*
+          Entrances are driven by JavaScript — an IntersectionObserver, and the
+          hero's own finish. With no JavaScript neither ever fires, and every
+          element waiting on one would stay hidden permanently. This is the
+          escape hatch: no animation, but nothing missing either. An entrance
+          animation must never be the reason content cannot be read.
+        */}
+        <noscript>
+          <style>{
+            "[data-reveal]{opacity:1!important;visibility:visible!important;transform:none!important}"
+          }</style>
+        </noscript>
+
         {children}
       </body>
     </html>

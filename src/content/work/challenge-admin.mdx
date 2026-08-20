@@ -1,0 +1,51 @@
+---
+title: Challenge admin, tools so customers don't need us
+role: Product design, internal tools
+year: 2023–2024
+stack: [Web app, Figma]
+summary: A self-serve tool for building challenges, picking raffle winners, and sending the whole email sequence — so running one stops being a support request.
+weight: medium
+---
+
+## Problem
+
+[Challenges](/work/challenges) worked. Running one did not.
+
+Every challenge a customer wanted meant a request to us: someone to configure
+it, someone to write the invitation, someone to remember the reminders, and
+someone at the end to work out who had won. A feature that needs its vendor
+present every time it runs is a feature that runs rarely — and the value of a
+challenge is in repetition, which is exactly what a support queue prevents.
+
+## What I did
+
+- Designed a creation flow the customer's own stakeholders and leaders can use:
+  challenge type, dates, prizes, and the rules specific to that type — maximum
+  team size for a leaderboard, and so on.
+- Designed the raffle selector. Personal and team target challenges accumulate
+  entries per participant across the run; at the end an admin draws from them
+  and gets a winner, rather than exporting a spreadsheet and trusting it.
+- Specified the email sequence to run off the challenge itself, so nobody has
+  to remember to send anything. Creating a challenge sends the invitation with
+  its details; reminders go out during the run; a result email closes it, naming
+  the winning team or the raffle winner.
+- Kept it to the web deliberately. This is a task someone does sitting down,
+  once, with real attention — a phone-sized version of it would have been effort
+  spent making a rare task portable.
+
+## Outcome
+
+- Organizations create and run their own challenges without us in the loop.
+- The communication around a challenge happens whether or not anyone remembers
+  it, which is what keeps a month-long challenge alive in week three.
+- Prize selection is a button rather than a spreadsheet and a promise.
+
+> **Who did what:** I led design and UI. Engineering built the tool and the
+> automated sends; product management and leadership shaped what an admin needed
+> to be able to configure.
+
+> **Why this is its own case study:** the participant experience and the admin
+> experience are two different products with two different users, and designing
+> the second is what made the first repeatable. Most of the value in
+> [Challenges](/work/challenges) — the 65% lift in Daily 5 completions — only
+> materialises if a challenge happens more than once.

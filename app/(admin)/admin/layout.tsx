@@ -34,9 +34,9 @@ export default async function AdminLayout({
           </Link>
 
           {/* Cover letters are the only thing the database holds that anyone
-              edits. Case studies are MDX files and the résumé is structured
+              edits. Case studies are MDX files and the experience page is structured
               data in lib/content/ — both are edited in the repo, not here. */}
-          <nav className="flex items-center gap-5 text-xs uppercase tracking-[0.14em] text-muted-foreground">
+          <nav className="flex items-center gap-5 text-label uppercase tracking-label text-muted-foreground">
             <Link className="hover:text-foreground" href="/admin/letters">
               Cover letters
             </Link>
@@ -50,7 +50,7 @@ export default async function AdminLayout({
           >
             <button
               type="submit"
-              className="text-xs uppercase tracking-[0.14em] text-muted-foreground hover:text-foreground"
+              className="text-label uppercase tracking-label text-muted-foreground transition-colors hover:text-foreground"
             >
               Sign out {user.name ? `(${user.name})` : ""}
             </button>
