@@ -45,7 +45,7 @@ export const resume = {
   ],
 
   summary:
-    "Product designer who works in code. I define what gets built — customer research, product briefs, prototypes — and build the frontend in React and TypeScript. I built the design system covering our four platforms, and the automated checks that keep design and code in sync. Nine years in design, five writing production frontend.",
+    "Product designer who works in code. I define what gets built — customer research, product briefs, prototypes — and build the frontend in React and TypeScript. I built the design system our web app runs on, and the automated checks that keep design and code in sync. Nine years in design, five writing production frontend.",
 
   skills: [
     {
@@ -54,7 +54,7 @@ export const resume = {
         "component libraries, design tokens, documentation and standards, versioned releases, multi-platform systems",
     },
     {
-      label: "Front-end",
+      label: "Frontend",
       value:
         "TypeScript, React, Next.js, Tailwind, React Native, Storybook, Git, code review",
     },
@@ -96,7 +96,7 @@ export const resume = {
         {
           heading: "Design system",
           bullets: [
-            "Built VimUI and lead its growth: 51 components covering our web, iOS, Android, and Windows desktop apps, in a shared codebase with Storybook documentation.",
+            "Built VimUI and lead its growth: 50+ web components on shared tokens, documented in Storybook. Color and type tokens carry across our iOS, Android, and Windows desktop apps.",
             "Raised reusable component use from about 10% to 80–90% of frontend code, and design token use from 0% to 99%.",
             "Wrote the standards that govern the system — structure, tokens, typing, accessibility, documentation, and versioning — and maintain them as the reference the whole team builds against.",
             "Run the system as a versioned package: semantic versioning, a changelog entry per change, and beta releases sent to the apps that consume it before anything breaking ships.",
@@ -135,7 +135,7 @@ export const resume = {
       period: "Dec 2016 – Present",
       note: "Design Engineer & Digital Consultant | Owner (concurrent)",
       bullets: [
-        "Design and build websites end to end — strategy, interface design, front-end implementation.",
+        "Design and build websites end to end — strategy, interface design, frontend implementation.",
         "Clients include Brooks Running, Shake Shack, Seabourn Cruise Lines, Chateau Ste. Michelle, Car Toys.",
       ],
     },
@@ -148,14 +148,6 @@ export const resume = {
         "Led digital communications, web presence, and data storytelling for a clean energy research nonprofit.",
       ],
     },
-    {
-      org: "Climate Solutions",
-      location: "Seattle, WA",
-      period: "1 yr 5 mos",
-      bullets: [
-        "Design and digital support for regional climate policy work.",
-      ],
-    },
   ] satisfies Position[],
 
   /** Ships alongside the Vimocity entry; kept separate so it can be reordered. */
@@ -163,7 +155,7 @@ export const resume = {
     {
       title: "Login and account creation",
       detail:
-        "Replaced three platform-specific flows with one web-based flow, added multi-factor authentication. Cut account-creation support tickets by over 80%.",
+        "Replaced three platform-specific flows with one web-based flow, added multi-factor authentication. Cut login and account-access support tickets by 80%.",
       slug: "login",
     },
     {

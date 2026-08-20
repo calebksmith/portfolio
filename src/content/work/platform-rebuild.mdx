@@ -1,31 +1,55 @@
 ---
-title: Rebuilding the web app
-role: Front-end, platform migration
+title: Rebuilding the Vimocity web app
+role: Frontend, platform migration
 year: 2026
-platforms: [Web]
-summary: Moved the entire web application off a legacy codebase onto Next.js, TypeScript, and Tailwind — page by page, while the product kept running.
+stack: [Web app, Next.js, Tailwind CSS, VimUI]
+summary: Migrated every page of the Vimocity portal into our new monorepo — rebuilt on VimUI against the live APIs, using Claude Code to read the legacy logic page by page.
 weight: medium
 ---
 
 ## Problem
 
-Our web application had been built up piecemeal over years. The code was
-inconsistent, slow to change, and increasingly hard to keep visually coherent.
-Rebuilding it meant rebuilding every page — and the product had to keep running
-the whole time.
+New features were being built in a new monorepo. The web portal was not — it
+sat on the old structure, and everything we wanted to improve there was blocked
+behind a migration nobody had time to do. We were running two frontends that
+looked and behaved like two different products.
+
+That gap was not going to close on its own. Rebuilding meant every page:
+the content library, challenges, movement routines, video collections,
+user-created playlists, site settings, and user settings.
 
 ## What I did
 
-- Rebuilt each existing page and feature on Next.js, TypeScript, and Tailwind,
-  using the component library.
-- Connected the new pages to existing APIs so behavior stayed intact.
-- Worked page by page rather than all at once, so the migration could ship in
-  pieces.
-- Handed each rebuilt section to engineering for review and hardening.
+- Loaded both repositories into Claude Code and had it read the old platform
+  page by page — the logic, the API calls, and the database links each page
+  actually depended on. Working out what a legacy page really does is most of
+  the work in a migration, and it is exactly what an agent is good at.
+- Rebuilt each page in the monorepo from [VimUI](/work/vimui) components and
+  tokens, wired to the same APIs and database. Functional equivalence first:
+  same behavior, same data, new foundation.
+- Held the whole rebuild to the standards from my
+  [guardrails work](/work/guardrails) — token use, component structure, and
+  accessibility rules, checked automatically. The rules I had written for people
+  turned out to be what made an agent's output reviewable.
+- Redesigned the content library on the way through, into a searchable explore
+  page. Migration was the opportunity to fix discovery rather than port a
+  problem forward.
+- Modernized the homepage and settings pages, which had accumulated patterns
+  that no longer matched how anyone expects a web app to behave.
+- Handed each rebuilt section to engineering to review and harden — an agent
+  misreads things, and the review is what catches it.
 
 ## Outcome
 
-- The entire web app now runs on one modern, consistent codebase.
-- Visual consistency with the mobile and desktop apps.
-- Faster to build on: new features assemble from existing components.
-- The migration ran alongside normal product work rather than replacing it.
+- Every page of the portal is live on one codebase, consistent with the new
+  features it used to sit beside.
+- About 80% of the frontend code I built survived review into production.
+  Backend calls and database queries were improved in the same pass — the
+  migration was a chance to clean up old code, not just move it.
+- The portal works on mobile web. VimUI components carry the responsive and
+  accessibility work with them, and the old platform had neither.
+- Changes no longer need me. A product manager or engineer can now change a
+  page using VimUI and the design rules, without a designer or a frontend
+  developer in the loop — which is the point of writing the rules down.
+- Every value on every page resolves to a token, so a change to the system is a
+  change to the product rather than a ticket to make it one.

@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 
+import { Eyebrow } from "@/components/cksui";
+
 /**
  * Reports the resolved value of each token in the live theme.
  *
@@ -72,9 +74,9 @@ export function TokenTable() {
   return (
     <div className="mt-6 space-y-8">
       <div>
-        <h3 className="text-xs uppercase tracking-[0.14em] text-muted-foreground">
-          Surface and foreground pairs
-        </h3>
+        <Eyebrow asChild>
+          <h3>Surface and foreground pairs</h3>
+        </Eyebrow>
         <ul className="mt-3 grid gap-3 sm:grid-cols-2">
           {PAIRS.map((pair) => (
             <li
@@ -115,9 +117,9 @@ export function TokenTable() {
       </div>
 
       <div>
-        <h3 className="text-xs uppercase tracking-[0.14em] text-muted-foreground">
-          Structure
-        </h3>
+        <Eyebrow asChild>
+          <h3>Structure</h3>
+        </Eyebrow>
         <ul className="mt-3 grid gap-3 sm:grid-cols-3">
           {SINGLES.map((single) => (
             <li

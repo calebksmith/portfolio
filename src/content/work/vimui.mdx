@@ -1,37 +1,64 @@
 ---
-title: VimUI, a design system across four platforms
+title: VimUI, a design system in code
 role: Design systems
 year: 2022–present
-platforms: [Web, iOS, Android, Desktop]
-summary: Vimocity's design system — 51 components covering web, iOS, Android, and Windows desktop, plus the standards and release process behind them.
+stack: [Storybook, Tailwind CSS, shadcn/ui, Radix]
+summary: Vimocity's design system — 50+ web components on shared tokens, documented in Storybook, which replaced the Figma file as the source of truth.
 weight: large
 ---
 
 ## Problem
 
-Vimocity ships a web app, iOS and Android apps, and a Windows desktop app. Each
-had drifted into its own patterns. The design system lived in Figma, which meant
-designers had one source of truth and engineers had another.
+Vimocity ships a web app, iOS and Android apps, and a Windows desktop app. We
+had brand colors, fonts, and a style guide, but over time each drifted into its
+own patterns.
+
+VimUI started in Figma, and for a while that worked: colors, typography, and
+component usage guidelines all lived in one file. The cost showed up in
+maintenance. Every change had to be made twice — once in the Figma file, then
+again in the component code — and the second half meant pulling a developer off
+their work to read the file, translate it, and cut a release. Designers had one
+source of truth and engineers had another, and the gap between them was
+measured in developer time.
 
 ## What I did
 
-- Moved the system out of Figma and into the codebase, where the components
-  engineers use are the components the system defines.
-- Built 51 components organized as atoms, molecules, and organisms, documented
-  in Storybook.
+- Built 50+ components organized as atoms, molecules, and organisms, on
+  shadcn/ui's patterns and Radix primitives — some staying close to the
+  original, some rewritten entirely for what we needed.
 - Established tokens for color, type, spacing, and sizing, and removed
   hardcoded values from the frontend.
 - Made accessibility a property of the system rather than a per-feature task:
   keyboard support, contrast in light and dark modes, minimum touch targets, and
   reduced-motion support built into the components themselves.
 - Set up versioned releases so consuming apps can test changes before they land.
+- Retired the Figma file. Once we started prototyping in real components rather
+  than mocking them up, the design file was a second copy of something that
+  already existed — so Storybook became the source of truth for what a component
+  is, how it is used, and what it does.
 
 ## Outcome
 
 - Reusable component use went from about 10% to 80–90% of frontend code.
-- Token use went from 0% to 99%.
-- One visual language across four platforms.
+- Token use went from 0% to 99%. The remaining 1% is deliberate overrides.
+- Changes are made once, in code, and released. There is no second artifact to
+  update and no translation step between the two.
 - Building a new page became assembly rather than construction.
 
+## What it does and doesn't cover
+
+The component library is the web app's. React Native and Electron need entirely
+different components, and that library does not exist yet — the mobile and
+desktop apps carry their own equivalents.
+
+What all four platforms share is the tokens. Color and type come from the same
+source everywhere, so the visual language is consistent even where the
+components are not.
+
+The exception is login and account creation, which run in a webview on desktop
+and mobile — so those screens are running actual VimUI components on every
+platform. That was a
+[side effect of building login as one flow](/work/login), not a plan.
+
 **See it:** the component library is public at
-[vimui.vimocity.com](https://vimui.vimocity.com).
+[vimui.vimocity.com](https://vimui.vimocity.com/main/).

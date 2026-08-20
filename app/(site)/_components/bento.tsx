@@ -1,11 +1,14 @@
 import Link from "next/link";
 
-import { Badge, Button, cn } from "@/components/cksui";
-import { caseStudies, type Weight } from "@/lib/content/work";
+import { Button, Eyebrow, cn } from "@/components/cksui";
+import { caseStudies } from "@/lib/content/work";
 import { site } from "@/lib/site";
 
+import { CASE_STUDY_STYLE, CaseStudyCard, STRETCH } from "./case-study-card";
+import { HeroPrompt } from "./hero-prompt";
+import { HeroRevealProvider } from "./hero-reveal";
 import { Reveal } from "./reveal";
-import { TypedTagline } from "./typed-tagline";
+import { ScrollCue } from "./scroll-cue";
 
 
 /**
@@ -26,16 +29,6 @@ import { TypedTagline } from "./typed-tagline";
  * flattens to identical boxes exactly where reading order matters most.
  */
 
-/** Column span out of 6, and the type scale that survives the collapse. */
-const CASE_STUDY_STYLE: Record<
-  Weight,
-  { span: string; title: string; pad: string }
-> = {
-  large: { span: "lg:col-span-3", title: "text-xl sm:text-2xl", pad: "p-6 sm:p-7" },
-  medium: { span: "lg:col-span-2", title: "text-base sm:text-lg", pad: "p-6" },
-  small: { span: "lg:col-span-2", title: "text-base", pad: "p-6" },
-};
-
 function ExternalIcon() {
   return (
     <svg
@@ -51,84 +44,6 @@ function ExternalIcon() {
     >
       <path d="M6 3h7v7M13 3 4 12" />
     </svg>
-  );
-}
-
-/**
- * The stretched-link pattern: one link per card, named by its heading, with a
- * pseudo-element covering the tile. A div with an onClick would not be
- * focusable, and a link wrapping the whole card would announce every word in it
- * as the link's name.
- */
-const STRETCH =
-  "after:absolute after:inset-0 after:rounded-lg focus-visible:outline-none";
-
-function CaseStudyCard({
-  slug,
-  title,
-  role,
-  year,
-  summary,
-  platforms,
-  weight,
-}: (typeof caseStudies)[number]) {
-  const style = CASE_STUDY_STYLE[weight];
-
-  return (
-    <article
-      data-slot="case-study-card"
-      // Grid placement lives on the Reveal wrapper, since that is what the grid
-      // actually lays out. `h-full` keeps the card filling its cell.
-      className={cn(
-        "group relative flex h-full flex-col gap-3 rounded-lg border border-border bg-card text-card-foreground transition-colors",
-        "hover:border-input focus-within:border-input",
-        style.pad,
-      )}
-    >
-      {/* The kind of thing this is, said outright. Replaces the accent edge:
-          a label survives the single-column collapse and says what a colored
-          border could only imply. */}
-      <p className="flex items-center gap-2 text-xs uppercase tracking-[0.16em] text-primary">
-        Case study
-        <span aria-hidden="true" className="text-muted-foreground">
-          ·
-        </span>
-        <span className="text-muted-foreground">{year}</span>
-      </p>
-
-      <h3
-        className={cn(
-          "font-display font-semibold tracking-[-0.01em] text-balance",
-          style.title,
-        )}
-      >
-        <Link
-          href={`/work/${slug}`}
-          className={cn(
-            STRETCH,
-            "decoration-primary underline-offset-4 group-hover:underline group-focus-within:underline",
-          )}
-        >
-          {title}
-        </Link>
-      </h3>
-
-      <p className="text-pretty text-muted-foreground">{summary}</p>
-
-      <p className="text-xs text-muted-foreground">{role}</p>
-
-      {platforms.length > 0 ? (
-        <ul className="flex flex-wrap gap-1.5">
-          {platforms.map((platform) => (
-            <li key={platform}>
-              <Badge>{platform}</Badge>
-            </li>
-          ))}
-        </ul>
-      ) : null}
-
-      <p className="mt-auto pt-3 text-xs text-primary">Read case study →</p>
-    </article>
   );
 }
 
@@ -152,22 +67,16 @@ function PointerCard({
   external?: boolean;
   className?: string;
 }) {
-  const linkClass = cn(
-    STRETCH,
-    "decoration-input underline-offset-4 group-hover:underline group-focus-within:underline",
-  );
-
   return (
     <div
       data-slot="pointer-card"
       className={cn(
-        "group relative flex h-full flex-col gap-2 rounded-lg border border-border bg-background p-6 transition-colors hover:border-input focus-within:border-input",
+        "group relative flex h-full flex-col gap-2 rounded-lg border border-border bg-background p-6 transition-colors",
+        "hover:border-input hover:bg-muted focus-within:border-input focus-within:bg-muted",
         className,
       )}
     >
-      <p className="text-xs uppercase tracking-[0.16em] text-muted-foreground">
-        {eyebrow}
-      </p>
+      <Eyebrow>{eyebrow}</Eyebrow>
 
       <h3 className="flex items-center gap-1.5 font-display text-base font-semibold tracking-[-0.01em] text-balance text-foreground">
         {external ? (
@@ -175,13 +84,13 @@ function PointerCard({
             href={href}
             target="_blank"
             rel="noreferrer noopener"
-            className={linkClass}
+            className={STRETCH}
           >
             {title}
             <span className="sr-only"> (opens in a new tab)</span>
           </a>
         ) : (
-          <Link href={href} className={linkClass}>
+          <Link href={href} className={STRETCH}>
             {title}
           </Link>
         )}
@@ -193,129 +102,128 @@ function PointerCard({
   );
 }
 
+/** The non-case-study tiles: utility pages on this site, and outside proof. */
+function pointers() {
+  return [
+    {
+      href: site.links[1].href,
+      external: true,
+      eyebrow: "Storybook",
+      title: "VimUI, live",
+      description:
+        "Vimocity's design system, public — 50+ web components on shared tokens.",
+    },
+    {
+      href: "/colophon",
+      external: false,
+      eyebrow: "About this site",
+      title: "Colophon",
+      description:
+        "The stack, the alternatives that lost, and what each choice cost.",
+    },
+    {
+      href: "/style-guide",
+      external: false,
+      eyebrow: "About this site",
+      title: "Style guide",
+      description:
+        "Tokens, type, and every component — measured live, in whichever theme you are viewing.",
+    },
+    {
+      href: site.links[0].href,
+      external: true,
+      eyebrow: "Profile",
+      title: "LinkedIn",
+      description: "Background, roles, and the longer version of all this.",
+    },
+  ];
+}
+
 export function Bento() {
   return (
-    <main className="mx-auto w-full max-w-5xl px-6 sm:px-10">
-      {/*
-        Hero. Not a card: type on the page ground, with the CTA as the only
-        interactive element. Sized so the section heading below sits
-        just at the fold — enough of it visible to read as an invitation to
-        scroll without the hero feeling cropped.
+    /* No content container. Pages run the full width of the window and the
+       measure lives on the text that needs it — `max-w-[NNch]` on the
+       paragraphs below, not a wrapper around everything. A container sets one
+       width for prose, grids, and headings alike, which is one decision doing
+       three jobs. */
+    <main className="w-full px-6 sm:px-10">
+      <HeroRevealProvider>
+        {/*
+          The first screen, exactly: the sticky header plus this and nothing
+          else. Subtracting the header from the viewport is what puts the scroll
+          prompt on the fold rather than just below it.
 
-        `svh` rather than `vh` so mobile browser chrome doesn't push the next
-        section off screen.
-      */}
-      <section className="flex min-h-[80svh] flex-col justify-center py-16">
-        <p className="text-xs uppercase tracking-[0.16em] text-primary">
-          {site.role}
-        </p>
+          `svh` rather than `vh` so mobile browser chrome doesn't push the prompt
+          off the bottom of the screen it is supposed to sit on.
+        */}
+        <div className="flex min-h-[calc(100svh_-_var(--ck-header-height))] flex-col">
+          {/* Not a card: type on the page ground. The hero takes the slack, so
+              the block stays optically centred whatever the viewport does. */}
+          {/* Tighter padding on a phone: three stacked chips plus the reserved
+              answer height is most of a small screen, and the scroll prompt has
+              to stay on it. */}
+          <section className="flex flex-1 flex-col justify-center py-10 sm:py-16">
+            <Eyebrow tone="primary">{site.role}</Eyebrow>
 
-        {/* Tight internal rhythm: role, name, lede, and CTA read as one block.
-            The section's own height is what gives the hero room — spacing
-            inside it would only pull the group apart. */}
-        <h1 className="mt-3 font-display text-[clamp(2.5rem,9vw,4.5rem)] font-semibold leading-[0.95] tracking-[-0.03em] text-balance text-foreground">
-          {site.name}
-        </h1>
+            {/* Tight internal rhythm: role, name, and the typed lines read as
+                one block. The section's own height is what gives the hero room —
+                spacing inside it would only pull the group apart. */}
+            <h1 className="mt-3 font-display text-[clamp(2.5rem,9vw,4.5rem)] font-semibold leading-[0.95] tracking-[-0.03em] text-balance text-foreground">
+              {site.name}
+            </h1>
 
-        {/* The body face is monospace, so `ch` is close to literal characters:
-            the lede is 65 of them and 64ch orphaned its last word. 70ch clears
-            all three lines with margin. Min-height reserves the finished set's
-            space so nothing below shifts while it types or when the first two
-            lines fold away. */}
-        <TypedTagline className="mt-6 min-h-[11em] max-w-[70ch] text-lg text-pretty sm:min-h-[6.5em]" />
-      </section>
+            {/* Close to the name — the statement belongs to it. The gap that
+                matters is the one inside HeroPrompt, between the statement and
+                the question, which is a change of speaker. */}
+            <HeroPrompt className="mt-4" />
+          </section>
 
-      <section aria-labelledby="selected-work" className="pb-24">
-        <h2
-          id="selected-work"
-          className="text-xs uppercase tracking-[0.16em] text-muted-foreground"
-        >
-          A few things I&rsquo;ve designed, built, or created
-        </h2>
-
-        {/* Half the gap the grid uses: the heading belongs to the grid it
-            labels, so it sits closer to it than the cards sit to each other. */}
-        <div className="mt-4 grid grid-cols-1 gap-8 sm:grid-cols-4 lg:grid-cols-6">
-          {caseStudies.map((study, index) => (
-            <Reveal
-              key={study.slug}
-              index={index}
-              className={cn(CASE_STUDY_STYLE[study.weight].span, "sm:col-span-2")}
-            >
-              <CaseStudyCard {...study} />
-            </Reveal>
-          ))}
+          {/* Carries the work section's heading, and sits on the fold. */}
+          <ScrollCue />
         </div>
-      </section>
 
-      {/* No rule between the sections — the section padding already separates
-          them, and a border on top of that is a second boundary. */}
-      <section aria-labelledby="elsewhere" className="pb-24">
-        <h2
-          id="elsewhere"
-          className="text-xs uppercase tracking-[0.16em] text-muted-foreground"
+        {/*
+          One grid, not two. The hierarchy is carried by the cards themselves —
+          case studies are filled surfaces with an accent "Case study" label and
+          a read affordance; pointers have no fill, a muted eyebrow, and no CTA.
+          That difference survives the collapse to a single column on a phone,
+          which is exactly where a section heading stops helping and starts
+          being another thing to scroll past.
+        */}
+        <section
+          id="work"
+          aria-labelledby="selected-work"
+          className="scroll-mt-20 pb-24"
         >
-          If you&rsquo;re curious
-        </h2>
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-4 lg:grid-cols-6">
+            {caseStudies.map((study, index) => (
+              <Reveal
+                key={study.slug}
+                index={index}
+                className={cn(
+                  CASE_STUDY_STYLE[study.weight].span,
+                  "sm:col-span-2",
+                )}
+              >
+                <CaseStudyCard {...study} />
+              </Reveal>
+            ))}
 
-        {/* Built from a list so the reveal stagger indexes stay correct when the
-            playlist card is absent. */}
-        <div className="mt-4 grid grid-cols-1 gap-8 sm:grid-cols-4 lg:grid-cols-6">
-          {[
-            {
-              href: site.links[1].href,
-              external: true,
-              eyebrow: "Storybook",
-              title: "VimUI, live",
-              description:
-                "Vimocity's design system, public — 51 components across four platforms.",
-            },
-            ...(site.playlistUrl
-              ? [
-                  {
-                    href: site.playlistUrl,
-                    external: true,
-                    eyebrow: "Vimocity",
-                    title: "A playlist I built",
-                    description:
-                      "Content collections, shareable across an organization and embeddable in company intranets.",
-                  },
-                ]
-              : []),
-            {
-              href: "/colophon",
-              external: false,
-              eyebrow: "About this site",
-              title: "Colophon",
-              description:
-                "The stack, the alternatives that lost, and what each choice cost.",
-            },
-            {
-              href: "/style-guide",
-              external: false,
-              eyebrow: "About this site",
-              title: "Style guide",
-              description:
-                "Tokens, type, and every component — measured live, in whichever theme you are viewing.",
-            },
-            {
-              href: site.links[0].href,
-              external: true,
-              eyebrow: "Profile",
-              title: "LinkedIn",
-              description: "Background, roles, and the longer version of all this.",
-            },
-          ].map((card, index) => (
-            <Reveal
-              key={card.href}
-              index={index}
-              className="sm:col-span-2 lg:col-span-2"
-            >
-              <PointerCard {...card} />
-            </Reveal>
-          ))}
-        </div>
-      </section>
+            {/* The stagger restarts here rather than continuing the count. The
+                case studies fill their rows exactly, so the pointers begin a
+                fresh band and should enter like one. */}
+            {pointers().map((card, index) => (
+              <Reveal
+                key={card.href}
+                index={index}
+                className="sm:col-span-2 lg:col-span-2"
+              >
+                <PointerCard {...card} />
+              </Reveal>
+            ))}
+          </div>
+        </section>
+      </HeroRevealProvider>
 
       {/* The CTA closes the page rather than competing with the hero, where the
           tagline is doing the work. Someone who has read this far is the person
@@ -331,31 +239,26 @@ export function Bento() {
           TL;DR about me
         </h2>
 
-        {/* Every figure here is approved copy from the deck — 51 components,
-            four platforms, nine and five years. Nothing extrapolated. */}
-        {/* Vimocity comes first: VimUI is a system built *there*, not a
-            product of his own, and naming the employer is what makes that
-            legible to someone who has never heard of either. "Built and lead"
-            rather than "own" — more precise and a stronger claim. */}
+        {/* Approved copy from the deck. Vimocity comes first: VimUI is a system
+            built *there*, not a product of his own, and naming the employer is
+            what makes that legible to someone who has never heard of either. */}
         <p className="mx-auto mt-4 max-w-[58ch] text-pretty text-muted-foreground">
-          I&rsquo;m a design engineer at Vimocity in Seattle, a workplace health
-          platform on web, iOS, Android, and Windows desktop. I lead design
-          there. I built our design system, VimUI — 51 components — and I
-          maintain the standards and automated checks that keep design and code
-          in sync. I define what gets built, then build the frontend it ships
-          on.
+          I&rsquo;m a design engineer and product manager at Vimocity, a
+          workplace health and safety platform based in Seattle. I lead design
+          there. I built our design system — VimUI — and I maintain the
+          standards and automated checks that keep our design and code in sync.
         </p>
         <p className="mx-auto mt-3 max-w-[58ch] text-pretty text-muted-foreground">
           Nine years in design, five writing production frontend.
         </p>
 
-        <div className="mt-8 flex flex-col items-center gap-3">
+        {/* Names the destination rather than its size. "The long version" was
+            the other half of the TL;DR joke, but it prices the click — telling
+            someone a page is long is a reason not to open it. */}
+        <div className="mt-8 flex justify-center">
           <Button asChild size="lg">
-            <Link href="/resume">Full résumé →</Link>
+            <Link href="/experience">My experience →</Link>
           </Button>
-          <p className="text-xs text-muted-foreground">
-            The roles, the dates, and the work behind all of it.
-          </p>
         </div>
       </section>
     </main>

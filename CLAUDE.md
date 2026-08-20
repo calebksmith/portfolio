@@ -103,10 +103,19 @@ releases."
 
 Metrics in copy are approved and defensible. Do not invent or extrapolate.
 
+**Case study badges name the stack** — `Next.js`, `Storybook`, `shadcn/ui`. This
+is the one place library-level terms belong in user-facing copy, because naming
+the tool is the information. Everywhere else the rule above still holds.
+
+**Frontend is one word.** Not "front-end", not "front end" — in body copy, labels,
+frontmatter, and spec rows alike. No exceptions — `npm run check:copy` enforces
+it across `app`, `components`, `lib`, `src`, and `docs`.
+
 ## Before opening a PR
 
 ```
 npm run check:contrast
+npm run check:copy
 npm run typecheck
 npm run lint
 npm run build

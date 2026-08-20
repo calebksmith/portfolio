@@ -95,10 +95,29 @@ const PAIRS = [
   ["muted", "muted-foreground"],
   ["primary", "primary-foreground"],
   ["accent", "accent-foreground"],
+  // Hover surfaces are held to the same standard as the surfaces they replace.
+  // A button that becomes unreadable for as long as the pointer is on it is
+  // unreadable exactly when someone is trying to read it.
+  ["primary-hover", "primary-foreground"],
+  ["accent-hover", "accent-foreground"],
+  // Verdict surfaces on the colophon. Gated like any other pair — a green that
+  // reads as "good" is worth nothing if the text on it cannot be read, and the
+  // Chosen/Rejected labels stay precisely because colour is never the only
+  // signal.
+  ["positive", "positive-foreground"],
+  ["destructive", "destructive-foreground"],
   ["background", "muted-foreground"],
   ["background", "input"],
   ["background", "ring"],
   ["background", "border"],
+
+  // The style guide's source panel highlights JSX on the card surface using
+  // tokens that already exist, rather than introducing a syntax palette. These
+  // are those combinations, gated here so the highlighter cannot quietly stop
+  // being legible when a theme value changes.
+  ["card", "primary"],
+  ["card", "accent-foreground"],
+  ["card", "muted-foreground"],
 ];
 
 const NON_TEXT = new Set(["input", "ring"]);

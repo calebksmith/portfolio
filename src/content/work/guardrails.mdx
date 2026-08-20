@@ -2,44 +2,84 @@
 title: Design rules that enforce themselves
 role: Design systems, AI tooling
 year: 2025–2026
-platforms: [Web, iOS, Android, Desktop]
-summary: One standard, enforced three ways — written for people, checked by automation, loaded for AI.
+stack: [Claude Code Skills, ESLint, Design tokens]
+summary: One standard, enforced three ways — loaded into the agent, checkable on demand, and gated before merge. Built twice, for the product and for the component library.
 weight: large
 ---
 
 ## Problem
 
-A design system only works if people follow it. Ours was well built but
-drifting: components got used incorrectly, raw color values slipped into code,
-and catching it depended on me reviewing everything. That made design the
-bottleneck. AI coding tools made it worse — they generated plausible code fast,
-and none of it knew our rules.
+The product team needed features fast, and nearly everyone was leaning into the
+vibe-coding wave. Most of what got built was internal tooling; some of it was
+customer-facing. The features worked, and they shared nothing: different
+repositories, different component libraries, patterns invented on the spot. None
+of it could be integrated into the broader platform.
+
+Even where a feature did use our design system, it used it wrong —
+components applied incorrectly, raw colors in the code, typography off the
+scale. The only thing catching any of it was me, reviewing everything. That made
+design the bottleneck.
 
 ## What I did
 
-- Wrote the component standards down in one place, covering structure, tokens,
-  typing, accessibility, documentation, and versioning.
-- Extended the same approach to the product itself, with page-level rules
-  covering token use, accessibility requirements, loading states, and responsive
-  breakpoints.
-- Turned both sets of standards into automated checks that run before code
-  merges, so violations are caught by the system rather than by a person.
-- Loaded the same standards into our AI coding tools, so generated components
-  and pages follow the rules by default.
-- Kept all of it in sync from a single source, and maintain it as the system
-  changes.
+Wrote the standard down and then made it hold, three ways, because a rule
+enforced one way is a rule with a gap in it.
+
+- **Loaded it into the agent.** Repository-level rules in the Claude Code file,
+  so anyone working in the web app gets them by default — not just which
+  components and tokens to use, but how a page is structured, how it connects to
+  APIs, and what it has to do for accessibility. New pages come out in the right
+  shape because the shape is what the agent was told.
+- **Made it checkable on demand.** A design audit skill anyone can run while
+  building or after finishing. It walks the requirements as a checklist and
+  tells you what to fix, so you do not have to have memorised the standard to
+  meet it.
+- **Gated it before merge.** ESLint rules that run on push. Some are hard
+  failures, some are recommendations — deliberately loosened where a guideline
+  might be broken on purpose. This is also the part that covers code nobody
+  generated: hand-written code gets the same treatment.
+
+Then built the same three for the [VimUI repository](/work/vimui). Components have different
+rules from pages — structure, typing, documentation, versioning — but the same
+gap exists, so the same agent rules, review skill and lint gate run there. New
+and updated components arrive in the right shape, which is cheaper than
+reworking them later and safer than finding out in production.
+
+## What the rules actually check
+
+- Components and tokens are used, and used correctly.
+- Repository structure and page layout follow the standard.
+- Breakpoints match the style guidelines, so pages agree with each other.
+- Loading states use skeletons rather than each page inventing one.
+- Every page works at every breakpoint, not only the one it was built at.
+- Pages are wired to the server-driven config, so copy changes ship without a
+  release.
+- Existing components are used before new ones are written — and when a local
+  component gets reused, it is flagged as a candidate for the library rather
+  than quietly becoming a second system.
 
 ## Outcome
 
-- One standard, enforced three ways: written for people, checked by automation,
-  loaded for AI.
-- Design stopped being a bottleneck — the full team can build production-quality
-  interfaces.
-- Reliance on outside design help dropped substantially.
-- Prototyping opened up to people who aren't designers.
+Reviewing a feature used to be four steps and two people:
+
+1. A designer designs it in Figma.
+2. An engineer interprets the spec into code.
+3. The designer reviews the frontend against the design.
+4. The designer or PM checks whether the frontend rules were followed at all.
+
+Steps three and four exist because of step two — the handoff is what introduces
+the drift, and the review is how you find it afterwards. Now the person
+designing and the person writing the frontend are the same, and the rules are
+checked by the system rather than by someone remembering to look.
+
+- Review shrank, and stopped depending on me being available.
+- Anyone on the team can build a page that meets the standard, which is what
+  made [rebuilding the web app](/work/platform-rebuild) possible at the speed it
+  happened.
+- The standard survives contact with an agent, because it was written for one.
 
 ## Why it matters
 
 Most teams are adding AI to their workflow without deciding what "correct" means
-first. Writing the standard is the hard part. Enforcing it is what makes it
-hold.
+first. Writing the standard is the hard part. Enforcing it — in the agent, on
+demand, and at the gate — is what makes it scale.

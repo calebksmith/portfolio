@@ -1,6 +1,7 @@
 import type { ComponentProps, ReactNode } from "react";
 
 import { cn } from "./lib/cn";
+import { Eyebrow } from "./eyebrow";
 
 /**
  * A label/value list drawn with hairline rules.
@@ -37,9 +38,9 @@ export function SpecRow({
       )}
       {...props}
     >
-      <dt className="text-xs uppercase tracking-[0.14em] text-muted-foreground">
-        {label}
-      </dt>
+      <Eyebrow asChild>
+        <dt>{label}</dt>
+      </Eyebrow>
       <dd className="flex items-center gap-2.5 text-foreground">{children}</dd>
     </div>
   );

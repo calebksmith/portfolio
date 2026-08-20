@@ -9,7 +9,7 @@ import "server-only";
  */
 
 /**
- * The public portfolio: index, case studies, résumé, style guide, colophon.
+ * The public portfolio: index, case studies, experience, style guide, colophon.
  *
  * Published 2026-08-12. Everything it needs is committed — content is MDX and
  * structured data, nothing reaches for a service that isn't there.

@@ -2,33 +2,75 @@
 title: One login for three platforms
 role: Product design, cross-platform
 year: 2025
-platforms: [Web, iOS, Android, Desktop]
-summary: Replaced three platform-specific flows with one. Account-creation support tickets dropped by over 80%.
+stack: [Figma, WebView, SSO, MFA]
+summary: Login and account-access support tickets dropped 80% — one flow replacing three, built so forgetting your password isn't a reset and forgetting your email isn't a dead end.
 weight: medium
 ---
 
 ## Problem
 
 Vimocity runs on web, mobile, and desktop, and each had its own login and
-account creation flow. Three codebases meant three sets of bugs, three things to
-update, and inconsistent experiences. Account creation was also our most common
-support issue.
+account creation flow. Three codebases meant three sets of bugs and three things
+to update — and login was our most common support issue.
+
+The tickets were specific. People could not remember their password, or could
+not remember which email address their account was under. Neither is a security
+problem; both were being treated like one.
+
+Account creation had a different problem. Every customer organization gets in a
+different way — single sign-on, an allowlist of company email addresses, or a
+company-specific registration code — and no user knows which of those is theirs.
+They knew the name of the company they worked for and nothing else about how
+their account was supposed to exist.
 
 ## What I did
 
-- Designed a single web-based login and account creation flow.
-- Surfaced it inside the mobile and desktop apps through a web view, so all
-  three platforms use the same flow without duplicating it.
-- Added multi-factor authentication and modern security handling.
-- Reworked the flow itself based on where people were getting stuck.
+- Designed a single web-based login and account creation flow, surfaced inside
+  the mobile and desktop apps through a webview, so all three platforms use the
+  same one without duplicating it.
+- Specified it as its own service rather than a feature of the web app, so
+  mobile and desktop consume the same one instead of each carrying a copy. That
+  consolidated three codebases into one.
+- Kept the email. "Remember me" stores it, so the most common failure — not
+  knowing which address the account is under — stops happening on the second
+  visit.
+- Stopped forcing password resets. If you cannot remember your password you get
+  a code by email and you are in. Changing a password you have forgotten is a
+  chore invented by the login screen, not a security requirement.
+- Replaced "which registration type is yours?" with "who do you work for?" —
+  the user picks their company from a list, and the flow they get is whatever
+  their organization uses.
+- Made that list safe to have. Nothing appears until three characters are typed,
+  and the list is seeded with decoy names, so it cannot be used to enumerate who
+  our customers are.
+- Required email verification on account creation, by code.
+
+Registrations came from the other half of this: an admin can see everyone in
+their organization and send invitations to the people who have not signed up. I
+designed that frontend too — it is the reason accounts get created rather than
+merely being creatable.
 
 ## Outcome
 
-- Account creation support tickets dropped by over 80%.
-- Three flows became one to maintain.
+- **Login and account-access support tickets dropped 80%.**
+- Three flows became one to maintain, in one codebase, on one service.
 - Consistent sign-in across every platform.
-- Security improved without adding friction.
+- Security improved — verification, MFA — without adding steps to the common
+  path.
 
-> **Trade-off worth naming:** a web view is not a native experience. We accepted
+> **Why a code, not a magic link:** we designed the link first. It assumes the
+> device reading the email is the device signing in, and for our users it often
+> isn't — email on a phone, Vimocity on a work machine or a shared terminal. A
+> six-digit code travels between devices. A link does not.
+
+> **Trade-off worth naming:** a webview is not a native experience. We accepted
 > slightly less native polish in exchange for one flow instead of three — the
 > right call for a small team, and worth revisiting at a larger one.
+
+Biometric sign-in was designed and prototyped, then cut to get the rest of the
+flow out sooner. It was the right call on the schedule we had, and it is the
+first thing I would put back.
+
+> **Who did what:** I led the UX research, customer interviews, and UI.
+> Engineering wrote the flows, the service, and the consolidation; product
+> management and leadership shaped the verification requirements.

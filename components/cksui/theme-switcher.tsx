@@ -12,6 +12,8 @@ import {
   type Theme,
 } from "@/lib/theme";
 
+import { Eyebrow } from "./eyebrow";
+
 import { cn } from "./lib/cn";
 import { useHtmlAttribute } from "./lib/use-html-attribute";
 
@@ -89,9 +91,9 @@ function Group({
 }) {
   return (
     <fieldset data-slot="theme-switcher-group" className="border-0 p-0">
-      <legend className="mb-2 text-xs uppercase tracking-[0.14em] text-muted-foreground">
-        {legend}
-      </legend>
+      <Eyebrow asChild className="mb-2">
+        <legend>{legend}</legend>
+      </Eyebrow>
       <div className="flex flex-wrap gap-2">
         {options.map((option) => (
           <label key={option.value} className="relative inline-flex">

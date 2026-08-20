@@ -138,8 +138,7 @@ form someone can clone.
 
 ## Open items needing Caleb
 
-1. **`site.playlistUrl` is empty** in `lib/site.ts`. The bento card is skipped
-   entirely while it is, rather than shipping a dead link.
+
 2. **The admin / OAuth / cover-letter system is parked**, not cut. It does not
    appear in `PROJECT-CONTEXT.md`'s content architecture. The code is in the
    repo, 404'd in production, and untouched. Decide whether it stays.

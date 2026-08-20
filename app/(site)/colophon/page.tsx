@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { Eyebrow } from "@/components/cksui";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -47,7 +48,7 @@ function Decision({
 }
 
 function P({ children }: { children: React.ReactNode }) {
-  return <p className="mb-3.5 max-w-[62ch] text-pretty text-muted-foreground">{children}</p>;
+  return <p className="mb-3.5 max-w-measure-wide text-pretty text-muted-foreground">{children}</p>;
 }
 
 function Pull({ children }: { children: React.ReactNode }) {
@@ -58,7 +59,14 @@ function Pull({ children }: { children: React.ReactNode }) {
   );
 }
 
-/** The Chosen/Rejected pairing — most of these decisions had a real loser. */
+/**
+ * The Chosen/Rejected pairing — most of these decisions had a real loser.
+ *
+ * The two sides now take the positive and destructive surfaces, so the verdict
+ * is legible before the words are. The labels stay: colour is never the only
+ * signal, and about one man in twelve would otherwise be reading two identical
+ * grey boxes.
+ */
 function Verdict({
   chosen,
   rejected,
@@ -68,19 +76,19 @@ function Verdict({
 }) {
   return (
     <div className="my-4 grid gap-px overflow-hidden rounded-md border border-border bg-border sm:grid-cols-2">
-      <div className="bg-card p-3.5">
-        <span className="mb-1.5 block text-[0.625rem] uppercase tracking-[0.16em] text-foreground">
-          Chosen
-        </span>
-        <span className="mb-0.5 block font-medium text-foreground">{chosen.what}</span>
-        <p className="text-xs text-muted-foreground">{chosen.why}</p>
+      <div className="bg-positive p-3.5 text-positive-foreground">
+        <Eyebrow asChild size="sm" tone="inherit" className="mb-1.5 block">
+          <span>Chosen</span>
+        </Eyebrow>
+        <span className="mb-0.5 block font-medium">{chosen.what}</span>
+        <p className="text-xs opacity-90">{chosen.why}</p>
       </div>
-      <div className="bg-card p-3.5">
-        <span className="mb-1.5 block text-[0.625rem] uppercase tracking-[0.16em] text-foreground">
-          Rejected
-        </span>
-        <span className="mb-0.5 block font-medium text-foreground">{rejected.what}</span>
-        <p className="text-xs text-muted-foreground">{rejected.why}</p>
+      <div className="bg-destructive p-3.5 text-destructive-foreground">
+        <Eyebrow asChild size="sm" tone="inherit" className="mb-1.5 block">
+          <span>Rejected</span>
+        </Eyebrow>
+        <span className="mb-0.5 block font-medium">{rejected.what}</span>
+        <p className="text-xs opacity-90">{rejected.why}</p>
       </div>
     </div>
   );
@@ -110,7 +118,7 @@ function Node({
     >
       {label}
       {sub ? (
-        <span className="mt-0.5 block text-[0.6875rem] text-muted-foreground">{sub}</span>
+        <span className="mt-0.5 block text-label-sm text-muted-foreground">{sub}</span>
       ) : null}
     </div>
   );
@@ -140,12 +148,14 @@ const surfaces = [
     who: "Anyone",
     name: "Public portfolio",
     need: "Fast, static, indexable",
+    status: "Live",
   },
-  { who: "Me", name: "Admin", need: "Authenticated, write-heavy" },
+  { who: "Me", name: "Admin", need: "Authenticated, write-heavy", status: "Live" },
   {
     who: "One hiring manager, by link",
     name: "Cover letters",
     need: "Private, unguessable, one per opening",
+    status: "Built, not yet in use",
   },
 ];
 
@@ -168,15 +178,13 @@ const pending = [
 
 export default async function ColophonPage() {
   return (
-    <main className="mx-auto w-full max-w-[66ch] px-6 pb-24">
-      <header className="border-b border-border pt-18 pb-8">
-        <p className="mb-5 text-[0.6875rem] uppercase tracking-[0.16em] text-muted-foreground">
-          Colophon · {site.name}
-        </p>
+    <main className="w-full px-6 py-14 sm:px-10">
+      <header className="border-b border-border pb-8">
+        <Eyebrow className="mb-5">Colophon · {site.name}</Eyebrow>
         <h1 className="font-display text-[clamp(2rem,6vw,3rem)] font-semibold leading-[1.03] tracking-[-0.03em] text-balance text-foreground">
           How this site is built, and why
         </h1>
-        <p className="mt-5 max-w-[52ch] text-pretty text-muted-foreground">
+        <p className="mt-5 max-w-measure-wide text-pretty text-muted-foreground">
           A stack list says what I installed. This says what the alternatives
           were, and what each choice cost.
         </p>
@@ -199,18 +207,28 @@ export default async function ColophonPage() {
               key={surface.name}
               className="flex flex-col gap-1 bg-card p-4"
             >
-              <span className="text-[0.6875rem] uppercase tracking-[0.12em] text-muted-foreground">
-                {surface.who}
-              </span>
+              <Eyebrow asChild size="sm">
+                <span>{surface.who}</span>
+              </Eyebrow>
               <span className="font-display text-sm font-semibold text-foreground">
                 {surface.name}
               </span>
               <span className="text-xs text-muted-foreground">{surface.need}</span>
+              <Eyebrow
+                size="sm"
+                tone={surface.status === "Live" ? "primary" : "muted"}
+                className="mt-1"
+              >
+                {surface.status}
+              </Eyebrow>
             </div>
           ))}
         </div>
-        <p className="mt-4 text-muted-foreground">
-          The third one shaped most of what follows.
+        <p className="mt-4 max-w-measure-wide text-pretty text-muted-foreground">
+          The third one shaped most of what follows, and is the one still
+          waiting on a first real use. Everything under it — the schema, the
+          token generation, the guard — is built and tested; no letter has been
+          sent yet.
         </p>
       </Section>
 
@@ -280,18 +298,15 @@ export default async function ColophonPage() {
             }}
           />
           <P>
-            shadcn/ui isn&rsquo;t a library you install; it&rsquo;s source you
-            copy in and own. That&rsquo;s what makes it compatible with the
-            constraint that I build the UI here. Radix stays a dependency, and a
-            justified one — it handles focus management, keyboard interaction,
-            and ARIA, where a subtle mistake is invisible until it reaches
-            someone using a screen reader.
+            Radix stays a dependency, and a justified one: focus management,
+            keyboard interaction, and ARIA are where a subtle mistake is
+            invisible until it reaches someone using a screen reader.
           </P>
-          <P>
+          <Pull>
             cksUI stands in the same relation to this site that VimUI does to the
-            product I work on, which makes the portfolio an example of the thing
-            it claims rather than a description of it.
-          </P>
+            product I work on. The portfolio is an example of the claim rather
+            than a description of it.
+          </Pull>
         </Decision>
 
         <Decision title="Neon over Supabase">
@@ -307,19 +322,16 @@ export default async function ColophonPage() {
           />
           <P>
             The decider was practical: free-tier Supabase pauses after about a
-            week idle, and the worst possible moment for that is a hiring manager
-            opening a letter three days after I sent it. Gave up a table-editing
-            UI and file storage.
+            week idle, and the worst moment for that is a hiring manager opening
+            a letter three days after I sent it. Cost: no table-editing UI, no
+            file storage.
           </P>
           <P>
             <strong className="font-semibold text-foreground">
               Drizzle over Prisma
             </strong>{" "}
             — lighter runtime, no codegen in the deploy path, migrations as plain
-            SQL you can review in a PR. Postgres doesn&rsquo;t index foreign keys
-            automatically, so the first migration adds them explicitly. One file
-            knows the database is Neon; switching is that file plus a driver
-            swap.
+            SQL reviewable in a PR. One file knows the database is Neon.
           </P>
         </Decision>
 
@@ -354,21 +366,20 @@ export default async function ColophonPage() {
 
         <Decision title="Deleting six tables when the requirement changed">
           <P>
-            The database was built for &ldquo;tailored CVs&rdquo; — a CV
-            assembled per opening from reusable parts. That was a misreading of
-            the requirement, and it survived long enough to become a schema:
-            positions, achievement bullets, skills, tags, and case studies, all
-            joined per opening with overrides.
+            The schema was built for &ldquo;tailored CVs&rdquo; — positions,
+            bullets, skills, tags, and case studies, joined per opening with
+            overrides. It was a misreading that survived long enough to become
+            six tables.
           </P>
           <P>
-            The actual need was cover letters. A CV is a document assembled from
-            parts; a letter is prose addressed to one reader. There is nothing to
-            select and reorder.
+            The actual need was cover letters. A CV is assembled from parts; a
+            letter is prose addressed to one reader. Nothing to select, nothing
+            to reorder.
           </P>
           <Verdict
             chosen={{
               what: "Delete the six tables",
-              why: "Case studies are files and the résumé is structured data, so none of them had a reader left.",
+              why: "Case studies are files and the experience page is structured data, so none of them had a reader left.",
             }}
             rejected={{
               what: "Keep them for later",
@@ -378,12 +389,7 @@ export default async function ColophonPage() {
           <Pull>
             The most useful thing I did to this database was take most of it out.
           </Pull>
-          <P>
-            What remains is auth and cover letters. That is a much better match
-            for the actual problem than what it replaced — and the migration had
-            never been applied anywhere, so it was regenerated rather than
-            migrated.
-          </P>
+
         </Decision>
 
         <Decision title="The URL is the credential">

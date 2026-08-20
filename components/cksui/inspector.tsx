@@ -10,6 +10,8 @@ import {
 } from "@/lib/inspect";
 import { INSPECT_ATTRIBUTE } from "@/lib/theme";
 
+import { Eyebrow } from "./eyebrow";
+
 import { useHtmlAttribute } from "./lib/use-html-attribute";
 
 /**
@@ -232,9 +234,9 @@ function InspectorOverlay() {
           )}
         </div>
 
-        <p className="mt-6 border-t border-border pt-3 text-[0.625rem] uppercase tracking-[0.16em] text-muted-foreground">
+        <Eyebrow size="sm" className="mt-6 border-t border-border pt-3">
           Esc to exit
-        </p>
+        </Eyebrow>
       </aside>
     </>
   );
@@ -248,11 +250,9 @@ function Label({
   className?: string;
 }) {
   return (
-    <p
-      className={`text-[0.625rem] uppercase tracking-[0.16em] text-muted-foreground ${className}`}
-    >
+    <Eyebrow size="sm" className={className}>
       {children}
-    </p>
+    </Eyebrow>
   );
 }
 

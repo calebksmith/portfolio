@@ -27,9 +27,15 @@
   --ck-muted: #dde1e6;
   --ck-muted-foreground: #4c535c;
   --ck-primary: #4a2ce0;
+  --ck-primary-hover: #3d21c4;
+  --ck-accent-hover: #d7d0fb;
   --ck-primary-foreground: #ffffff;
   --ck-accent: #e5e0fd;
   --ck-accent-foreground: #2c1a8c;
+  --ck-positive: #d9f0e1;
+  --ck-positive-foreground: #0d5129;
+  --ck-destructive: #fbe1e1;
+  --ck-destructive-foreground: #8a1c1c;
   --ck-gradient-from: #4a2ce0;
   --ck-gradient-to: #c026a8;
 
@@ -45,10 +51,17 @@
   --ck-radius-md: 4px;
   --ck-radius-lg: 8px;
 
+  /* Hover and press feedback. Fast enough not to lag the pointer, slow enough
+     to read as a fade rather than a switch. Every interactive surface uses it. */
   --ck-duration-fast: 120ms;
-  --ck-duration-base: 320ms;
   --ck-duration-slow: 640ms;
   --ck-ease: cubic-bezier(0.2, 0.6, 0.2, 1);
+
+  /* The uppercase label — the most-repeated text style on the site. It lived as
+     ten hand-typed variants across 33 call sites until these existed. */
+  --ck-label-size: 0.75rem;
+  --ck-label-size-sm: 0.6875rem;
+  --ck-label-tracking: 0.14em;
 
   /* Minimum touch target. Non-negotiable; see CLAUDE.md. */
   --ck-tap: 44px;
@@ -63,7 +76,13 @@
      padding that gives the page its width back, and by the appearance popover
      that has to clear it — one value, three consumers, no drift. */
   --ck-inspector-width: 21rem;
+
+  /* Line length. `measure` is the reading width for body prose; `measure-wide`
+     is for pages whose content is scanned rather than read straight through —
+     case study bodies, style guide descriptions — where a column half the
+     window's width reads as an unfinished layout rather than as care. */
   --ck-measure: 62ch;
+  --ck-measure-wide: 90ch;
 }
 
 /* --- default · dark ------------------------------------------------------- */
@@ -77,9 +96,15 @@
     --ck-muted: #232830;
     --ck-muted-foreground: #9aa2ac;
     --ck-primary: #a78bfa;
+    --ck-primary-hover: #b9a3fb;
+    --ck-accent-hover: #2e2456;
     --ck-primary-foreground: #14161b;
     --ck-accent: #241c46;
     --ck-accent-foreground: #c9b8fd;
+    --ck-positive: #12291c;
+    --ck-positive-foreground: #7fd9a3;
+    --ck-destructive: #2e1517;
+    --ck-destructive-foreground: #f2a1a1;
   --ck-gradient-from: #a78bfa;
   --ck-gradient-to: #f2a8e4;
     --ck-border: #2a3038;
@@ -96,9 +121,15 @@
   --ck-muted: #232830;
   --ck-muted-foreground: #9aa2ac;
   --ck-primary: #a78bfa;
+  --ck-primary-hover: #b9a3fb;
+  --ck-accent-hover: #2e2456;
   --ck-primary-foreground: #14161b;
   --ck-accent: #241c46;
   --ck-accent-foreground: #c9b8fd;
+  --ck-positive: #12291c;
+  --ck-positive-foreground: #7fd9a3;
+  --ck-destructive: #2e1517;
+  --ck-destructive-foreground: #f2a1a1;
   --ck-gradient-from: #a78bfa;
   --ck-gradient-to: #f2a8e4;
   --ck-border: #2a3038;
@@ -116,9 +147,15 @@
   --ck-muted: #e3dedb;
   --ck-muted-foreground: #57504b;
   --ck-primary: #b03a10;
+  --ck-primary-hover: #93300d;
+  --ck-accent-hover: #f7d4c4;
   --ck-primary-foreground: #ffffff;
   --ck-accent: #fbe3d8;
   --ck-accent-foreground: #7a2708;
+  --ck-positive: #dcefdf;
+  --ck-positive-foreground: #14512a;
+  --ck-destructive: #fbe0da;
+  --ck-destructive-foreground: #8f2415;
   --ck-gradient-from: #b03a10;
   --ck-gradient-to: #d98014;
   --ck-border: #d5cec9;
@@ -137,9 +174,15 @@
     --ck-muted: #292421;
     --ck-muted-foreground: #a89f99;
     --ck-primary: #f08a5d;
+    --ck-primary-hover: #f39c75;
+    --ck-accent-hover: #48281a;
     --ck-primary-foreground: #1a1614;
     --ck-accent: #3a1f12;
     --ck-accent-foreground: #f6b393;
+    --ck-positive: #17291b;
+    --ck-positive-foreground: #8fd49b;
+    --ck-destructive: #331814;
+    --ck-destructive-foreground: #f3ac9c;
   --ck-gradient-from: #f08a5d;
   --ck-gradient-to: #f5c46b;
     --ck-border: #332c28;
@@ -156,9 +199,15 @@
   --ck-muted: #292421;
   --ck-muted-foreground: #a89f99;
   --ck-primary: #f08a5d;
+  --ck-primary-hover: #f39c75;
+  --ck-accent-hover: #48281a;
   --ck-primary-foreground: #1a1614;
   --ck-accent: #3a1f12;
   --ck-accent-foreground: #f6b393;
+  --ck-positive: #17291b;
+  --ck-positive-foreground: #8fd49b;
+  --ck-destructive: #331814;
+  --ck-destructive-foreground: #f3ac9c;
   --ck-gradient-from: #f08a5d;
   --ck-gradient-to: #f5c46b;
   --ck-border: #332c28;
@@ -171,14 +220,20 @@
 :root[data-theme="contrast"] {
   --ck-background: #ffffff;
   --ck-foreground: #000000;
-  --ck-card: #ffffff;
+  --ck-card: #fbfbfc;
   --ck-card-foreground: #000000;
   --ck-muted: #ebebeb;
   --ck-muted-foreground: #1a1a1a;
   --ck-primary: #00006b;
+  --ck-primary-hover: #00004d;
+  --ck-accent-hover: #dedef0;
   --ck-primary-foreground: #ffffff;
-  --ck-accent: #ffffff;
+  --ck-accent: #ececf7;
   --ck-accent-foreground: #00006b;
+  --ck-positive: #e6f4ea;
+  --ck-positive-foreground: #00380f;
+  --ck-destructive: #fdeaea;
+  --ck-destructive-foreground: #660000;
   --ck-gradient-from: #00006b;
   --ck-gradient-to: #00006b;
   /* In high contrast the hairline stops being decorative and carries
@@ -194,14 +249,20 @@
   :root[data-theme="contrast"]:not([data-mode="light"]) {
     --ck-background: #000000;
     --ck-foreground: #ffffff;
-    --ck-card: #000000;
+    --ck-card: #0a0a0c;
     --ck-card-foreground: #ffffff;
     --ck-muted: #141414;
     --ck-muted-foreground: #ededed;
     --ck-primary: #eaeaff;
+    --ck-primary-hover: #ffffff;
+    --ck-accent-hover: #1c1c2c;
     --ck-primary-foreground: #000000;
-    --ck-accent: #000000;
+    --ck-accent: #12121c;
     --ck-accent-foreground: #eaeaff;
+    --ck-positive: #0a1a0e;
+    --ck-positive-foreground: #baf5c9;
+    --ck-destructive: #1a0a0a;
+    --ck-destructive-foreground: #ffc9c9;
   --ck-gradient-from: #eaeaff;
   --ck-gradient-to: #eaeaff;
     --ck-border: #ffffff;
@@ -213,14 +274,20 @@
 :root[data-theme="contrast"][data-mode="dark"] {
   --ck-background: #000000;
   --ck-foreground: #ffffff;
-  --ck-card: #000000;
+  --ck-card: #0a0a0c;
   --ck-card-foreground: #ffffff;
   --ck-muted: #141414;
   --ck-muted-foreground: #ededed;
   --ck-primary: #eaeaff;
+  --ck-primary-hover: #ffffff;
+  --ck-accent-hover: #1c1c2c;
   --ck-primary-foreground: #000000;
-  --ck-accent: #000000;
+  --ck-accent: #12121c;
   --ck-accent-foreground: #eaeaff;
+  --ck-positive: #0a1a0e;
+  --ck-positive-foreground: #baf5c9;
+  --ck-destructive: #1a0a0a;
+  --ck-destructive-foreground: #ffc9c9;
   --ck-gradient-from: #eaeaff;
   --ck-gradient-to: #eaeaff;
   --ck-border: #ffffff;
@@ -246,6 +313,16 @@
   --color-primary-foreground: var(--ck-primary-foreground);
   --color-accent: var(--ck-accent);
   --color-accent-foreground: var(--ck-accent-foreground);
+  /* One step further from the page ground, for hover on a filled surface.
+     `hover:opacity-90` was the old answer and it was two bugs: opacity is not
+     in `transition-colors`, so it snapped, and fading a button fades its label
+     with it — dropping the very contrast the pairs exist to guarantee. */
+  --color-primary-hover: var(--ck-primary-hover);
+  --color-accent-hover: var(--ck-accent-hover);
+  --color-positive: var(--ck-positive);
+  --color-positive-foreground: var(--ck-positive-foreground);
+  --color-destructive: var(--ck-destructive);
+  --color-destructive-foreground: var(--ck-destructive-foreground);
   --color-border: var(--ck-border);
   --color-input: var(--ck-input);
   --color-ring: var(--ck-ring);
@@ -253,6 +330,29 @@
   --radius-sm: var(--ck-radius-sm);
   --radius-md: var(--ck-radius-md);
   --radius-lg: var(--ck-radius-lg);
+
+  /* Type. The label sizes and tracking exist so the site's most-repeated text
+     style has one definition rather than ten. Tailwind's `--text-*` and
+     `--tracking-*` namespaces generate real utilities — `text-label`,
+     `tracking-label` — unlike the spacing scale, which is a single multiplier
+     and needs @utility. */
+  --text-label: var(--ck-label-size);
+  --text-label-sm: var(--ck-label-size-sm);
+  --tracking-label: var(--ck-label-tracking);
+
+  /* Line length, as `max-w-measure` and `max-w-measure-wide`. The token existed
+     for a year and nothing read it; every call site typed `62ch` instead,
+     because there was no utility to reach for. */
+  --container-measure: var(--ck-measure);
+  --container-measure-wide: var(--ck-measure-wide);
+
+  /* Motion defaults, not utilities. Tailwind has no `--duration-*` namespace —
+     `duration-150` is a literal — but it does take a default, so setting these
+     two means a bare `transition-colors` picks up the site's timing and easing
+     with nothing at the call site. That is what makes every hover on the site
+     fade at the same rate: one declaration, not a class repeated forty times. */
+  --default-transition-duration: var(--ck-duration-fast);
+  --default-transition-timing-function: var(--ck-ease);
 
   --font-display: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-plex-mono), ui-monospace, "SF Mono", monospace;
@@ -301,10 +401,19 @@
 
 /* While the inspector is docked, give the page the width back — the same thing
    docked browser devtools do. Only from `lg`, because below that the panel is
-   most of the viewport and shifting the layout would leave nothing to inspect. */
+   most of the viewport and shifting the layout would leave nothing to inspect.
+
+   The content moves, the chrome does not. This used to pad `body`, which shrank
+   the sticky header along with everything else and pulled the Inspect toggle
+   away from the panel it opens. Header and footer stay full width so the toggle
+   sits directly above its own dock.
+
+   Margin rather than padding: `main` already carries its own `px` gutters, and
+   padding here would fight them. */
 @media (min-width: 1024px) {
-  :root[data-inspect="on"] body {
-    padding-right: var(--ck-inspector-width);
+  :root[data-inspect="on"] main,
+  :root[data-inspect="on"] [data-slot="site-footer"] {
+    margin-right: var(--ck-inspector-width);
   }
 
   /* The appearance panel is a native popover, so it renders in the top layer
@@ -416,6 +525,30 @@ body {
   animation: ck-pulse 2.4s var(--ck-ease) infinite;
 }
 
+/**
+ * The scroll arrow: one slow fall, fading as it goes.
+ *
+ * Deliberately unhurried. A fast bounce reads as an alert; the point here is
+ * only to say the page continues. Travel is a fraction of the glyph so it never
+ * looks detached from the words above it.
+ */
+@keyframes ck-scroll-cue {
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(0.3rem);
+  }
+}
+
+
+.ck-scroll-cue {
+  animation: ck-scroll-cue 2.8s var(--ck-ease) infinite;
+}
+
 /* ===========================================================================
    Print
    ===========================================================================
@@ -437,14 +570,23 @@ body {
     --ck-muted: #ffffff;
     --ck-muted-foreground: #1a1a1a;
     --ck-primary: #000000;
+    --ck-primary-hover: #000000;
+    --ck-accent-hover: #ffffff;
     --ck-primary-foreground: #ffffff;
     --ck-accent: #ffffff;
     --ck-accent-foreground: #000000;
+    --ck-positive: #ffffff;
+    --ck-positive-foreground: #000000;
+    --ck-destructive: #ffffff;
+    --ck-destructive-foreground: #000000;
     --ck-border: #999999;
     --ck-input: #333333;
   }
 
+  /* Site chrome is dropped on paper — a printed résumé should be the document
+     and nothing else. */
   [data-slot="site-header"],
+  [data-slot="site-footer"],
   [data-slot="control-bar"],
   [popover] {
     display: none !important;
@@ -469,90 +611,15 @@ body {
 }
 
 /* ===========================================================================
-   Process diagrams
+   Typewriter
    ===========================================================================
-   Two candidate hero graphics. Both are inline SVG driven from here, with no
-   animation library — the whole effect is a stroke being drawn and a dot riding
-   an offset-path.
+   The hero and the style guide's source panel are both written out a character
+   at a time by JavaScript. What lives here is only what CSS is better at: the
+   caret's two states.
 
-   Under reduced motion each collapses to its finished state rather than
-   stopping mid-draw: the completed path, all labels lit, no dot. The meaning is
-   in the shape and the labels, never in the movement.
+   The timing lives in the components, because they are what decide when to
+   pause. Splitting it across both would mean two places to keep in step.
 =========================================================================== */
-
-/* --- A · double diamond that loops --------------------------------------- */
-
-@keyframes ck-trace {
-  0% {
-    stroke-dashoffset: var(--ck-path-length);
-  }
-  55%,
-  100% {
-    stroke-dashoffset: 0;
-  }
-}
-
-@keyframes ck-ride {
-  0% {
-    offset-distance: 0%;
-    opacity: 0;
-  }
-  4%,
-  52% {
-    opacity: 1;
-  }
-  55%,
-  100% {
-    offset-distance: 100%;
-    opacity: 0;
-  }
-}
-
-/** Each phase label brightens as the dot passes it, then settles back. */
-@keyframes ck-phase {
-  0%,
-  8% {
-    opacity: 0.35;
-  }
-  14%,
-  22% {
-    opacity: 1;
-  }
-  32%,
-  100% {
-    opacity: 0.55;
-  }
-}
-
-.ck-trace {
-  stroke-dasharray: var(--ck-path-length);
-  animation: ck-trace 12s var(--ck-ease) infinite;
-}
-
-.ck-ride {
-  offset-path: var(--ck-path);
-  offset-rotate: 0deg;
-  animation: ck-ride 12s var(--ck-ease) infinite;
-}
-
-.ck-phase {
-  opacity: 0.55;
-  animation: ck-phase 12s var(--ck-ease) infinite;
-  animation-delay: calc(var(--ck-phase-index, 0) * 1.1s);
-}
-
-/* --- Typewriter caret ----------------------------------------------------- */
-
-@keyframes ck-blink {
-  0%,
-  45% {
-    opacity: 1;
-  }
-  55%,
-  100% {
-    opacity: 0;
-  }
-}
 
 /**
  * The block caret, in two states.
@@ -574,34 +641,8 @@ body {
   }
 }
 
-.ck-caret {
-  animation: ck-blink 1.1s steps(1, end) infinite;
-}
-
 .ck-caret-writing {
   opacity: 1;
-}
-
-/**
- * An underline that draws itself left to right.
- *
- * A background gradient rather than a positioned bar or a border, because those
- * force the phrase to `inline-block` — which stops it wrapping and can push it
- * whole to the next line on a narrow screen. A background follows the text
- * across line breaks the way a real underline does.
- *
- * Width comes from an inline `background-size`, so the component controls both
- * the trigger and the per-phrase stagger.
- */
-.ck-mark {
-  background-image: linear-gradient(var(--ck-primary), var(--ck-primary));
-  background-repeat: no-repeat;
-  background-position: 0 100%;
-  background-size: 0% 0.08em;
-  padding-bottom: 0.1em;
-  transition-property: background-size;
-  transition-duration: 460ms;
-  transition-timing-function: var(--ck-ease);
 }
 
 .ck-caret-thinking {
@@ -609,115 +650,28 @@ body {
   animation: ck-think 1.15s var(--ck-ease) infinite;
 }
 
-/* --- B · line that bends into a cycle ------------------------------------ */
-
-@keyframes ck-linear-in {
-  0% {
-    opacity: 0;
-  }
-  6%,
-  38% {
-    opacity: 1;
-  }
-  48%,
-  100% {
-    opacity: 0;
-  }
-}
-
-@keyframes ck-ring-in {
-  0%,
-  40% {
-    opacity: 0;
-    transform: scale(0.94);
-  }
-  54%,
-  94% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: scale(1);
-  }
-}
-
-@keyframes ck-orbit {
-  0%,
-  46% {
-    opacity: 0;
-    offset-distance: 0%;
-  }
-  54% {
-    opacity: 1;
-  }
-  92% {
-    opacity: 1;
-    offset-distance: 100%;
-  }
-  100% {
-    opacity: 0;
-    offset-distance: 100%;
-  }
-}
-
-.ck-linear {
-  animation: ck-linear-in 14s var(--ck-ease) infinite;
-}
-
-.ck-ring {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: ck-ring-in 14s var(--ck-ease) infinite;
-}
-
-.ck-orbit {
-  offset-path: var(--ck-path);
-  offset-rotate: 0deg;
-  animation: ck-orbit 14s linear infinite;
-}
-
 @media (prefers-reduced-motion: reduce) {
-  /* Finished state, held. Not a paused animation — a completed one. */
-  .ck-trace {
-    stroke-dashoffset: 0;
-    animation: none;
-  }
-
-  .ck-phase {
-    opacity: 1;
-    animation: none;
-  }
-
-  .ck-ride,
-  .ck-orbit {
-    display: none;
-  }
-
-  .ck-caret,
+  /* The caret stops moving. It is not hidden: the components stop typing under
+     reduced motion, so the caret is only ever shown at rest, and a resting
+     caret still says where the text ends. */
   .ck-caret-thinking {
     animation: none;
   }
 
-  /* B resolves to the cycle, since that is the point it is making. */
-  .ck-linear {
-    display: none;
-  }
-
-  .ck-ring {
-    opacity: 1;
-    transform: none;
-    animation: none;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
   .ck-enter {
     opacity: 1;
     animation: none;
   }
 
   .ck-pulse {
+    animation: none;
+  }
+
+  /* Held at full strength, not at whichever keyframe the blanket rule below
+     would land on — a half-faded arrow reads as disabled. */
+  .ck-scroll-cue {
+    opacity: 1;
+    transform: none;
     animation: none;
   }
 

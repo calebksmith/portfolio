@@ -14,23 +14,16 @@ export const site = {
 
   /** Rendered in order, as written. */
   spec: [
-    { label: "Focus", value: "Design systems, product design, front-end" },
+    { label: "Focus", value: "Design systems, product design, frontend" },
     { label: "Stack", value: "TypeScript, React, Next.js, Tailwind" },
     { label: "Platforms", value: "Web, iOS, Android, Desktop" },
     { label: "Based", value: "Seattle, Washington" },
   ],
 
-  /** Its own row, because it carries the live status dot. */
-  status: "Portfolio in development",
 
   links: [
     { label: "LinkedIn", href: "https://www.linkedin.com/in/calebksmith" },
-    { label: "VimUI — design system", href: "https://vimui.vimocity.com" },
+    { label: "VimUI — design system", href: "https://vimui.vimocity.com/main/" },
   ],
 
-  /**
-   * TODO(caleb): public Vimocity playlist URL. The bento card is skipped
-   * entirely while this is empty rather than shipping a dead link.
-   */
-  playlistUrl: "",
 } as const;
