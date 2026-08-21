@@ -33,79 +33,77 @@ const MUTED = "#9aa2ac";
 
 export default async function Image() {
   return new ImageResponse(
-    (
-      <div
-        style={{
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          background: GROUND,
-          padding: 84,
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: 28 }}>
-          {/* The same tile as the favicon and the header, at 22% radius. */}
-          <div
-            style={{
-              width: 108,
-              height: 108,
-              borderRadius: 24,
-              background: TILE,
-              color: TILE_INK,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: 46,
-              fontWeight: 500,
-              letterSpacing: -1,
-            }}
-          >
-            CS
-          </div>
-          <div
-            style={{
-              color: FG,
-              fontSize: 62,
-              fontWeight: 600,
-              letterSpacing: -1.8,
-            }}
-          >
-            {site.name}
-          </div>
-        </div>
-
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        background: GROUND,
+        padding: 84,
+      }}
+    >
+      <div style={{ display: "flex", alignItems: "center", gap: 28 }}>
+        {/* The same tile as the favicon and the header, at 22% radius. */}
         <div
           style={{
-            display: "flex",
-            color: FG,
-            fontSize: 44,
-            lineHeight: 1.3,
-            maxWidth: 900,
-            letterSpacing: -0.6,
-          }}
-        >
-          {site.lede}
-        </div>
-
-        <div
-          style={{
+            width: 108,
+            height: 108,
+            borderRadius: 24,
+            background: TILE,
+            color: TILE_INK,
             display: "flex",
             alignItems: "center",
-            gap: 20,
-            color: MUTED,
-            fontSize: 24,
-            letterSpacing: 3,
-            textTransform: "uppercase",
+            justifyContent: "center",
+            fontSize: 46,
+            fontWeight: 500,
+            letterSpacing: -1,
           }}
         >
-          <span style={{ color: MARK }}>{site.role}</span>
-          <span>·</span>
-          <span>calebksmith.com</span>
+          CS
+        </div>
+        <div
+          style={{
+            color: FG,
+            fontSize: 62,
+            fontWeight: 600,
+            letterSpacing: -1.8,
+          }}
+        >
+          {site.name}
         </div>
       </div>
-    ),
+
+      <div
+        style={{
+          display: "flex",
+          color: FG,
+          fontSize: 44,
+          lineHeight: 1.3,
+          maxWidth: 900,
+          letterSpacing: -0.6,
+        }}
+      >
+        {site.lede}
+      </div>
+
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 20,
+          color: MUTED,
+          fontSize: 24,
+          letterSpacing: 3,
+          textTransform: "uppercase",
+        }}
+      >
+        <span style={{ color: MARK }}>{site.role}</span>
+        <span>·</span>
+        <span>calebksmith.com</span>
+      </div>
+    </div>,
     size,
   );
 }

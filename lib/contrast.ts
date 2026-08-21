@@ -9,7 +9,11 @@
 
 /** The pairs that mean something. A ratio is only meaningful in combination. */
 export const CONTRAST_PAIRS = [
-  { surface: "background", foreground: "foreground", label: "Background / text" },
+  {
+    surface: "background",
+    foreground: "foreground",
+    label: "Background / text",
+  },
   { surface: "card", foreground: "card-foreground", label: "Card / text" },
   { surface: "muted", foreground: "muted-foreground", label: "Muted / text" },
   {
@@ -17,7 +21,11 @@ export const CONTRAST_PAIRS = [
     foreground: "primary-foreground",
     label: "Primary / text",
   },
-  { surface: "accent", foreground: "accent-foreground", label: "Accent / text" },
+  {
+    surface: "accent",
+    foreground: "accent-foreground",
+    label: "Accent / text",
+  },
   {
     surface: "background",
     foreground: "muted-foreground",

@@ -132,7 +132,9 @@ export function HeroPrompt({ className }: { className?: string }) {
 
   // `nonce` is what lets the same question be asked twice: it changes the key
   // on the answer, which remounts it, which starts the typing over.
-  const [asked, setAsked] = useState<{ id: string; nonce: number } | null>(null);
+  const [asked, setAsked] = useState<{ id: string; nonce: number } | null>(
+    null,
+  );
 
   // Two lines in sequence: the statement, then the question. The second gates on
   // the first being finished rather than running its own timer, so the pause

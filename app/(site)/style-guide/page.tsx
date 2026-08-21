@@ -36,7 +36,11 @@ const SECTIONS = [
 
 export default async function StyleGuidePage() {
   return (
-    <main id="main" tabIndex={-1} className="mx-auto w-full max-w-page px-6 py-14 sm:px-10">
+    <main
+      id="main"
+      tabIndex={-1}
+      className="mx-auto w-full max-w-page px-6 py-14 sm:px-10"
+    >
       <header className="border-b border-border pb-8">
         <h1 className="font-display text-[clamp(2rem,6vw,3rem)] font-semibold leading-[1.03] tracking-[-0.03em] text-balance text-foreground">
           Style guide
@@ -74,9 +78,9 @@ export default async function StyleGuidePage() {
             <p className="max-w-measure-wide text-pretty text-muted-foreground">
               Colors are not a flat palette. Every surface has a paired
               foreground, so a component written as{" "}
-              <Code>bg-card text-card-foreground</Code> is legible in every theme
-              without anyone remembering which color goes where. Values below are
-              read from the running page.
+              <Code>bg-card text-card-foreground</Code> is legible in every
+              theme without anyone remembering which color goes where. Values
+              below are read from the running page.
             </p>
             <TokenTable />
           </Section>
@@ -92,17 +96,17 @@ export default async function StyleGuidePage() {
             <p className="mt-6 max-w-measure-wide text-xs text-muted-foreground">
               The same math runs at build time in{" "}
               <Code>npm run check:contrast</Code>, reading{" "}
-              <Code>globals.css</Code> directly, so this page and the gate cannot
-              disagree. Note that <Code>--ck-border</Code> is not held to 3:1:
-              WCAG 1.4.11 governs control boundaries, not decorative hairlines,
-              which is why <Code>--ck-input</Code> exists separately.
+              <Code>globals.css</Code> directly, so this page and the gate
+              cannot disagree. Note that <Code>--ck-border</Code> is not held to
+              3:1: WCAG 1.4.11 governs control boundaries, not decorative
+              hairlines, which is why <Code>--ck-input</Code> exists separately.
             </p>
           </Section>
 
           <Section id="typography" title="Typography">
             <p className="max-w-measure-wide text-pretty text-muted-foreground">
-              Archivo carries display type — headings and the name. IBM Plex Mono
-              carries everything else: body copy, labels, tables, UI. The
+              Archivo carries display type — headings and the name. IBM Plex
+              Mono carries everything else: body copy, labels, tables, UI. The
               inversion of the usual serif-on-cream portfolio is deliberate.
             </p>
 
@@ -148,10 +152,10 @@ export default async function StyleGuidePage() {
           <Section id="components" title="Components">
             <p className="max-w-measure-wide text-pretty text-muted-foreground">
               cksUI — this site&rsquo;s component library. Built on
-              shadcn/ui&rsquo;s patterns as source copied in and owned, not as an
-              installed dependency, with every value rewritten onto the tokens
-              above. Every component declares a <Code>data-slot</Code>, the same
-              convention VimUI uses.
+              shadcn/ui&rsquo;s patterns as source copied in and owned, not as
+              an installed dependency, with every value rewritten onto the
+              tokens above. Every component declares a <Code>data-slot</Code>,
+              the same convention VimUI uses.
             </p>
 
             <div className="mt-6 rounded-lg border border-input bg-card p-5">
@@ -181,8 +185,8 @@ export default async function StyleGuidePage() {
               <Code>createElement</Code> into the components on the left, once
               through a printer into the JSX on the right. There is no way to
               write code here that renders something else, which is the same
-              reason the contrast table reads <Code>globals.css</Code> instead of
-              keeping its own palette.
+              reason the contrast table reads <Code>globals.css</Code> instead
+              of keeping its own palette.
             </p>
           </Section>
         </div>

@@ -88,7 +88,9 @@ export function renderNode(node: Child, key?: number): ReactNode {
     props[name] = isExpression(value) ? value.value : value;
   }
 
-  const children = node.children?.map((child, index) => renderNode(child, index));
+  const children = node.children?.map((child, index) =>
+    renderNode(child, index),
+  );
 
   return children
     ? createElement(type, props, ...children)
@@ -250,7 +252,11 @@ export const recipes: Recipe[] = [
     slot: "badge",
     description: "A small label. Used for platforms and for pass/fail results.",
     controls: [
-      { name: "variant", label: "Variant", values: ["outline", "soft", "solid"] },
+      {
+        name: "variant",
+        label: "Variant",
+        values: ["outline", "soft", "solid"],
+      },
       { name: "label", label: "Label", values: ["Web", "iOS", "AA pass"] },
     ],
     build: (choices) => ({
@@ -317,7 +323,9 @@ export const recipes: Recipe[] = [
     slot: "spec-list",
     description:
       "Label and value pairs drawn with hairline rules. A <dl>, not a table — these are term/description pairs rather than tabular data, so a screen reader announces “Focus, design systems” instead of “row 1, column 1”.",
-    controls: [{ name: "rows", label: "Rows", values: ["Two", "Three", "Four"] }],
+    controls: [
+      { name: "rows", label: "Rows", values: ["Two", "Three", "Four"] },
+    ],
     build: (choices) => {
       const count = { Two: 2, Three: 3, Four: 4 }[choices.rows] ?? 2;
 

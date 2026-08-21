@@ -13,7 +13,7 @@ The actual need is **cover letters** — a letter written for one opening and se
 to one hiring manager, at a link.
 
 The difference is not cosmetic. A CV is a document assembled from reusable
-parts, which is why the old model was a *view*: joins selecting positions,
+parts, which is why the old model was a _view_: joins selecting positions,
 bullets, and skills, with overrides. A cover letter is prose addressed to a
 specific reader. There is nothing to select and reorder. Building selection
 machinery for it would be elaborate infrastructure around a `text` column.

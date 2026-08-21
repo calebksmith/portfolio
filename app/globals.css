@@ -86,7 +86,6 @@
   --ck-measure: 62ch;
   --ck-measure-wide: 75ch;
 
-
   /* The page container. Content ran to the window's full width, which on a wide
      monitor left every page hugging the left gutter with a field of empty space
      to the right — the measure capped the line length but nothing centred it,
@@ -120,8 +119,8 @@
     --ck-positive-foreground: #7fd9a3;
     --ck-destructive: #2e1517;
     --ck-destructive-foreground: #f2a1a1;
-  --ck-gradient-from: #a78bfa;
-  --ck-gradient-to: #f2a8e4;
+    --ck-gradient-from: #a78bfa;
+    --ck-gradient-to: #f2a8e4;
     --ck-border: #2a3038;
     --ck-input: #6b737d;
     --ck-ring: #a78bfa;
@@ -204,8 +203,8 @@
     --ck-positive-foreground: #8fd49b;
     --ck-destructive: #331814;
     --ck-destructive-foreground: #f3ac9c;
-  --ck-gradient-from: #f08a5d;
-  --ck-gradient-to: #f5c46b;
+    --ck-gradient-from: #f08a5d;
+    --ck-gradient-to: #f5c46b;
     --ck-border: #332c28;
     --ck-input: #7a726c;
     --ck-ring: #f08a5d;
@@ -290,8 +289,8 @@
     --ck-positive-foreground: #baf5c9;
     --ck-destructive: #1a0a0a;
     --ck-destructive-foreground: #ffc9c9;
-  --ck-gradient-from: #eaeaff;
-  --ck-gradient-to: #eaeaff;
+    --ck-gradient-from: #eaeaff;
+    --ck-gradient-to: #eaeaff;
     --ck-border: #ffffff;
     --ck-input: #ffffff;
     --ck-ring: #eaeaff;
@@ -575,7 +574,6 @@ body {
     transform: translateY(0.3rem);
   }
 }
-
 
 .ck-scroll-cue {
   animation: ck-scroll-cue 2.8s var(--ck-ease) infinite;

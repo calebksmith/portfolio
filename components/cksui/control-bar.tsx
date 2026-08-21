@@ -70,9 +70,9 @@ const CONTROL_ITEM = [
  *           token the secondary button uses, so "on" responds to the pointer
  *           the way every other filled surface on the site does.
  */
-const CONTROL_REST = "text-foreground hover:bg-muted hover:text-muted-foreground";
-const CONTROL_ACTIVE =
-  "bg-accent text-accent-foreground hover:bg-accent-hover";
+const CONTROL_REST =
+  "text-foreground hover:bg-muted hover:text-muted-foreground";
+const CONTROL_ACTIVE = "bg-accent text-accent-foreground hover:bg-accent-hover";
 
 /**
  * An instrument that opens something — a panel, a menu.

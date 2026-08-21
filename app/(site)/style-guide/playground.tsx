@@ -48,9 +48,9 @@ export function Playground() {
   const reduced = usePrefersReducedMotion();
 
   const [activeId, setActiveId] = useState(recipes[0].id);
-  const [choices, setChoices] = useState<Record<string, Record<string, string>>>(
-    () => Object.fromEntries(recipes.map((r) => [r.id, defaultsFor(r)])),
-  );
+  const [choices, setChoices] = useState<
+    Record<string, Record<string, string>>
+  >(() => Object.fromEntries(recipes.map((r) => [r.id, defaultsFor(r)])));
 
   // Until something is chosen, the code is shown finished rather than typed.
   const [touched, setTouched] = useState(false);
@@ -78,7 +78,9 @@ export function Playground() {
           value={recipe.name}
           onChange={(name) => {
             setTouched(true);
-            setActiveId(recipes.find((r) => r.name === name)?.id ?? recipes[0].id);
+            setActiveId(
+              recipes.find((r) => r.name === name)?.id ?? recipes[0].id,
+            );
           }}
           prominent
         />
@@ -165,15 +167,12 @@ export function Playground() {
           </div>
         ) : null}
       </div>
-
     </div>
   );
 }
 
 function PanelLabel({ children }: { children: React.ReactNode }) {
-  return (
-    <Eyebrow className="mb-4">{children}</Eyebrow>
-  );
+  return <Eyebrow className="mb-4">{children}</Eyebrow>;
 }
 
 /* --- The typed source panel ----------------------------------------------- */

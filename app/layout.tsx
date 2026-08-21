@@ -81,9 +81,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           animation must never be the reason content cannot be read.
         */}
         <noscript>
-          <style>{
-            "[data-reveal]{opacity:1!important;visibility:visible!important;transform:none!important}"
-          }</style>
+          <style>
+            {
+              "[data-reveal]{opacity:1!important;visibility:visible!important;transform:none!important}"
+            }
+          </style>
         </noscript>
 
         {children}

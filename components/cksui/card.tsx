@@ -62,7 +62,11 @@ export function CardDescription({ className, ...props }: ComponentProps<"p">) {
 
 export function CardContent({ className, ...props }: ComponentProps<"div">) {
   return (
-    <div data-slot="card-content" className={cn("p-5 pt-0", className)} {...props} />
+    <div
+      data-slot="card-content"
+      className={cn("p-5 pt-0", className)}
+      {...props}
+    />
   );
 }
 

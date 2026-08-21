@@ -97,12 +97,8 @@
           "name": "account_user_id_user_id_fk",
           "tableFrom": "account",
           "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -110,10 +106,7 @@
       "compositePrimaryKeys": {
         "account_provider_provider_account_id_pk": {
           "name": "account_provider_provider_account_id_pk",
-          "columns": [
-            "provider",
-            "provider_account_id"
-          ]
+          "columns": ["provider", "provider_account_id"]
         }
       },
       "uniqueConstraints": {},
@@ -166,12 +159,8 @@
           "name": "session_user_id_user_id_fk",
           "tableFrom": "session",
           "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -224,9 +213,7 @@
         "user_email_unique": {
           "name": "user_email_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "email"
-          ]
+          "columns": ["email"]
         }
       },
       "policies": {},
@@ -261,10 +248,7 @@
       "compositePrimaryKeys": {
         "verification_token_identifier_token_pk": {
           "name": "verification_token_identifier_token_pk",
-          "columns": [
-            "identifier",
-            "token"
-          ]
+          "columns": ["identifier", "token"]
         }
       },
       "uniqueConstraints": {},
@@ -302,12 +286,8 @@
           "name": "cover_letter_case_study_letter_id_cover_letter_id_fk",
           "tableFrom": "cover_letter_case_study",
           "tableTo": "cover_letter",
-          "columnsFrom": [
-            "letter_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["letter_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -315,10 +295,7 @@
       "compositePrimaryKeys": {
         "cover_letter_case_study_letter_id_slug_pk": {
           "name": "cover_letter_case_study_letter_id_slug_pk",
-          "columns": [
-            "letter_id",
-            "slug"
-          ]
+          "columns": ["letter_id", "slug"]
         }
       },
       "uniqueConstraints": {},
@@ -397,12 +374,8 @@
           "name": "cover_letter_view_letter_id_cover_letter_id_fk",
           "tableFrom": "cover_letter_view",
           "tableTo": "cover_letter",
-          "columnsFrom": [
-            "letter_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["letter_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -512,9 +485,7 @@
         "cover_letter_share_token_unique": {
           "name": "cover_letter_share_token_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "share_token"
-          ]
+          "columns": ["share_token"]
         }
       },
       "policies": {},
@@ -526,11 +497,7 @@
     "public.letter_status": {
       "name": "letter_status",
       "schema": "public",
-      "values": [
-        "draft",
-        "shared",
-        "revoked"
-      ]
+      "values": ["draft", "shared", "revoked"]
     }
   },
   "schemas": {},

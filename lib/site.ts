@@ -20,10 +20,11 @@ export const site = {
     { label: "Based", value: "Seattle, Washington" },
   ],
 
-
   links: [
     { label: "LinkedIn", href: "https://www.linkedin.com/in/calebksmith" },
-    { label: "VimUI — design system", href: "https://vimui.vimocity.com/main/" },
+    {
+      label: "VimUI — design system",
+      href: "https://vimui.vimocity.com/main/",
+    },
   ],
-
 } as const;

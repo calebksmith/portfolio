@@ -8,7 +8,7 @@ Handoff document. Read this first — it carries the decisions made before the b
 
 Personal portfolio for **Caleb Smith**, product designer and design engineer in Seattle. It supports an active job search for design engineer, design systems lead, and senior/staff product designer roles.
 
-**The site is a work sample, not just a container for work samples.** Every decision should survive the question: *would an engineer interviewing me respect this?*
+**The site is a work sample, not just a container for work samples.** Every decision should survive the question: _would an engineer interviewing me respect this?_
 
 ---
 
@@ -21,7 +21,7 @@ The one-line version:
 The differentiator, in the order it should be argued:
 
 1. **Design systems** — built VimUI at Vimocity and leads its growth: 50+ web components on shared tokens; color and type tokens carry across iOS, Android, and Windows desktop, living in a shared codebase with Storybook, plus the written standards and release process behind it.
-2. **AI guardrails** — wrote the component standards, turned them into automated checks that run before every merge, and loaded the same standards into the team's AI coding tools. *One standard, enforced three ways: written for people, checked by automation, loaded for AI.* This is the strongest and least common thing about him.
+2. **AI guardrails** — wrote the component standards, turned them into automated checks that run before every merge, and loaded the same standards into the team's AI coding tools. _One standard, enforced three ways: written for people, checked by automation, loaded for AI._ This is the strongest and least common thing about him.
 3. **Production frontend** — designs and builds directly in the product codebase in TypeScript/React/Next.js. Reviews and approves frontend pull requests.
 4. **Product definition** — runs discovery: customer interviews, product briefs, prototype-led iteration. Not just execution.
 5. **Behavior-change design** — workplace health product where success means people come back.
@@ -45,19 +45,20 @@ The homepage is a bento-box index. Cards link out to full detail pages.
 
 **Hierarchy matters more than the grid.** Do not make cards uniform. Weighted spans, largest first:
 
-| Card | Weight | Links to |
-|---|---|---|
-| About / résumé | Large | `/resume` |
-| VimUI design system | Large | `/work/vimui` |
-| AI guardrails | Large | `/work/guardrails` |
-| Platform rebuild | Medium | `/work/platform-rebuild` |
-| Cross-platform login | Medium | `/work/login` |
-| Challenges (behavior change) | Medium | `/work/challenges` |
-| Theme / token controls | Small, interactive | — |
-| Playlist embed | Small | Vimocity public playlist |
-| Colophon | Small | `/colophon` |
+| Card                         | Weight             | Links to                 |
+| ---------------------------- | ------------------ | ------------------------ |
+| About / résumé               | Large              | `/resume`                |
+| VimUI design system          | Large              | `/work/vimui`            |
+| AI guardrails                | Large              | `/work/guardrails`       |
+| Platform rebuild             | Medium             | `/work/platform-rebuild` |
+| Cross-platform login         | Medium             | `/work/login`            |
+| Challenges (behavior change) | Medium             | `/work/challenges`       |
+| Theme / token controls       | Small, interactive | —                        |
+| Playlist embed               | Small              | Vimocity public playlist |
+| Colophon                     | Small              | `/colophon`              |
 
 Two cards should be **live rather than descriptive**:
+
 - The **theme controls** card (see below)
 - The **playlist** card — embed the Vimocity playlist widget if it can be embedded cross-origin; otherwise link to a public playlist
 
@@ -70,12 +71,14 @@ Bento is a common portfolio pattern right now. The weighting, the live cards, an
 This is a feature, not decoration — it demonstrates token architecture and accessibility, which are two central claims on the résumé.
 
 **Requirements:**
+
 - **Two or three selectable primary colors** — not a full palette picker, just enough to show the token layer works
 - **A high-contrast option** for accessibility
 - **Light / dark mode**, defaulting to system preference
-- Preference persists across navigation *within the session* (note: no `localStorage` in this codebase — use cookies or a server-set preference if persistence across visits is wanted)
+- Preference persists across navigation _within the session_ (note: no `localStorage` in this codebase — use cookies or a server-set preference if persistence across visits is wanted)
 
 **Implementation shape:**
+
 - All color, type-size, and spacing values resolve to `--ck-*` custom properties
 - Themes are alternate value sets for the same token names, applied via a `data-theme` attribute on `<html>`
 - Light/dark handled the same way, with `prefers-color-scheme` as the default
@@ -103,6 +106,7 @@ Themes then only need to redefine those pairs. A component that uses `bg-card te
 Three features that demonstrate the résumé claims rather than asserting them. These are what keep the site from reading as another bento portfolio. Build them in this order.
 
 ### Theme colors page with live contrast readout
+
 A page (also surfaced as the small interactive bento card) that displays the currently selected theme's colors and their measured contrast ratios, updating live as the theme or mode changes.
 
 - Read resolved values with `getComputedStyle` on `<html>` — never hardcode them, or the page duplicates the token layer instead of reporting on it
@@ -112,13 +116,15 @@ A page (also surfaced as the small interactive bento card) that displays the cur
 - Consequence to accept: this publishes failures as readily as passes. Every theme must genuinely pass, and high contrast should clear AAA.
 
 ### Design-system inspector overlay
+
 A toggle that annotates the live page: hovering any element reveals which component it is, which tokens it resolves to, and which rule governs it. Inspect-element for design decisions.
 
 - Reuse the `data-slot` attribute convention from the VimUI guidelines — same attribute, same meaning, so the portfolio and the production system share a vocabulary
 - Toggle sets a flag; pointer or focus lands on nearest `[data-slot]`; a floating panel reports component name and resolved tokens
 - **Must be keyboard operable.** An inspector that only responds to a mouse, on an accessibility-forward site, undercuts the point it exists to make.
 
-### Public starter repo *(separate repo, not this one)*
+### Public starter repo _(separate repo, not this one)_
+
 A minimal open-source template giving any project the same enforcement pattern: token structure, lint rules, an AI context file, a docs template, and a pre-merge checklist.
 
 **Write this from scratch.** The VimUI guidelines, lint rules, and `CLAUDE.md` are work product created for Vimocity — do not copy or closely derive from company files. Author an independent, generic version of the same idea. It makes a better template anyway, since a starter shouldn't carry one company's conventions. Worth a quick conversation with leadership before publishing.
@@ -188,7 +194,7 @@ Rules for the codebase itself are in `CLAUDE.md` at the repo root.
 ## 10. Build order
 
 1. Bento index with real copy, placeholder cards
-2. Token layer + theme system, **high contrast built first** *(do early — it shapes everything after)*
+2. Token layer + theme system, **high contrast built first** _(do early — it shapes everything after)_
 3. Theme colors page with live contrast readout
 4. Guardrails case study
 5. VimUI case study
@@ -197,7 +203,7 @@ Rules for the codebase itself are in `CLAUDE.md` at the repo root.
 8. Colophon
 9. Inspector overlay
 10. Playlist and live cards
-11. Starter repo *(separate repo, any time after step 5)*
+11. Starter repo _(separate repo, any time after step 5)_
 
 **Applications can start after step 5.** Two strong case studies beat six mediocre ones. Don't let the site become the reason he hasn't applied.
 

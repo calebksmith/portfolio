@@ -47,7 +47,11 @@ export default async function CaseStudyPage({
   // No breadcrumb in the page — the site header carries the path, and the Work
   // crumb in it lists the other case studies.
   return (
-    <main id="main" tabIndex={-1} className="mx-auto w-full max-w-page px-6 py-14 sm:px-10">
+    <main
+      id="main"
+      tabIndex={-1}
+      className="mx-auto w-full max-w-page px-6 py-14 sm:px-10"
+    >
       <article>
         <header className="border-b border-border pb-8">
           <Eyebrow>

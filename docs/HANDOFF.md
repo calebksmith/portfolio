@@ -11,16 +11,16 @@ where things stand.
 sign-in and admin light up when the environment is configured, and cannot be
 published as doors that lead nowhere.
 
-| Route | Status |
-|---|---|
-| `/` | live — bento index |
-| `/work/[slug]` | live — 5 case studies, prerendered |
-| `/resume` | live — with print-to-PDF |
-| `/style-guide` | live — tokens, type, contrast, live components, inspector |
-| `/colophon` | live — architecture writeup |
-| `/themes` | 308 → `/style-guide` |
-| `/robots.txt`, `/sitemap.xml` | live — private routes disallowed |
-| `/sign-in`, `/admin`, `/letter/[token]` | 404 until `DATABASE_URL` is set |
+| Route                                   | Status                                                    |
+| --------------------------------------- | --------------------------------------------------------- |
+| `/`                                     | live — bento index                                        |
+| `/work/[slug]`                          | live — 5 case studies, prerendered                        |
+| `/resume`                               | live — with print-to-PDF                                  |
+| `/style-guide`                          | live — tokens, type, contrast, live components, inspector |
+| `/colophon`                             | live — architecture writeup                               |
+| `/themes`                               | 308 → `/style-guide`                                      |
+| `/robots.txt`, `/sitemap.xml`           | live — private routes disallowed                          |
+| `/sign-in`, `/admin`, `/letter/[token]` | 404 until `DATABASE_URL` is set                           |
 
 Preview: `portfolio-git-develop-calebksmith1.vercel.app` (SSO-protected).
 
@@ -74,7 +74,7 @@ persisted — a debugging overlay should not greet a recruiter on their next
 visit.
 
 The part worth pointing at in an interview: it resolves rendered values
-*backwards* to token names, so it reports on the token layer rather than dumping
+_backwards_ to token names, so it reports on the token layer rather than dumping
 CSS, and it names anything that resolves to no token as a violation. While it is
 on, every `[data-slot]` becomes a tab stop, and the previous `tabindex` is
 recorded and restored on exit.
@@ -117,7 +117,7 @@ What extracts cleanly, all of it already written here:
   keeping its own copy of the values
 - `eslint-plugin-jsx-a11y` at strict, wired without re-registering the plugin
 - `CLAUDE.md` as the AI context file, which is the piece that makes it a
-  *guardrails* starter rather than a component starter
+  _guardrails_ starter rather than a component starter
 - The `data-slot` convention plus the inspector that reads it
 - `/style-guide` as a Storybook substitute that cannot drift from the code
 
@@ -137,7 +137,6 @@ form someone can clone.
 ---
 
 ## Open items needing Caleb
-
 
 2. **The admin / OAuth / cover-letter system is parked**, not cut. It does not
    appear in `PROJECT-CONTEXT.md`'s content architecture. The code is in the

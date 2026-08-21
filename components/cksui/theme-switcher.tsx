@@ -41,7 +41,12 @@ export function ThemeSwitcher({ className }: { className?: string }) {
    * above sees the attribute change and re-renders, so the DOM stays the single
    * source of truth instead of being shadowed by a second copy in React.
    */
-  function apply(attribute: string, cookie: string, value: string, fallback: string) {
+  function apply(
+    attribute: string,
+    cookie: string,
+    value: string,
+    fallback: string,
+  ) {
     const root = document.documentElement;
     if (value === fallback) root.removeAttribute(attribute);
     else root.setAttribute(attribute, value);

@@ -13,9 +13,7 @@ import { showLetters } from "@/lib/flags";
  * error. Nested admin pages call the guard again — this layout is convenience,
  * not the security boundary. See lib/auth-guard.ts.
  */
-export default async function AdminLayout({
-  children,
-}: LayoutProps<"/admin">) {
+export default async function AdminLayout({ children }: LayoutProps<"/admin">) {
   // Not published yet — 404 rather than redirect, so production reveals nothing
   // about an admin area existing at all.
   if (!showLetters()) notFound();

@@ -10,11 +10,11 @@ codebase is held to: [`CLAUDE.md`](../CLAUDE.md).
 
 ## Three surfaces
 
-| Surface | Audience | Requirement |
-|---|---|---|
-| Public portfolio | Anyone | Fast, static, indexable |
-| Admin | Me | Authenticated, write-heavy |
-| Cover letters | One hiring manager, by link | Private, unguessable, one per opening |
+| Surface          | Audience                    | Requirement                           |
+| ---------------- | --------------------------- | ------------------------------------- |
+| Public portfolio | Anyone                      | Fast, static, indexable               |
+| Admin            | Me                          | Authenticated, write-heavy            |
+| Cover letters    | One hiring manager, by link | Private, unguessable, one per opening |
 
 The third one shaped most of what follows.
 
@@ -102,8 +102,7 @@ The actual need was cover letters. A CV is a document assembled from parts; a
 letter is prose addressed to one reader. There is nothing to select and reorder,
 so all of that machinery was elaborate infrastructure around a `text` column.
 
-So six tables were deleted rather than migrated. Case studies are files (ADR
-0004) and the résumé is structured data, so none of them had a reader left.
+So six tables were deleted rather than migrated. Case studies are files (ADR 0004) and the résumé is structured data, so none of them had a reader left.
 Unused schema is a claim about the future that has to be maintained and
 explained. Sixteen tables became seven.
 
