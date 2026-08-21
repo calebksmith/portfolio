@@ -113,15 +113,27 @@ export function ContrastTable() {
               <tr key={row.label} className="border-b border-border">
                 <th scope="row" className="py-3 pr-4 font-normal">
                   <span className="flex items-center gap-2.5">
+                    {/*
+                      Text pairs get letters; non-text pairs get a boundary.
+                      Drawing "Aa" in `background / input` implied that pair was
+                      for text — it is a control boundary held to 3:1, so the
+                      letters were unreadable by construction and Lighthouse was
+                      right to fail the page for it. The swatch now shows each
+                      pair doing the job it exists for.
+                    */}
                     <span
                       aria-hidden="true"
                       className="inline-flex size-6 shrink-0 items-center justify-center rounded-sm border border-border text-label-sm"
-                      style={{
-                        background: row.surfaceValue,
-                        color: row.foregroundValue,
-                      }}
+                      style={{ background: row.surfaceValue }}
                     >
-                      Aa
+                      {row.nonText ? (
+                        <span
+                          className="size-3 rounded-[1px] border-2"
+                          style={{ borderColor: row.foregroundValue }}
+                        />
+                      ) : (
+                        <span style={{ color: row.foregroundValue }}>Aa</span>
+                      )}
                     </span>
                     <span>
                       {row.label}

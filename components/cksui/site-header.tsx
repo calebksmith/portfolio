@@ -135,7 +135,7 @@ export function SiteHeader({ work }: { work: WorkItem[] }) {
                 {crumb.kind === "mark" ? (
                   <Link
                     href={crumb.href}
-                    aria-label="Caleb Smith — home"
+                    aria-label="CS — Caleb Smith, home"
                     aria-current={pathname === "/" ? "page" : undefined}
                     className="inline-flex min-h-tap items-center rounded-sm transition-opacity hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
                   >

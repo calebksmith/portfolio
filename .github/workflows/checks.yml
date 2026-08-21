@@ -49,3 +49,34 @@ jobs:
 
       - name: Build
         run: npm run build
+
+  # Separate job: it needs a production build and a real Chrome, and takes
+  # minutes where the gates above take seconds. Failing fast on a type error
+  # should not wait behind fifteen Lighthouse runs.
+  lighthouse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+      - run: npm run build
+
+      # `lhci autorun` starts the production server itself, measures five pages
+      # three times each, and fails the job on a broken assertion. Accessibility,
+      # best practices and SEO are errors below 100 — those are the claims this
+      # site makes. Performance is a budget at 80 rather than a gate: the
+      # homepage hero types its own text, and Lighthouse measures that as slow
+      # paint. It is a trade that was measured and taken, not a regression.
+      - name: Lighthouse
+        run: npm run lighthouse
+
+      # Scores go in the job summary whether or not anything failed. A number
+      # nobody reads is a number nobody notices moving.
+      - name: Report scores
+        if: always()
+        run: npm run lighthouse:summary
