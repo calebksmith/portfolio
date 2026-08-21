@@ -37,7 +37,8 @@ what ships.
 **Accessibility is a gate, not an intention.** WCAG AA everywhere, AAA in the
 high-contrast theme, 44px minimum targets, `prefers-reduced-motion` honoured by
 every animation, and `eslint-plugin-jsx-a11y` running strict. Lighthouse
-accessibility is 100 on every page.
+accessibility is 100 on every page, measured on every push — below 100 fails
+the build.
 
 ## Checks
 
@@ -67,6 +68,28 @@ catches it instead.
 There is deliberately no component rendering in the test suite. `check:contrast`,
 strict `jsx-a11y`, and a Lighthouse accessibility score of 100 already cover what
 a render assertion would, and better.
+
+## Lighthouse, on every push
+
+```bash
+npm run lighthouse           # five pages, three runs each
+npm run lighthouse:summary   # the table
+```
+
+Five pages, three runs each, scored on Lighthouse's default **mobile** profile —
+a mid-range Android on throttled 4G. Desktop scores this site 100 across the
+board, which is true and flattering; mobile is what Google ranks on and what
+someone opening a link on a phone actually gets, so it is what gets gated.
+
+Accessibility, best practices and SEO **fail the build below 100**. Performance
+is a budget rather than a gate, because the homepage hero types its own text and
+Lighthouse correctly measures that as slow paint. The largest contentful paint
+element on the homepage _is_ the animation. That is a trade that was measured
+and taken, not a regression — and the budget is there so that if it gets worse
+for some other reason, someone finds out.
+
+Scores land in the GitHub Actions job summary on every run, passing or failing.
+A number nobody reads is a number nobody notices moving.
 
 ## Layout
 
