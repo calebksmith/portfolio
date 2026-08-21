@@ -15,7 +15,7 @@ import { REVEAL_TRANSITION, revealState } from "./reveal";
  * it is — the answer to "and if none of those?" — rather than competing with
  * them for the same glance.
  */
-const CUE_DELAY_MS = 2500;
+const CUE_DELAY_MS = 1500;
 
 /**
  * The prompt that closes the first screen.

@@ -52,6 +52,7 @@ export function CaseStudyCard({
         // The whole tile is the target, so the whole tile responds. The border
         // alone was too quiet to read as "this is clickable".
         "hover:border-input hover:bg-muted focus-within:border-input focus-within:bg-muted",
+        "has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-ring",
         style.pad,
       )}
     >

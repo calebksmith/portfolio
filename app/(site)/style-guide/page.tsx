@@ -36,7 +36,7 @@ const SECTIONS = [
 
 export default async function StyleGuidePage() {
   return (
-    <main className="w-full px-6 py-14 sm:px-10">
+    <main id="main" tabIndex={-1} className="mx-auto w-full max-w-page px-6 py-14 sm:px-10">
       <header className="border-b border-border pb-8">
         <h1 className="font-display text-[clamp(2rem,6vw,3rem)] font-semibold leading-[1.03] tracking-[-0.03em] text-balance text-foreground">
           Style guide

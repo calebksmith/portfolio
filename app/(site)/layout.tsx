@@ -1,4 +1,4 @@
-import { Inspector, SiteFooter, SiteHeader } from "@/components/cksui";
+import { Inspector, SiteFooter, SiteHeader, SkipLink } from "@/components/cksui";
 import { caseStudies } from "@/lib/content/work";
 import { site } from "@/lib/site";
 
@@ -18,6 +18,8 @@ export default function SiteLayout({ children }: LayoutProps<"/">) {
 
   return (
     <div className="flex min-h-full flex-1 flex-col">
+      {/* First in the tab order, before the header it exists to skip. */}
+      <SkipLink>Skip to content</SkipLink>
       <SiteHeader work={work} />
       {children}
       {/* No year: a notice needs a holder, not a date, and a date is a thing to
