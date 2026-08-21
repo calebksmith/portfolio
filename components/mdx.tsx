@@ -31,7 +31,10 @@ const components = {
     </h3>
   ),
   p: (props: React.ComponentProps<"p">) => (
-    <p className="mt-4 max-w-measure-wide text-pretty text-muted-foreground" {...props} />
+    <p
+      className="mt-4 max-w-measure-wide text-pretty text-muted-foreground"
+      {...props}
+    />
   ),
   // The measure lives here rather than on a container around the article: there
   // is no content container on this site, so anything made of sentences carries

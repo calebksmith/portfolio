@@ -27,14 +27,20 @@ export const metadata: Metadata = {
  */
 export default async function ExperiencePage() {
   return (
-    <main id="main" tabIndex={-1} className="mx-auto w-full max-w-page px-6 py-14 sm:px-10 print:px-0 print:py-0">
+    <main
+      id="main"
+      tabIndex={-1}
+      className="mx-auto w-full max-w-page px-6 py-14 sm:px-10 print:px-0 print:py-0"
+    >
       <header className="border-b border-border pb-8">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <h1 className="font-display text-[clamp(2rem,6vw,3rem)] font-semibold leading-[1.03] tracking-[-0.03em] text-foreground">
               {resume.name}
             </h1>
-            <Eyebrow tone="primary" className="mt-2">{resume.title}</Eyebrow>
+            <Eyebrow tone="primary" className="mt-2">
+              {resume.title}
+            </Eyebrow>
           </div>
 
           <PrintButton className="print:hidden" />
@@ -84,7 +90,10 @@ export default async function ExperiencePage() {
             <div className="flex flex-wrap items-baseline justify-between gap-x-4">
               <h3 className="font-display text-lg font-semibold tracking-[-0.01em] text-foreground">
                 {position.org}
-                <span className="text-muted-foreground"> · {position.location}</span>
+                <span className="text-muted-foreground">
+                  {" "}
+                  · {position.location}
+                </span>
               </h3>
               <Eyebrow>{position.period}</Eyebrow>
             </div>
@@ -178,7 +187,11 @@ function Section({
 }) {
   return (
     <section className="mt-10 break-inside-avoid">
-      <Eyebrow asChild tone="strong" className="mb-4 border-b border-input pb-1">
+      <Eyebrow
+        asChild
+        tone="strong"
+        className="mb-4 border-b border-input pb-1"
+      >
         <h2>{title}</h2>
       </Eyebrow>
       {children}

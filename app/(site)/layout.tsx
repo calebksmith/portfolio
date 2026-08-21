@@ -1,4 +1,9 @@
-import { Inspector, SiteFooter, SiteHeader, SkipLink } from "@/components/cksui";
+import {
+  Inspector,
+  SiteFooter,
+  SiteHeader,
+  SkipLink,
+} from "@/components/cksui";
 import { caseStudies } from "@/lib/content/work";
 import { site } from "@/lib/site";
 

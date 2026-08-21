@@ -29,6 +29,9 @@ jobs:
 
       # Ordered cheapest-first, so an obvious failure reports in seconds rather
       # than after a full build.
+      - name: Format
+        run: npm run check:format
+
       - name: Contrast — every token pair, 3 themes × 2 modes
         run: npm run check:contrast
 
@@ -40,6 +43,9 @@ jobs:
 
       - name: Lint
         run: npm run lint
+
+      - name: Tests
+        run: npm test
 
       - name: Build
         run: npm run build

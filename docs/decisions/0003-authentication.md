@@ -19,7 +19,7 @@ plus cookie teaches hashing and CSRF and stops there.
 
 **Auth.js v5 (`next-auth@beta`) with the GitHub provider.**
 
-Auth.js over a hosted vendor such as Clerk, specifically *because* Clerk's value
+Auth.js over a hosted vendor such as Clerk, specifically _because_ Clerk's value
 proposition is hiding the mechanics behind a drop-in component. Here the
 mechanics are the point.
 

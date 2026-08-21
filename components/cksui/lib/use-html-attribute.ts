@@ -29,7 +29,8 @@ export function useHtmlAttribute<T extends string>(
       return () => observer.disconnect();
     },
     () =>
-      (document.documentElement.getAttribute(attribute) as T | null) ?? fallback,
+      (document.documentElement.getAttribute(attribute) as T | null) ??
+      fallback,
     () => fallback,
   );
 }

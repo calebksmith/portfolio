@@ -42,18 +42,31 @@ accessibility is 100 on every page.
 ## Checks
 
 ```bash
+npm run check:format     # prettier
 npm run check:contrast   # every token pair, 3 themes × 2 modes
 npm run check:copy       # copy conventions the linter cannot see
 npm run typecheck
 npm run lint
+npm test                 # vitest
 npm run build
 ```
 
-CI runs all five on every push and pull request. `check:contrast` and
-`check:copy` are the interesting two: the first parses the stylesheet and
-computes WCAG ratios so the documentation and the gate read the same source; the
-second catches the things style guides lose to — one spelling of "frontend", one
-component count across eight files.
+CI runs all seven on every push and pull request, cheapest first.
+
+Three of them are the interesting ones. **`check:contrast`** parses
+`globals.css` and computes WCAG ratios, so the style guide and the gate read the
+same source and cannot disagree. **`check:copy`** catches what style guides lose
+to — one spelling of "frontend", one component count across eight files.
+**The tests** cover the colour maths, a hand-written frontmatter parser, and the
+content's own integrity: every `/work/<slug>` link in the MDX _and in the
+components_ has to resolve, and the case study titles quoted in the homepage hero
+have to still match the case studies. Renaming a study without updating the hero
+is valid TypeScript, passes lint, builds, and 404s for a reader — so a test
+catches it instead.
+
+There is deliberately no component rendering in the test suite. `check:contrast`,
+strict `jsx-a11y`, and a Lighthouse accessibility score of 100 already cover what
+a render assertion would, and better.
 
 ## Layout
 
@@ -75,8 +88,8 @@ behaviour, `cva` for variants — with every value rewritten onto the tokens. It
 source this repository owns, which is the whole reason it can be held to the
 rules above.
 
-**The inspector** (press *Inspect* in the header) reads computed styles off any
-element and resolves them *backwards* to token names. Anything that resolves to
+**The inspector** (press _Inspect_ in the header) reads computed styles off any
+element and resolves them _backwards_ to token names. Anything that resolves to
 no token is a violation, and the panel says so rather than hiding it.
 
 ## Deliberately absent

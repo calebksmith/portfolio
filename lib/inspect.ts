@@ -109,7 +109,8 @@ export type Inspection = {
 const RULES: Record<string, string> = {
   button:
     "Every variant pairs a surface with its foreground. Minimum target 44px, enforced in the component.",
-  badge: "Pairs only — a badge never sets a foreground its surface doesn't own.",
+  badge:
+    "Pairs only — a badge never sets a foreground its surface doesn't own.",
   card: "Carries text-card-foreground with its background, so nested content inherits a legible color.",
   "card-title": "Display face, balanced wrapping, no color of its own.",
   "card-description": "muted-foreground on the card surface.",
@@ -119,15 +120,19 @@ const RULES: Record<string, string> = {
     "Decorative: aria-hidden, visible at rest, no-op under reduced motion. The label carries the meaning.",
   "control-bar":
     "Ghost by design — no border against the header's own rule. Grouped by proximity and announced once.",
-  "control-button": "Instrument, not navigation. Inset focus ring so it never spills past the header.",
-  "control-toggle": "aria-pressed, because it turns a page mode on rather than submitting a value.",
-  "site-header": "Two zones: the path is plain text, the instruments are controls.",
+  "control-button":
+    "Instrument, not navigation. Inset focus ring so it never spills past the header.",
+  "control-toggle":
+    "aria-pressed, because it turns a page mode on rather than submitting a value.",
+  "site-header":
+    "Two zones: the path is plain text, the instruments are controls.",
   "theme-switcher":
     "Radio inputs, so arrow-key navigation and correct announcements come from the platform.",
   "case-study-card":
     "Filled surface plus an accent label — the label survives the single-column collapse a border would not.",
   "pointer-card": "Unfilled, so navigation never reads as work.",
-  "bento-tile": "Span follows content weight; hierarchy also carried by type scale.",
+  "bento-tile":
+    "Span follows content weight; hierarchy also carried by type scale.",
 };
 
 /** Elements that render text directly, rather than only arranging children. */

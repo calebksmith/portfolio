@@ -130,14 +130,18 @@ export function TokenTable() {
                 className="h-8 rounded-sm border"
                 style={{ borderColor: values[single.token] }}
               />
-              <p className="mt-3 text-sm text-card-foreground">{single.label}</p>
+              <p className="mt-3 text-sm text-card-foreground">
+                {single.label}
+              </p>
               <p className="text-xs text-muted-foreground">
                 --ck-{single.token}
               </p>
               <p className="mt-1 text-xs tabular-nums text-muted-foreground">
                 {values[single.token] || "—"}
               </p>
-              <p className="mt-2 text-xs text-muted-foreground">{single.note}</p>
+              <p className="mt-2 text-xs text-muted-foreground">
+                {single.note}
+              </p>
             </li>
           ))}
         </ul>

@@ -48,7 +48,11 @@ function Decision({
 }
 
 function P({ children }: { children: React.ReactNode }) {
-  return <p className="mb-3.5 max-w-measure-wide text-pretty text-muted-foreground">{children}</p>;
+  return (
+    <p className="mb-3.5 max-w-measure-wide text-pretty text-muted-foreground">
+      {children}
+    </p>
+  );
 }
 
 function Pull({ children }: { children: React.ReactNode }) {
@@ -118,14 +122,18 @@ function Node({
     >
       {label}
       {sub ? (
-        <span className="mt-0.5 block text-label-sm text-muted-foreground">{sub}</span>
+        <span className="mt-0.5 block text-label-sm text-muted-foreground">
+          {sub}
+        </span>
       ) : null}
     </div>
   );
 }
 
 function Arrow() {
-  return <div className="py-1 text-center text-sm text-muted-foreground">↓</div>;
+  return (
+    <div className="py-1 text-center text-sm text-muted-foreground">↓</div>
+  );
 }
 
 /* -------------------------------------------------------------------------- */
@@ -150,7 +158,12 @@ const surfaces = [
     need: "Fast, static, indexable",
     status: "Live",
   },
-  { who: "Me", name: "Admin", need: "Authenticated, write-heavy", status: "Live" },
+  {
+    who: "Me",
+    name: "Admin",
+    need: "Authenticated, write-heavy",
+    status: "Live",
+  },
   {
     who: "One hiring manager, by link",
     name: "Cover letters",
@@ -178,7 +191,11 @@ const pending = [
 
 export default async function ColophonPage() {
   return (
-    <main id="main" tabIndex={-1} className="mx-auto w-full max-w-page px-6 py-14 sm:px-10">
+    <main
+      id="main"
+      tabIndex={-1}
+      className="mx-auto w-full max-w-page px-6 py-14 sm:px-10"
+    >
       <header className="border-b border-border pb-8">
         <Eyebrow className="mb-5">Colophon · {site.name}</Eyebrow>
         <h1 className="font-display text-[clamp(2rem,6vw,3rem)] font-semibold leading-[1.03] tracking-[-0.03em] text-balance text-foreground">
@@ -203,17 +220,16 @@ export default async function ColophonPage() {
       <Section title="Three surfaces">
         <div className="grid gap-px overflow-hidden rounded-md border border-border bg-border sm:grid-cols-3">
           {surfaces.map((surface) => (
-            <div
-              key={surface.name}
-              className="flex flex-col gap-1 bg-card p-4"
-            >
+            <div key={surface.name} className="flex flex-col gap-1 bg-card p-4">
               <Eyebrow asChild size="sm">
                 <span>{surface.who}</span>
               </Eyebrow>
               <span className="font-display text-sm font-semibold text-foreground">
                 {surface.name}
               </span>
-              <span className="text-xs text-muted-foreground">{surface.need}</span>
+              <span className="text-xs text-muted-foreground">
+                {surface.need}
+              </span>
               <Eyebrow
                 size="sm"
                 tone={surface.status === "Live" ? "primary" : "muted"}
@@ -242,7 +258,10 @@ export default async function ColophonPage() {
           <Arrow />
           <div className="grid grid-cols-3 gap-1.5">
             <Node label={<code>(site)</code>} sub="static" />
-            <Node label={<code>/letter/[token]</code>} sub="per request, noindex" />
+            <Node
+              label={<code>/letter/[token]</code>}
+              sub="per request, noindex"
+            />
             <Node label={<code>(admin)</code>} sub="gated per route" />
           </div>
           <Arrow />
@@ -276,13 +295,13 @@ export default async function ColophonPage() {
         <Decision title="Tailwind v4, configured in CSS">
           <P>
             Tokens and the utility namespace sit in one file, twelve lines
-            apart, so they can&rsquo;t drift. Dark mode is defined per token, not
-            retrofitted. Focus rings always visible; animations no-op under
+            apart, so they can&rsquo;t drift. Dark mode is defined per token,
+            not retrofitted. Focus rings always visible; animations no-op under
             reduced motion. This page uses the same tokens.
           </P>
           <Pull>
-            Every color, radius, and duration resolves to a token. A hex value in
-            a component is a reviewable error.
+            Every color, radius, and duration resolves to a token. A hex value
+            in a component is a reviewable error.
           </Pull>
         </Decision>
 
@@ -303,9 +322,9 @@ export default async function ColophonPage() {
             invisible until it reaches someone using a screen reader.
           </P>
           <Pull>
-            cksUI stands in the same relation to this site that VimUI does to the
-            product I work on. The portfolio is an example of the claim rather
-            than a description of it.
+            cksUI stands in the same relation to this site that VimUI does to
+            the product I work on. The portfolio is an example of the claim
+            rather than a description of it.
           </Pull>
         </Decision>
 
@@ -330,8 +349,8 @@ export default async function ColophonPage() {
             <strong className="font-semibold text-foreground">
               Drizzle over Prisma
             </strong>{" "}
-            — lighter runtime, no codegen in the deploy path, migrations as plain
-            SQL reviewable in a PR. One file knows the database is Neon.
+            — lighter runtime, no codegen in the deploy path, migrations as
+            plain SQL reviewable in a PR. One file knows the database is Neon.
           </P>
         </Decision>
 
@@ -339,8 +358,9 @@ export default async function ColophonPage() {
           <P>
             For one user, a hashed password in an env var would be adequate
             security in eighty lines. I chose OAuth because OIDC is how modern
-            auth actually works and every enterprise SSO product is the same flow
-            with a different issuer — I wanted to build it, not read about it.
+            auth actually works and every enterprise SSO product is the same
+            flow with a different issuer — I wanted to build it, not read about
+            it.
           </P>
           <Verdict
             chosen={{
@@ -387,31 +407,33 @@ export default async function ColophonPage() {
             }}
           />
           <Pull>
-            The most useful thing I did to this database was take most of it out.
+            The most useful thing I did to this database was take most of it
+            out.
           </Pull>
-
         </Decision>
 
         <Decision title="The URL is the credential">
           <P>
-            No login, because asking a hiring manager to register to read a cover
-            letter is a good way to not have it read. The boundary is token
-            entropy: 32 bytes from a CSPRNG, generated in the repository layer,
-            never accepted as an argument.
+            No login, because asking a hiring manager to register to read a
+            cover letter is a good way to not have it read. The boundary is
+            token entropy: 32 bytes from a CSPRNG, generated in the repository
+            layer, never accepted as an argument.
           </P>
           <P>
             Accepted honestly: anyone with the link can read and forward it.
-            It&rsquo;s a letter written to be handed to someone I have never met,
-            so exposure is bounded by what it already is. It is also HTML only —
-            a downloadable copy would be a second artifact of the same content,
-            stale the moment a sentence changes. Mitigations: revoke, rotate,
-            expire,{" "}
+            It&rsquo;s a letter written to be handed to someone I have never
+            met, so exposure is bounded by what it already is. It is also HTML
+            only — a downloadable copy would be a second artifact of the same
+            content, stale the moment a sentence changes. Mitigations: revoke,
+            rotate, expire,{" "}
             <code className="rounded-sm bg-muted px-1.5 py-0.5 text-[0.9em] text-foreground">
               noindex
             </code>
             , and an{" "}
-            <strong className="font-semibold text-foreground">identical 404</strong> for
-            revoked, expired, draft, and nonexistent alike, so a recipient
+            <strong className="font-semibold text-foreground">
+              identical 404
+            </strong>{" "}
+            for revoked, expired, draft, and nonexistent alike, so a recipient
             can&rsquo;t learn a link was turned off — or that a company was ever
             sent one.
           </P>
@@ -449,10 +471,9 @@ export default async function ColophonPage() {
       </Section>
 
       <footer className="mt-16 border-t border-border pt-5 text-xs text-muted-foreground">
-        Per-decision records live in{" "}
-        <code>docs/decisions/</code>. The rules the codebase is held to live in{" "}
-        <code>CLAUDE.md</code> — which exists so the standard is applied by
-        default rather than corrected after the fact.
+        Per-decision records live in <code>docs/decisions/</code>. The rules the
+        codebase is held to live in <code>CLAUDE.md</code> — which exists so the
+        standard is applied by default rather than corrected after the fact.
       </footer>
     </main>
   );

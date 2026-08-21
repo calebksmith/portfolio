@@ -17,7 +17,11 @@ export const CASE_STUDY_STYLE: Record<
   Weight,
   { span: string; title: string; pad: string }
 > = {
-  large: { span: "lg:col-span-3", title: "text-xl sm:text-2xl", pad: "p-6 sm:p-7" },
+  large: {
+    span: "lg:col-span-3",
+    title: "text-xl sm:text-2xl",
+    pad: "p-6 sm:p-7",
+  },
   medium: { span: "lg:col-span-2", title: "text-base sm:text-lg", pad: "p-6" },
   small: { span: "lg:col-span-2", title: "text-base", pad: "p-6" },
 };

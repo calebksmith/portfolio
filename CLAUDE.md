@@ -7,7 +7,7 @@ Positioning: design systems, production frontend, and AI guardrails for
 design-to-code.
 
 The site is a work sample. Every decision should survive the question:
-*would an engineer interviewing me respect this?*
+_would an engineer interviewing me respect this?_
 
 Project background and build order: `docs/PROJECT-CONTEXT.md`.
 Approved copy for every page: `docs/copy-deck.md` — use it, don't rewrite it.

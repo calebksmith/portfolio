@@ -54,7 +54,8 @@ const ratio = (a, b) => {
 /** Returns the `--ck-*: #hex;` declarations of the block opened by `selector`. */
 function block(selector) {
   const start = css.indexOf(selector);
-  if (start === -1) throw new Error(`Selector not found in globals.css: ${selector}`);
+  if (start === -1)
+    throw new Error(`Selector not found in globals.css: ${selector}`);
   const open = css.indexOf("{", start);
   const end = css.indexOf("}", open);
   const body = css.slice(open + 1, end);
@@ -134,7 +135,10 @@ let failures = 0;
 // The two declarations of each dark theme must agree, or the toggle and the
 // system preference would render differently.
 for (const [name, selectors] of [
-  ["default · dark", [':root:not([data-mode="light"]) {', ':root[data-mode="dark"] {']],
+  [
+    "default · dark",
+    [':root:not([data-mode="light"]) {', ':root[data-mode="dark"] {'],
+  ],
   [
     "ember · dark",
     [

@@ -10,7 +10,6 @@ import { HeroRevealProvider } from "./hero-reveal";
 import { Reveal } from "./reveal";
 import { ScrollCue } from "./scroll-cue";
 
-
 /**
  * The bento index.
  *
@@ -147,7 +146,11 @@ export function Bento() {
        paragraphs below, not a wrapper around everything. A container sets one
        width for prose, grids, and headings alike, which is one decision doing
        three jobs. */
-    <main id="main" tabIndex={-1} className="mx-auto w-full max-w-page px-6 sm:px-10">
+    <main
+      id="main"
+      tabIndex={-1}
+      className="mx-auto w-full max-w-page px-6 sm:px-10"
+    >
       <HeroRevealProvider>
         {/*
           The first screen, exactly: the sticky header plus this and nothing

@@ -81,7 +81,8 @@ function InspectorOverlay() {
   useEffect(() => {
     const onPointerOver = (event: PointerEvent) =>
       inspect(inspectTarget(event.target));
-    const onFocusIn = (event: FocusEvent) => inspect(inspectTarget(event.target));
+    const onFocusIn = (event: FocusEvent) =>
+      inspect(inspectTarget(event.target));
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key !== "Escape") return;

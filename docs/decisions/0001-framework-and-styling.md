@@ -27,10 +27,10 @@ in the same file, twelve lines apart, so they cannot drift.
 
 **No installed UI library. A library we own instead: cksUI.**
 
-*Superseded an earlier version of this ADR that proposed adopting shadcn/ui for
+_Superseded an earlier version of this ADR that proposed adopting shadcn/ui for
 the admin surface. `PROJECT-CONTEXT.md` is explicit — "no UI component library;
 the point of this site is that he builds the UI" — and that constraint is
-correct for a portfolio whose central claim is owning a design system.*
+correct for a portfolio whose central claim is owning a design system._
 
 The distinction that resolves it: shadcn/ui is not a library you install. It is
 source you copy in and own. So `components/cksui/` is built on its patterns —
@@ -58,7 +58,7 @@ on speculatively against routes that are still shells.
 
 ## Consequences
 
-- Adding a color means editing one file. Adding a color *without* editing that
+- Adding a color means editing one file. Adding a color _without_ editing that
   file is a reviewable error.
 - The public site's performance floor is high, because there is nothing to
   hydrate.

@@ -31,10 +31,7 @@ export const env = {
   },
 
   get authSecret(): string {
-    return required(
-      "AUTH_SECRET",
-      "Generate one with `npx auth secret`.",
-    );
+    return required("AUTH_SECRET", "Generate one with `npx auth secret`.");
   },
 
   get githubClientId(): string {
@@ -59,10 +56,7 @@ export const env = {
    * Without this allowlist, anyone with a GitHub account could sign in.
    */
   get adminGithubLogins(): string[] {
-    return required(
-      "ADMIN_GITHUB_LOGINS",
-      "Set it to your GitHub username.",
-    )
+    return required("ADMIN_GITHUB_LOGINS", "Set it to your GitHub username.")
       .split(",")
       .map((login) => login.trim().toLowerCase())
       .filter(Boolean);

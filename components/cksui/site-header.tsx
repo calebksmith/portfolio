@@ -122,7 +122,10 @@ export function SiteHeader({ work }: { work: WorkItem[] }) {
         <nav aria-label="Breadcrumb" className="min-w-0 flex-1 overflow-x-auto">
           <ol className="flex items-center gap-2">
             {crumbs.map((crumb, index) => (
-              <li key={`${crumb.label}-${index}`} className="flex items-center gap-2">
+              <li
+                key={`${crumb.label}-${index}`}
+                className="flex items-center gap-2"
+              >
                 {index > 0 ? (
                   <span aria-hidden="true" className="text-muted-foreground">
                     /
@@ -151,7 +154,10 @@ export function SiteHeader({ work }: { work: WorkItem[] }) {
                 ) : crumb.kind === "menu" ? (
                   <WorkMenu work={work} currentSlug={currentSlug} />
                 ) : (
-                  <span className={cn(CRUMB, "text-foreground")} aria-current="page">
+                  <span
+                    className={cn(CRUMB, "text-foreground")}
+                    aria-current="page"
+                  >
                     {crumb.label}
                   </span>
                 )}
@@ -258,7 +264,8 @@ function WorkMenu({
  * overlay is a sibling, not a child, and the attribute is what both read.
  */
 function InspectToggle() {
-  const active = useHtmlAttribute<"on" | "off">(INSPECT_ATTRIBUTE, "off") === "on";
+  const active =
+    useHtmlAttribute<"on" | "off">(INSPECT_ATTRIBUTE, "off") === "on";
 
   return (
     <ControlToggle
