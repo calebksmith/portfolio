@@ -32,6 +32,8 @@
   --ck-primary-foreground: #ffffff;
   --ck-accent: #e5e0fd;
   --ck-accent-foreground: #2c1a8c;
+  --ck-mark-ground: #14161b;
+  --ck-mark-ink: #a78bfa;
   --ck-positive: #d9f0e1;
   --ck-positive-foreground: #0d5129;
   --ck-destructive: #fbe1e1;
@@ -82,7 +84,18 @@
      case study bodies, style guide descriptions — where a column half the
      window's width reads as an unfinished layout rather than as care. */
   --ck-measure: 62ch;
-  --ck-measure-wide: 90ch;
+  --ck-measure-wide: 75ch;
+
+
+  /* The page container. Content ran to the window's full width, which on a wide
+     monitor left every page hugging the left gutter with a field of empty space
+     to the right — the measure capped the line length but nothing centred it,
+     so the result read as unfinished rather than as restraint.
+
+     72rem holds a six-column bento at a sensible card size and leaves prose at
+     roughly two thirds of it, which is the relationship a page wants: headings
+     span the container, sentences do not. */
+  --ck-container: 72rem;
 }
 
 /* --- default · dark ------------------------------------------------------- */
@@ -101,6 +114,8 @@
     --ck-primary-foreground: #14161b;
     --ck-accent: #241c46;
     --ck-accent-foreground: #c9b8fd;
+    --ck-mark-ground: #a78bfa;
+    --ck-mark-ink: #14161b;
     --ck-positive: #12291c;
     --ck-positive-foreground: #7fd9a3;
     --ck-destructive: #2e1517;
@@ -126,6 +141,8 @@
   --ck-primary-foreground: #14161b;
   --ck-accent: #241c46;
   --ck-accent-foreground: #c9b8fd;
+  --ck-mark-ground: #a78bfa;
+  --ck-mark-ink: #14161b;
   --ck-positive: #12291c;
   --ck-positive-foreground: #7fd9a3;
   --ck-destructive: #2e1517;
@@ -152,6 +169,8 @@
   --ck-primary-foreground: #ffffff;
   --ck-accent: #fbe3d8;
   --ck-accent-foreground: #7a2708;
+  --ck-mark-ground: #14161b;
+  --ck-mark-ink: #f08a5d;
   --ck-positive: #dcefdf;
   --ck-positive-foreground: #14512a;
   --ck-destructive: #fbe0da;
@@ -179,6 +198,8 @@
     --ck-primary-foreground: #1a1614;
     --ck-accent: #3a1f12;
     --ck-accent-foreground: #f6b393;
+    --ck-mark-ground: #f08a5d;
+    --ck-mark-ink: #14161b;
     --ck-positive: #17291b;
     --ck-positive-foreground: #8fd49b;
     --ck-destructive: #331814;
@@ -204,6 +225,8 @@
   --ck-primary-foreground: #1a1614;
   --ck-accent: #3a1f12;
   --ck-accent-foreground: #f6b393;
+  --ck-mark-ground: #f08a5d;
+  --ck-mark-ink: #14161b;
   --ck-positive: #17291b;
   --ck-positive-foreground: #8fd49b;
   --ck-destructive: #331814;
@@ -230,6 +253,8 @@
   --ck-primary-foreground: #ffffff;
   --ck-accent: #ececf7;
   --ck-accent-foreground: #00006b;
+  --ck-mark-ground: #000000;
+  --ck-mark-ink: #ffffff;
   --ck-positive: #e6f4ea;
   --ck-positive-foreground: #00380f;
   --ck-destructive: #fdeaea;
@@ -259,6 +284,8 @@
     --ck-primary-foreground: #000000;
     --ck-accent: #12121c;
     --ck-accent-foreground: #eaeaff;
+    --ck-mark-ground: #ffffff;
+    --ck-mark-ink: #000000;
     --ck-positive: #0a1a0e;
     --ck-positive-foreground: #baf5c9;
     --ck-destructive: #1a0a0a;
@@ -284,6 +311,8 @@
   --ck-primary-foreground: #000000;
   --ck-accent: #12121c;
   --ck-accent-foreground: #eaeaff;
+  --ck-mark-ground: #ffffff;
+  --ck-mark-ink: #000000;
   --ck-positive: #0a1a0e;
   --ck-positive-foreground: #baf5c9;
   --ck-destructive: #1a0a0a;
@@ -317,6 +346,8 @@
      `hover:opacity-90` was the old answer and it was two bugs: opacity is not
      in `transition-colors`, so it snapped, and fading a button fades its label
      with it — dropping the very contrast the pairs exist to guarantee. */
+  --color-mark-ground: var(--ck-mark-ground);
+  --color-mark-ink: var(--ck-mark-ink);
   --color-primary-hover: var(--ck-primary-hover);
   --color-accent-hover: var(--ck-accent-hover);
   --color-positive: var(--ck-positive);
@@ -345,6 +376,7 @@
      because there was no utility to reach for. */
   --container-measure: var(--ck-measure);
   --container-measure-wide: var(--ck-measure-wide);
+  --container-page: var(--ck-container);
 
   /* Motion defaults, not utilities. Tailwind has no `--duration-*` namespace —
      `duration-150` is a literal — but it does take a default, so setting these
@@ -575,6 +607,8 @@ body {
     --ck-primary-foreground: #ffffff;
     --ck-accent: #ffffff;
     --ck-accent-foreground: #000000;
+    --ck-mark-ground: #000000;
+    --ck-mark-ink: #ffffff;
     --ck-positive: #ffffff;
     --ck-positive-foreground: #000000;
     --ck-destructive: #ffffff;

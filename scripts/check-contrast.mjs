@@ -104,6 +104,10 @@ const PAIRS = [
   // reads as "good" is worth nothing if the text on it cannot be read, and the
   // Chosen/Rejected labels stay precisely because colour is never the only
   // signal.
+  // The mark's own pair. A logo is exempt from WCAG, but a mark whose letters
+  // stop reading on its own tile is a broken mark regardless of what the spec
+  // requires — and this is the one asset that appears on every page.
+  ["mark-ground", "mark-ink"],
   ["positive", "positive-foreground"],
   ["destructive", "destructive-foreground"],
   ["background", "muted-foreground"],

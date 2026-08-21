@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { INSPECT_ATTRIBUTE } from "@/lib/theme";
 
 import { ControlBar, ControlButton, ControlToggle } from "./control-bar";
+import { Monogram } from "./monogram";
 import { cn } from "./lib/cn";
 import { useHtmlAttribute } from "./lib/use-html-attribute";
 import { usePopoverOpen } from "./lib/use-popover-open";
@@ -60,9 +61,10 @@ function buildCrumbs(pathname: string, work: WorkItem[]): Crumb[] {
     return [{ kind: "mark", label: "CS", href: "/" }];
   }
 
-  const crumbs: Crumb[] = [
-    { kind: "link", label: "Caleb Smith", href: "/" },
-  ];
+  // The mark stands in for the name on inner pages too — one root for the trail,
+  // the same object in every header, and it buys back the horizontal space that
+  // "CALEB SMITH" was taking from the path on a phone.
+  const crumbs: Crumb[] = [{ kind: "mark", label: "CS", href: "/" }];
 
   segments.forEach((segment, index) => {
     const isLast = index === segments.length - 1;
@@ -128,20 +130,13 @@ export function SiteHeader({ work }: { work: WorkItem[] }) {
                 ) : null}
 
                 {crumb.kind === "mark" ? (
-                  /* The display face and a heavier weight, so it reads as a
-                     mark rather than as the first word of a path. It links to
-                     the page it is on, which is what a logo does — so it says
-                     so rather than pretending to navigate. */
                   <Link
                     href={crumb.href}
-                    aria-current="page"
                     aria-label="Caleb Smith — home"
-                    className={cn(
-                      CRUMB,
-                      "rounded-sm font-display text-sm font-semibold tracking-[-0.01em] text-foreground transition-colors hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
-                    )}
+                    aria-current={pathname === "/" ? "page" : undefined}
+                    className="inline-flex min-h-tap items-center rounded-sm transition-opacity hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
                   >
-                    {crumb.label}
+                    <Monogram />
                   </Link>
                 ) : crumb.kind === "link" ? (
                   <Link

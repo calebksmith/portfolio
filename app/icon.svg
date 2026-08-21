@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- The mark, drawn without assuming a font is available. An SVG favicon can
+       follow the reader's colour scheme, so it inverts the same way the header
+       does: ink tile on light chrome, purple tile on dark. -->
+  <style>
+    .ground { fill: #14161b }
+    .ink    { fill: #a78bfa }
+    @media (prefers-color-scheme: dark) {
+      .ground { fill: #a78bfa }
+      .ink    { fill: #14161b }
+    }
+  </style>
+  <rect class="ground" width="64" height="64" rx="14"/>
+  <text class="ink" x="32" y="33"
+        font-family="Archivo, ui-sans-serif, system-ui, 'Helvetica Neue', Arial, sans-serif"
+        font-size="27" font-weight="500" letter-spacing="-0.5"
+        text-anchor="middle" dominant-baseline="central">CS</text>
+</svg>

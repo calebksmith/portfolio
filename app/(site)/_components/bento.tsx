@@ -73,6 +73,7 @@ function PointerCard({
       className={cn(
         "group relative flex h-full flex-col gap-2 rounded-lg border border-border bg-background p-6 transition-colors",
         "hover:border-input hover:bg-muted focus-within:border-input focus-within:bg-muted",
+        "has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-ring",
         className,
       )}
     >
@@ -146,7 +147,7 @@ export function Bento() {
        paragraphs below, not a wrapper around everything. A container sets one
        width for prose, grids, and headings alike, which is one decision doing
        three jobs. */
-    <main className="w-full px-6 sm:px-10">
+    <main id="main" tabIndex={-1} className="mx-auto w-full max-w-page px-6 sm:px-10">
       <HeroRevealProvider>
         {/*
           The first screen, exactly: the sticky header plus this and nothing

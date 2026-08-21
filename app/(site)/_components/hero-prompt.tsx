@@ -125,9 +125,7 @@ const PROMPTS: Prompt[] = [
 ];
 
 /** A beat of blank page with a live cursor before the first character lands. */
-const OPENING_WAIT_MS = 1000;
-/** And a shorter one between the statement and the question that follows it. */
-const BETWEEN_LINES_MS = 500;
+const OPENING_WAIT_MS = 500;
 
 export function HeroPrompt({ className }: { className?: string }) {
   const { markSettled } = useHeroReveal();
@@ -139,10 +137,11 @@ export function HeroPrompt({ className }: { className?: string }) {
   // Two lines in sequence: the statement, then the question. The second gates on
   // the first being finished rather than running its own timer, so the pause
   // between them cannot drift out of step with the typing speed.
-  const intro = useTypedText(INTRO, { delayMs: OPENING_WAIT_MS });
-  const question = useTypedText(QUESTION, {
-    enabled: intro.complete,
-    delayMs: BETWEEN_LINES_MS,
+  // Only the statement types. The question and the options arrive together,
+  // faded in — two things typing in sequence made the reader wait twice for one
+  // idea, and the question is a prompt rather than a thought being formed.
+  const intro = useTypedText(INTRO, {
+    delayMs: OPENING_WAIT_MS,
     onDone: markSettled,
   });
 
@@ -161,16 +160,15 @@ export function HeroPrompt({ className }: { className?: string }) {
         caret={intro.complete ? null : <Caret writing={intro.writing} />}
       />
 
-      <TypedLine
-        full={QUESTION}
-        typed={question.text}
-        className="mt-9 text-lg text-pretty text-muted-foreground"
-        caret={
-          intro.complete && !selected ? (
-            <Caret writing={question.writing} />
-          ) : null
-        }
-      />
+      <p
+        aria-hidden="true"
+        className={`mt-9 text-lg text-pretty text-muted-foreground ${REVEAL_TRANSITION} ${revealState(
+          intro.complete,
+        )}`}
+      >
+        {QUESTION}
+        {selected ? null : <Caret writing={false} />}
+      </p>
 
       {/*
         Held back until the question has finished being asked — `invisible`
@@ -179,7 +177,7 @@ export function HeroPrompt({ className }: { className?: string }) {
       */}
       <ul
         className={`mt-5 flex flex-wrap gap-2 ${REVEAL_TRANSITION} ${revealState(
-          question.complete,
+          intro.complete,
         )}`}
       >
         {PROMPTS.map((prompt) => (
