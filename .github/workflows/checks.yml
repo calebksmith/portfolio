@@ -1,0 +1,45 @@
+# The five gates, run on every push and pull request.
+#
+# They existed as npm scripts long before this file did, which meant they ran
+# when someone remembered. A standard that depends on remembering is the exact
+# failure the guardrails case study in this repository is about — so it would be
+# a strange thing to leave unautomated here.
+#
+# One job, not five. These take seconds and share an install; parallel jobs would
+# spend more time restoring node_modules than running the checks.
+name: Checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # Ordered cheapest-first, so an obvious failure reports in seconds rather
+      # than after a full build.
+      - name: Contrast — every token pair, 3 themes × 2 modes
+        run: npm run check:contrast
+
+      - name: Copy conventions
+        run: npm run check:copy
+
+      - name: Types
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
