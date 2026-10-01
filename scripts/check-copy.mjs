@@ -49,10 +49,10 @@ const RULES = [
   },
   {
     id: "component-count",
-    // The VimUI component count appears in eight places — the hero, a bento
-    // card, the résumé, the case study, and four spots in the copy deck. They
-    // drifted into "51" and "50+" at the same time, which is the kind of thing
-    // an interviewer notices and every other number on the page then pays for.
+    // The VimUI component count appears in several places — the hero, a bento
+    // card, the résumé, and the case study. It once drifted into "51" and
+    // "50+" at the same time, which is the kind of thing an interviewer
+    // notices and every other number on the page then pays for.
     pattern: /\b\d{2} components\b/g,
     message: 'the component count is written "50+ components"',
   },

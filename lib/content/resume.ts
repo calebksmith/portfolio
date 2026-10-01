@@ -6,8 +6,8 @@
  * shape means the same data renders as a page and as a print stylesheet without
  * two copies drifting apart.
  *
- * Copy is the approved text from docs/copy-deck.md §3. Do not rewrite it to fit
- * a layout — change the layout. Metrics here are approved and defensible; do
+ * This file is the source of truth for the résumé copy. Do not rewrite it to
+ * fit a layout — change the layout. Metrics here are approved and defensible; do
  * not invent or extrapolate new ones.
  */
 

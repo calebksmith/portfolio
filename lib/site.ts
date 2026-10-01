@@ -1,8 +1,8 @@
 /**
  * Site identity.
  *
- * Copy here is the approved text from the copy deck. Do not rewrite it to fit
- * a layout — change the layout. Anything appearing in more than one place (the
+ * This file is the source of truth for site identity copy. Do not rewrite it to
+ * fit a layout — change the layout. Anything appearing in more than one place (the
  * name in the header and in the OG title) lives here rather than being retyped.
  */
 
