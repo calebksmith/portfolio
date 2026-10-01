@@ -17,5 +17,8 @@ export const site = {
     practice: "https://www.moderntrailhead.com",
     /** The repository is public, and part of the work sample. */
     source: "https://github.com/calebksmith/portfolio",
+    /** The design-system lint rules, where the style guide points. */
+    rules:
+      "https://github.com/calebksmith/portfolio/blob/main/eslint-rules/ck.mjs",
   },
 } as const;

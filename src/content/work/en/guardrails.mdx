@@ -78,6 +78,40 @@ checked by the system rather than by someone remembering to look.
   happened.
 - The standard survives contact with an agent, because it was written for one.
 
+## See it on this site
+
+The rules at work live in private repositories, so they can't be shown here.
+This site runs the same three layers, written from scratch for a portfolio, and
+all of it is public:
+
+- **The agent rules:** the
+  [Claude Code file](https://github.com/calebksmith/portfolio/blob/main/CLAUDE.md)
+  covering tokens, surface and text pairs, component conventions, and where
+  copy lives.
+- **The review skill:**
+  [design review](https://github.com/calebksmith/portfolio/blob/main/.claude/skills/design-review/SKILL.md),
+  a readiness check for any change before it ships, including the parts no
+  linter can judge.
+- **The gate:**
+  [five lint rules](https://github.com/calebksmith/portfolio/blob/main/eslint-rules/ck.mjs)
+  plus the contrast, copy, and Lighthouse checks, run on every pull request.
+  Nothing merges until they pass.
+
+This is what a failure looks like. A surface drawn with a text color the
+contrast check has never measured:
+
+```
+<section className="rounded-lg bg-accent p-5 text-muted-foreground">
+```
+
+```
+"bg-accent" is drawn with "text-muted-foreground", a pair the contrast
+gate never measures. Use `text-accent-foreground`, or add the pair to
+scripts/contrast-pairs.mjs so it is measured.        ck/paired-surface
+```
+
+The full list, in plain language, is in the [style guide](/style-guide#rules).
+
 ## Why it matters
 
 Most teams are adding AI to their workflow without deciding what "correct" means

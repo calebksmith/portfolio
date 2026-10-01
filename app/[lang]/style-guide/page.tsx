@@ -6,6 +6,7 @@ import { RichText } from "@/components/rich-text";
 import { isLocale } from "@/lib/i18n/config";
 import { alternates } from "@/lib/i18n/metadata";
 import { messages } from "@/lib/i18n/messages";
+import { site } from "@/lib/site";
 
 import { ContrastTable } from "./contrast-table";
 import { Motion } from "./motion";
@@ -47,6 +48,7 @@ const SECTION_IDS = [
   "typography",
   "motion",
   "components",
+  "rules",
 ] as const;
 
 /** The specimen rows, in order. The classes are the point; the copy is not. */
@@ -169,6 +171,47 @@ export default async function StyleGuidePage({
 
             <p className="mt-4 max-w-measure-wide text-pretty text-xs text-muted-foreground">
               <RichText>{t.playgroundNote}</RichText>
+            </p>
+          </Section>
+
+          <Section id="rules" title={t.sections.rules}>
+            <p className="max-w-measure-wide text-pretty text-muted-foreground">
+              <RichText>{t.rulesIntro}</RichText>
+            </p>
+
+            {/* A definition list: each rule is a term, and what it means and
+                what checks it are its description. */}
+            <dl className="mt-6 divide-y divide-border rounded-lg border border-border bg-card">
+              {t.rules.map((rule) => (
+                <div
+                  key={rule.check}
+                  className="grid gap-x-6 gap-y-1 p-5 sm:grid-cols-[1fr_auto]"
+                >
+                  <dt className="font-medium text-card-foreground">
+                    {rule.title}
+                  </dt>
+                  <dd className="sm:row-span-2 sm:text-right">
+                    <code className="rounded-sm bg-muted px-1.5 py-0.5 text-xs text-foreground">
+                      {rule.check}
+                    </code>
+                  </dd>
+                  <dd className="max-w-measure-wide text-sm text-pretty text-muted-foreground">
+                    {rule.why}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+
+            <p className="mt-6 max-w-measure-wide text-pretty text-sm text-muted-foreground">
+              {t.rulesReview}
+            </p>
+            <p className="mt-3 text-sm">
+              <a
+                href={site.links.rules}
+                className="inline-flex min-h-tap items-center rounded-sm text-primary underline underline-offset-4 hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+              >
+                {t.rulesSource}
+              </a>
             </p>
           </Section>
         </div>
