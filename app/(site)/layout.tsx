@@ -7,6 +7,8 @@ import {
 import { caseStudies } from "@/lib/content/work";
 import { site } from "@/lib/site";
 
+import { SmoothAnchors } from "./_components/smooth-anchors";
+
 /**
  * Chrome for the public site.
  *
@@ -22,16 +24,23 @@ export default function SiteLayout({ children }: LayoutProps<"/">) {
   const work = caseStudies.map(({ slug, title }) => ({ slug, title }));
 
   return (
-    <div className="flex min-h-full flex-1 flex-col">
-      {/* First in the tab order, before the header it exists to skip. */}
-      <SkipLink>Skip to content</SkipLink>
-      <SiteHeader work={work} />
-      {children}
-      {/* No year: a notice needs a holder, not a date, and a date is a thing to
+    /* A row at every size: the inspector is a sibling column, so opening it
+       narrows the site rather than covering it, and everything — including the
+       header and its own toggle — stays reachable. */
+    <div className="flex min-h-full flex-1 flex-row">
+      <div className="flex min-w-0 flex-1 flex-col">
+        {/* First in the tab order, before the header it exists to skip. */}
+        <SmoothAnchors />
+        <SkipLink>Skip to content</SkipLink>
+        <SiteHeader work={work} />
+        {children}
+        {/* No year: a notice needs a holder, not a date, and a date is a thing to
           remember to change. The name appears once, as the copyright holder,
           and the credit uses the same first person as the rest of the site
           rather than repeating it. */}
-      <SiteFooter>© {site.name} · Designed and built by me</SiteFooter>
+        <SiteFooter>© {site.name} · Designed and built by me</SiteFooter>
+      </div>
+
       <Inspector />
     </div>
   );

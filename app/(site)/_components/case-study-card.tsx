@@ -49,10 +49,14 @@ export function CaseStudyCard({
   return (
     <article
       data-slot="case-study-card"
+      data-glow=""
       // Grid placement lives on the Reveal wrapper, since that is what the grid
       // actually lays out. `h-full` keeps the card filling its cell.
       className={cn(
-        "group relative flex h-full flex-col gap-3 rounded-lg border border-border bg-card text-card-foreground transition-colors",
+        "group relative flex h-full cursor-pointer flex-col gap-3 rounded-lg border border-border bg-card text-card-foreground",
+        // The lift is transform and shadow, so it is named explicitly —
+        // `transition-colors` would animate the fill and snap the movement.
+        "transition-[color,background-color,border-color,transform,box-shadow] hover:-translate-y-0.5 hover:shadow-lift focus-within:-translate-y-0.5 focus-within:shadow-lift",
         // The whole tile is the target, so the whole tile responds. The border
         // alone was too quiet to read as "this is clickable".
         "hover:border-input hover:bg-muted focus-within:border-input focus-within:bg-muted",

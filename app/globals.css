@@ -49,6 +49,8 @@
   --ck-ring: #4a2ce0;
 
   /* --- Non-color tokens. Theme-independent. --- */
+  --ck-shadow-lift: 0 6px 20px -6px rgb(0 0 0 / 0.18);
+
   --ck-radius-sm: 2px;
   --ck-radius-md: 4px;
   --ck-radius-lg: 8px;
@@ -56,6 +58,7 @@
   /* Hover and press feedback. Fast enough not to lag the pointer, slow enough
      to read as a fade rather than a switch. Every interactive surface uses it. */
   --ck-duration-fast: 120ms;
+  --ck-duration-base: 320ms;
   --ck-duration-slow: 640ms;
   --ck-ease: cubic-bezier(0.2, 0.6, 0.2, 1);
 
@@ -102,6 +105,7 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-mode="light"]) {
     --ck-background: #0e1013;
+    --ck-shadow-lift: 0 10px 28px -8px rgb(0 0 0 / 0.55);
     --ck-foreground: #e9ebee;
     --ck-card: #171a1f;
     --ck-card-foreground: #e9ebee;
@@ -129,6 +133,7 @@
 
 :root[data-mode="dark"] {
   --ck-background: #0e1013;
+  --ck-shadow-lift: 0 10px 28px -8px rgb(0 0 0 / 0.55);
   --ck-foreground: #e9ebee;
   --ck-card: #171a1f;
   --ck-card-foreground: #e9ebee;
@@ -186,6 +191,7 @@
 @media (prefers-color-scheme: dark) {
   :root[data-theme="ember"]:not([data-mode="light"]) {
     --ck-background: #12100f;
+    --ck-shadow-lift: 0 10px 28px -8px rgb(0 0 0 / 0.55);
     --ck-foreground: #ece8e6;
     --ck-card: #1c1917;
     --ck-card-foreground: #ece8e6;
@@ -213,6 +219,7 @@
 
 :root[data-theme="ember"][data-mode="dark"] {
   --ck-background: #12100f;
+  --ck-shadow-lift: 0 10px 28px -8px rgb(0 0 0 / 0.55);
   --ck-foreground: #ece8e6;
   --ck-card: #1c1917;
   --ck-card-foreground: #ece8e6;
@@ -272,6 +279,7 @@
 @media (prefers-color-scheme: dark) {
   :root[data-theme="contrast"]:not([data-mode="light"]) {
     --ck-background: #000000;
+    --ck-shadow-lift: 0 10px 28px -8px rgb(0 0 0 / 0.55);
     --ck-foreground: #ffffff;
     --ck-card: #0a0a0c;
     --ck-card-foreground: #ffffff;
@@ -299,6 +307,7 @@
 
 :root[data-theme="contrast"][data-mode="dark"] {
   --ck-background: #000000;
+  --ck-shadow-lift: 0 10px 28px -8px rgb(0 0 0 / 0.55);
   --ck-foreground: #ffffff;
   --ck-card: #0a0a0c;
   --ck-card-foreground: #ffffff;
@@ -356,6 +365,8 @@
   --color-border: var(--ck-border);
   --color-input: var(--ck-input);
   --color-ring: var(--ck-ring);
+
+  --shadow-lift: var(--ck-shadow-lift);
 
   --radius-sm: var(--ck-radius-sm);
   --radius-md: var(--ck-radius-md);
@@ -430,31 +441,10 @@
   background: transparent;
 }
 
-/* While the inspector is docked, give the page the width back — the same thing
-   docked browser devtools do. Only from `lg`, because below that the panel is
-   most of the viewport and shifting the layout would leave nothing to inspect.
-
-   The content moves, the chrome does not. This used to pad `body`, which shrank
-   the sticky header along with everything else and pulled the Inspect toggle
-   away from the panel it opens. Header and footer stay full width so the toggle
-   sits directly above its own dock.
-
-   Margin rather than padding: `main` already carries its own `px` gutters, and
-   padding here would fight them. */
-@media (min-width: 1024px) {
-  :root[data-inspect="on"] main,
-  :root[data-inspect="on"] [data-slot="site-footer"] {
-    margin-right: var(--ck-inspector-width);
-  }
-
-  /* The appearance panel is a native popover, so it renders in the top layer
-     and paints above the inspector no matter what z-index either carries.
-     Z-index cannot fix that; moving it can. While inspecting, it clears the
-     dock and opens over the page — which is what it is describing. */
-  :root[data-inspect="on"] [data-slot="settings-panel"] {
-    right: calc(var(--ck-inspector-width) + 1rem);
-  }
-}
+/* The inspector is a layout column on the left (see
+   components/cksui/inspector.tsx), so nothing here has to move the page out
+   from under it, and the appearance popover on the right no longer collides
+   with it. Both rules that used to live here are gone. */
 
 @utility h-tap {
   height: var(--ck-tap);
@@ -481,6 +471,24 @@ html {
   /* The browser paints its own ground behind the document; be explicit. */
   background-color: var(--ck-background);
   color-scheme: light dark;
+}
+
+/* Anything that responds to a click says so.
+ *
+ * A rule rather than forty call sites. `<button>` defaults to `cursor: default`
+ * in every browser — links get a pointer for free and buttons do not, which is
+ * why this is the control people forget. Labels are here because the radio
+ * groups in the playground and the theme switcher hide the input and put the
+ * whole hit area on the label.
+ *
+ * Disabled controls are excluded: a pointer on something that will not respond
+ * is a promise the interface cannot keep. */
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]),
+label:has(input[type="radio"]:not(:disabled)),
+label:has(input[type="checkbox"]:not(:disabled)),
+summary {
+  cursor: pointer;
 }
 
 :root[data-mode="light"] {
@@ -682,7 +690,120 @@ body {
   animation: ck-think 1.15s var(--ck-ease) infinite;
 }
 
+/* --- card glow ------------------------------------------------------------ */
+
+/* A fixed gradient that blooms from the top-left corner on hover.
+
+   Painted once and never moved: only `opacity` animates, so this composites and
+   costs nothing per frame. An earlier version tracked the pointer, which meant
+   a listener, a rAF loop, and a transform update on every move — a lot of
+   machinery for a decoration, and this reads better without it.
+
+   Pointer devices only. A touch device has no hover to reveal it with, and a
+   gradient stuck permanently on a card is not the effect. */
+@media (hover: hover) and (pointer: fine) {
+  /* `isolation` is what makes the negative z-index below safe: it forces the
+     card to be a stacking context, so the glow paints above the card's own
+     background and below its content, and cannot escape behind the page.
+
+     The alternative — leaving the glow at z-index 0 and lifting every child
+     above it — is what shipped first, and it broke the stretched link. The
+     link's ::after lives inside the heading, so promoting the siblings put the
+     summary, badges, and "Read case study" above the overlay and every click
+     below the heading landed on a paragraph instead of the card. Content that
+     is never positioned cannot get in front of the overlay by accident. */
+  [data-glow] {
+    isolation: isolate;
+  }
+
+  [data-glow]::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(
+      22rem circle at 0% 0%,
+      var(--ck-accent),
+      transparent 70%
+    );
+    opacity: 0;
+    transition: opacity var(--ck-duration-base) var(--ck-ease);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  [data-glow]:hover::before,
+  [data-glow]:focus-within::before {
+    opacity: 1;
+  }
+}
+
+/* --- skeletons ------------------------------------------------------------ */
+
+/* Opacity only — it composites, where a shimmering gradient repaints on every
+   frame for the entire time the page is loading, which is the worst possible
+   moment to be spending frames. */
+@keyframes ck-skeleton {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+.ck-skeleton {
+  animation: ck-skeleton 1.6s var(--ck-ease) infinite;
+}
+
+/* --- view transitions ---------------------------------------------------- */
+
+/* The handoff from a loading skeleton to the content it stood in for.
+   Vertical direction carries the meaning: the placeholder yields downward, the
+   real thing arrives from below. Without it the skeleton vanishes and the
+   content pops, which reads as a glitch rather than as an arrival.
+
+   Asymmetric on purpose — the exit is quick because nobody wants to watch a
+   placeholder leave, and the enter is slower and starts only once it has, so
+   the two never overlap into a smear. */
+@keyframes ck-reveal-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes ck-reveal-slide {
+  from {
+    transform: translateY(1.25rem);
+  }
+}
+
+::view-transition-old(.reveal-out) {
+  animation:
+    var(--ck-duration-fast) var(--ck-ease) both ck-reveal-fade reverse,
+    var(--ck-duration-fast) var(--ck-ease) both ck-reveal-slide reverse;
+}
+
+::view-transition-new(.reveal-in) {
+  animation:
+    var(--ck-duration-base) var(--ck-ease) var(--ck-duration-fast) both
+      ck-reveal-fade,
+    var(--ck-duration-slow) var(--ck-ease) both ck-reveal-slide;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .ck-skeleton {
+    animation: none;
+  }
+
+  /* No slide, no fade. The content still arrives; it just cuts. */
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+
   /* The caret stops moving. It is not hidden: the components stop typing under
      reduced motion, so the caret is only ever shown at rest, and a resting
      caret still says where the text ends. */

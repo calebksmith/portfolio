@@ -1,5 +1,10 @@
 import { MDXRemote } from "next-mdx-remote/rsc";
 
+import { Figure } from "@/components/cksui";
+import { DeviceHandoff } from "@/components/diagrams/device-handoff";
+import { SystemReach } from "@/components/diagrams/system-reach";
+import { TeamScoring } from "@/components/diagrams/team-scoring";
+
 /**
  * Renders MDX that came out of the database.
  *
@@ -51,6 +56,19 @@ const components = {
       {...props}
     />
   ),
+  // Raster images, for the few things a diagram cannot show — a Storybook grid,
+  // a real terminal run. Width and height are required by the same rule the
+  // Figure component enforces: an image with no dimensions is a layout shift
+  // waiting for a slow connection.
+  img: (props: React.ComponentProps<"img">) => (
+    // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
+    <img
+      loading="lazy"
+      decoding="async"
+      className="h-auto w-full rounded-lg border border-border"
+      {...props}
+    />
+  ),
   a: ({ children, ...props }: React.ComponentProps<"a">) => (
     <a
       className="text-primary underline underline-offset-4 hover:opacity-80"
@@ -82,6 +100,18 @@ const components = {
   ),
 };
 
+/**
+ * Components a case study may use directly. Diagrams are named here rather than
+ * imported per file because MDX has no imports — the map is the whole surface.
+ */
+const available = {
+  ...components,
+  Figure,
+  DeviceHandoff,
+  SystemReach,
+  TeamScoring,
+};
+
 export function Mdx({ source }: { source: string }) {
-  return <MDXRemote source={source} components={components} />;
+  return <MDXRemote source={source} components={available} />;
 }
