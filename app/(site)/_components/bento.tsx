@@ -116,6 +116,14 @@ function pointers() {
         "Vimocity's design system, public — 50+ web components on shared tokens.",
     },
     {
+      href: "https://www.moderntrailhead.com",
+      external: true,
+      eyebrow: "Practice",
+      title: "Modern Trailhead",
+      description:
+        "The consultancy I have run alongside full-time work since 2016 — client websites, and video and photo for brands including Brooks Running and Shake Shack.",
+    },
+    {
       href: "/colophon",
       external: false,
       eyebrow: "About this site",

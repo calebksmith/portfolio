@@ -89,7 +89,19 @@ export default async function ExperiencePage() {
           >
             <div className="flex flex-wrap items-baseline justify-between gap-x-4">
               <h3 className="font-display text-lg font-semibold tracking-[-0.01em] text-foreground">
-                {position.org}
+                {position.href ? (
+                  <a
+                    href={position.href}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="rounded-sm underline decoration-input underline-offset-4 transition-colors hover:decoration-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                  >
+                    {position.org}
+                    <span className="sr-only"> (opens in a new tab)</span>
+                  </a>
+                ) : (
+                  position.org
+                )}
                 <span className="text-muted-foreground">
                   {" "}
                   · {position.location}

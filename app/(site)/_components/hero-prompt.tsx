@@ -87,7 +87,7 @@ const PROMPTS: Prompt[] = [
     // LinkedIn role description in the copy deck. It is a claim about judgment
     // rather than about how far he takes the build.
     answer:
-      "I'm a designer who rarely opens Figma. I design with prototypes that use real components, so engineering gets working frontend code to use rather than a design spec to rebuild. Currently, about 80% of what I prototype ships.",
+      "I spent years in Figma and rarely open it now. I design in real components, so engineering gets working code rather than a spec to rebuild. About 80% of what I prototype ships.",
     link: {
       href: "/work/guardrails",
       kind: "Case study",
@@ -117,7 +117,7 @@ const PROMPTS: Prompt[] = [
     // stops the sentence from reading as a designer consulting a different
     // department.
     answer:
-      "I take a feature from idea to working code: research, strategy, testing with customers, then building the frontend. I work closely with other product managers, backend developers, and leadership to decide what's worth building.",
+      "I take features 0→1 — idea, research, strategy, testing with customers, then building the frontend in working code. I work closely with other product managers, backend developers, and leadership to decide what's worth building.",
     // No link. Challenges is a case study about designing for repeat behavior,
     // which is not what this answer is about, and no other page argues this
     // particular point yet.

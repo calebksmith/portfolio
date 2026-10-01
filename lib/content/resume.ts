@@ -23,6 +23,8 @@ export type Role = {
 
 export type Position = {
   org: string;
+  /** The org's own site, when there is one worth visiting. */
+  href?: string;
   location: string;
   period: string;
   note?: string;
@@ -54,6 +56,11 @@ export const resume = {
         "component libraries, design tokens, documentation and standards, versioned releases, multi-platform systems",
     },
     {
+      label: "Figma",
+      value:
+        "published libraries with versioned releases, variables and modes, component APIs and nested instance properties, interactive prototypes with real state, Dev Mode and Code Connect, branching, accessibility annotations, REST and plugin API automation",
+    },
+    {
       label: "Frontend",
       value:
         "TypeScript, React, Next.js, Tailwind, React Native, Storybook, Git, code review",
@@ -66,7 +73,7 @@ export const resume = {
     {
       label: "Product",
       value:
-        "product definition and briefs, customer research, prototyping, 0–1 features, roadmap input",
+        "product definition and briefs, customer research, prototyping, 0→1 features, roadmap input",
     },
     {
       label: "Platforms",
@@ -131,12 +138,15 @@ export const resume = {
     },
     {
       org: "Modern Trailhead",
+      href: "https://www.moderntrailhead.com",
       location: "Seattle, WA",
       period: "Dec 2016 – Present",
       note: "Design Engineer & Digital Consultant | Owner (concurrent)",
       bullets: [
-        "Design and build websites end to end — strategy, interface design, frontend implementation.",
-        "Clients include Brooks Running, Shake Shack, Seabourn Cruise Lines, Chateau Ste. Michelle, Car Toys.",
+        "Run an independent practice alongside full-time work: finding clients, scoping and pricing engagements, and owning delivery.",
+        "Design and build client websites end to end in Webflow and WordPress — strategy, interface design, and build.",
+        "Produce video and photo content for brands including Brooks Running, Shake Shack, Seabourn Cruise Lines, Chateau Ste. Michelle, and Car Toys.",
+        "Subcontract and direct specialists on larger engagements, and work as a contractor inside other teams.",
       ],
     },
     {

@@ -29,11 +29,16 @@ benefit into surveillance or a leaderboard nobody asked to be on.
   **personal targets** (you against your own count, earning raffle entries),
   **team targets** (the same, pooled across a team), and
   **leaderboards** (teams ranked against each other).
-- For the Leaderboard challenge, worked out the team-size problem. A large team
-  wins any contest scored on totals,
-  which makes joining a small crew pointless. Teams are scored on the share of
-  what they could have completed — members times days — so a five-person crew
-  and a fifty-person one are measured on the same scale.
+- For the leaderboard challenge, worked out the team-size problem. A large team
+  wins any contest scored on totals, which makes joining a small crew pointless.
+  So a team scores up to 100 points a day, and the points are the share of its
+  members who completed a Daily 5 — ten people and nine completions is 90.
+  Team size stops deciding the winner; completion rate does.
+- Kept the door open for teams below the organization's minimum size, with the
+  ceiling handicapped in proportion: four people against a minimum of five can
+  earn 80 a day rather than 100. Small teams do have an edge — getting four
+  people to finish is easier than fifty — and the handicap is what stops that
+  edge being decisive.
 - Set join windows, so a challenge is a fixed period with a start and an end
   rather than an open-ended obligation. They run from a week to over a month.
 - Designed for web and mobile as two specs rather than one stretched across
@@ -42,6 +47,31 @@ benefit into surveillance or a leaderboard nobody asked to be on.
   challenge you have joined.
 - Tested with customers and non-customers, checking that the mechanics motivated
   rather than pressured.
+
+This was 0→1. There was no challenges feature to improve on — the mechanics, the
+scoring, the join windows and the three types were all decisions rather than
+inheritances, which is why the fairness problem had to be solved rather than
+tuned.
+
+<Figure
+  ratio="700/300"
+  caption="Points are the share of a team that finished, not the count. Fifty people and forty-five completions scores less than five people and five — and the handicap below the minimum is what keeps a very small crew from simply being the easiest place to win."
+>
+  <TeamScoring />
+</Figure>
+
+> **What it cost.** A ceiling of 100 means every team that finishes gets the
+> same score, and committed crews finish — so ties turned out to be far more
+> common than we modelled. Ten teams tied is not unusual.
+>
+> The tiebreaker is worse than the problem: largest team wins, and if they are
+> the same size the admin draws at random. That hands the result back to the
+> bigger team, which is the exact bias the percentage was built to remove — and
+> a coin toss is not an outcome anyone earns.
+>
+> The answer is not a better tiebreaker. It is a harder ceiling: scoring needs
+> another layer of difficulty so that finishing is the entry price rather than
+> the maximum. That is the next change.
 
 ## Outcome
 
