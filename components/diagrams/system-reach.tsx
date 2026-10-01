@@ -1,3 +1,5 @@
+import { getMessages } from "@/lib/i18n/server";
+
 /**
  * How far VimUI actually reaches.
  *
@@ -14,11 +16,11 @@
  */
 
 const COLS = [
-  { x: 306, label: "Web app" },
-  { x: 416, label: "iOS" },
-  { x: 526, label: "Android" },
-  { x: 636, label: "Windows" },
-];
+  { x: 306, key: "web" },
+  { x: 416, key: "ios" },
+  { x: 526, key: "android" },
+  { x: 636, key: "windows" },
+] as const;
 
 const W = 100;
 const SEAM = 411;
@@ -108,12 +110,14 @@ function RowLabel({
   );
 }
 
-export function SystemReach() {
+export async function SystemReach() {
+  const t = (await getMessages()).diagrams.systemReach;
+
   return (
     <svg
       viewBox="0 0 760 300"
       role="img"
-      aria-label="Tokens reach all four platforms, but only the web app reads them directly — iOS, Android, and Windows get them copied by hand. The VimUI component library reaches the web app alone; the other three carry their own components. Login and account creation are the exception: they run in a webview, so real VimUI components render on all four platforms."
+      aria-label={t.label}
       className="h-full w-full"
       fill="none"
     >
@@ -124,19 +128,19 @@ export function SystemReach() {
         letterSpacing="1.4"
         className="fill-current text-muted-foreground"
       >
-        WHAT REACHES WHICH PLATFORM
+        {t.title}
       </text>
 
       {COLS.map((c) => (
         <text
-          key={c.label}
+          key={c.key}
           x={c.x + W / 2}
           y="48"
           textAnchor="middle"
           fontSize="12"
           className="fill-current text-foreground"
         >
-          {c.label}
+          {t.columns[c.key]}
         </text>
       ))}
 
@@ -155,7 +159,7 @@ export function SystemReach() {
         fontSize="11"
         className="fill-current text-muted-foreground"
       >
-        React Native and Electron — separate codebases
+        {t.separateCodebases}
       </text>
       <text
         x={SEAM - 8}
@@ -164,36 +168,36 @@ export function SystemReach() {
         fontSize="11"
         className="fill-current text-muted-foreground"
       >
-        one codebase
+        {t.oneCodebase}
       </text>
 
       {/* Tokens: everywhere, but only one platform reads them at the source. */}
-      <RowLabel y={66} name="Tokens" note="color, type, spacing" />
+      <RowLabel y={66} name={t.tokens.name} note={t.tokens.note} />
       <Cell x={COLS[0].x} y={66} state="vimui">
-        source of truth
+        {t.sourceOfTruth}
       </Cell>
       {COLS.slice(1).map((c) => (
-        <Cell key={c.label} x={c.x} y={66} state="byHand">
-          copied by hand
+        <Cell key={c.key} x={c.x} y={66} state="byHand">
+          {t.copiedByHand}
         </Cell>
       ))}
 
       {/* Components: one platform. */}
-      <RowLabel y={132} name="Components" note="50+, React and Radix" />
+      <RowLabel y={132} name={t.components.name} note={t.components.note} />
       <Cell x={COLS[0].x} y={132} state="vimui">
-        VimUI
+        {t.vimui}
       </Cell>
       {COLS.slice(1).map((c) => (
-        <Cell key={c.label} x={c.x} y={132} state="separate">
-          its own
+        <Cell key={c.key} x={c.x} y={132} state="separate">
+          {t.itsOwn}
         </Cell>
       ))}
 
       {/* The exception, and the only row that ignores the seam. */}
-      <RowLabel y={198} name="Login & account" note="runs in a webview" />
+      <RowLabel y={198} name={t.login.name} note={t.login.note} />
       {COLS.map((c) => (
-        <Cell key={c.label} x={c.x} y={198} state="vimui">
-          VimUI
+        <Cell key={c.key} x={c.x} y={198} state="vimui">
+          {t.vimui}
         </Cell>
       ))}
     </svg>

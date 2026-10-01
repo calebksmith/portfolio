@@ -23,7 +23,7 @@ The third one shaped most of what follows.
 ```
 Visitor       Hiring mgr (link)      Me (admin)
    │                   │                   │
-(site)         /letter/[token]        (admin)
+[lang]         /letter/[token]        (letters)/admin
 static           per request,          gated per route
                    noindex                 │
    │                   │            requireAdmin()

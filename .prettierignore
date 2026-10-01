@@ -2,4 +2,3 @@
 node_modules
 package-lock.json
 *.mdx
-docs/copy-deck.md

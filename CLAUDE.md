@@ -66,12 +66,23 @@ These are the same kind of guardrails I maintain on VimUI at work. Follow them.
 ### Content
 
 - The repo is the source of truth for copy. There is no separate copy document
-  to keep in sync — edit the file that renders the words.
-- Case studies live as MDX in `src/content/work/*.mdx` with frontmatter:
+  to keep in sync. See `docs/decisions/0006-localization.md`.
+- **Interface copy** lives in `lib/i18n/messages/<locale>.ts`, never as a
+  literal in a page or component. English defines the shape; other locales
+  are typed against it. Inline emphasis uses `<code>`, `<strong>`, `<em>` in
+  the string, rendered with `<RichText>`.
+- **Long-form copy** is MDX per locale: case studies in
+  `src/content/work/<locale>/`, page bodies in `src/content/pages/<locale>/`.
+  Internal links in MDX are written locale-free (`/work/login`).
+- Internal hrefs go through `localizePath(locale, path)`. Server Components get
+  the locale from `getLocale()` / `getMessages()` in `lib/i18n/server.ts`.
+- Only English is enabled. Do not add Spanish until asked — the content is
+  being revised first.
+- Case studies have frontmatter:
   `title, role, year, stack, summary, weight`. Structure is always
   Problem → What I did → Outcome, and each names a real trade-off or hard call.
 - Structured records — the résumé, skills, selected work — live as typed data
-  in `lib/content/`.
+  in `lib/content/resume/<locale>.ts`.
 - Adding a case study should mean adding a file, not editing components.
 - The content layer must accept structured data, not just prose.
 

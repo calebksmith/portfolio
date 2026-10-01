@@ -1,3 +1,5 @@
+import { getMessages } from "@/lib/i18n/server";
+
 /**
  * Why the login flow uses a code and not a magic link.
  *
@@ -8,12 +10,14 @@
  * `currentColor` for structure so it follows the theme, and the two semantic
  * tokens for the one thing being compared. Nothing else is coloured.
  */
-export function DeviceHandoff() {
+export async function DeviceHandoff() {
+  const t = (await getMessages()).diagrams.deviceHandoff;
+
   return (
     <svg
       viewBox="0 0 700 260"
       role="img"
-      aria-label="A magic link opens on the phone that received the email, leaving the work machine signed out. A six-digit code can be carried across to it."
+      aria-label={t.label}
       className="h-full w-full"
       fill="none"
     >
@@ -43,7 +47,7 @@ export function DeviceHandoff() {
         fontSize="13"
         className="fill-current text-foreground"
       >
-        Phone
+        {t.phone}
       </text>
       <text
         x="100"
@@ -52,7 +56,7 @@ export function DeviceHandoff() {
         fontSize="12"
         className="fill-current text-muted-foreground"
       >
-        email arrives here
+        {t.emailArrives}
       </text>
 
       {/* Work machine — where the person actually is */}
@@ -95,7 +99,7 @@ export function DeviceHandoff() {
         fontSize="13"
         className="fill-current text-foreground"
       >
-        Work machine
+        {t.workMachine}
       </text>
       <text
         x="600"
@@ -104,7 +108,7 @@ export function DeviceHandoff() {
         fontSize="12"
         className="fill-current text-muted-foreground"
       >
-        signing in here
+        {t.signingIn}
       </text>
 
       <defs>
@@ -131,10 +135,10 @@ export function DeviceHandoff() {
           markerEnd="url(#dh-arrow)"
         />
         <text x="316" y="78" fontSize="12" className="fill-current">
-          Magic link opens on the phone
+          {t.linkOpens}
         </text>
         <text x="316" y="96" fontSize="12" className="fill-current opacity-80">
-          The other machine stays signed out.
+          {t.staysSignedOut}
         </text>
       </g>
 
@@ -148,7 +152,7 @@ export function DeviceHandoff() {
           markerEnd="url(#dh-arrow)"
         />
         <text x="240" y="158" fontSize="12" className="fill-current">
-          Six-digit code, read here and typed there
+          {t.code}
         </text>
       </g>
     </svg>

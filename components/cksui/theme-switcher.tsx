@@ -12,6 +12,8 @@ import {
   type Theme,
 } from "@/lib/theme";
 
+import type { Messages } from "@/lib/i18n/messages";
+
 import { Eyebrow } from "./eyebrow";
 
 import { cn } from "./lib/cn";
@@ -32,7 +34,15 @@ function writeCookie(name: string, value: string) {
   document.cookie = `${name}=${value}; path=/; max-age=${THEME_COOKIE_MAX_AGE}; samesite=lax`;
 }
 
-export function ThemeSwitcher({ className }: { className?: string }) {
+export type ThemeSwitcherLabels = Messages["themeSwitcher"];
+
+export function ThemeSwitcher({
+  labels,
+  className,
+}: {
+  labels: ThemeSwitcherLabels;
+  className?: string;
+}) {
   const theme = useHtmlAttribute<Theme>("data-theme", DEFAULT_THEME);
   const mode = useHtmlAttribute<Mode>("data-mode", DEFAULT_MODE);
 
@@ -64,16 +74,19 @@ export function ThemeSwitcher({ className }: { className?: string }) {
       className={cn("flex flex-col gap-4", className)}
     >
       <Group
-        legend="Theme"
+        legend={labels.theme}
         name="ck-theme"
-        options={THEMES}
+        options={THEMES.map((value) => ({
+          value,
+          label: labels.themes[value],
+        }))}
         value={theme}
         onChange={(value) => applyTheme(value as Theme)}
       />
       <Group
-        legend="Mode"
+        legend={labels.mode}
         name="ck-mode"
-        options={MODES}
+        options={MODES.map((value) => ({ value, label: labels.modes[value] }))}
         value={mode}
         onChange={(value) => applyMode(value as Mode)}
       />

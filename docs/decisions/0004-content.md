@@ -20,6 +20,9 @@ way to model that.
 
 ## Decision
 
+_Amended by ADR 0006: files are now per locale, in
+`src/content/work/<locale>/`, and the résumé in `lib/content/resume/<locale>.ts`._
+
 **Case study prose lives in `src/content/work/*.mdx`.** Frontmatter carries
 `title, role, year, platforms, summary, weight`. The bento index maps over the
 files; adding one is adding a file.
