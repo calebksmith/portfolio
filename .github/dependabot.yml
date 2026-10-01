@@ -1,0 +1,25 @@
+# Dependency updates, as pull requests that have to pass the same checks as
+# any other change before they can merge.
+#
+# Grouped, so a week's minor and patch bumps arrive as one PR to review rather
+# than a dozen. Majors stay separate: they are the ones that break things, and
+# each deserves its own look.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      minor-and-patch:
+        update-types: [minor, patch]
+    open-pull-requests-limit: 5
+
+  # The workflow's actions are code that runs with this repository's token.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      actions:
+        patterns: ["*"]
