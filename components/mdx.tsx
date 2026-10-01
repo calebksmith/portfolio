@@ -81,9 +81,11 @@ const components = {
       {...props}
     />
   ),
+  // A code block reuses the inline `code` element, so its chip is cleared here
+  // rather than drawing a box inside the box.
   pre: (props: React.ComponentProps<"pre">) => (
     <pre
-      className="mt-6 overflow-x-auto rounded-md border border-border bg-card p-4 text-xs"
+      className="mt-6 overflow-x-auto rounded-md border border-border bg-card p-4 text-xs [&>code]:bg-transparent [&>code]:p-0"
       {...props}
     />
   ),

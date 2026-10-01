@@ -359,6 +359,7 @@ export const en = {
       typography: "Typography",
       motion: "Motion",
       components: "Component playground",
+      rules: "Rules",
     },
     /** rich */
     theme:
@@ -408,6 +409,64 @@ export const en = {
     /** rich */
     playgroundNote:
       "The source panel is not a code sample kept beside a demo. Each specimen is one tree, projected twice — once through <code>createElement</code> into the components on the left, once through a printer into the JSX on the right. There is no way to write code here that renders something else, which is the same reason the contrast table reads <code>globals.css</code> instead of keeping its own palette.",
+
+    /** rich */
+    rulesIntro:
+      "The standard everything above is held to. Each rule is written down for people in <code>CLAUDE.md</code>, loaded into the coding agent from the same file, and checked by a machine before anything merges — so it holds whether a person or an agent wrote the change.",
+    /**
+     * One row per rule: what it says, why it exists, and what enforces it.
+     * `check` is a command or rule name, shown as code.
+     */
+    rules: [
+      {
+        title: "Colors come from tokens",
+        why: "No hex, rgb, or palette colors in markup. A raw value is the one place a theme cannot reach.",
+        check: "ck/no-raw-color",
+      },
+      {
+        title: "Sizes come from the scale",
+        why: "No pixel values written into a class. A one-off number is how two components end up a pixel apart.",
+        check: "ck/no-arbitrary-px",
+      },
+      {
+        title: "Every surface is drawn with a measured text color",
+        why: "Any foreground will do, as long as the pair is one the contrast check measures. New tokens are not invented just to make a pair.",
+        check: "ck/paired-surface",
+      },
+      {
+        title: "Every pair clears WCAG AA",
+        why: "AAA in the high-contrast theme. Measured in all three themes and both modes, from the same file the site is styled with.",
+        check: "npm run check:contrast",
+      },
+      {
+        title: "Components say what they are",
+        why: "Every library component sets data-slot, so the inspector can name it and a reviewer can find it.",
+        check: "ck/require-data-slot",
+      },
+      {
+        title: "Words live in the dictionary, not the markup",
+        why: "Pages read copy from the locale file; library components take it as props. That is what makes a translation a new file rather than a rewrite.",
+        check: "ck/no-literal-copy",
+      },
+      {
+        title: "Markup is accessible",
+        why: "Semantic elements, keyboard-operable controls, real labels. The strict rule set, with no rules switched off to pass.",
+        check: "jsx-a11y/strict",
+      },
+      {
+        title: "One spelling, one number, nothing internal",
+        why: "House spellings and repeated figures stay consistent, and nothing private — a ticket key, a workspace link, an email — reaches this public repository.",
+        check: "npm run check:copy",
+      },
+      {
+        title: "Every page scores 100",
+        why: "Accessibility, best practices, and SEO on Lighthouse's mobile profile, on every pull request.",
+        check: "npm run lighthouse",
+      },
+    ],
+    rulesReview:
+      "What a machine cannot judge — whether a token is the right one, whether a layout holds at a breakpoint, whether the empty and error states exist — is a checklist the design-review skill walks through before a change ships.",
+    rulesSource: "Read the rules and the lint plugin on GitHub →",
 
     tokenTable: {
       pairs: "Surface and foreground pairs",
