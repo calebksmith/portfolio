@@ -3,14 +3,27 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import {
+  LOCALES,
+  LOCALE_NAMES,
+  localizePath,
+  splitLocale,
+  type Locale,
+} from "@/lib/i18n/config";
+import type { Messages } from "@/lib/i18n/messages";
 import { INSPECT_ATTRIBUTE } from "@/lib/theme";
 
-import { ControlBar, ControlButton, ControlToggle } from "./control-bar";
+import {
+  ControlBar,
+  ControlButton,
+  ControlLink,
+  ControlToggle,
+} from "./control-bar";
 import { Monogram } from "./monogram";
 import { cn } from "./lib/cn";
 import { useHtmlAttribute } from "./lib/use-html-attribute";
 import { usePopoverOpen } from "./lib/use-popover-open";
-import { ThemeSwitcher } from "./theme-switcher";
+import { ThemeSwitcher, type ThemeSwitcherLabels } from "./theme-switcher";
 
 /**
  * The site header: a path on the left, instruments on the right.
@@ -35,14 +48,8 @@ import { ThemeSwitcher } from "./theme-switcher";
 
 export type WorkItem = { slug: string; title: string };
 
-/** Labels for top-level segments. Anything absent falls back to the segment. */
-const SEGMENT_LABELS: Record<string, string> = {
-  work: "Work",
-  "style-guide": "Style guide",
-  colophon: "Colophon",
-  experience: "Experience",
-  "sign-in": "Sign in",
-};
+/** Every visible string, passed in — this is a library component. */
+export type SiteHeaderLabels = Messages["header"];
 
 type Crumb =
   | { kind: "mark"; label: string; href: string }
@@ -50,21 +57,27 @@ type Crumb =
   | { kind: "menu"; label: string }
   | { kind: "current"; label: string };
 
-function buildCrumbs(pathname: string, work: WorkItem[]): Crumb[] {
-  const segments = pathname.split("/").filter(Boolean);
+function buildCrumbs(
+  path: string,
+  work: WorkItem[],
+  labels: SiteHeaderLabels,
+  locale: Locale,
+): Crumb[] {
+  const segments = path.split("/").filter(Boolean);
+  const home = localizePath(locale, "/");
 
   // The index gets a monogram rather than a trail. There is nowhere to go back
   // to, and the page states the name at full size directly below — but the
   // corner was empty, and an empty corner opposite a cluster of instruments
   // reads as a bar that failed to load rather than as restraint.
   if (segments.length === 0) {
-    return [{ kind: "mark", label: "CS", href: "/" }];
+    return [{ kind: "mark", label: "CS", href: home }];
   }
 
   // The mark stands in for the name on inner pages too — one root for the trail,
   // the same object in every header, and it buys back the horizontal space that
   // "CALEB SMITH" was taking from the path on a phone.
-  const crumbs: Crumb[] = [{ kind: "mark", label: "CS", href: "/" }];
+  const crumbs: Crumb[] = [{ kind: "mark", label: "CS", href: home }];
 
   segments.forEach((segment, index) => {
     const isLast = index === segments.length - 1;
@@ -72,7 +85,7 @@ function buildCrumbs(pathname: string, work: WorkItem[]): Crumb[] {
     // /work has no index route, so the crumb opens the case study menu instead
     // of linking somewhere that would 404.
     if (segment === "work" && !isLast) {
-      crumbs.push({ kind: "menu", label: "Work" });
+      crumbs.push({ kind: "menu", label: labels.work });
       return;
     }
 
@@ -81,7 +94,7 @@ function buildCrumbs(pathname: string, work: WorkItem[]): Crumb[] {
     // Work menu still lists titles in full.
     const title = work.find((item) => item.slug === segment)?.title;
     const label =
-      SEGMENT_LABELS[segment] ??
+      labels.segments[segment] ??
       title?.split(",")[0] ??
       segment.replace(/-/g, " ");
 
@@ -91,7 +104,10 @@ function buildCrumbs(pathname: string, work: WorkItem[]): Crumb[] {
         : {
             kind: "link",
             label,
-            href: `/${segments.slice(0, index + 1).join("/")}`,
+            href: localizePath(
+              locale,
+              `/${segments.slice(0, index + 1).join("/")}`,
+            ),
           },
     );
   });
@@ -102,12 +118,24 @@ function buildCrumbs(pathname: string, work: WorkItem[]): Crumb[] {
 const CRUMB =
   "inline-flex min-h-tap items-center text-label uppercase tracking-label whitespace-nowrap";
 
-export function SiteHeader({ work }: { work: WorkItem[] }) {
-  const pathname = usePathname();
-  const crumbs = buildCrumbs(pathname ?? "/", work);
+export function SiteHeader({
+  locale,
+  work,
+  labels,
+  themeLabels,
+}: {
+  locale: Locale;
+  work: WorkItem[];
+  labels: SiteHeaderLabels;
+  themeLabels: ThemeSwitcherLabels;
+}) {
+  // The path under the locale prefix. Crumbs, the current case study, and the
+  // language toggle all work on this, then re-prefix when they build a link.
+  const { path } = splitLocale(usePathname() ?? "/");
+  const crumbs = buildCrumbs(path, work, labels, locale);
 
   // Which case study is open, if any — so the Work menu can mark it.
-  const currentSlug = pathname?.match(/^\/work\/([^/]+)/)?.[1] ?? null;
+  const currentSlug = path.match(/^\/work\/([^/]+)/)?.[1] ?? null;
 
   return (
     <header
@@ -119,7 +147,10 @@ export function SiteHeader({ work }: { work: WorkItem[] }) {
           explicit is what lets other components read the value. */}
       <div className="flex h-tap w-full items-center gap-4 px-6 sm:px-10">
         {/* Path — wayfinding. Plain text; scrolls rather than wrapping. */}
-        <nav aria-label="Breadcrumb" className="min-w-0 flex-1 overflow-x-auto">
+        <nav
+          aria-label={labels.breadcrumb}
+          className="min-w-0 flex-1 overflow-x-auto"
+        >
           <ol className="flex items-center gap-2">
             {crumbs.map((crumb, index) => (
               <li
@@ -135,8 +166,8 @@ export function SiteHeader({ work }: { work: WorkItem[] }) {
                 {crumb.kind === "mark" ? (
                   <Link
                     href={crumb.href}
-                    aria-label="CS — Caleb Smith, home"
-                    aria-current={pathname === "/" ? "page" : undefined}
+                    aria-label={labels.home}
+                    aria-current={path === "/" ? "page" : undefined}
                     className="inline-flex min-h-tap items-center rounded-sm transition-opacity hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
                   >
                     <Monogram />
@@ -152,7 +183,12 @@ export function SiteHeader({ work }: { work: WorkItem[] }) {
                     {crumb.label}
                   </Link>
                 ) : crumb.kind === "menu" ? (
-                  <WorkMenu work={work} currentSlug={currentSlug} />
+                  <WorkMenu
+                    work={work}
+                    currentSlug={currentSlug}
+                    locale={locale}
+                    labels={labels}
+                  />
                 ) : (
                   <span
                     className={cn(CRUMB, "text-foreground")}
@@ -173,9 +209,14 @@ export function SiteHeader({ work }: { work: WorkItem[] }) {
             where its panel docks. The toggle ends up directly above the thing
             it opens, and the pair reads as one object rather than as a button
             that happens to have a side effect somewhere else on the page. */}
-        <ControlBar className="shrink-0">
-          <AppearanceMenu />
-          <InspectToggle />
+        <ControlBar className="shrink-0" label={labels.controls}>
+          <LanguageToggle locale={locale} path={path} label={labels.language} />
+          <AppearanceMenu
+            locale={locale}
+            labels={labels}
+            themeLabels={themeLabels}
+          />
+          <InspectToggle label={labels.inspect} />
         </ControlBar>
       </div>
     </header>
@@ -185,9 +226,13 @@ export function SiteHeader({ work }: { work: WorkItem[] }) {
 function WorkMenu({
   work,
   currentSlug,
+  locale,
+  labels,
 }: {
   work: WorkItem[];
   currentSlug: string | null;
+  locale: Locale;
+  labels: SiteHeaderLabels;
 }) {
   const open = usePopoverOpen("ck-work-menu");
 
@@ -209,7 +254,7 @@ function WorkMenu({
             : "text-muted-foreground hover:bg-muted hover:text-foreground",
         )}
       >
-        Work
+        {labels.work}
         <Chevron open={open} />
       </button>
 
@@ -217,7 +262,7 @@ function WorkMenu({
         id="ck-work-menu"
         popover="auto"
         data-slot="work-menu-panel"
-        aria-label="Case studies"
+        aria-label={labels.workMenu}
         className="w-[min(22rem,calc(100vw-2rem))] rounded-lg border border-input bg-card p-2 text-card-foreground shadow-lg"
       >
         {/* An arrow on every row, not only the hovered one. Five wrapped titles
@@ -236,7 +281,7 @@ function WorkMenu({
             return (
               <li key={item.slug}>
                 <Link
-                  href={`/work/${item.slug}`}
+                  href={localizePath(locale, `/work/${item.slug}`)}
                   aria-current={current ? "page" : undefined}
                   className={cn(
                     "group flex min-h-tap items-center justify-between gap-3 rounded-md px-3 text-sm text-pretty transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
@@ -263,14 +308,14 @@ function WorkMenu({
  * The mode lives on <html> rather than in React state, same as theme — the
  * overlay is a sibling, not a child, and the attribute is what both read.
  */
-function InspectToggle() {
+function InspectToggle({ label }: { label: string }) {
   const active =
     useHtmlAttribute<"on" | "off">(INSPECT_ATTRIBUTE, "off") === "on";
 
   return (
     <ControlToggle
       icon={<CrosshairIcon />}
-      label="Inspect"
+      label={label}
       pressed={active}
       onClick={() => {
         const root = document.documentElement;
@@ -281,7 +326,15 @@ function InspectToggle() {
   );
 }
 
-function AppearanceMenu() {
+function AppearanceMenu({
+  locale,
+  labels,
+  themeLabels,
+}: {
+  locale: Locale;
+  labels: SiteHeaderLabels;
+  themeLabels: ThemeSwitcherLabels;
+}) {
   const open = usePopoverOpen("ck-settings");
 
   return (
@@ -289,7 +342,7 @@ function AppearanceMenu() {
       <ControlButton
         popoverTarget="ck-settings"
         icon={<SlidersIcon />}
-        label="Appearance"
+        label={labels.appearance}
         active={open}
       />
 
@@ -297,28 +350,69 @@ function AppearanceMenu() {
         id="ck-settings"
         popover="auto"
         data-slot="settings-panel"
-        aria-label="Appearance settings"
+        aria-label={labels.appearanceSettings}
         className="w-[min(20rem,calc(100vw-2rem))] rounded-lg border border-input bg-card p-5 text-card-foreground shadow-lg"
       >
         <h2 className="mb-4 font-display text-sm font-semibold tracking-[-0.01em]">
-          Appearance
+          {labels.appearance}
         </h2>
 
-        <ThemeSwitcher />
+        <ThemeSwitcher labels={themeLabels} />
 
         {/* Names where it goes. The old text — "Measured contrast for every
             pair" — was a claim about the site, and a claim is not a
             destination: nothing in it said a page was on the other side. */}
         <p className="mt-5 border-t border-border pt-4 text-xs text-muted-foreground">
           <Link
-            href="/style-guide#contrast"
+            href={localizePath(locale, "/style-guide#contrast")}
             className="underline decoration-input underline-offset-4 transition-colors hover:text-foreground hover:decoration-primary"
           >
-            Style guide: tokens, type, and contrast →
+            {labels.styleGuideLink}
           </Link>
         </p>
       </div>
     </>
+  );
+}
+
+/**
+ * Switches language, keeping you on the same page.
+ *
+ * A link per other locale rather than a button: changing language is going to
+ * a different URL, and a link is what lets someone open it in a new tab, copy
+ * it, or have it announced as navigation. Each option is written in its own
+ * language and carries `lang` and `hrefLang`, so a screen reader pronounces
+ * "Español" as Spanish and the destination is declared.
+ *
+ * With one locale enabled there is nowhere to switch to, so it renders nothing
+ * rather than a control that cannot do anything.
+ */
+function LanguageToggle({
+  locale,
+  path,
+  label,
+}: {
+  locale: Locale;
+  path: string;
+  label: string;
+}) {
+  const others = LOCALES.filter((code) => code !== locale);
+  if (others.length === 0) return null;
+
+  return (
+    <nav aria-label={label} className="flex items-stretch">
+      {others.map((code) => (
+        <ControlLink
+          key={code}
+          href={localizePath(code, path)}
+          hrefLang={code}
+          lang={code}
+        >
+          <span aria-hidden="true">{code}</span>
+          <span className="sr-only">{LOCALE_NAMES[code]}</span>
+        </ControlLink>
+      ))}
+    </nav>
   );
 }
 

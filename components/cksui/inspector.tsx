@@ -8,6 +8,7 @@ import {
   inspectTarget,
   type Inspection,
 } from "@/lib/inspect";
+import type { Messages } from "@/lib/i18n/messages";
 import { INSPECT_ATTRIBUTE } from "@/lib/theme";
 
 import { Eyebrow } from "./eyebrow";
@@ -31,16 +32,24 @@ import { useHtmlAttribute } from "./lib/use-html-attribute";
  *     that only answers a mouse would undercut the argument it exists to make —
  *     so while it is on, every `[data-slot]` becomes a tab stop.
  */
-export function Inspector() {
+/**
+ * Every visible string, including the rule statement for each slot. The rules
+ * are the third column the inspector reports — component, tokens, and the rule
+ * behind them. Only slots with a rule worth stating have one; the rest report
+ * their tokens and nothing invented.
+ */
+export type InspectorLabels = Messages["inspector"];
+
+export function Inspector({ labels }: { labels: InspectorLabels }) {
   const active = useHtmlAttribute<"on" | "off">(INSPECT_ATTRIBUTE, "off");
 
   // The overlay holds all the state, so turning inspection off unmounts it and
   // discards that state as a consequence. Clearing it by hand in an effect
   // would mean a second copy of "is this on" that can disagree with the DOM.
-  return active === "on" ? <InspectorOverlay /> : null;
+  return active === "on" ? <InspectorOverlay labels={labels} /> : null;
 }
 
-function InspectorOverlay() {
+function InspectorOverlay({ labels }: { labels: InspectorLabels }) {
   const [inspection, setInspection] = useState<Inspection | null>(null);
   const [rect, setRect] = useState<DOMRect | null>(null);
   const targetRef = useRef<HTMLElement | null>(null);
@@ -164,10 +173,10 @@ function InspectorOverlay() {
             id="ck-inspector-title"
             className="font-display text-sm font-semibold tracking-[-0.01em]"
           >
-            Inspector
+            {labels.title}
           </h2>
           <p className="mt-1 text-xs text-pretty text-muted-foreground">
-            What each element is, and which tokens it resolves to.
+            {labels.description}
           </p>
         </header>
 
@@ -178,7 +187,9 @@ function InspectorOverlay() {
         <div aria-live="polite">
           {inspection ? (
             <>
-              <Label>{inspection.slot ? "Component" : "Element"}</Label>
+              <Label>
+                {inspection.slot ? labels.component : labels.element}
+              </Label>
               <p className="mt-1 font-display text-base font-semibold tracking-[-0.01em]">
                 {inspection.slot ?? `<${inspection.tag}>`}
                 {inspection.slot ? (
@@ -190,13 +201,13 @@ function InspectorOverlay() {
 
               {inspection.owner ? (
                 <p className="mt-1 text-xs text-muted-foreground">
-                  inside {inspection.owner}
+                  {labels.inside} {inspection.owner}
                 </p>
               ) : null}
 
               {inspection.tokens.length > 0 ? (
                 <>
-                  <Label className="mt-5">Tokens</Label>
+                  <Label className="mt-5">{labels.tokens}</Label>
                   <ul className="mt-1 space-y-1">
                     {inspection.tokens.map((entry) => (
                       <li
@@ -204,7 +215,7 @@ function InspectorOverlay() {
                         className="flex items-baseline justify-between gap-3 text-xs"
                       >
                         <span className="text-muted-foreground">
-                          {entry.label}
+                          {labels.properties[entry.property] ?? entry.property}
                         </span>
                         {entry.token ? (
                           <span className="text-right">--ck-{entry.token}</span>
@@ -212,7 +223,7 @@ function InspectorOverlay() {
                           // Saying so is the point: an unresolvable value is a
                           // violation of the token rule, not a gap in the tool.
                           <span className="text-right text-muted-foreground">
-                            {entry.value} — no token
+                            {entry.value} — {labels.noToken}
                           </span>
                         )}
                       </li>
@@ -223,34 +234,43 @@ function InspectorOverlay() {
 
               {inspection.type ? (
                 <>
-                  <Label className="mt-5">Type</Label>
+                  <Label className="mt-5">{labels.type}</Label>
                   <ul className="mt-1 space-y-1 text-xs">
-                    <Row label="Family" value={inspection.type.family} />
-                    <Row label="Size" value={inspection.type.size} />
-                    <Row label="Weight" value={inspection.type.weight} />
-                    <Row label="Leading" value={inspection.type.lineHeight} />
+                    <Row
+                      label={labels.family}
+                      value={
+                        inspection.type.family === "display" ||
+                        inspection.type.family === "body"
+                          ? labels.faces[inspection.type.family]
+                          : inspection.type.family
+                      }
+                    />
+                    <Row label={labels.size} value={inspection.type.size} />
+                    <Row label={labels.weight} value={inspection.type.weight} />
+                    <Row
+                      label={labels.leading}
+                      value={inspection.type.lineHeight}
+                    />
                   </ul>
                 </>
               ) : null}
 
-              {inspection.rule ? (
+              {inspection.slot && labels.rules[inspection.slot] ? (
                 <>
-                  <Label className="mt-5">Rule</Label>
+                  <Label className="mt-5">{labels.rule}</Label>
                   <p className="mt-1 text-xs text-pretty text-muted-foreground">
-                    {inspection.rule}
+                    {labels.rules[inspection.slot]}
                   </p>
                 </>
               ) : null}
             </>
           ) : (
-            <p className="text-xs text-muted-foreground">
-              Hover or tab to any element to inspect it.
-            </p>
+            <p className="text-xs text-muted-foreground">{labels.empty}</p>
           )}
         </div>
 
         <Eyebrow size="sm" className="mt-6 border-t border-border pt-3">
-          Esc to exit
+          {labels.exit}
         </Eyebrow>
       </aside>
     </>

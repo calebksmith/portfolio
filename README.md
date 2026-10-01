@@ -95,8 +95,8 @@ A number nobody reads is a number nobody notices moving.
 
 ```
 app/
-  (site)/          public pages, and the chrome they share
-  (admin)/         authenticated, gated per route
+  [lang]/          public pages and their chrome, one tree per locale
+  (letters)/       admin and shared cover letters — English only
   letter/[token]/  a cover letter behind an unguessable URL
   opengraph-image  link preview, generated from lib/site.ts
 components/cksui/  the component library — copied-in source, not a dependency
@@ -106,9 +106,10 @@ scripts/           the two checks
 docs/decisions/    architecture decision records
 ```
 
-Copy lives with the code that renders it: case studies in
-`src/content/work/*.mdx`, the résumé in `lib/content/resume.ts`, and page-level
-text in the page itself. There is no separate copy document to drift from it.
+Copy lives in the repo, typed and split by length: interface strings in
+`lib/i18n/messages/`, case studies and long pages as MDX in
+`src/content/<kind>/<locale>/`, the résumé in `lib/content/resume/`. English is
+served at bare paths; other locales get a prefix. See ADR 0006.
 
 **cksUI** is built on shadcn/ui's patterns — copied-in source, Radix for
 behaviour, `cva` for variants — with every value rewritten onto the tokens. It is

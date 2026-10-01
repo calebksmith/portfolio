@@ -25,20 +25,13 @@ export const INSPECT_ATTRIBUTE = "data-inspect";
 /** A year. The preference is not sensitive and should outlive the session. */
 export const THEME_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
 
-export const THEMES = [
-  { value: "default", label: "Default" },
-  { value: "ember", label: "Ember" },
-  { value: "contrast", label: "High contrast" },
-] as const;
+/** Theme and mode values. Their labels are copy, in `lib/i18n/messages/`. */
+export const THEMES = ["default", "ember", "contrast"] as const;
 
-export const MODES = [
-  { value: "system", label: "System" },
-  { value: "light", label: "Light" },
-  { value: "dark", label: "Dark" },
-] as const;
+export const MODES = ["system", "light", "dark"] as const;
 
-export type Theme = (typeof THEMES)[number]["value"];
-export type Mode = (typeof MODES)[number]["value"];
+export type Theme = (typeof THEMES)[number];
+export type Mode = (typeof MODES)[number];
 
 export const DEFAULT_THEME: Theme = "default";
 export const DEFAULT_MODE: Mode = "system";

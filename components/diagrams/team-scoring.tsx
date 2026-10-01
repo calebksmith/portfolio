@@ -1,3 +1,5 @@
+import { getMessages } from "@/lib/i18n/server";
+
 /**
  * Why a crew of five can beat a team of fifty.
  *
@@ -25,7 +27,9 @@ function Dot({ x, y, done }: { x: number; y: number; done: boolean }) {
   );
 }
 
-export function TeamScoring() {
+export async function TeamScoring() {
+  const t = (await getMessages()).diagrams.teamScoring;
+
   // 45 of 50, laid out ten to a row.
   const big = Array.from({ length: 50 }, (_, i) => ({
     x: 196 + (i % 10) * 22,
@@ -37,7 +41,7 @@ export function TeamScoring() {
     <svg
       viewBox="0 0 700 300"
       role="img"
-      aria-label="A crew of five with all five completing scores 100 for the day. A team of fifty with forty-five completing scores 90. A crew of four, below a minimum of five, scores at most 80."
+      aria-label={t.label}
       className="h-full w-full"
       fill="none"
     >
@@ -48,13 +52,13 @@ export function TeamScoring() {
         letterSpacing="1.4"
         className="fill-current text-muted-foreground"
       >
-        ONE DAY OF A LEADERBOARD CHALLENGE
+        {t.title}
       </text>
 
       {/* Crew of five — everyone in */}
       <g className="text-foreground">
         <text x="24" y="70" fontSize="13" className="fill-current">
-          Crew of 5
+          {t.crew5}
         </text>
         {[0, 1, 2, 3, 4].map((i) => (
           <Dot key={i} x={196 + i * 22} y={65} done />
@@ -65,7 +69,7 @@ export function TeamScoring() {
           fontSize="12"
           className="fill-current text-muted-foreground"
         >
-          5 of 5 completed
+          {t.completed5}
         </text>
       </g>
       <text
@@ -84,7 +88,7 @@ export function TeamScoring() {
         fontSize="12"
         className="fill-current text-muted-foreground"
       >
-        pts
+        {t.pts}
       </text>
 
       <path
@@ -97,7 +101,7 @@ export function TeamScoring() {
       {/* Team of fifty — five short */}
       <g className="text-foreground">
         <text x="24" y="176" fontSize="13" className="fill-current">
-          Team of 50
+          {t.team50}
         </text>
         {big.map((dot, i) => (
           <Dot key={i} x={dot.x} y={dot.y} done={dot.done} />
@@ -108,7 +112,7 @@ export function TeamScoring() {
           fontSize="12"
           className="fill-current text-muted-foreground"
         >
-          45 of 50
+          {t.completed45}
         </text>
       </g>
       <text
@@ -127,7 +131,7 @@ export function TeamScoring() {
         fontSize="12"
         className="fill-current text-muted-foreground"
       >
-        pts
+        {t.pts}
       </text>
 
       <path
@@ -140,7 +144,7 @@ export function TeamScoring() {
       {/* Below the minimum — allowed in, ceiling reduced */}
       <g className="text-foreground">
         <text x="24" y="262" fontSize="13" className="fill-current">
-          Crew of 4
+          {t.crew4}
         </text>
         <text
           x="24"
@@ -148,7 +152,7 @@ export function TeamScoring() {
           fontSize="11"
           className="fill-current text-muted-foreground"
         >
-          minimum is 5
+          {t.minimum}
         </text>
         {[0, 1, 2, 3].map((i) => (
           <Dot key={i} x={196 + i * 22} y={257} done />
@@ -168,7 +172,7 @@ export function TeamScoring() {
           fontSize="12"
           className="fill-current text-muted-foreground"
         >
-          4 of 4, but a place short
+          {t.placeShort}
         </text>
       </g>
       <text
@@ -187,7 +191,7 @@ export function TeamScoring() {
         fontSize="12"
         className="fill-current text-muted-foreground"
       >
-        max
+        {t.max}
       </text>
     </svg>
   );
