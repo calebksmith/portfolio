@@ -33,6 +33,11 @@ export const en = {
   chrome: {
     skipLink: "Skip to content",
     footer: "Designed and built by me",
+    /**
+     * The one contact method, on every page. LinkedIn only: no email address
+     * on the site, and no contact form to maintain. See issue #1.
+     */
+    contact: "LinkedIn",
     opensInNewTab: "(opens in a new tab)",
   },
 
