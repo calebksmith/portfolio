@@ -15,6 +15,10 @@ import { site } from "@/lib/site";
 
 import { SmoothAnchors } from "./_components/smooth-anchors";
 
+/** The footer's two links: contact, and the public source. Tap-sized. */
+const FOOTER_LINK =
+  "inline-flex min-h-tap items-center rounded-sm underline decoration-input underline-offset-4 transition-colors hover:text-foreground hover:decoration-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
+
 /** Every enabled locale is prerendered; anything else is not a page. */
 export function generateStaticParams() {
   return LOCALES.map((lang) => ({ lang }));
@@ -96,11 +100,12 @@ export default async function SiteLayout({
               thing to remember to change. */}
           <SiteFooter>
             © {site.name} · {t.chrome.footer} ·{" "}
-            <a
-              href={site.links.linkedin}
-              className="inline-flex min-h-tap items-center rounded-sm underline decoration-input underline-offset-4 transition-colors hover:text-foreground hover:decoration-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-            >
+            <a href={site.links.linkedin} className={FOOTER_LINK}>
               {t.chrome.contact}
+            </a>{" "}
+            ·{" "}
+            <a href={site.links.source} className={FOOTER_LINK}>
+              {t.chrome.source}
             </a>
           </SiteFooter>
         </div>

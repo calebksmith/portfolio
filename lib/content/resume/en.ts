@@ -12,6 +12,10 @@ export const en: Resume = {
       label: "linkedin.com/in/calebksmith",
       href: "https://www.linkedin.com/in/calebksmith",
     },
+    {
+      label: "github.com/calebksmith/portfolio",
+      href: "https://github.com/calebksmith/portfolio",
+    },
   ],
 
   summary:
