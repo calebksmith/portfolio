@@ -69,8 +69,10 @@ function PointerCard({
   return (
     <div
       data-slot="pointer-card"
+      data-glow=""
       className={cn(
-        "group relative flex h-full flex-col gap-2 rounded-lg border border-border bg-background p-6 transition-colors",
+        "group relative flex h-full cursor-pointer flex-col gap-2 rounded-lg border border-border bg-background p-6",
+        "transition-[color,background-color,border-color,transform,box-shadow] hover:-translate-y-0.5 hover:shadow-lift focus-within:-translate-y-0.5 focus-within:shadow-lift",
         "hover:border-input hover:bg-muted focus-within:border-input focus-within:bg-muted",
         "has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-ring",
         className,

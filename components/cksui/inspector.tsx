@@ -127,9 +127,23 @@ function InspectorOverlay() {
       ) : null}
 
       {/*
-        Docked right, the way browser devtools dock — out of the reading column
-        rather than sitting on top of it. Below the header in z-order, so the
-        Inspect toggle stays reachable and you are never trapped in the mode.
+        A column in the layout, not a panel over it. It used to be `fixed`, with
+        a margin pushing `main` and the footer clear — which left the header
+        full width and therefore underneath it, so the Inspect toggle you needed
+        to get back out was the thing being covered.
+
+        Sticky rather than fixed, so it holds position while the page scrolls
+        without leaving the flow.
+
+        On the left, and last in the DOM. Those are not in conflict: `order`
+        places it visually first while the tab order still runs through the page
+        before reaching the panel, which is the right sequence — the site is the
+        content and this is a tool for looking at it.
+
+        `min()` rather than a breakpoint. On a wide screen 50vw is larger than
+        the token, so the token wins; on a phone the viewport wins and the panel
+        takes half rather than all of it. One expression, no breakpoint to keep
+        in step with anything.
       */}
       <aside
         data-inspector-chrome=""
@@ -140,10 +154,10 @@ function InspectorOverlay() {
            it, so the title sits on the header's own baseline and the panel
            tracks the header if its height ever changes. */
         style={{
-          top: "var(--ck-header-height)",
-          width: "min(var(--ck-inspector-width), 100vw)",
+          width: "min(var(--ck-inspector-width), 50vw)",
+          order: -1,
         }}
-        className="fixed right-0 bottom-0 z-30 overflow-y-auto border-l border-input bg-card p-5 text-card-foreground shadow-lg"
+        className="sticky top-0 z-30 h-svh shrink-0 overflow-y-auto border-r border-input bg-card p-5 text-card-foreground shadow-lg"
       >
         <header className="mb-5 border-b border-border pb-3">
           <h2

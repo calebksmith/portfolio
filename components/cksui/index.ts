@@ -17,10 +17,12 @@ export {
 } from "./card";
 export { ControlBar, ControlButton, ControlToggle } from "./control-bar";
 export { Eyebrow, type EyebrowProps } from "./eyebrow";
+export { Figure } from "./figure";
 export { Inspector } from "./inspector";
 export { Monogram } from "./monogram";
 export { PrintButton } from "./print-button";
 export { SiteFooter } from "./site-footer";
+export { Skeleton } from "./skeleton";
 export { SkipLink } from "./skip-link";
 export { SiteHeader, type WorkItem } from "./site-header";
 export { SpecList, SpecRow } from "./spec-list";

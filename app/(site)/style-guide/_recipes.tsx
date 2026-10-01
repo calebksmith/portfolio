@@ -289,7 +289,10 @@ export const recipes: Recipe[] = [
         {
           tag: "CardHeader",
           children: [
-            { tag: "CardTitle", children: ["VimUI"] },
+            {
+              tag: "CardTitle",
+              children: ["VimUI, a design system in code"],
+            },
             ...(choices.content === "Title"
               ? []
               : [

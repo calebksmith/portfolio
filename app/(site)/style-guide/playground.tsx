@@ -87,6 +87,34 @@ export function Playground() {
       </div>
 
       {/*
+        The variables for whatever is selected above, in a quieter treatment so
+        the two rows read as a hierarchy rather than as ten equal buttons: pick
+        a component, then pick how it is configured.
+
+        Reserved height, so choosing a component with fewer controls than the
+        last one does not pull the preview up the page.
+      */}
+      <div className="min-h-[7.5rem] border-b border-border p-5 sm:min-h-[6.5rem]">
+        {recipe.controls.length > 0 ? (
+          <div className="flex flex-col gap-4">
+            {recipe.controls.map((control) => (
+              <ControlRow
+                key={control.name}
+                control={control}
+                recipeId={recipe.id}
+                value={choices[recipe.id][control.name]}
+                onChange={(value) => choose(control.name, value)}
+              />
+            ))}
+          </div>
+        ) : (
+          <p className="text-sm text-muted-foreground">
+            Nothing to configure — see the note below.
+          </p>
+        )}
+      </div>
+
+      {/*
         The component and the code that makes it, side by side — the pairing is
         the whole argument, and reading it as one thing is easier than scrolling
         between two.
@@ -151,20 +179,6 @@ export function Playground() {
               <li key={note}>{note}</li>
             ))}
           </ul>
-        ) : null}
-
-        {recipe.controls.length > 0 ? (
-          <div className="mt-5 flex flex-col gap-4">
-            {recipe.controls.map((control) => (
-              <ControlRow
-                key={control.name}
-                control={control}
-                recipeId={recipe.id}
-                value={choices[recipe.id][control.name]}
-                onChange={(value) => choose(control.name, value)}
-              />
-            ))}
-          </div>
         ) : null}
       </div>
     </div>
@@ -295,13 +309,15 @@ function RadioRow({
           <label
             key={option}
             className={[
-              "inline-flex min-h-tap cursor-pointer items-center rounded-sm border px-3 transition-colors",
-              "text-xs tracking-[0.06em]",
-              prominent ? "font-medium" : "",
-              "border-border text-muted-foreground",
-              "hover:bg-muted hover:text-muted-foreground",
-              "has-[:checked]:border-input has-[:checked]:bg-accent has-[:checked]:text-accent-foreground",
+              "inline-flex min-h-tap items-center rounded-md border transition-colors",
               "has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-ring",
+              prominent
+                ? // The component picker: a real control boundary and full
+                  // strength text, so it reads as the primary choice.
+                  "border-input px-4 text-sm font-medium text-foreground hover:bg-muted hover:text-muted-foreground has-[:checked]:bg-accent has-[:checked]:text-accent-foreground"
+                : // Its variables: a hairline and quieter type. Same mechanism,
+                  // visibly subordinate to the thing it configures.
+                  "border-border px-3 text-xs tracking-[0.06em] text-muted-foreground hover:bg-muted has-[:checked]:border-input has-[:checked]:bg-accent has-[:checked]:text-accent-foreground",
             ].join(" ")}
           >
             {/* The real control, kept in the accessibility tree and in the tab

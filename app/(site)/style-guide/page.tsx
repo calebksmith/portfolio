@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Eyebrow, ThemeSwitcher } from "@/components/cksui";
 
 import { ContrastTable } from "./contrast-table";
+import { Motion } from "./motion";
 import { Playground } from "./playground";
 import { SectionNav } from "./section-nav";
 import { TokenTable } from "./token-table";
@@ -31,7 +32,8 @@ const SECTIONS = [
   { id: "color", label: "Color" },
   { id: "contrast", label: "Contrast" },
   { id: "typography", label: "Typography" },
-  { id: "components", label: "Components" },
+  { id: "motion", label: "Motion" },
+  { id: "components", label: "Component playground" },
 ] as const;
 
 export default async function StyleGuidePage() {
@@ -149,7 +151,18 @@ export default async function StyleGuidePage() {
             </div>
           </Section>
 
-          <Section id="components" title="Components">
+          <Section id="motion" title="Motion">
+            <p className="max-w-measure-wide text-pretty text-muted-foreground">
+              Three durations and one easing curve, read from the running page.
+              Motion here is a property of the system rather than a decision per
+              component — which is what makes it consistent, and what makes
+              honouring <Code>prefers-reduced-motion</Code> a single rule
+              instead of a promise repeated in forty places.
+            </p>
+            <Motion />
+          </Section>
+
+          <Section id="components" title="Component playground">
             <p className="max-w-measure-wide text-pretty text-muted-foreground">
               cksUI — this site&rsquo;s component library. Built on
               shadcn/ui&rsquo;s patterns as source copied in and owned, not as
