@@ -84,7 +84,7 @@ const PROMPTS: Prompt[] = [
     // has done the rebuilding.
     //
     // The 80% is the hit rate — how often a prototype ships — matching the
-    // LinkedIn role description in the copy deck. It is a claim about judgment
+    // résumé and the LinkedIn role description. It is a claim about judgment
     // rather than about how far he takes the build.
     answer:
       "I spent years in Figma and rarely open it now. I design in real components, so engineering gets working code rather than a spec to rebuild. About 80% of what I prototype ships.",

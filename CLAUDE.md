@@ -9,9 +9,8 @@ design-to-code.
 The site is a work sample. Every decision should survive the question:
 _would an engineer interviewing me respect this?_
 
-Project background and build order: `docs/PROJECT-CONTEXT.md`.
-Approved copy for every page: `docs/copy-deck.md` — use it, don't rewrite it.
-Architecture rationale: `docs/decisions/`.
+The site's copy lives in the code that renders it — see **Content** below.
+Architecture: `docs/ARCHITECTURE.md`; rationale per decision: `docs/decisions/`.
 
 ## Stack
 
@@ -66,8 +65,13 @@ These are the same kind of guardrails I maintain on VimUI at work. Follow them.
 
 ### Content
 
+- The repo is the source of truth for copy. There is no separate copy document
+  to keep in sync — edit the file that renders the words.
 - Case studies live as MDX in `src/content/work/*.mdx` with frontmatter:
-  `title, role, year, platforms, summary, weight`.
+  `title, role, year, stack, summary, weight`. Structure is always
+  Problem → What I did → Outcome, and each names a real trade-off or hard call.
+- Structured records — the résumé, skills, selected work — live as typed data
+  in `lib/content/`.
 - Adding a case study should mean adding a file, not editing components.
 - The content layer must accept structured data, not just prose.
 
@@ -102,6 +106,16 @@ spec-level terms in user-facing copy — say "style variants," "versioned
 releases."
 
 Metrics in copy are approved and defensible. Do not invent or extrapolate.
+One number, one meaning: "about 80%" is always the share of prototyped frontend
+code that reaches production, wherever it appears. Product metrics are figures
+Caleb has approved for publication; keep their caveats attached to the numbers.
+
+**This repo is public.** Source material stays out of it: internal reports,
+analytics exports, raw data, and anything else from an employer. Only the
+approved figures, as they appear in the copy, are committed. Employer product
+metrics appear as percentages, ratios, or multiples — never raw counts of
+users, organizations, or events. The one exception is the company-scale line
+on the résumé (~50,000 users across 75+ organizations).
 
 **Case study badges name the stack** — `Next.js`, `Storybook`, `shadcn/ui`. This
 is the one place library-level terms belong in user-facing copy, because naming
