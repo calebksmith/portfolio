@@ -38,6 +38,8 @@ export const en = {
      * on the site, and no contact form to maintain. See issue #1.
      */
     contact: "LinkedIn",
+    /** The public repository this site is built from. */
+    source: "Source",
     opensInNewTab: "(opens in a new tab)",
   },
 

@@ -15,5 +15,7 @@ export const site = {
     linkedin: "https://www.linkedin.com/in/calebksmith",
     vimui: "https://vimui.vimocity.com/main/",
     practice: "https://www.moderntrailhead.com",
+    /** The repository is public, and part of the work sample. */
+    source: "https://github.com/calebksmith/portfolio",
   },
 } as const;
