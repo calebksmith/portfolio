@@ -95,7 +95,13 @@ export default async function SiteLayout({
           {/* No year: a notice needs a holder, not a date, and a date is a
               thing to remember to change. */}
           <SiteFooter>
-            © {site.name} · {t.chrome.footer}
+            © {site.name} · {t.chrome.footer} ·{" "}
+            <a
+              href={site.links.linkedin}
+              className="inline-flex min-h-tap items-center rounded-sm underline decoration-input underline-offset-4 transition-colors hover:text-foreground hover:decoration-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+            >
+              {t.chrome.contact}
+            </a>
           </SiteFooter>
         </div>
 
