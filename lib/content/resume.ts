@@ -90,7 +90,7 @@ export const resume = {
       org: "Vimocity",
       location: "Seattle, WA",
       period: "May 2021 – Present",
-      note: "Workplace health platform · ~50,000 users across 30+ organizations",
+      note: "Workplace health platform · ~50,000 users across 75+ organizations",
       roles: [
         {
           title: "Design Engineer, Product Design Manager",
@@ -193,6 +193,7 @@ export const resume = {
       title: "Playlists",
       detail:
         "Custom content collections, shareable and embeddable in company intranets. Also used by sales to build industry-specific collections for prospects.",
+      slug: "playlists",
     },
   ],
 
