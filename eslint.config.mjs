@@ -3,6 +3,8 @@ import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
 import jsxA11y from "eslint-plugin-jsx-a11y";
 
+import ck from "./eslint-rules/ck.mjs";
+
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
@@ -21,6 +23,37 @@ const eslintConfig = defineConfig([
   {
     files: ["**/*.{js,jsx,mjs,ts,tsx}"],
     rules: jsxA11y.flatConfigs.strict.rules,
+  },
+
+  /**
+   * The design-system gate — CLAUDE.md's token, pairing, and component rules,
+   * checked rather than remembered. See eslint-rules/ck.mjs, and the Rules
+   * section of the style guide for the same list in plain language.
+   */
+  {
+    files: ["app/**/*.tsx", "components/**/*.tsx"],
+    plugins: { ck },
+    rules: {
+      "ck/no-raw-color": "error",
+      "ck/no-arbitrary-px": "error",
+      "ck/paired-surface": "error",
+      "no-console": "error",
+    },
+  },
+  {
+    files: ["components/cksui/**/*.tsx"],
+    plugins: { ck },
+    rules: { "ck/require-data-slot": "error" },
+  },
+  {
+    // Pages read copy from the locale dictionary; library components take it
+    // as props. Typographic marks and the specimen text the contrast table
+    // draws are not copy.
+    files: ["app/[[]lang[]]/**/*.tsx", "components/cksui/**/*.tsx"],
+    plugins: { ck },
+    rules: {
+      "ck/no-literal-copy": ["error", { allow: ["Aa", "AA", "AAA", "CS"] }],
+    },
   },
 
   // Override default ignores of eslint-config-next.

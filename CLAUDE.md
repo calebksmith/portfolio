@@ -86,6 +86,33 @@ These are the same kind of guardrails I maintain on VimUI at work. Follow them.
 - Adding a case study should mean adding a file, not editing components.
 - The content layer must accept structured data, not just prose.
 
+### The gate
+
+The rules above that a parser can check are checked: `eslint-rules/ck.mjs`,
+run by `npm run lint` and in CI. Don't silence a rule to pass — fix the code, or
+change the rule in the open.
+
+- `ck/no-raw-color` — no hex/rgb/palette colors in class strings.
+- `ck/no-arbitrary-px` — no `[Npx]`; use the scale or add a token.
+- `ck/paired-surface` — a surface is only drawn with a foreground the contrast
+  gate measures (`scripts/contrast-pairs.mjs`). Loose on purpose: any measured
+  foreground will do, and inheriting the page foreground is fine where that
+  pair is measured. Don't invent a token just to make a pair; measure the
+  equivalent one instead.
+- `ck/require-data-slot` — exported cksUI components set `data-slot`.
+- `ck/no-literal-copy` — no words written into page or library markup.
+
+What the gate can't judge is the `design-review` skill
+(`.claude/skills/design-review/`). The same list is public on the style guide
+under Rules — keep the three in step when a rule changes.
+
+### Reference material
+
+Employer and client documents are reference only. Read them where they are, or
+put them in `private/` (gitignored); never commit them, and never copy them
+verbatim — write this site's own version. `npm run check:copy` fails on ticket
+keys, private workspace links, and email addresses anywhere in the repo.
+
 ## Next.js 16 specifics
 
 This version differs from older App Router code in ways that matter:

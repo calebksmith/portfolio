@@ -45,3 +45,6 @@ next-env.d.ts
 
 # Claude Code: personal permissions and machine paths. Never commit.
 .claude/settings.local.json
+
+# Reference material from an employer or client. Read it, never commit it.
+/private/

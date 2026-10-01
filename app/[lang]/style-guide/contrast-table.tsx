@@ -129,7 +129,7 @@ export function ContrastTable({
                     >
                       {row.nonText ? (
                         <span
-                          className="size-3 rounded-[1px] border-2"
+                          className="size-3 rounded-sm border-2"
                           style={{ borderColor: row.foregroundValue }}
                         />
                       ) : (
