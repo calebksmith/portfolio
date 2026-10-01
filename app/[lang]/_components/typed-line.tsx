@@ -122,7 +122,7 @@ export function Caret({ writing }: { writing: boolean }) {
   return (
     <span
       aria-hidden="true"
-      className={`ml-[0.1em] inline-block h-[1.05em] w-[0.5em] rounded-[1px] bg-primary align-[-0.2em] ${
+      className={`ml-[0.1em] inline-block h-[1.05em] w-[0.5em] rounded-sm bg-primary align-[-0.2em] ${
         writing ? "ck-caret-writing" : "ck-caret-thinking"
       }`}
     />

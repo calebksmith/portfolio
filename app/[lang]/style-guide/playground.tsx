@@ -171,7 +171,9 @@ export function Playground({
           <h3 className="font-display text-lg font-semibold tracking-[-0.01em] text-card-foreground">
             {recipe.name}
           </h3>
-          <Badge>data-slot=&quot;{recipe.slot}&quot;</Badge>
+          <Badge>
+            <code>data-slot=&quot;{recipe.slot}&quot;</code>
+          </Badge>
         </div>
 
         <p className="mt-2 max-w-measure-wide text-pretty text-sm text-muted-foreground">
@@ -242,7 +244,10 @@ function Code({
         })}
 
         {shown < length ? (
-          <span className="ck-caret-writing ml-[0.1em] inline-block h-[1em] w-[0.5em] rounded-[1px] bg-primary align-[-0.15em]" />
+          <span
+            aria-hidden="true"
+            className="ck-caret-writing ml-[0.1em] inline-block h-[1em] w-[0.5em] rounded-sm bg-primary align-[-0.15em]"
+          />
         ) : null}
       </code>
     </pre>

@@ -17,7 +17,7 @@ import { fileURLToPath } from "node:url";
 export default defineConfig({
   test: {
     environment: "node",
-    include: ["{lib,scripts,src}/**/*.test.ts"],
+    include: ["{lib,scripts,src,eslint-rules}/**/*.test.ts"],
   },
   resolve: {
     alias: {

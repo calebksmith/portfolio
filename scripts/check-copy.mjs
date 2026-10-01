@@ -58,12 +58,58 @@ const RULES = [
   },
 ];
 
-function* walk(dir) {
+/**
+ * Nothing internal ships.
+ *
+ * This repository is public, and it is written by someone whose day job has
+ * its own tracker, its own docs, and its own data. These patterns catch the
+ * fingerprints of that material arriving by copy and paste — a ticket key, a
+ * link into a private workspace, a personal address — before it is pushed.
+ *
+ * Deliberately generic. Listing an employer's actual repository or product
+ * names here would publish the very thing it exists to keep out.
+ */
+const INTERNAL_RULES = [
+  {
+    id: "ticket-key",
+    // A project key, a dash, a number. Ticket keys are the most common thing
+    // to paste by accident, and they point into a system a reader cannot open.
+    pattern: /\b[A-Z][A-Z\d]{1,9}-\d{1,6}\b/g,
+    message: "looks like a ticket key from a private tracker",
+  },
+  {
+    id: "private-workspace",
+    pattern: /\b[\w-]+\.(atlassian\.net|slack\.com|notion\.so|linear\.app)\b/gi,
+    message: "links into a private workspace",
+  },
+  {
+    id: "email-address",
+    // A personal address in a public file. The GitHub no-reply form is the
+    // one that belongs in commit metadata; a `user:pass@host` URL is not an
+    // email and is skipped by the lookbehind.
+    pattern:
+      /(?<![:/\w])[\w.%+-]+@(?!users\.noreply\.github\.com)[\w-]+\.[\w.-]*[a-z]{2,}\b/gi,
+    message: "is an email address in a public file",
+  },
+];
+
+/** Everything that is published with the repository, not only the site. */
+const PUBLIC_ROOTS = [
+  ...ROOTS,
+  ".claude",
+  ".github",
+  "scripts",
+  "eslint-rules",
+];
+const PUBLIC_FILES = ["CLAUDE.md", "AGENTS.md", "README.md", "package.json"];
+const PUBLIC_EXTENSIONS = [...EXTENSIONS, ".mjs", ".json", ".yml", ".yaml"];
+
+function* walk(dir, extensions = EXTENSIONS) {
   for (const entry of readdirSync(dir)) {
     if (SKIP.has(entry)) continue;
     const path = join(dir, entry);
-    if (statSync(path).isDirectory()) yield* walk(path);
-    else if (EXTENSIONS.some((ext) => entry.endsWith(ext))) yield path;
+    if (statSync(path).isDirectory()) yield* walk(path, extensions);
+    else if (extensions.some((ext) => entry.endsWith(ext))) yield path;
   }
 }
 
@@ -98,9 +144,36 @@ for (const root_ of ROOTS) {
   }
 }
 
+function* publicFiles() {
+  for (const root_ of PUBLIC_ROOTS) {
+    const base = join(root, root_);
+    try {
+      statSync(base);
+    } catch {
+      continue;
+    }
+    yield* walk(base, PUBLIC_EXTENSIONS);
+  }
+  for (const file of PUBLIC_FILES) yield join(root, file);
+}
+
+for (const path of new Set(publicFiles())) {
+  const file = relative(root, path);
+  const lines = readFileSync(path, "utf8").split("\n");
+
+  lines.forEach((line, index) => {
+    for (const rule of INTERNAL_RULES) {
+      for (const match of line.matchAll(rule.pattern)) {
+        failures += 1;
+        console.log(`  ${file}:${index + 1}  "${match[0]}" ${rule.message}`);
+      }
+    }
+  });
+}
+
 if (failures > 0) {
   console.log(`\n${failures} copy issue${failures === 1 ? "" : "s"}.`);
   process.exit(1);
 }
 
-console.log("Copy conventions hold.");
+console.log("Copy conventions hold, and nothing internal is in the repo.");

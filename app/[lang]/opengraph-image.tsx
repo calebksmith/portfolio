@@ -125,7 +125,7 @@ export default async function Image({
       >
         <span style={{ color: MARK }}>{t.role}</span>
         <span>·</span>
-        <span>calebksmith.com</span>
+        <span>{new URL(site.url).host}</span>
       </div>
     </div>,
     size,
