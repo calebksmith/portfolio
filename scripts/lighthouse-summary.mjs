@@ -95,6 +95,40 @@ const body = rows
   )
   .join("\n");
 
+/**
+ * For a gated category under 100: which audits failed, and on what. A score
+ * alone sends someone to rerun Lighthouse locally, where the failure may not
+ * reproduce — the CI machine renders and times things its own way.
+ */
+const GATED = ["accessibility", "best-practices", "seo"];
+
+const failures = [...byUrl.entries()]
+  .sort(([a], [b]) => a.localeCompare(b))
+  .flatMap(([path, reports]) =>
+    GATED.flatMap((key) => {
+      const failing = reports.find((r) => (r.categories[key]?.score ?? 1) < 1);
+      if (!failing) return [];
+      return failing.categories[key].auditRefs
+        .filter((ref) => ref.weight > 0)
+        .map((ref) => failing.audits[ref.id])
+        .filter((audit) => audit.score !== null && audit.score < 1)
+        .map((audit) => {
+          const nodes = (audit.details?.items ?? [])
+            .map((item) => item.node?.snippet)
+            .filter(Boolean)
+            .slice(0, 3)
+            .map(
+              (snippet) =>
+                `  - \`${snippet.replaceAll("`", "'").slice(0, 160)}\``,
+            );
+          return [
+            `- \`${path}\` · ${key} · **${audit.id}**: ${audit.title}`,
+            ...nodes,
+          ].join("\n");
+        });
+    }),
+  );
+
 const worst = Math.min(...rows.map((r) => r.scores.accessibility));
 const note =
   worst === 100
@@ -107,7 +141,7 @@ ${header}
 ${body}
 
 ${note}
-
+${failures.length ? `\n### What failed\n\n${failures.join("\n")}\n` : ""}
 Median of ${rows[0]?.runs ?? 0} runs per page, on Lighthouse's default mobile
 profile — a mid-range Android on throttled 4G — against a production build. Accessibility, best practices and SEO fail the job below 100;
 performance is a budget at 80, because the homepage hero types its own text and
