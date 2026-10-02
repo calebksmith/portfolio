@@ -28,9 +28,10 @@ These are the same kind of guardrails I maintain on VimUI at work. Follow them.
 - Need a value that doesn't exist? Add it to the token block first, then use it.
 - **Colors are paired, not flat.** Every surface has a foreground:
   `background/foreground`, `card/card-foreground`, `muted/muted-foreground`,
-  `primary/primary-foreground`, `accent/accent-foreground`. A surface class
-  always travels with its foreground — `bg-card text-card-foreground`, never
-  `bg-card text-foreground`. This is what makes a new theme a value swap.
+  `primary/primary-foreground`, `accent/accent-foreground`. A surface is only
+  drawn with a foreground the contrast gate measures — its own pair, or an
+  equivalent measured one (see `ck/paired-surface` below). Don't create a token
+  just to complete a pair. This is what makes a new theme a value swap.
 - `--ck-border` is the decorative hairline; `--ck-input` is a control boundary
   and is held to 3:1. They are separate tokens for that reason.
 - Themes are alternate value sets for the same names, applied via `data-theme`
@@ -52,7 +53,8 @@ These are the same kind of guardrails I maintain on VimUI at work. Follow them.
 - Every component sets `data-slot`, so the inspector overlay can report what it
   is. Same attribute and meaning as the VimUI convention.
 - No hardcoded user-facing strings inside reusable components — pass via props.
-  Page-level content as literal text is fine.
+  Pages don't write copy inline either; it comes from the dictionary (see
+  **Content**).
 
 ### Accessibility — non-negotiable
 
@@ -129,8 +131,9 @@ This version differs from older App Router code in ways that matter:
 
 ## What is published
 
-`lib/flags.ts` decides. Production serves the landing page only; preview and
-development serve everything. Routes that aren't published call `notFound()`.
+`lib/flags.ts` decides. The whole portfolio is published. The cover-letter
+system (sign-in, admin, letters) turns on only where `DATABASE_URL` is set, and
+in development; elsewhere those routes call `notFound()`.
 
 ## Voice
 
