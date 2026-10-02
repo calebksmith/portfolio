@@ -11,6 +11,16 @@ const granted = () =>
 const onServer = () => false;
 
 /**
+ * A refused image means the link expired or was revoked. Dropping the mark on
+ * <html> swaps every gated figure on the page back to its note, rather than
+ * leaving empty frames — and the image route has already cleared the
+ * cookies, so the next page starts out public.
+ */
+function fallBack() {
+  document.documentElement.removeAttribute(ACCESS_ATTRIBUTE);
+}
+
+/**
  * The image half of a gated figure. It renders only in a browser the theme
  * script has marked as granted, so nobody else's browser ever requests the
  * file. The server render is empty: the page stays static, and the frame
@@ -41,6 +51,7 @@ export function GatedImage({
       width={width}
       height={height}
       decoding="async"
+      onError={fallBack}
       className="h-full w-full object-contain"
     />
   );

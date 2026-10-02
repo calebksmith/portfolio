@@ -2,10 +2,10 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 
 import { get } from "@vercel/blob";
-import type { NextRequest } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 
 import { GATED_PATH, verifyToken } from "@/lib/access";
-import { ACCESS_COOKIE } from "@/lib/access-cookies";
+import { ACCESS_COOKIE, ACCESS_FLAG_COOKIE } from "@/lib/access-cookies";
 import { env } from "@/lib/env";
 
 /**
@@ -22,7 +22,14 @@ export async function GET(
   ctx: RouteContext<"/api/media/[...path]">,
 ) {
   const pathname = (await ctx.params).path.join("/");
-  if (!GATED_PATH.test(pathname) || !hasAccess(request)) return missing();
+  if (!GATED_PATH.test(pathname)) return missing();
+
+  const access = check(request);
+  // A token that stopped working — expired, revoked, or signed with a
+  // rotated secret — also takes its cookies with it, so the visitor's next
+  // page is the public one instead of a page of empty frames.
+  if (access === "invalid") return missing({ forget: true });
+  if (access === "none") return missing();
 
   const image = await read(pathname);
   if (!image) return missing();
@@ -39,13 +46,16 @@ export async function GET(
   });
 }
 
-function hasAccess(request: NextRequest): boolean {
+function check(request: NextRequest): "valid" | "invalid" | "none" {
   const token = request.cookies.get(ACCESS_COOKIE)?.value;
-  if (!token) return false;
+  if (!token) return "none";
   try {
-    return verifyToken(token, env.accessSecret, env.accessRevoked) !== null;
+    return verifyToken(token, env.accessSecret, env.accessRevoked)
+      ? "valid"
+      : "invalid";
   } catch {
-    return false;
+    // No secret configured: nothing can be checked, and nothing is cleared.
+    return "none";
   }
 }
 
@@ -75,9 +85,15 @@ async function read(
   }
 }
 
-function missing(): Response {
-  return new Response("Not found", {
+function missing({ forget = false } = {}): Response {
+  const response = new NextResponse("Not found", {
     status: 404,
     headers: { "Cache-Control": "private, no-store" },
   });
+  if (forget) {
+    for (const name of [ACCESS_COOKIE, ACCESS_FLAG_COOKIE]) {
+      response.cookies.set(name, "", { path: "/", maxAge: 0 });
+    }
+  }
+  return response;
 }
