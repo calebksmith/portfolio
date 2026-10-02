@@ -376,6 +376,12 @@ export const en = {
     },
   },
 
+  /** In place of a screenshot from inside Vimocity's app, without access. */
+  gated: {
+    note: "Screens from inside Vimocity's app are shared on request.",
+    ask: "Ask on LinkedIn",
+  },
+
   caseStudy: {
     moreWork: "More of my work",
     loading: "Loading case study",

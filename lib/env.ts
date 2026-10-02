@@ -69,4 +69,31 @@ export const env = {
       "Any long random string; rotating it resets repeat-view detection.",
     );
   },
+
+  /**
+   * Signs the personal access links to the gated screenshots. The same value
+   * must be in Vercel and in `.env.local`, where `npm run access:link` signs.
+   */
+  get accessSecret(): string {
+    return required(
+      "ACCESS_SECRET",
+      "Any long random string, e.g. `openssl rand -base64 32`. Rotating it revokes every access link.",
+    );
+  },
+
+  /** Access-link ids that no longer work, comma-separated. Optional. */
+  get accessRevoked(): string[] {
+    return (process.env.ACCESS_REVOKED ?? "")
+      .split(",")
+      .map((id) => id.trim())
+      .filter(Boolean);
+  },
+
+  /** Read-write token for the private Blob store holding gated screenshots. */
+  get blobToken(): string {
+    return required(
+      "BLOB_READ_WRITE_TOKEN",
+      "Connect the private Blob store to the project in Vercel; its token appears in the project's environment variables.",
+    );
+  },
 } as const;

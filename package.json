@@ -19,12 +19,17 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "access:link": "node --env-file-if-exists=.env.local --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/access.mjs link",
+    "access:list": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/access.mjs list",
+    "access:revoke": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/access.mjs revoke",
+    "media:upload": "node --env-file-if-exists=.env.local --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/upload-private-media.mjs"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.11.3",
     "@neondatabase/serverless": "^1.1.0",
     "@radix-ui/react-slot": "^1.3.3",
+    "@vercel/blob": "^2.8.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "drizzle-orm": "^0.45.3",
