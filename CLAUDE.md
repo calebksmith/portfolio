@@ -146,7 +146,9 @@ This version differs from older App Router code in ways that matter:
 
 `lib/flags.ts` decides. The whole portfolio is published. The cover-letter
 system (sign-in, admin, letters) turns on only where `DATABASE_URL` is set, and
-in development; elsewhere those routes call `notFound()`.
+in development; elsewhere those routes call `notFound()`. Screenshots from
+inside Vimocity's app are shown only to people with a personal access link
+(`npm run access:link`); everyone else sees a note in their place.
 
 ## Voice
 
@@ -197,5 +199,8 @@ interactive element, Lighthouse accessibility and performance ≥ 95.
 - Add a dependency without a clear reason it beats writing it.
 - Use `localStorage` or any browser storage. Cookies or server state only.
 - Install a UI library. cksUI is the UI — copied-in source we own is the point.
-- Use product screenshots from behind Vimocity's paywall. The public Storybook
-  at vimui.vimocity.com is the interactive proof; link and embed from it.
+- Put a screenshot from behind Vimocity's login in the repository. Screens
+  anyone can open without an account (the login, a shared playlist, the public
+  Storybook at vimui.vimocity.com) are ordinary images, allowlisted in
+  `lib/content/integrity.test.ts`. Everything else is a `<GatedFigure>`, served
+  from the private Blob store. See `docs/decisions/0007-gated-screens.md`.

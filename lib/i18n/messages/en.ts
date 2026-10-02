@@ -350,6 +350,16 @@ export const en = {
       components: { name: "Components", note: "50+, React and Radix" },
       login: { name: "Login & account", note: "runs in a webview" },
     },
+    loginEverywhere: {
+      label:
+        "The same Vimocity login screen in three places: the web portal in a browser, the iOS and Android apps through a webview, and V-minder, the Windows desktop app.",
+      url: "portal.vimocity.com",
+      appTitle: "V-minder",
+      web: "Web portal",
+      mobile: "iOS and Android apps",
+      mobileNote: "through a webview",
+      desktop: "Windows desktop app",
+    },
     teamScoring: {
       label:
         "A crew of five with all five completing scores 100 for the day. A team of fifty with forty-five completing scores 90. A crew of four, below a minimum of five, scores at most 80.",
@@ -364,6 +374,12 @@ export const en = {
       pts: "pts",
       max: "max",
     },
+  },
+
+  /** In place of a screenshot from inside Vimocity's app, without access. */
+  gated: {
+    note: "Screens from inside Vimocity's app are shared on request.",
+    ask: "Ask on LinkedIn",
   },
 
   caseStudy: {
