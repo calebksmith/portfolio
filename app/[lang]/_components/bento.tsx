@@ -194,7 +194,7 @@ export async function Bento() {
         */}
         <section
           id="work"
-          aria-labelledby="selected-work"
+          aria-labelledby="work-heading"
           className="scroll-mt-20 pb-24"
         >
           {/* The case studies: where each sits in Vimocity, or all of them as
