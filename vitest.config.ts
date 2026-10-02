@@ -12,12 +12,13 @@ import { fileURLToPath } from "node:url";
  * "Submit" would add a maintenance cost and catch nothing those three miss.
  *
  * What is tested here is the logic those tools cannot see: colour math,
- * a hand-written frontmatter parser, and the content's own integrity.
+ * a hand-written frontmatter parser, the content's own integrity, and the
+ * class merging every component's overrides depend on.
  */
 export default defineConfig({
   test: {
     environment: "node",
-    include: ["{lib,scripts,src,eslint-rules}/**/*.test.ts"],
+    include: ["{lib,scripts,src,eslint-rules,components}/**/*.test.ts"],
   },
   resolve: {
     alias: {
