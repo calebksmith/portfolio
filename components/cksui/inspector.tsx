@@ -8,6 +8,7 @@ import {
   inspectTarget,
   type Inspection,
 } from "@/lib/inspect";
+import type { Messages } from "@/lib/i18n/messages";
 import { INSPECT_ATTRIBUTE } from "@/lib/theme";
 
 import { Eyebrow } from "./eyebrow";
@@ -31,16 +32,24 @@ import { useHtmlAttribute } from "./lib/use-html-attribute";
  *     that only answers a mouse would undercut the argument it exists to make —
  *     so while it is on, every `[data-slot]` becomes a tab stop.
  */
-export function Inspector() {
+/**
+ * Every visible string, including the rule statement for each slot. The rules
+ * are the third column the inspector reports — component, tokens, and the rule
+ * behind them. Only slots with a rule worth stating have one; the rest report
+ * their tokens and nothing invented.
+ */
+export type InspectorLabels = Messages["inspector"];
+
+export function Inspector({ labels }: { labels: InspectorLabels }) {
   const active = useHtmlAttribute<"on" | "off">(INSPECT_ATTRIBUTE, "off");
 
   // The overlay holds all the state, so turning inspection off unmounts it and
   // discards that state as a consequence. Clearing it by hand in an effect
   // would mean a second copy of "is this on" that can disagree with the DOM.
-  return active === "on" ? <InspectorOverlay /> : null;
+  return active === "on" ? <InspectorOverlay labels={labels} /> : null;
 }
 
-function InspectorOverlay() {
+function InspectorOverlay({ labels }: { labels: InspectorLabels }) {
   const [inspection, setInspection] = useState<Inspection | null>(null);
   const [rect, setRect] = useState<DOMRect | null>(null);
   const targetRef = useRef<HTMLElement | null>(null);
@@ -127,9 +136,23 @@ function InspectorOverlay() {
       ) : null}
 
       {/*
-        Docked right, the way browser devtools dock — out of the reading column
-        rather than sitting on top of it. Below the header in z-order, so the
-        Inspect toggle stays reachable and you are never trapped in the mode.
+        A column in the layout, not a panel over it. It used to be `fixed`, with
+        a margin pushing `main` and the footer clear — which left the header
+        full width and therefore underneath it, so the Inspect toggle you needed
+        to get back out was the thing being covered.
+
+        Sticky rather than fixed, so it holds position while the page scrolls
+        without leaving the flow.
+
+        On the left, and last in the DOM. Those are not in conflict: `order`
+        places it visually first while the tab order still runs through the page
+        before reaching the panel, which is the right sequence — the site is the
+        content and this is a tool for looking at it.
+
+        `min()` rather than a breakpoint. On a wide screen 50vw is larger than
+        the token, so the token wins; on a phone the viewport wins and the panel
+        takes half rather than all of it. One expression, no breakpoint to keep
+        in step with anything.
       */}
       <aside
         data-inspector-chrome=""
@@ -140,20 +163,20 @@ function InspectorOverlay() {
            it, so the title sits on the header's own baseline and the panel
            tracks the header if its height ever changes. */
         style={{
-          top: "var(--ck-header-height)",
-          width: "min(var(--ck-inspector-width), 100vw)",
+          width: "min(var(--ck-inspector-width), 50vw)",
+          order: -1,
         }}
-        className="fixed right-0 bottom-0 z-30 overflow-y-auto border-l border-input bg-card p-5 text-card-foreground shadow-lg"
+        className="sticky top-0 z-30 h-svh shrink-0 overflow-y-auto border-r border-input bg-card p-5 text-card-foreground shadow-lg"
       >
         <header className="mb-5 border-b border-border pb-3">
           <h2
             id="ck-inspector-title"
             className="font-display text-sm font-semibold tracking-[-0.01em]"
           >
-            Inspector
+            {labels.title}
           </h2>
           <p className="mt-1 text-xs text-pretty text-muted-foreground">
-            What each element is, and which tokens it resolves to.
+            {labels.description}
           </p>
         </header>
 
@@ -164,7 +187,9 @@ function InspectorOverlay() {
         <div aria-live="polite">
           {inspection ? (
             <>
-              <Label>{inspection.slot ? "Component" : "Element"}</Label>
+              <Label>
+                {inspection.slot ? labels.component : labels.element}
+              </Label>
               <p className="mt-1 font-display text-base font-semibold tracking-[-0.01em]">
                 {inspection.slot ?? `<${inspection.tag}>`}
                 {inspection.slot ? (
@@ -176,13 +201,13 @@ function InspectorOverlay() {
 
               {inspection.owner ? (
                 <p className="mt-1 text-xs text-muted-foreground">
-                  inside {inspection.owner}
+                  {labels.inside} {inspection.owner}
                 </p>
               ) : null}
 
               {inspection.tokens.length > 0 ? (
                 <>
-                  <Label className="mt-5">Tokens</Label>
+                  <Label className="mt-5">{labels.tokens}</Label>
                   <ul className="mt-1 space-y-1">
                     {inspection.tokens.map((entry) => (
                       <li
@@ -190,7 +215,7 @@ function InspectorOverlay() {
                         className="flex items-baseline justify-between gap-3 text-xs"
                       >
                         <span className="text-muted-foreground">
-                          {entry.label}
+                          {labels.properties[entry.property] ?? entry.property}
                         </span>
                         {entry.token ? (
                           <span className="text-right">--ck-{entry.token}</span>
@@ -198,7 +223,7 @@ function InspectorOverlay() {
                           // Saying so is the point: an unresolvable value is a
                           // violation of the token rule, not a gap in the tool.
                           <span className="text-right text-muted-foreground">
-                            {entry.value} — no token
+                            {entry.value} — {labels.noToken}
                           </span>
                         )}
                       </li>
@@ -209,34 +234,43 @@ function InspectorOverlay() {
 
               {inspection.type ? (
                 <>
-                  <Label className="mt-5">Type</Label>
+                  <Label className="mt-5">{labels.type}</Label>
                   <ul className="mt-1 space-y-1 text-xs">
-                    <Row label="Family" value={inspection.type.family} />
-                    <Row label="Size" value={inspection.type.size} />
-                    <Row label="Weight" value={inspection.type.weight} />
-                    <Row label="Leading" value={inspection.type.lineHeight} />
+                    <Row
+                      label={labels.family}
+                      value={
+                        inspection.type.family === "display" ||
+                        inspection.type.family === "body"
+                          ? labels.faces[inspection.type.family]
+                          : inspection.type.family
+                      }
+                    />
+                    <Row label={labels.size} value={inspection.type.size} />
+                    <Row label={labels.weight} value={inspection.type.weight} />
+                    <Row
+                      label={labels.leading}
+                      value={inspection.type.lineHeight}
+                    />
                   </ul>
                 </>
               ) : null}
 
-              {inspection.rule ? (
+              {inspection.slot && labels.rules[inspection.slot] ? (
                 <>
-                  <Label className="mt-5">Rule</Label>
+                  <Label className="mt-5">{labels.rule}</Label>
                   <p className="mt-1 text-xs text-pretty text-muted-foreground">
-                    {inspection.rule}
+                    {labels.rules[inspection.slot]}
                   </p>
                 </>
               ) : null}
             </>
           ) : (
-            <p className="text-xs text-muted-foreground">
-              Hover or tab to any element to inspect it.
-            </p>
+            <p className="text-xs text-muted-foreground">{labels.empty}</p>
           )}
         </div>
 
         <Eyebrow size="sm" className="mt-6 border-t border-border pt-3">
-          Esc to exit
+          {labels.exit}
         </Eyebrow>
       </aside>
     </>

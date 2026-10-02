@@ -1,0 +1,144 @@
+<Section title="Three surfaces">
+
+<Surfaces
+  items={[
+    { who: "Anyone", name: "Public portfolio", need: "Fast, static, indexable", status: "Live", live: true },
+    { who: "Me", name: "Admin", need: "Authenticated, write-heavy", status: "Live", live: true },
+    { who: "One hiring manager, by link", name: "Cover letters", need: "Private, unguessable, one per opening", status: "Built, not yet in use", live: false },
+  ]}
+/>
+
+<Note>The third one shaped most of what follows, and is the one still waiting on a first real use. Everything under it — the schema, the token generation, the guard — is built and tested; no letter has been sent yet.</Note>
+
+</Section>
+
+<Section title="Shape">
+
+<Shape>
+  <NodeRow>
+    <Node label="Visitor" />
+    <Node label="Hiring manager" sub="holds a link" />
+    <Node label="Me" sub="admin" />
+  </NodeRow>
+  <Arrow />
+  <NodeRow>
+    <Node code label="[lang]" sub="static" />
+    <Node code label="/letter/[token]" sub="per request, noindex" />
+    <Node code label="(letters)/admin" sub="gated per route" />
+  </NodeRow>
+  <Arrow />
+  <NodeRow>
+    <Node wide keystone code label="lib/repositories/" sub="every query lives here — nothing above writes SQL, nothing below knows what a route is" />
+  </NodeRow>
+  <Arrow />
+  <NodeRow>
+    <Node label="Neon Postgres" sub="over HTTP" />
+    <Node label="GitHub OAuth" sub="identity only" />
+    <Node label="Vercel" sub="hosting" />
+  </NodeRow>
+</Shape>
+
+</Section>
+
+<Section title="Decisions">
+
+<Decision title="Server Components by default">
+
+Nearly every page is a read of content the visitor didn’t personalise. The landing and sign-in pages ship zero application JavaScript. Client components go at the leaf, when an interaction needs one.
+
+</Decision>
+
+<Decision title="Tailwind v4, configured in CSS">
+
+Tokens and the utility namespace sit in one file, twelve lines apart, so they can’t drift. Dark mode is defined per token, not retrofitted. Focus rings always visible; animations no-op under reduced motion. This page uses the same tokens.
+
+<Pull>Every color, radius, and duration resolves to a token. A hex value in a component is a reviewable error.</Pull>
+
+</Decision>
+
+<Decision title="A component library I own, not one I installed">
+
+<Verdict
+  chosen={{ what: "cksUI, in this repo", why: "Built on shadcn's patterns — Radix for behavior, source copied in — with every value rewritten onto these tokens." }}
+  rejected={{ what: "An installed UI library", why: "It would ship someone else's UI and run a second design system alongside this one." }}
+/>
+
+Radix stays a dependency, and a justified one: focus management, keyboard interaction, and ARIA are where a subtle mistake is invisible until it reaches someone using a screen reader.
+
+<Pull>cksUI stands in the same relation to this site that VimUI does to the product I work on. The portfolio is an example of the claim rather than a description of it.</Pull>
+
+</Decision>
+
+<Decision title="Neon over Supabase">
+
+<Verdict
+  chosen={{ what: "Neon + Drizzle", why: "Scales to zero, resumes instantly. Speaks Postgres over HTTP, so there's no connection pool to exhaust." }}
+  rejected={{ what: "Supabase", why: "Its edge is Auth + row-level security — unused here, since auth is Auth.js. Complexity stays, payoff doesn't." }}
+/>
+
+The decider was practical: free-tier Supabase pauses after about a week idle, and the worst moment for that is a hiring manager opening a letter three days after I sent it. Cost: no table-editing UI, no file storage.
+
+**Drizzle over Prisma** — lighter runtime, no codegen in the deploy path, migrations as plain SQL reviewable in a PR. One file knows the database is Neon.
+
+</Decision>
+
+<Decision title="OAuth, where a password would have done">
+
+For one user, a hashed password in an env var would be adequate security in eighty lines. I chose OAuth because OIDC is how modern auth actually works and every enterprise SSO product is the same flow with a different issuer — I wanted to build it, not read about it.
+
+<Verdict
+  chosen={{ what: "Auth.js + database sessions", why: "Every leg of the code exchange leaves an inspectable row. Deleting a session row ends it immediately." }}
+  rejected={{ what: "Clerk, and JWT sessions", why: "Clerk's value proposition is hiding the mechanics. A signed JWT stays valid until it expires." }}
+/>
+
+<Pull>Authentication is not authorization. GitHub will prove the identity of any of its users; it has no opinion on who may edit my portfolio.</Pull>
+
+So a sign-in callback checks the login against an allowlist. No proxy-level guard: Next’s docs say that layer suits optimistic checks and real authorization belongs next to the data, so every admin route calls the guard itself.
+
+</Decision>
+
+<Decision title="Deleting six tables when the requirement changed">
+
+The schema was built for “tailored CVs” — positions, bullets, skills, tags, and case studies, joined per opening with overrides. It was a misreading that survived long enough to become six tables.
+
+The actual need was cover letters. A CV is assembled from parts; a letter is prose addressed to one reader. Nothing to select, nothing to reorder.
+
+<Verdict
+  chosen={{ what: "Delete the six tables", why: "Case studies are files and the experience page is structured data, so none of them had a reader left." }}
+  rejected={{ what: "Keep them for later", why: "Unused schema is a claim about the future that has to be maintained and explained." }}
+/>
+
+<Pull>The most useful thing I did to this database was take most of it out.</Pull>
+
+</Decision>
+
+<Decision title="The URL is the credential">
+
+No login, because asking a hiring manager to register to read a cover letter is a good way to not have it read. The boundary is token entropy: 32 bytes from a CSPRNG, generated in the repository layer, never accepted as an argument.
+
+Accepted honestly: anyone with the link can read and forward it. It’s a letter written to be handed to someone I have never met, so exposure is bounded by what it already is. It is also HTML only — a downloadable copy would be a second artifact of the same content, stale the moment a sentence changes. Mitigations: revoke, rotate, expire, `noindex`, and an **identical 404** for revoked, expired, draft, and nonexistent alike, so a recipient can’t learn a link was turned off — or that a company was ever sent one.
+
+</Decision>
+
+<Decision title="View logging, minimal on purpose">
+
+“Did they open it” is useful, but the visitor is a counterparty in a hiring process who consented to nothing. No cookies, no fingerprinting, no third-party analytics. IP stored only as a salted hash; rotating the salt severs the link to everything logged — which is why the salt is secret, since hashing an IP isn’t strong anonymisation. The write happens after the response is sent and swallows its errors.
+
+</Decision>
+
+</Section>
+
+<Section title="Deliberately not built">
+
+Stated explicitly, because unfinished and overlooked look identical from outside.
+
+<Pending
+  items={[
+    { thing: "Admin editing screens", why: "Schema, repositories, and the gate exist. Each screen is a form wired to a server action." },
+    { thing: "Cache Components", why: "Off until DB-backed routes exist and can be verified against it. The code is already written in the shape it wants." },
+  ]}
+/>
+
+</Section>
+
+<Footer>Per-decision records live in <code>docs/decisions/</code>. The rules the codebase is held to live in <code>CLAUDE.md</code> — which exists so the standard is applied by default rather than corrected after the fact.</Footer>

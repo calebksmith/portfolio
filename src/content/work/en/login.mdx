@@ -1,0 +1,68 @@
+---
+title: Login and account creation: One sign-in for web, mobile, and desktop
+role: Product design, cross-platform
+year: 2025
+stack: [Figma, WebView, SSO, MFA]
+summary: Login and account-access support tickets dropped 80% — a forgotten password isn't a reset anymore, and a forgotten email isn't a dead end.
+user: Pick your company to sign up, and get back in with a code instead of a password reset.
+business: Fewer support tickets, and one login service to maintain instead of three.
+connects: [vimui, challenges]
+area: identity
+order: 1
+impact: −80% login support tickets
+---
+
+## Problem
+
+Web, mobile, and desktop each had their own login, and getting in was our top
+support issue.
+
+Sign-up was worse. Each organization has its own way in, like single sign-on, an
+email allowlist, or a registration code. Users didn't know which was theirs.
+
+> **The call:** a code, not a magic link. We designed the link first, but it
+> assumes the device reading the email is the device signing in — and for a
+> utility crew sharing a terminal, it usually isn't. A six-digit code travels
+> between devices. A link doesn't.
+
+<Figure
+  ratio="700/260"
+  caption="Email on a phone, Vimocity on a shared terminal: the code makes the trip, the link can't."
+>
+  <DeviceHandoff />
+</Figure>
+
+## What I did
+
+- **Started with research.** Interviews, support tickets, and the five whys
+  showed people weren't locked out by security. They forgot a password, or which
+  email they'd signed up with. I explored options and tested the design with
+  customers.
+- **Designed for forgetting.** "Remember me" keeps your email, and a forgotten
+  password gets a code by email, not a reset. Changing a password you've
+  forgotten is a chore invented by the login screen, not a security
+  requirement.
+- **One flow, one service.** One web login, shown in the mobile and desktop apps
+  through a webview. Three codebases became one.
+- **Asked "who do you work for?"** instead of "which registration type is
+  yours?" Pick your company and get its flow. The list stays empty until you
+  type three letters and includes decoys, so nobody can use it to list our
+  customers.
+- **Designed the admin side.** Admins see who hasn't signed up and invite them.
+  About two in three active organizations used it in its first eight months.
+
+## Outcome
+
+- **Login and account-access support tickets dropped 80%.**
+- Users hitting a broken password-reset link fell more than 90%, and sign-ins
+  held steady through the switch.
+- Security went up — email verification, MFA — without adding steps to the
+  common path.
+
+> **Trade-offs:** a webview isn't native; we took slightly less polish for one
+> flow instead of three, the right call for a small team. Biometric sign-in was
+> prototyped and cut to ship sooner. It's the first thing I'd put back.
+
+**Who did what:** I led the UX research, customer interviews, and UI.
+Engineering built the flows and the service; product management and leadership
+shaped the verification requirements.

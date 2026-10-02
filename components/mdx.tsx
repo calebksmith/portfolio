@@ -1,10 +1,21 @@
 import { MDXRemote } from "next-mdx-remote/rsc";
+import {
+  Children,
+  isValidElement,
+  type ComponentType,
+  type ReactElement,
+  type ReactNode,
+} from "react";
+
+import { Eyebrow, Figure, Tabs } from "@/components/cksui";
+import { DeviceHandoff } from "@/components/diagrams/device-handoff";
+import { SystemReach } from "@/components/diagrams/system-reach";
+import { TeamScoring } from "@/components/diagrams/team-scoring";
+import { localizePath, type Locale } from "@/lib/i18n/config";
 
 /**
- * Renders MDX that came out of the database.
- *
- * Cover letters are stored as MDX source and
- * compiled here, in a Server Component, so no MDX runtime ships to the browser.
+ * Renders MDX: case studies and the colophon from `src/content/`, and cover
+ * letters from the database. All of it is compiled here, in a Server Component, so no MDX runtime ships to the browser.
  *
  * The component map is the guardrail: prose written in the admin panel cannot
  * introduce colors, spacing, or type of its own, because every element it can
@@ -51,13 +62,18 @@ const components = {
       {...props}
     />
   ),
-  a: ({ children, ...props }: React.ComponentProps<"a">) => (
-    <a
-      className="text-primary underline underline-offset-4 hover:opacity-80"
+  // Raster images, for the few things a diagram cannot show — a Storybook grid,
+  // a real terminal run. Width and height are required by the same rule the
+  // Figure component enforces: an image with no dimensions is a layout shift
+  // waiting for a slow connection.
+  img: (props: React.ComponentProps<"img">) => (
+    // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
+    <img
+      loading="lazy"
+      decoding="async"
+      className="h-auto w-full rounded-lg border border-border"
       {...props}
-    >
-      {children}
-    </a>
+    />
   ),
   blockquote: (props: React.ComponentProps<"blockquote">) => (
     <blockquote
@@ -71,9 +87,11 @@ const components = {
       {...props}
     />
   ),
+  // A code block reuses the inline `code` element, so its chip is cleared here
+  // rather than drawing a box inside the box.
   pre: (props: React.ComponentProps<"pre">) => (
     <pre
-      className="mt-6 overflow-x-auto rounded-md border border-border bg-card p-4 text-xs"
+      className="mt-6 overflow-x-auto rounded-md border border-border bg-card p-4 text-xs [&>code]:bg-transparent [&>code]:p-0"
       {...props}
     />
   ),
@@ -82,6 +100,116 @@ const components = {
   ),
 };
 
-export function Mdx({ source }: { source: string }) {
-  return <MDXRemote source={source} components={components} />;
+type SegmentProps = { value: string; label: string; children: ReactNode };
+
+/**
+ * One view inside `<Segments>`. It carries a label and its content; Segments
+ * reads both and draws the control, so this never renders on its own.
+ */
+function Segment({ children }: SegmentProps) {
+  return <>{children}</>;
+}
+
+/**
+ * A segmented control written in MDX: one subject, one view per kind of it.
+ *
+ *   <Segments title="Challenge types">
+ *     <Segment value="leaderboard" label="Leaderboard"> markdown </Segment>
+ *     <Segment value="target" label="Target"> markdown </Segment>
+ *   </Segments>
+ *
+ * Each Segment is ordinary markdown, so the copy stays in the case study.
+ * cksUI's Tabs owns the behavior: the keyboard, the roles, and the no-script
+ * fallback that shows every view stacked. Held to the prose measure, so the
+ * control sits over the column it switches rather than at the page's edge.
+ */
+function Segments({ title, children }: { title: string; children: ReactNode }) {
+  const items = Children.toArray(children)
+    .filter(
+      (child): child is ReactElement<SegmentProps> =>
+        isValidElement(child) && child.type === Segment,
+    )
+    .map(({ props }) => ({
+      value: props.value,
+      label: props.label,
+      content: props.children,
+    }));
+
+  return (
+    <Tabs
+      label={title}
+      items={items}
+      className="mt-10 max-w-measure-wide"
+      header={
+        <Eyebrow asChild>
+          <h3>{title}</h3>
+        </Eyebrow>
+      }
+    />
+  );
+}
+
+/**
+ * Components a case study may use directly. Diagrams are named here rather than
+ * imported per file because MDX has no imports — the map is the whole surface.
+ */
+const available = {
+  ...components,
+  Figure,
+  Segments,
+  Segment,
+  DeviceHandoff,
+  SystemReach,
+  TeamScoring,
+};
+
+/**
+ * Internal links are written locale-free in the MDX — `/work/login` — and
+ * prefixed here for the language being read, so a translated case study does
+ * not have to remember which language it is in to link correctly.
+ */
+function linkFor(locale: Locale) {
+  return function MdxLink({
+    children,
+    href = "",
+    ...props
+  }: React.ComponentProps<"a">) {
+    return (
+      <a
+        className="text-primary underline underline-offset-4 hover:opacity-80"
+        href={localizePath(locale, href)}
+        {...props}
+      >
+        {children}
+      </a>
+    );
+  };
+}
+
+export function Mdx({
+  source,
+  locale,
+  extra,
+  trusted = false,
+}: {
+  source: string;
+  locale: Locale;
+  /** Page-specific components on top of the shared map, e.g. the colophon's. */
+  extra?: Record<string, ComponentType<never>>;
+  /**
+   * Content committed to this repository — case studies, the colophon — may
+   * pass objects and arrays as props (`items={[…]}`). Content from the
+   * database may not: JavaScript expressions stay blocked by default, so a
+   * stored cover letter cannot execute anything. Dangerous globals stay
+   * blocked either way.
+   */
+  trusted?: boolean;
+}) {
+  return (
+    <MDXRemote
+      source={source}
+      components={{ ...available, a: linkFor(locale), ...extra }}
+      options={trusted ? { blockJS: false } : undefined}
+    />
+  );
 }

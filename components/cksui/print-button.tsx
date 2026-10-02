@@ -13,7 +13,13 @@ import { Button } from "./button";
  * The whole control is hidden when printing — a "Print" button in a printout is
  * the kind of detail that reads as carelessness on a résumé.
  */
-export function PrintButton({ className }: { className?: string }) {
+export function PrintButton({
+  label,
+  className,
+}: {
+  label: string;
+  className?: string;
+}) {
   return (
     <Button
       variant="outline"
@@ -21,7 +27,7 @@ export function PrintButton({ className }: { className?: string }) {
       className={className}
       onClick={() => window.print()}
     >
-      Print / Save as PDF
+      {label}
     </Button>
   );
 }

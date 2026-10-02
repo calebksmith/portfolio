@@ -7,18 +7,53 @@
  * that nothing can exercise is a hand-written parser nobody should trust.
  */
 
-/** Weight drives the bento grid's span. Largest first. */
-export type Weight = "large" | "medium" | "small";
+/**
+ * Where a case study sits in the Vimocity ecosystem: the people it serves, or
+ * the layers everyone shares. Different people use Vimocity for different jobs,
+ * so the first three are personas; identity and platform run underneath all of
+ * them. In display order.
+ */
+export const AREAS = [
+  "workers",
+  "safety-leaders",
+  "admins",
+  "identity",
+  "platform",
+] as const;
+export type Area = (typeof AREAS)[number];
 
 export type CaseStudy = {
   slug: string;
+  /** `Name: What it is` — the feature first, then a plain description. */
   title: string;
+  /** The part before the colon: breadcrumbs, links between studies, the map. */
+  name: string;
+  /** The part after it: shown under the name wherever the title is. */
+  descriptor: string;
   role: string;
   year: string;
   /** What it was built with. Badges name a stack, not a device list. */
   stack: string[];
   summary: string;
-  weight: Weight;
+  /**
+   * Why it mattered, in product terms — user value and business value, one
+   * line each: what it changed for the people using Vimocity, and what it
+   * changed for the business. Required; a case study that can't say both isn't
+   * finished.
+   */
+  user: string;
+  business: string;
+  /** Slugs of the case studies this one feeds or depends on. */
+  connects: string[];
+  /** Where it sits in the ecosystem, and its place within that area. */
+  area: Area;
+  order: number;
+  /**
+   * The headline result as a chip on the card — "−80% login support
+   * tickets". Short enough to scan; the full figure and its caveat are on the
+   * page. Optional: not every case study has a number to show.
+   */
+  impact?: string;
   /** The MDX body, compiled at render time by components/mdx.tsx. */
   body: string;
 };
@@ -66,8 +101,6 @@ export function parseFrontmatter(source: string, file: string) {
   return { data, body: body.trim() };
 }
 
-export const WEIGHTS: Weight[] = ["large", "medium", "small"];
-
 export function required(
   data: Record<string, string | string[]>,
   key: string,
@@ -91,23 +124,51 @@ export function toCaseStudy(
   data: Record<string, string | string[]>,
   body: string,
 ): CaseStudy {
-  const weight = required(data, "weight", file);
-  if (!WEIGHTS.includes(weight as Weight)) {
+  const stack = data.stack;
+  const connects = data.connects;
+
+  const area = required(data, "area", file);
+  if (!AREAS.includes(area as Area)) {
     throw new Error(
-      `${file}: weight must be one of ${WEIGHTS.join(", ")} — got "${weight}"`,
+      `${file}: area must be one of ${AREAS.join(", ")} — got "${area}"`,
+    );
+  }
+  const order = Number(data.order ?? Number.MAX_SAFE_INTEGER);
+  const impact = data.impact;
+
+  // Titles inform rather than tease: a reader should know what the feature is
+  // before clicking. So every title is `Name: What it is`, and a title that
+  // isn't fails the build rather than reaching a card. The second part is shown
+  // on its own line under the name, so it starts with a capital like any line.
+  const title = required(data, "title", file);
+  const separator = title.indexOf(": ");
+  if (separator < 1 || separator === title.length - 2) {
+    throw new Error(
+      `${file}: title must name the feature first, as "Name: What it is" — got "${title}"`,
+    );
+  }
+  const descriptor = title.slice(separator + 2);
+  if (/^\p{Ll}/u.test(descriptor)) {
+    throw new Error(
+      `${file}: "${descriptor}" starts its own line under the name, so it starts with a capital`,
     );
   }
 
-  const stack = data.stack;
-
   return {
     slug: file.replace(/\.mdx$/, ""),
-    title: required(data, "title", file),
+    title,
+    name: title.slice(0, separator),
+    descriptor,
     role: required(data, "role", file),
     year: required(data, "year", file),
     stack: Array.isArray(stack) ? stack : [],
     summary: required(data, "summary", file),
-    weight: weight as Weight,
+    user: required(data, "user", file),
+    business: required(data, "business", file),
+    connects: Array.isArray(connects) ? connects : [],
+    area: area as Area,
+    impact: typeof impact === "string" && impact ? impact : undefined,
+    order: Number.isFinite(order) ? order : Number.MAX_SAFE_INTEGER,
     body,
   } satisfies CaseStudy;
 }

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { ComponentProps, ReactNode } from "react";
 
 import { cn } from "./lib/cn";
@@ -149,5 +150,24 @@ export function ControlToggle({
       {icon}
       <span className="sr-only sm:not-sr-only">{label}</span>
     </button>
+  );
+}
+
+/**
+ * An instrument that goes somewhere — the language toggle.
+ *
+ * Same visual grammar as the buttons, but a real link: changing language is a
+ * different URL, which someone should be able to open in a new tab or copy.
+ */
+export function ControlLink({
+  className,
+  ...props
+}: ComponentProps<typeof Link>) {
+  return (
+    <Link
+      data-slot="control-link"
+      className={cn(CONTROL_ITEM, CONTROL_REST, className)}
+      {...props}
+    />
   );
 }

@@ -95,8 +95,8 @@ A number nobody reads is a number nobody notices moving.
 
 ```
 app/
-  (site)/          public pages, and the chrome they share
-  (admin)/         authenticated, gated per route
+  [lang]/          public pages and their chrome, one tree per locale
+  (letters)/       admin and shared cover letters — English only
   letter/[token]/  a cover letter behind an unguessable URL
   opengraph-image  link preview, generated from lib/site.ts
 components/cksui/  the component library — copied-in source, not a dependency
@@ -105,6 +105,11 @@ src/content/work/  case studies as MDX; adding one is adding a file
 scripts/           the two checks
 docs/decisions/    architecture decision records
 ```
+
+Copy lives in the repo, typed and split by length: interface strings in
+`lib/i18n/messages/`, case studies and long pages as MDX in
+`src/content/<kind>/<locale>/`, the résumé in `lib/content/resume/`. English is
+served at bare paths; other locales get a prefix. See ADR 0006.
 
 **cksUI** is built on shadcn/ui's patterns — copied-in source, Radix for
 behaviour, `cva` for variants — with every value rewritten onto the tokens. It is
@@ -128,6 +133,20 @@ no token is a violation, and the panel says so rather than hiding it.
   first paint, so there is no flash.
 - **Cache Components are off.** Considered, not overlooked — see
   `docs/decisions/0001`.
+
+## Gotchas
+
+- **The dev server serves stale CSS after a `globals.css` change.** Verify CSS
+  changes against `npm run build` output, not the dev server.
+- **Case studies are read at module scope.** Adding or renaming an `.mdx` file
+  needs a dev server restart to show up.
+- **Route types (`PageProps<>`, `LayoutProps<>`) are generated, not committed.**
+  `npm run typecheck` runs `next typegen` first, so a fresh checkout or a
+  moved route type-checks without a build. Bare `tsc --noEmit` does not.
+- **Tailwind v4's spacing scale is a single multiplier**, not a named map. A
+  `--spacing-foo` theme key silently generates no utility. Use `@utility`.
+- **`eslint-config-next` already registers the jsx-a11y plugin.** Spreading the
+  whole `jsx-a11y` flat config re-registers it and errors; spread only `.rules`.
 
 ## Stack
 

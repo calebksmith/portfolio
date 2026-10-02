@@ -1,0 +1,65 @@
+---
+title: Design guardrails: Keeping AI-written code on the design system
+role: Design systems, AI tooling
+year: 2025–2026
+stack: [Claude Code Skills, ESLint, Design tokens]
+summary: One design standard, enforced in the coding agent, on demand, and before merge — so review stopped waiting on me.
+user: One consistent, accessible product, no matter who built the page.
+business: Design stopped being the bottleneck, so the team ships without a designer on every change.
+connects: [vimui, platform-rebuild]
+area: platform
+order: 2
+---
+
+## Problem
+
+The product team was shipping fast with AI, and nothing matched: different
+repositories, different component libraries, patterns invented on the spot.
+Even code that used our design system used it wrong — raw colors, type off the
+scale. The only check was me, reviewing everything. Design had become the
+bottleneck.
+
+> **The call:** stop reviewing for the standard and start enforcing it — in
+> three places, because a rule enforced one way has a gap in it. Not every rule
+> is a hard failure. Some are warnings, because breaking a guideline on purpose
+> is sometimes the right design.
+
+## What I did
+
+- **Loaded it into the agent.** Repository rules in the Claude Code file cover
+  components, tokens, page structure, and accessibility, so new pages come out
+  in the right shape.
+- **Made it checkable on demand.** A design-audit skill anyone can run mid-build
+  walks the checklist and says what to fix.
+- **Gated it before merge.** Lint rules run on every push, on generated and
+  hand-written code alike — tokens, breakpoints, loading states, and reuse. A
+  local component that gets reused is flagged for the library.
+- **Built it twice:** for the web app's pages, and for the
+  [VimUI](/work/vimui) component library, where the rules differ but the gap is
+  the same.
+
+## Outcome
+
+- Review used to take four steps and two people, because handing a Figma spec
+  to an engineer is where the drift came from. Now the person designing writes
+  the frontend, and the system checks the rules.
+- Anyone on the team can build a page that meets the standard — which is what
+  made [rebuilding the web app](/work/platform-rebuild) possible at that speed.
+- The standard survives contact with an agent, because it was written for one.
+
+## See it on this site
+
+The work versions are private, so this site runs its own, written from scratch:
+[agent rules](https://github.com/calebksmith/portfolio/blob/main/CLAUDE.md), a
+[design-review skill](https://github.com/calebksmith/portfolio/blob/main/.claude/skills/design-review/SKILL.md),
+and [five lint rules](https://github.com/calebksmith/portfolio/blob/main/eslint-rules/ck.mjs)
+that run on every pull request. A failure looks like this:
+
+```
+<section className="bg-accent text-muted-foreground">
+
+ck/paired-surface  "bg-accent" is drawn with "text-muted-foreground",
+                   a pair the contrast gate never measures.
+```
+
+The full list is in the [style guide](/style-guide#rules).

@@ -1,0 +1,90 @@
+---
+title: Movement challenges: Leaderboards and targets that build a daily habit
+role: Product design, behavior change
+year: 2023–2024
+stack: [Web app, Mobile, Figma]
+summary: Daily 5 completions rose 65% — scored so a five-person crew can beat a fifty-person one, and nobody has to be ranked to take part.
+user: A reason to come back to do the Daily 5 every day.
+business: More registrations, sign-ins, and Daily 5 completions — Vimocity's key engagement metric.
+connects: [challenge-admin, login]
+area: workers
+order: 1
+impact: +65% Daily 5 completions in challenges
+---
+
+## Problem
+
+The Daily 5 is a full-body routine of four or five moves, done in five minutes
+or less. It helps prevent injuries and keeps your body moving well for physical
+work. Completions are Vimocity's key engagement metric, and the routine works
+best done daily.
+
+Engagement was inconsistent: on their own, people were less likely to make it a
+habit. The missing ingredient was competition. Many of our users are
+competitive, and a team up against coworkers on another team has a reason to do
+the Daily 5 on a Tuesday in February. It couldn't feel like surveillance,
+though, or put anyone on a leaderboard they didn't opt into.
+
+> **The call:** normalize leaderboard scores to completion rate, not totals. Totals
+> reward headcount: the biggest team wins by default, and a small crew has no
+> reason to join. So a team earns up to 100 points a day, the share of its
+> members who completed the Daily 5. Ten people, nine completions: 90.
+
+## What I did
+
+- **Started with research.** It set the brief: a reason to do the Daily 5 every
+  day, without pressure. I tested each mechanic against that brief with
+  customers and non-customers.
+- **Built for competitive teams, with a way out.** The leaderboard puts teams
+  of coworkers against each other. Target challenges give everyone else, often
+  the people the Daily 5 helps most, a prize to play for without a ranking. Three
+  challenge types, and only one ranks anyone.
+- **Scored the existing habit.** A completed Daily 5 is the only thing that
+  counts, so a challenge adds a reason to do it, not a new task.
+- **Time-boxed every challenge.** Join windows run from a week to over a month,
+  so a challenge reads as an event, not an obligation.
+
+<Segments title="Challenge types">
+<Segment value="leaderboard" label="Leaderboard">
+
+Teams of coworkers compete on one board, scored on completion rate. The top
+team wins a shared prize.
+
+<Figure
+  ratio="700/300"
+  caption="Points are the share of a team that completed the Daily 5: five of five beats forty-five of fifty. Crews under the five-person minimum play for a lower ceiling, so going small isn't a shortcut."
+>
+  <TeamScoring />
+</Figure>
+
+</Segment>
+<Segment value="target" label="Target">
+
+No board, no ranking. A personal target is solo: complete as many Daily 5s as
+you can before the challenge ends, earning raffle tickets along the way. A team
+target is the same goal, shared by a group.
+
+</Segment>
+</Segments>
+
+## Outcome
+
+- **Engagement:** Daily 5 completions rose 65% among participants, and
+  leaderboard challenges drew the highest engagement of the three types.
+- **Adoption:** 25% more people registered for Vimocity to join a challenge.
+- **Re-engagement:** 10% of visitors who viewed a challenge signed in within a
+  week, against 4% of everyone else. Months with a major challenge bring 61%
+  more sign-ins.
+- **The catch:** outside a challenge window, Daily 5 engagement dropped.
+  Competition built the routine; between challenges, it didn't hold.
+
+> **What I'd change:** the 100-point cap. A crew where everyone completes the
+> Daily 5 maxes out, so committed crews tie and the tiebreaker decides: largest
+> team, then a random draw. That hands the win back to the bigger team, the bias
+> the percentage was meant to remove. Next iteration: make full completion the
+> entry price, not the max score.
+
+**Who did what:** I owned design end to end, from research through UI.
+Engineering built the frontend and backend, and we worked out the mechanics as a
+team. Admins run challenges in [challenge admin](/work/challenge-admin), and new
+participants sign up through [login and account creation](/work/login).

@@ -42,3 +42,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .lighthouseci/
+
+# Claude Code: personal permissions and machine paths. Never commit.
+.claude/settings.local.json
+
+# Reference material from an employer or client. Read it, never commit it.
+/private/
