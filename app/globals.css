@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+/* `access:` — styles for a browser that opened a personal access link. The
+   theme script stamps data-access="granted" on <html> before first paint, so a
+   gated figure can show its image or its note without a flash or a shift. The
+   attribute grants nothing: the image route checks the token itself. */
+@custom-variant access (&:where([data-access="granted"] *));
+
 /* ===========================================================================
    Token layer
    ===========================================================================

@@ -8,6 +8,7 @@ import {
 } from "react";
 
 import { Eyebrow, Figure, Tabs } from "@/components/cksui";
+import { GatedFigure } from "@/components/gated-figure";
 import { DeviceHandoff } from "@/components/diagrams/device-handoff";
 import { LoginEverywhere } from "@/components/diagrams/login-everywhere";
 import { SystemReach } from "@/components/diagrams/system-reach";
@@ -157,6 +158,7 @@ function Segments({ title, children }: { title: string; children: ReactNode }) {
 const available = {
   ...components,
   Figure,
+  GatedFigure,
   Segments,
   Segment,
   DeviceHandoff,

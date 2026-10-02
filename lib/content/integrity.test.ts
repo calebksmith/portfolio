@@ -2,6 +2,7 @@ import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 
+import { GATED_PATH } from "@/lib/access";
 import { DEFAULT_LOCALE, LOCALES, type Locale } from "@/lib/i18n/config";
 import { messages } from "@/lib/i18n/messages";
 
@@ -202,4 +203,42 @@ describe("internal links resolve", () => {
       }
     },
   );
+});
+
+/**
+ * Screens from inside Vimocity's app never go in `public/`: they are gated,
+ * served from the private Blob store to people with an access link. Only
+ * screens anyone can open without an account are public files, and they are
+ * named here — so adding one is a decision someone makes on purpose, and a
+ * logged-in screenshot can't drift back in with the next batch of images.
+ */
+const PUBLIC_MEDIA = [
+  "login/account-flow.webp",
+  "login/mobile-login.webp",
+  "login/web-login-wide.webp",
+  "playlists/shared-page.webp",
+  "vimui/media-card.webp",
+];
+
+describe("screenshots", () => {
+  it("public/media holds only screens that are public anyway", () => {
+    const present = readdirSync(join(process.cwd(), "public/media"), {
+      recursive: true,
+    })
+      .map((file) => String(file).split("\\").join("/"))
+      .filter((file) => file.endsWith(".webp"));
+    expect(present.sort()).toEqual([...PUBLIC_MEDIA].sort());
+  });
+
+  it("every gated figure names a path in the private store", () => {
+    const srcs = LOCALES.flatMap((locale) =>
+      byLocale[locale].flatMap((study) =>
+        [...study.body.matchAll(/<GatedFigure[^>]*?\ssrc="([^"]+)"/g)].map(
+          (match) => match[1],
+        ),
+      ),
+    );
+    expect(srcs.length).toBeGreaterThan(0);
+    for (const src of srcs) expect(src).toMatch(GATED_PATH);
+  });
 });

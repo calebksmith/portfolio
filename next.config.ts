@@ -8,7 +8,7 @@ import { DEFAULT_LOCALE, LOCALES } from "./lib/i18n/config";
  * letters system, the API, and Next's internals. Static files and metadata
  * routes with an extension never reach an `afterFiles` rewrite.
  */
-const UNLOCALIZED = [...LOCALES, "admin", "letter", "api", "_next"];
+const UNLOCALIZED = [...LOCALES, "admin", "letter", "access", "api", "_next"];
 const unlocalized = UNLOCALIZED.map((segment) => `${segment}(?:/|$)`).join("|");
 
 const nextConfig: NextConfig = {
