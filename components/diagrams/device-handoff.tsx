@@ -13,6 +13,9 @@ import { getMessages } from "@/lib/i18n/server";
 export async function DeviceHandoff() {
   const t = (await getMessages()).diagrams.deviceHandoff;
 
+  // Laid out on measured text: the labels are 12-unit monospace, about 7.2
+  // units a character. Both devices sit 40 in from the edges and centre on the
+  // same line, and each lane's label clears its arrow and the devices by 15.
   return (
     <svg
       viewBox="0 0 700 260"
@@ -21,7 +24,30 @@ export async function DeviceHandoff() {
       className="h-full w-full"
       fill="none"
     >
+      <defs>
+        <marker
+          id="dh-arrow"
+          viewBox="0 0 10 10"
+          refX="9"
+          refY="5"
+          markerWidth="6"
+          markerHeight="6"
+          orient="auto-start-reverse"
+        >
+          <path d="M0 0 L10 5 L0 10 z" fill="currentColor" />
+        </marker>
+      </defs>
+
       {/* Phone — where the email lands */}
+      <text
+        x="100"
+        y="36"
+        textAnchor="middle"
+        fontSize="13"
+        className="fill-current text-foreground"
+      >
+        {t.phone}
+      </text>
       <rect
         x="40"
         y="52"
@@ -42,16 +68,7 @@ export async function DeviceHandoff() {
       />
       <text
         x="100"
-        y="36"
-        textAnchor="middle"
-        fontSize="13"
-        className="fill-current text-foreground"
-      >
-        {t.phone}
-      </text>
-      <text
-        x="100"
-        y="230"
+        y="232"
         textAnchor="middle"
         fontSize="12"
         className="fill-current text-muted-foreground"
@@ -59,51 +76,51 @@ export async function DeviceHandoff() {
         {t.emailArrives}
       </text>
 
-      {/* Work machine — where the person actually is */}
+      {/* Shared terminal — where the person is signing in */}
+      <text
+        x="580"
+        y="36"
+        textAnchor="middle"
+        fontSize="13"
+        className="fill-current text-foreground"
+      >
+        {t.terminal}
+      </text>
       <rect
-        x="536"
-        y="70"
-        width="128"
-        height="88"
+        x="500"
+        y="64"
+        width="160"
+        height="104"
         rx="6"
         stroke="currentColor"
         strokeWidth="1.5"
         className="text-input"
       />
       <rect
-        x="548"
-        y="82"
-        width="104"
-        height="64"
+        x="512"
+        y="76"
+        width="136"
+        height="80"
         rx="3"
         className="fill-muted"
       />
       <path
-        d="M516 176 H684"
+        d="M568 168 h24 l8 28 h-40 z"
+        className="fill-muted text-input"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M500 196 H660"
         stroke="currentColor"
         strokeWidth="1.5"
         strokeLinecap="round"
         className="text-input"
       />
-      <path
-        d="M580 158 h40 l10 18 h-60 z"
-        className="fill-muted"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinejoin="round"
-      />
       <text
-        x="600"
-        y="36"
-        textAnchor="middle"
-        fontSize="13"
-        className="fill-current text-foreground"
-      >
-        {t.workMachine}
-      </text>
-      <text
-        x="600"
-        y="230"
+        x="580"
+        y="232"
         textAnchor="middle"
         fontSize="12"
         className="fill-current text-muted-foreground"
@@ -111,49 +128,43 @@ export async function DeviceHandoff() {
         {t.signingIn}
       </text>
 
-      <defs>
-        <marker
-          id="dh-arrow"
-          viewBox="0 0 10 10"
-          refX="9"
-          refY="5"
-          markerWidth="6"
-          markerHeight="6"
-          orient="auto-start-reverse"
-        >
-          <path d="M0 0 L10 5 L0 10 z" fill="currentColor" />
-        </marker>
-      </defs>
-
-      {/* The link: leaves the phone and returns to it. */}
+      {/* The link: leaves the phone and turns straight back. Its label sits
+          beside the turn, not on it. */}
       <g className="text-destructive-foreground">
         <path
-          d="M176 104 C 250 104, 250 72, 300 72 C 350 72, 350 104, 300 104"
+          d="M168 108 H202 A14 14 0 0 0 202 80 H168"
           stroke="currentColor"
           strokeWidth="2"
           strokeLinecap="round"
+          strokeLinejoin="round"
           markerEnd="url(#dh-arrow)"
         />
-        <text x="316" y="78" fontSize="12" className="fill-current">
+        <text x="232" y="90" fontSize="12" className="fill-current">
           {t.linkOpens}
         </text>
-        <text x="316" y="96" fontSize="12" className="fill-current opacity-80">
+        <text x="232" y="108" fontSize="12" className="fill-current">
           {t.staysSignedOut}
         </text>
       </g>
 
-      {/* The code: crosses. */}
+      {/* The code: crosses the whole gap and lands on the screen. */}
       <g className="text-positive-foreground">
+        <text
+          x="330"
+          y="144"
+          textAnchor="middle"
+          fontSize="12"
+          className="fill-current"
+        >
+          {t.code}
+        </text>
         <path
-          d="M176 168 H 520"
+          d="M168 156 H492"
           stroke="currentColor"
           strokeWidth="2"
           strokeLinecap="round"
           markerEnd="url(#dh-arrow)"
         />
-        <text x="240" y="158" fontSize="12" className="fill-current">
-          {t.code}
-        </text>
       </g>
     </svg>
   );

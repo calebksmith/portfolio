@@ -1,96 +1,62 @@
 ---
-title: VimUI, a design system in code
+title: VimUI: Vimocity's design system, built in code
 role: Design systems
 year: 2022–present
 stack: [Storybook, Tailwind CSS, shadcn/ui, Radix]
-summary: Vimocity's design system — 50+ web components on shared tokens, documented in Storybook, which replaced the Figma file as the source of truth.
-weight: large
+summary: 50+ web components on shared tokens — with Storybook, not Figma, as the source of truth.
+user: The same components, accessibility, and light and dark modes everywhere in the web app.
+business: Pages are assembled from parts that already exist, and a change ships once instead of twice.
+connects: [guardrails, platform-rebuild, login]
+area: platform
+order: 1
+impact: Reuse 10% → 80–90%
 ---
 
 ## Problem
 
-Vimocity ships a web app, iOS and Android apps, and a Windows desktop app. We
-had brand colors, fonts, and a style guide, but over time each drifted into its
-own patterns.
+Vimocity ships web, iOS, Android, and Windows apps, and each had drifted into
+its own patterns. VimUI started as a thorough Figma system — published
+libraries, variables and modes, versioned releases. The cost wasn't the tool.
+Every change happened twice, in Figma and then in code, and the second half
+meant pulling a developer off their work to translate the file.
 
-VimUI started in Figma, and it was a real system there — not a page of
-screenshots. Published libraries consumed across every product file, with
-versioned releases so a change could be reviewed before it reached anyone.
-Variable collections with modes driving light and dark from one set of names,
-primitives aliased into semantic tokens. Components with proper APIs: variants,
-boolean and instance-swap properties, nested instance properties exposed so a
-designer could configure one without opening it. Interactive prototypes with
-real state, and annotations covering spacing, contrast, and semantic intent so
-handoff carried the reasoning and not just the measurements.
-
-The cost was not the tool. It was that every change had to be made twice — once
-in the Figma file, then again in the component code — and the second half meant
-pulling a developer off their work to read the file, translate it, and cut a
-release. Designers had one source of truth and engineers had another, and the
-gap between them was measured in developer time.
+> **The call:** retire the Figma file. Once we prototyped in real components,
+> it was a second copy of something that already existed. That was a decision
+> made from inside the tool, not an escape from it — knowing a tool well is what
+> tells you where it stops paying.
 
 ## What I did
 
-- Built 50+ components organized as atoms, molecules, and organisms, on
-  shadcn/ui's patterns and Radix primitives — some staying close to the
-  original, some rewritten entirely for what we needed.
-- Established tokens for color, type, spacing, and sizing, and removed
-  hardcoded values from the frontend.
-- Made accessibility a property of the system rather than a per-feature task:
-  keyboard support, contrast in light and dark modes, minimum touch targets, and
-  reduced-motion support built into the components themselves.
-- Set up versioned releases so consuming apps can test changes before they land.
-- Closed the translation gap while it still existed, using Figma's REST and
-  plugin APIs to feed designs to Claude Code and build pages from them directly.
-  That made the handoff faster before it made it unnecessary.
-- Retired the Figma file. Once we started prototyping in real components rather
-  than mocking them up, the design file was a second copy of something that
-  already existed — so Storybook became the source of truth for what a component
-  is, how it is used, and what it does.
+- **Built 50+ components** as atoms, molecules, and organisms on shadcn/ui and
+  Radix — some close to the originals, some rewritten for what we needed.
+- **Tokenized color, type, spacing, and sizing**, and removed hardcoded values
+  from the frontend.
+- **Built accessibility into the components** — keyboard support, contrast in
+  both modes, touch targets, reduced motion — so every feature inherits it.
+- **Released it in versions**, so apps can test a change before it lands.
+- **Bridged the gap while it lasted:** fed designs to Claude Code through
+  Figma's APIs, which sped up the handoff before it removed it.
 
 ## Outcome
 
-- Reusable component use went from about 10% to 80–90% of frontend code.
-- Token use went from 0% to 99%. The remaining 1% is deliberate overrides.
-- Changes are made once, in code, and released. There is no second artifact to
-  update and no translation step between the two.
-- Building a new page became assembly rather than construction.
+- Reusable component use rose from about 10% to 80–90% of frontend code.
+- Token use went from 0% to 99%; the remaining 1% is deliberate overrides.
+- Changes happen once, in code. A new page is assembly, not construction.
 
-## What it does and doesn't cover
+## What it doesn't cover
 
-The component library is the web app's. React Native and Electron need entirely
-different components, and that library does not exist yet — the mobile and
-desktop apps carry their own equivalents.
-
-What all four platforms share is the tokens. Color and type come from the same
-source everywhere, so the visual language is consistent even where the
-components are not.
-
-Only the web app reads that source directly, though. The values are copied by
-hand into React Native and Electron, which means the consistency holds by
-discipline rather than by build step — a drift waiting for the release nobody
-double-checks. Generating them from one file is the obvious next move and is not
-done.
-
-The exception is login and account creation, which run in a webview on desktop
-and mobile — so those screens are running actual VimUI components on every
-platform. That was a
-[side effect of building login as one flow](/work/login), not a plan.
-
+The components are the web app's; mobile and desktop carry their own. Tokens
+reach all four platforms, but only the web app reads them directly — the others
+get them copied by hand, so consistency holds by discipline rather than by build
+step. Generating them from one file is the next move.
 
 <Figure
   width="breakout"
   ratio="760/300"
-  caption="Tokens reach all four platforms; the component library reaches one. Login is the exception — it runs in a webview, so it is the only place real VimUI components render everywhere, and the only row that ignores the seam."
+  caption="Tokens reach all four platforms; components reach one. Login runs in a webview, so it's the one place real VimUI renders everywhere."
 >
   <SystemReach />
 </Figure>
-
-> **On leaving Figma.** Retiring the file was a decision made from inside the
-> tool, not an escape from one that was hard to use. The system had everything
-> Figma is good at — published libraries, variables and modes, component APIs,
-> Dev Mode, branching — and a change still cost a developer most of a day to
-> move through. Knowing a tool well is what tells you where it stops paying.
 
 **See it:** the component library is public at
 [vimui.vimocity.com](https://vimui.vimocity.com/main/).

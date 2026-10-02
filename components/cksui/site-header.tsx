@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, type MouseEvent } from "react";
 
 import {
   LOCALES,
@@ -46,7 +47,33 @@ import { ThemeSwitcher, type ThemeSwitcherLabels } from "./theme-switcher";
  * click-outside, and top-layer stacking come from the platform.
  */
 
-export type WorkItem = { slug: string; title: string };
+/**
+ * Closes a native popover if it is open.
+ *
+ * The platform closes a popover on Escape and on a click outside it. Following
+ * a link inside it is neither, and the header is not replaced when the page is
+ * — so without this, a menu outlives the page it was opened on.
+ */
+function closePopover(id: string) {
+  const panel = document.getElementById(id);
+  if (panel?.matches(":popover-open")) panel.hidePopover();
+}
+
+/**
+ * For links inside a panel: following one in this tab is done with the panel,
+ * even when the destination is the page you are on. A modified click opens the
+ * page somewhere else, so the panel stays — you may want the next one too.
+ */
+function closeOnFollow(id: string) {
+  return (event: MouseEvent<HTMLAnchorElement>) => {
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)
+      return;
+    closePopover(id);
+  };
+}
+
+/** A case study as the header needs it: `name` for crumbs, both for the menu. */
+export type WorkItem = { slug: string; name: string; descriptor: string };
 
 /** Every visible string, passed in — this is a library component. */
 export type SiteHeaderLabels = Messages["header"];
@@ -89,14 +116,11 @@ function buildCrumbs(
       return;
     }
 
-    // Case study titles are written as "Subject, elaboration" — the leading
-    // clause is the crumb, so the path stays a path instead of a sentence. The
-    // Work menu still lists titles in full.
-    const title = work.find((item) => item.slug === segment)?.title;
+    // Case study titles are "Name: What it is" — the name is the crumb, so the
+    // path stays a path instead of a sentence. The Work menu shows both.
+    const name = work.find((item) => item.slug === segment)?.name;
     const label =
-      labels.segments[segment] ??
-      title?.split(",")[0] ??
-      segment.replace(/-/g, " ");
+      labels.segments[segment] ?? name ?? segment.replace(/-/g, " ");
 
     crumbs.push(
       isLast
@@ -131,7 +155,15 @@ export function SiteHeader({
 }) {
   // The path under the locale prefix. Crumbs, the current case study, and the
   // language toggle all work on this, then re-prefix when they build a link.
-  const { path } = splitLocale(usePathname() ?? "/");
+  const pathname = usePathname() ?? "/";
+  const { path } = splitLocale(pathname);
+
+  // However the route changed — a link in a menu, the back button, anything
+  // else — the menus belong to the page that was left.
+  useEffect(() => {
+    closePopover("ck-work-menu");
+    closePopover("ck-settings");
+  }, [pathname]);
   const crumbs = buildCrumbs(path, work, labels, locale);
 
   // Which case study is open, if any — so the Work menu can mark it.
@@ -273,8 +305,11 @@ function WorkMenu({
             The page you are on takes the same "current" treatment the rest of
             the site uses, and loses its arrow: an arrow means "go here", and
             you are already here. It keeps a dot in the arrow's place so the
-            right edge stays a column rather than developing a gap. */}
-        <ul>
+            right edge stays a column rather than developing a gap.
+
+            Padding inside each row and a gap between them, so a two-line
+            title reads as one item: tight within, loose between. */}
+        <ul className="flex flex-col gap-1">
           {work.map((item) => {
             const current = item.slug === currentSlug;
 
@@ -283,14 +318,21 @@ function WorkMenu({
                 <Link
                   href={localizePath(locale, `/work/${item.slug}`)}
                   aria-current={current ? "page" : undefined}
+                  onClick={closeOnFollow("ck-work-menu")}
                   className={cn(
-                    "group flex min-h-tap items-center justify-between gap-3 rounded-md px-3 text-sm text-pretty transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+                    "group flex min-h-tap items-center justify-between gap-3 rounded-md px-3 py-2 text-sm text-pretty transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
                     current
                       ? "bg-muted font-medium text-foreground"
                       : "hover:bg-muted hover:text-muted-foreground",
                   )}
                 >
-                  {item.title}
+                  <span>
+                    <span className="block">{item.name}</span>
+                    <span className="sr-only">: </span>
+                    <span className="block text-xs text-muted-foreground">
+                      {item.descriptor}
+                    </span>
+                  </span>
                   {current ? <CurrentDot /> : <ArrowRight />}
                 </Link>
               </li>
@@ -365,6 +407,7 @@ function AppearanceMenu({
         <p className="mt-5 border-t border-border pt-4 text-xs text-muted-foreground">
           <Link
             href={localizePath(locale, "/style-guide#contrast")}
+            onClick={closeOnFollow("ck-settings")}
             className="underline decoration-input underline-offset-4 transition-colors hover:text-foreground hover:decoration-primary"
           >
             {labels.styleGuideLink}

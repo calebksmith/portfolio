@@ -1,13 +1,13 @@
 import Link from "next/link";
 
 import { Button, Eyebrow, cn } from "@/components/cksui";
-import { getCaseStudies } from "@/lib/content/work";
 import { localizePath, type Locale } from "@/lib/i18n/config";
 import type { Messages } from "@/lib/i18n/messages";
 import { getLocale, getMessages } from "@/lib/i18n/server";
 import { site } from "@/lib/site";
 
-import { CASE_STUDY_STYLE, CaseStudyCard, STRETCH } from "./case-study-card";
+import { STRETCH } from "./case-study-card";
+import { WorkViews } from "./work-views";
 import { HeroPrompt } from "./hero-prompt";
 import { HeroRevealProvider } from "./hero-reveal";
 import { Reveal } from "./reveal";
@@ -124,6 +124,7 @@ function pointers(locale: Locale, t: Messages["home"]["pointers"]) {
       external: false,
       ...t.styleGuide,
     },
+    { href: site.links.source, external: true, ...t.source },
     { href: site.links.linkedin, external: true, ...t.linkedin },
   ];
 }
@@ -131,7 +132,6 @@ function pointers(locale: Locale, t: Messages["home"]["pointers"]) {
 export async function Bento() {
   const locale = await getLocale();
   const t = await getMessages();
-  const caseStudies = getCaseStudies(locale);
 
   return (
     /* No content container. Pages run the full width of the window and the
@@ -197,23 +197,13 @@ export async function Bento() {
           aria-labelledby="selected-work"
           className="scroll-mt-20 pb-24"
         >
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-4 lg:grid-cols-6">
-            {caseStudies.map((study, index) => (
-              <Reveal
-                key={study.slug}
-                index={index}
-                className={cn(
-                  CASE_STUDY_STYLE[study.weight].span,
-                  "sm:col-span-2",
-                )}
-              >
-                <CaseStudyCard {...study} />
-              </Reveal>
-            ))}
+          {/* The case studies: where each sits in Vimocity, or all of them as
+              cards — one control switches between the two. */}
+          <WorkViews />
 
-            {/* The stagger restarts here rather than continuing the count. The
-                case studies fill their rows exactly, so the pointers begin a
-                fresh band and should enter like one. */}
+          {/* Everything that isn't a case study: utility pages and outside
+              proof. Three to a row, so six tiles fill two rows exactly. */}
+          <div className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-4 lg:grid-cols-6">
             {pointers(locale, t.home.pointers).map((card, index) => (
               <Reveal
                 key={card.href}

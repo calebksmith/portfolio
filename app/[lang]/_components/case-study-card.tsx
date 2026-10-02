@@ -1,32 +1,27 @@
 import Link from "next/link";
 
-import { Badge, Eyebrow, cn } from "@/components/cksui";
-import type { CaseStudy, Weight } from "@/lib/content/work";
+import { cn } from "@/components/cksui";
+import type { CaseStudy } from "@/lib/content/work";
 import { localizePath } from "@/lib/i18n/config";
-import { getLocale, getMessages } from "@/lib/i18n/server";
+import { getLocale } from "@/lib/i18n/server";
+
+import { CaseStudyChips } from "./case-study-chips";
 
 /**
- * A case study tile.
+ * A case study card: what it is, the facts that help decide, and a way in.
  *
- * Lives here rather than inside the bento because two pages render it now — the
- * index, and the "keep reading" row at the foot of every case study. A second
- * copy would look identical on the day it was written and stop being identical
- * on the first edit.
+ * Name and what it is, then one row of chips: the headline result where there
+ * is a number, the kind of work, and when. Chips rather than a sentence — a
+ * sentence restated the descriptor, where chips answer the questions a reader
+ * is actually asking ("did it work? what did he do? how recent?") at a glance.
+ * The summary, role, and stack are on the case study page.
+ *
+ * The arrow is the only call to action, and it is an icon: the whole card is
+ * the link, so a label would only repeat what the card already is.
+ *
+ * Rendered by the homepage and by the "more of my work" row on every case
+ * study, so it lives once.
  */
-
-/** Column span out of 6, and the type scale that survives the collapse. */
-export const CASE_STUDY_STYLE: Record<
-  Weight,
-  { span: string; title: string; pad: string }
-> = {
-  large: {
-    span: "lg:col-span-3",
-    title: "text-xl sm:text-2xl",
-    pad: "p-6 sm:p-7",
-  },
-  medium: { span: "lg:col-span-2", title: "text-base sm:text-lg", pad: "p-6" },
-  small: { span: "lg:col-span-2", title: "text-base", pad: "p-6" },
-};
 
 /**
  * The stretched-link pattern: one link per card, named by its heading, with a
@@ -38,76 +33,70 @@ export const STRETCH =
   "after:absolute after:inset-0 after:rounded-lg focus-visible:outline-none";
 
 export async function CaseStudyCard({
+  as: Heading = "h3",
   slug,
-  title,
+  name,
+  descriptor,
+  impact,
   role,
   year,
-  summary,
-  stack,
-  weight,
-}: CaseStudy) {
-  const style = CASE_STUDY_STYLE[weight];
+}: CaseStudy & {
+  /** The card's heading level, so the page outline stays in order. */
+  as?: "h3" | "h4";
+}) {
   const locale = await getLocale();
-  const t = (await getMessages()).home.caseStudyCard;
 
   return (
     <article
       data-slot="case-study-card"
-      data-glow=""
+      data-glow="end"
       // Grid placement lives on the Reveal wrapper, since that is what the grid
       // actually lays out. `h-full` keeps the card filling its cell.
       className={cn(
-        "group relative flex h-full cursor-pointer flex-col gap-3 rounded-lg border border-border bg-card text-card-foreground",
+        "group relative flex h-full cursor-pointer flex-col gap-3 rounded-lg border border-border bg-card p-6 text-card-foreground",
         // The lift is transform and shadow, so it is named explicitly —
         // `transition-colors` would animate the fill and snap the movement.
         "transition-[color,background-color,border-color,transform,box-shadow] hover:-translate-y-0.5 hover:shadow-lift focus-within:-translate-y-0.5 focus-within:shadow-lift",
-        // The whole tile is the target, so the whole tile responds. The border
-        // alone was too quiet to read as "this is clickable".
+        // The whole tile is the target, so the whole tile responds.
         "hover:border-input hover:bg-muted focus-within:border-input focus-within:bg-muted",
         "has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-ring",
-        style.pad,
       )}
     >
-      {/* The kind of thing this is, said outright. Replaces the accent edge:
-          a label survives the single-column collapse and says what a colored
-          border could only imply. */}
-      <Eyebrow tone="primary" className="flex items-center gap-2">
-        {t.kind}
-        <span aria-hidden="true" className="text-muted-foreground">
-          ·
-        </span>
-        <span className="text-muted-foreground">{year}</span>
-      </Eyebrow>
-
-      <h3
-        className={cn(
-          "font-display font-semibold tracking-[-0.01em] text-balance",
-          style.title,
-        )}
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        viewBox="0 0 16 16"
+        className="absolute top-6 right-6 size-4 text-primary transition-transform group-hover:translate-x-0.5"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       >
+        <path d="M3 8h10M9 4l4 4-4 4" />
+      </svg>
+
+      <Heading className="pr-8 font-display text-base font-semibold tracking-[-0.01em] text-balance sm:text-lg">
         {/* No underline on hover. The stretched link covers the whole tile, so
             underlining the heading says the heading is the target when it is
             not — the card responds instead. */}
         <Link href={localizePath(locale, `/work/${slug}`)} className={STRETCH}>
-          {title}
+          {name}
+          {/* The colon is for the ear: read aloud it is one title, "Name:
+              What it is". On screen the two parts are two lines. */}
+          <span className="sr-only">: </span>
+          <span className="mt-1 block font-sans text-sm font-normal tracking-normal text-pretty text-muted-foreground">
+            {descriptor}
+          </span>
         </Link>
-      </h3>
+      </Heading>
 
-      <p className="text-pretty text-muted-foreground">{summary}</p>
-
-      <p className="text-xs text-muted-foreground">{role}</p>
-
-      {stack.length > 0 ? (
-        <ul className="flex flex-wrap gap-1.5">
-          {stack.map((tool) => (
-            <li key={tool}>
-              <Badge>{tool}</Badge>
-            </li>
-          ))}
-        </ul>
-      ) : null}
-
-      <p className="mt-auto pt-3 text-xs text-primary">{t.read}</p>
+      <CaseStudyChips
+        impact={impact}
+        role={role}
+        year={year}
+        className="mt-auto pt-1"
+      />
     </article>
   );
 }

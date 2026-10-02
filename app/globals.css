@@ -424,6 +424,11 @@
   position: fixed;
   margin: 0;
   top: 3.75rem;
+  /* A fixed panel taller than the window can't be scrolled into view, so on a
+     short window it scrolls inside instead. The 1rem below matches its inset
+     from the side. */
+  max-height: calc(100dvh - 4.75rem);
+  overflow-y: auto;
 }
 
 [data-slot="settings-panel"] {
@@ -730,6 +735,17 @@ body {
     transition: opacity var(--ck-duration-base) var(--ck-ease);
     pointer-events: none;
     z-index: -1;
+  }
+
+  /* The case study card's arrow sits top right, and its result chip is the
+     same accent as the glow — blooming from the left washed the chip out.
+     From the arrow's corner, the light lands on the call to action. */
+  [data-glow="end"]::before {
+    background: radial-gradient(
+      22rem circle at 100% 0%,
+      var(--ck-accent),
+      transparent 70%
+    );
   }
 
   [data-glow]:hover::before,

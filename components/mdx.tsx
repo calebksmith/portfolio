@@ -1,7 +1,13 @@
 import { MDXRemote } from "next-mdx-remote/rsc";
-import type { ComponentType } from "react";
+import {
+  Children,
+  isValidElement,
+  type ComponentType,
+  type ReactElement,
+  type ReactNode,
+} from "react";
 
-import { Figure } from "@/components/cksui";
+import { Eyebrow, Figure, Tabs } from "@/components/cksui";
 import { DeviceHandoff } from "@/components/diagrams/device-handoff";
 import { SystemReach } from "@/components/diagrams/system-reach";
 import { TeamScoring } from "@/components/diagrams/team-scoring";
@@ -94,6 +100,55 @@ const components = {
   ),
 };
 
+type SegmentProps = { value: string; label: string; children: ReactNode };
+
+/**
+ * One view inside `<Segments>`. It carries a label and its content; Segments
+ * reads both and draws the control, so this never renders on its own.
+ */
+function Segment({ children }: SegmentProps) {
+  return <>{children}</>;
+}
+
+/**
+ * A segmented control written in MDX: one subject, one view per kind of it.
+ *
+ *   <Segments title="Challenge types">
+ *     <Segment value="leaderboard" label="Leaderboard"> markdown </Segment>
+ *     <Segment value="target" label="Target"> markdown </Segment>
+ *   </Segments>
+ *
+ * Each Segment is ordinary markdown, so the copy stays in the case study.
+ * cksUI's Tabs owns the behavior: the keyboard, the roles, and the no-script
+ * fallback that shows every view stacked. Held to the prose measure, so the
+ * control sits over the column it switches rather than at the page's edge.
+ */
+function Segments({ title, children }: { title: string; children: ReactNode }) {
+  const items = Children.toArray(children)
+    .filter(
+      (child): child is ReactElement<SegmentProps> =>
+        isValidElement(child) && child.type === Segment,
+    )
+    .map(({ props }) => ({
+      value: props.value,
+      label: props.label,
+      content: props.children,
+    }));
+
+  return (
+    <Tabs
+      label={title}
+      items={items}
+      className="mt-10 max-w-measure-wide"
+      header={
+        <Eyebrow asChild>
+          <h3>{title}</h3>
+        </Eyebrow>
+      }
+    />
+  );
+}
+
 /**
  * Components a case study may use directly. Diagrams are named here rather than
  * imported per file because MDX has no imports — the map is the whole surface.
@@ -101,6 +156,8 @@ const components = {
 const available = {
   ...components,
   Figure,
+  Segments,
+  Segment,
   DeviceHandoff,
   SystemReach,
   TeamScoring,

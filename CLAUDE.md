@@ -80,9 +80,22 @@ These are the same kind of guardrails I maintain on VimUI at work. Follow them.
   the locale from `getLocale()` / `getMessages()` in `lib/i18n/server.ts`.
 - Only English is enabled. Do not add Spanish until asked — the content is
   being revised first.
-- Case studies have frontmatter:
-  `title, role, year, stack, summary, weight`. Structure is always
-  Problem → What I did → Outcome, and each names a real trade-off or hard call.
+- Case studies have frontmatter — `title`, `role`, `year`, `stack`, `summary`,
+  `user`, `business`, `connects`, `area`, `order`, `impact`. Titles are
+  `Name: What it is` — the second part is its own line under the name, so it
+  starts with a capital. They are written for a hiring manager skimming in about
+  a minute, at roughly 250–400 words:
+  - **Problem** — two or three sentences: who it hurt, and why it mattered.
+  - **The call** — one blockquote right after the problem: the hardest decision,
+    what was weighed (customer needs first, business needs when they win), and
+    why. This is the one place a trade-off is argued; don't add more callouts.
+  - **What I did** — three to five bullets, each opening with a bold lead-in.
+    Where the work started with research, the first bullet says so in a line
+    or two: what it found, specific to this feature. Most of these case studies
+    started that way, so the process is never boilerplate repeated across them.
+  - **Outcome** — the approved figures, caveats attached.
+  - **Who did what** — one bold-labelled line.
+  - Optional: one "What I'd change" or "Trade-offs" blockquote at the end.
 - Structured records — the résumé, skills, selected work — live as typed data
   in `lib/content/resume/<locale>.ts`.
 - Adding a case study should mean adding a file, not editing components.

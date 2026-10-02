@@ -1,59 +1,45 @@
 ---
-title: Rebuilding the Vimocity web app
+title: Web app rebuild: Migrating the Vimocity portal to one codebase
 role: Frontend, platform migration
 year: 2026
 stack: [Web app, Next.js, Tailwind CSS, VimUI]
-summary: Migrated every page of the Vimocity portal into our new monorepo — rebuilt on VimUI against the live APIs, using Claude Code to read the legacy logic page by page.
-weight: medium
+summary: Every page rebuilt on VimUI, with Claude Code reading the legacy logic page by page — and no migration dip.
+user: A portal that works on mobile web, with a searchable library — and no disruption on the way.
+business: One codebase instead of two, so an improvement reaches the whole portal.
+connects: [vimui, guardrails, playlists]
+area: platform
+order: 3
+impact: No migration dip
 ---
 
 ## Problem
 
-New features were being built in a new monorepo. The web portal was not — it
-sat on the old structure, and everything we wanted to improve there was blocked
-behind a migration nobody had time to do. We were running two frontends that
-looked and behaved like two different products.
+New features were built in a new monorepo; the web portal still sat on the old
+one. Two frontends that looked like two products — and every improvement to the
+portal waited on a migration nobody had time for.
 
-That gap was not going to close on its own. Rebuilding meant every page:
-the content library, challenges, movement routines, video collections,
-user-created playlists, site settings, and user settings.
+> **The call:** functional equivalence first — same behavior, same data, new
+> foundation. The exceptions were pages where porting a problem forward would
+> waste the migration: the content library became a searchable explore page, and
+> the homepage and settings were modernized.
 
 ## What I did
 
-- Loaded both repositories into Claude Code and had it read the old platform
-  page by page — the logic, the API calls, and the database links each page
-  actually depended on. Working out what a legacy page really does is most of
-  the work in a migration, and it is exactly what an agent is good at.
-- Rebuilt each page in the monorepo from [VimUI](/work/vimui) components and
-  tokens, wired to the same APIs and database. Functional equivalence first:
-  same behavior, same data, new foundation.
-- Held the whole rebuild to the standards from my
-  [guardrails work](/work/guardrails) — token use, component structure, and
-  accessibility rules, checked automatically. The rules I had written for people
+- **Had Claude Code read the old platform page by page:** the logic, API calls,
+  and database links each page depended on. Working out what a legacy page
+  really does is most of a migration, and exactly what an agent is good at.
+- **Rebuilt each page from VimUI**, against the same APIs, held to the
+  [guardrails](/work/guardrails) automatically. The rules I'd written for people
   turned out to be what made an agent's output reviewable.
-- Redesigned the content library on the way through, into a searchable explore
-  page. Migration was the opportunity to fix discovery rather than port a
-  problem forward.
-- Modernized the homepage and settings pages, which had accumulated patterns
-  that no longer matched how anyone expects a web app to behave.
-- Handed each rebuilt section to engineering to review and harden — an agent
-  misreads things, and the review is what catches it.
+- **Handed every section to engineering to review and harden.** An agent
+  misreads things; review is what catches it.
 
 ## Outcome
 
-- Every page of the portal is live on one codebase, consistent with the new
-  features it used to sit beside.
-- No migration dip. Weekly web users held steady, and week-1 return went from
-  74% to 75%.
-- Web video engagement rose 4–7 points year over year after the content
-  library redesign.
+- Every page is live on one codebase, with no migration dip: weekly web users
+  held steady, and week-1 return went from 74% to 75%.
+- Web video engagement rose 4–7 points year over year after the content library
+  redesign.
 - About 80% of the frontend code I built survived review into production.
-  Backend calls and database queries were improved in the same pass — the
-  migration was a chance to clean up old code, not just move it.
-- The portal works on mobile web. VimUI components carry the responsive and
-  accessibility work with them, and the old platform had neither.
-- Changes no longer need me. A product manager or engineer can now change a
-  page using VimUI and the design rules, without a designer or a frontend
-  developer in the loop — which is the point of writing the rules down.
-- Every value on every page resolves to a token, so a change to the system is a
-  change to the product rather than a ticket to make it one.
+- The portal works on mobile web, and a PM or engineer can change a page without
+  a designer in the loop.
