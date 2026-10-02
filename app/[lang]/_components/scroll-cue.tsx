@@ -25,10 +25,10 @@ const CUE_DELAY_MS = 1500;
  * lie. This one jumps to the work, which also means it is reachable by keyboard
  * and gives someone tabbing through the page a way past the hero.
  *
- * It carries the work section's heading, so the section below is named and the
- * outline still runs h1 → h2 → h3. The heading sits above the fold rather than
- * inside the section because that is where it is useful: the point of a label
- * you can see before the content is to tell you the content is there.
+ * It is not a heading. It used to carry the work section's name, but it fades
+ * in after the hero, and a heading that is hidden until then isn't in the
+ * outline — which ran h1 → h3 for as long as the cue was waiting. The section
+ * names itself now, with an h2 that is always there.
  */
 export function ScrollCue({ label }: { label: string }) {
   const { revealed } = useHeroReveal();
@@ -52,27 +52,25 @@ export function ScrollCue({ label }: { label: string }) {
       // differently.
       className={`pb-10 text-center ${REVEAL_TRANSITION} ${revealState(shown)}`}
     >
-      <h2 id="selected-work" className="font-normal">
-        <a
-          href="#work"
-          className="group inline-flex min-h-tap flex-col items-center gap-2 rounded-md px-4 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+      <a
+        href="#work"
+        className="group inline-flex min-h-tap flex-col items-center gap-2 rounded-md px-4 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+      >
+        {label}
+        <svg
+          aria-hidden="true"
+          focusable="false"
+          viewBox="0 0 16 16"
+          className="ck-scroll-cue size-4"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         >
-          {label}
-          <svg
-            aria-hidden="true"
-            focusable="false"
-            viewBox="0 0 16 16"
-            className="ck-scroll-cue size-4"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M8 2.5v11M3.5 9.5 8 14l4.5-4.5" />
-          </svg>
-        </a>
-      </h2>
+          <path d="M8 2.5v11M3.5 9.5 8 14l4.5-4.5" />
+        </svg>
+      </a>
     </div>
   );
 }

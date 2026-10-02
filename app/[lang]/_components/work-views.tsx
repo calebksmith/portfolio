@@ -27,9 +27,14 @@ export async function WorkViews() {
       defaultValue="map"
       header={
         <>
-          <h3 className="font-display text-3xl font-semibold tracking-[-0.02em] text-foreground">
+          {/* The section's heading: the work section is labelled by it, and the
+              cards under it are h3s. */}
+          <h2
+            id="work-heading"
+            className="font-display text-3xl font-semibold tracking-[-0.02em] text-foreground"
+          >
             {t.heading}
-          </h3>
+          </h2>
           <p className="mt-3 max-w-measure-wide text-pretty text-muted-foreground">
             {t.intro}
           </p>
@@ -52,7 +57,7 @@ export async function WorkViews() {
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
               {studies.map((study, index) => (
                 <Reveal key={study.slug} index={index}>
-                  <CaseStudyCard {...study} as="h4" />
+                  <CaseStudyCard {...study} />
                 </Reveal>
               ))}
             </div>
