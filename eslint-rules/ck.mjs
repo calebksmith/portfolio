@@ -397,7 +397,7 @@ function insideCode(node) {
 
 /* -------------------------------------------------------------------------- */
 
-export default {
+const plugin = {
   meta: { name: "eslint-plugin-ck" },
   rules: {
     "no-raw-color": noRawColor,
@@ -407,3 +407,5 @@ export default {
     "no-literal-copy": noLiteralCopy,
   },
 };
+
+export default plugin;
