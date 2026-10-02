@@ -20,6 +20,20 @@ support issue.
 Sign-up was worse. Each organization has its own way in, like single sign-on, an
 email allowlist, or a registration code. Users didn't know which was theirs.
 
+<Figure
+  width="breakout"
+  ratio="1600/663"
+  caption="Account creation, mapped end to end: every organization's way in — single sign-on, a registration code, a company email, an employee ID — ending in one verified account."
+>
+  <img
+    src="/media/login/account-flow.webp"
+    alt="A flowchart of account creation: from entering a company name, branching by each organization's registration method, through email verification to a created account."
+    width={1600}
+    height={663}
+    className="h-full w-full object-contain"
+  />
+</Figure>
+
 > **The call:** a code, not a magic link. We designed the link first, but it
 > assumes the device reading the email is the device signing in — and for a
 > utility crew sharing a terminal, it usually isn't. A six-digit code travels
@@ -50,6 +64,14 @@ email allowlist, or a registration code. Users didn't know which was theirs.
   customers.
 - **Designed the admin side.** Admins see who hasn't signed up and invite them.
   About two in three active organizations used it in its first eight months.
+
+<Figure
+  width="breakout"
+  ratio="900/400"
+  caption="One login, one service: the same screen in the web portal, in the mobile apps through a webview, and in the Windows app — remembered email included."
+>
+  <LoginEverywhere />
+</Figure>
 
 ## Outcome
 
