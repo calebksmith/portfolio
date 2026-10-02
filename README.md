@@ -91,6 +91,21 @@ for some other reason, someone finds out.
 Scores land in the GitHub Actions job summary on every run, passing or failing.
 A number nobody reads is a number nobody notices moving.
 
+## Gated screenshots
+
+```bash
+npm run access:link -- "Jane Doe, Acme" 30   # a personal link, 30 days
+npm run access:list                            # who has one, and its status
+npm run access:revoke -- <id>                  # cut one off
+npm run media:upload                           # private/media/ → the Blob store
+```
+
+Screens from inside Vimocity's app aren't in this repository. They sit in a
+private Blob store and are shown only to someone holding a personal link — a
+signed token, so no database and no form. Everyone else sees a short note in
+their place, and their browser never requests the image. ADR 0007 has the
+reasoning.
+
 ## Layout
 
 ```
