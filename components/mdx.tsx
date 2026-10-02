@@ -9,6 +9,7 @@ import {
 
 import { Eyebrow, Figure, Tabs } from "@/components/cksui";
 import { DeviceHandoff } from "@/components/diagrams/device-handoff";
+import { LoginEverywhere } from "@/components/diagrams/login-everywhere";
 import { SystemReach } from "@/components/diagrams/system-reach";
 import { TeamScoring } from "@/components/diagrams/team-scoring";
 import { localizePath, type Locale } from "@/lib/i18n/config";
@@ -159,6 +160,7 @@ const available = {
   Segments,
   Segment,
   DeviceHandoff,
+  LoginEverywhere,
   SystemReach,
   TeamScoring,
 };
