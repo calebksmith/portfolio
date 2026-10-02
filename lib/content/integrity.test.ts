@@ -221,6 +221,25 @@ const PUBLIC_MEDIA = [
 ];
 
 describe("screenshots", () => {
+  it("every segmented control keeps at least two views", () => {
+    // A <Segment> swallowed into its neighbour leaves a control with one view
+    // and a page missing half its content — valid MDX that builds, so it is
+    // checked here. A bad conversion did exactly that once.
+    for (const study of studies) {
+      for (const [, views] of study.body.matchAll(
+        /<Segments\b[^>]*>([\s\S]*?)<\/Segments>/g,
+      )) {
+        expect(views.match(/<Segment\b/g)?.length ?? 0, study.slug).toBe(
+          (views.match(/<\/Segment>/g) ?? []).length,
+        );
+        expect(
+          views.match(/<Segment\b/g)?.length ?? 0,
+          study.slug,
+        ).toBeGreaterThanOrEqual(2);
+      }
+    }
+  });
+
   it("public/media holds only screens that are public anyway", () => {
     const present = readdirSync(join(process.cwd(), "public/media"), {
       recursive: true,

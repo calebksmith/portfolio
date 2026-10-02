@@ -137,6 +137,15 @@ function Segments({ title, children }: { title: string; children: ReactNode }) {
       content: props.children,
     }));
 
+  // One view isn't a choice. Fewer than two means the MDX lost a <Segment> —
+  // swallowed into a neighbour or never opened — and the page would quietly
+  // drop a view instead of failing the build.
+  if (items.length < 2) {
+    throw new Error(
+      `<Segments title="${title}"> needs at least two <Segment>s; found ${items.length}.`,
+    );
+  }
+
   return (
     <Tabs
       label={title}
