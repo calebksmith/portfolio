@@ -77,7 +77,11 @@ export default async function SiteLayout({
   if (!isLocale(lang)) notFound();
   const t = messages[lang];
 
-  const work = getCaseStudies(lang).map(({ slug, title }) => ({ slug, title }));
+  const work = getCaseStudies(lang).map(({ slug, name, descriptor }) => ({
+    slug,
+    name,
+    descriptor,
+  }));
 
   return (
     <Document lang={lang}>

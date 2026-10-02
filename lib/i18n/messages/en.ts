@@ -125,6 +125,7 @@ export const en = {
       "case-study-card":
         "Filled surface plus an accent label — the label survives the single-column collapse a border would not.",
       "pointer-card": "Unfilled, so navigation never reads as work.",
+      tabs: "Segmented tabs: arrow keys move between views, and every view stays in the page — hidden, not removed — so it still works without JavaScript.",
       "bento-tile":
         "Span follows content weight; hierarchy also carried by type scale.",
     } as Record<string, string>,
@@ -148,7 +149,7 @@ export const en = {
           link: {
             href: "/work/vimui",
             kind: "Case study",
-            title: "VimUI, a design system in code",
+            title: "VimUI: Vimocity's design system, built in code",
           },
         },
         {
@@ -169,7 +170,8 @@ export const en = {
           link: {
             href: "/work/guardrails",
             kind: "Case study",
-            title: "Design rules that enforce themselves",
+            title:
+              "Design guardrails: Keeping AI-written code on the design system",
           },
         },
         {
@@ -195,11 +197,27 @@ export const en = {
           // stops the sentence from reading as a designer consulting a different
           // department.
           answer:
-            "I take features 0→1 — idea, research, strategy, testing with customers, then building the frontend in working code. I work closely with other product managers, backend developers, and leadership to decide what's worth building.",
+            "I take features 0→1: research, strategy, testing with customers, then the frontend in working code — deciding what's worth building with other product managers, engineers, and leadership.",
           link: null,
           // No link. Challenges is a case study about designing for repeat behavior,
           // which is not what this answer is about, and no other page argues this
           // particular point yet.
+        },
+        {
+          id: "overengineered",
+          question: "What's overengineered here?",
+          // The one question that isn't about the job — and the answer is
+          // literally true. The hero types itself, reserves its height so the
+          // page never jumps, announces the finished sentence once to screen
+          // readers, and has a no-JavaScript fallback. Humor that is also a
+          // receipt for the craft.
+          answer:
+            "This, probably. The answer types itself, holds the page still while it does, reads to screen readers as one sentence, and works with JavaScript off. I regret nothing.",
+          link: {
+            href: "/colophon",
+            kind: "Colophon",
+            title: "How this site is built, and why",
+          },
         },
       ] as {
         id: string;
@@ -209,7 +227,47 @@ export const en = {
       }[],
     },
     scrollCue: "Check out some of my work",
-    caseStudyCard: { kind: "Case study", read: "Read case study →" },
+    /**
+     * The work, two ways: where each case study sits in Vimocity, and all of
+     * them as cards. Area keys match `area` in each case study's frontmatter.
+     */
+    work: {
+      heading: "Vimocity",
+      /** What Vimocity is, and what the product team is working toward. */
+      intro:
+        "Where I lead design: workplace health and safety for utility companies. Our product team builds the tools that get crews moving and help safety leaders keep their teams safe, so fewer people get hurt on the job.",
+      views: "View the work as",
+      tabs: { map: "Product map", list: "Case studies" },
+      ecosystem: {
+        areas: {
+          workers: { label: "Workers", note: "Move and recover" },
+          "safety-leaders": {
+            label: "Safety leaders",
+            note: "Find and share safety content",
+          },
+          admins: { label: "Admins", note: "Run the program" },
+          identity: {
+            label: "Identity & access",
+            note: "One way in, for everyone",
+          },
+          platform: { label: "Platform", note: "What all of it is built on" },
+        },
+        /**
+         * Parts of Vimocity that aren't case studies, drawn so the diagram
+         * shows the product's breadth rather than only the work written up.
+         * A `note` marks the one that matters most to the business.
+         */
+        context: {
+          workers: [{ label: "Daily 5", note: "Key habit" }],
+          "safety-leaders": [
+            { label: "Content library" },
+            { label: "Safety campaigns" },
+          ],
+          admins: [{ label: "User management" }],
+        } as Record<string, { label: string; note?: string }[]>,
+        legend: { study: "Case study", context: "Also part of Vimocity" },
+      },
+    },
     pointers: {
       vimui: {
         eyebrow: "Storybook",
@@ -228,6 +286,12 @@ export const en = {
         title: "Colophon",
         description:
           "The stack, the alternatives that lost, and what each choice cost.",
+      },
+      source: {
+        eyebrow: "About this site",
+        title: "Source code",
+        description:
+          "The repository behind this site — the components, the tokens, and the checks that hold them.",
       },
       styleGuide: {
         eyebrow: "About this site",
@@ -257,14 +321,14 @@ export const en = {
   diagrams: {
     deviceHandoff: {
       label:
-        "A magic link opens on the phone that received the email, leaving the work machine signed out. A six-digit code can be carried across to it.",
+        "A magic link opens on the phone that received the email, leaving the shared terminal signed out. A six-digit code can be read on the phone and typed on the terminal.",
       phone: "Phone",
       emailArrives: "email arrives here",
-      workMachine: "Work machine",
+      terminal: "Shared terminal",
       signingIn: "signing in here",
-      linkOpens: "Magic link opens on the phone",
-      staysSignedOut: "The other machine stays signed out.",
-      code: "Six-digit code, read here and typed there",
+      linkOpens: "Magic link opens on the phone.",
+      staysSignedOut: "The terminal stays signed out.",
+      code: "Six-digit code: read here, typed there",
     },
     systemReach: {
       label:
@@ -305,6 +369,11 @@ export const en = {
   caseStudy: {
     moreWork: "More of my work",
     loading: "Loading case study",
+    /** The why, in product terms: one line each, from the frontmatter. */
+    userValue: "User value",
+    businessValue: "Business value",
+    stack: "Stack",
+    connects: "Related case studies",
   },
 
   experience: {
@@ -381,7 +450,7 @@ export const en = {
       },
       heading: {
         label: "Heading · Archivo 600",
-        sample: "VimUI, a design system in code",
+        sample: "VimUI: Vimocity's design system, built in code",
       },
       body: {
         label: "Body · IBM Plex Mono 400",

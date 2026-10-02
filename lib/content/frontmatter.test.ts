@@ -107,11 +107,13 @@ describe("required", () => {
 
 describe("toCaseStudy", () => {
   const data = {
-    title: "T",
+    title: "Unified login: One sign-in for every platform",
     role: "R",
     year: "2025",
     summary: "S",
-    weight: "medium",
+    user: "U",
+    business: "B",
+    area: "identity",
     stack: ["A"],
   };
 
@@ -121,10 +123,61 @@ describe("toCaseStudy", () => {
     );
   });
 
-  it("rejects a weight outside the three the grid can lay out", () => {
+  it("splits the title into the feature's name and what it is", () => {
+    const { name, descriptor } = toCaseStudy("f.mdx", data, "b");
+    expect(name).toBe("Unified login");
+    expect(descriptor).toBe("One sign-in for every platform");
+  });
+
+  it("rejects a descriptor that starts in lowercase", () => {
+    // It is shown as its own line under the name, where lowercase reads as a
+    // sentence that lost its start.
     expect(() =>
-      toCaseStudy("f.mdx", { ...data, weight: "huge" }, "body"),
-    ).toThrow(/weight must be one of[\s\S]*huge/);
+      toCaseStudy(
+        "f.mdx",
+        { ...data, title: "Unified login: one sign-in for every platform" },
+        "b",
+      ),
+    ).toThrow(/capital/);
+  });
+
+  it("rejects a title that doesn't name the feature first", () => {
+    // "Challenges, getting utility workers moving" read as a teaser: you had
+    // to open it to learn what it was about.
+    expect(() =>
+      toCaseStudy("f.mdx", { ...data, title: "Content that travels" }, "b"),
+    ).toThrow(/Name: What it is/);
+  });
+
+  it("requires the why: user value and business value", () => {
+    // A case study that can't say what it changed for users and for the
+    // business isn't finished, so it doesn't build.
+    for (const key of ["user", "business"] as const) {
+      const without: Record<string, string | string[]> = { ...data };
+      delete without[key];
+      expect(() => toCaseStudy("f.mdx", without, "b")).toThrow(key);
+    }
+  });
+
+  it("rejects an area outside the ecosystem", () => {
+    expect(() => toCaseStudy("f.mdx", { ...data, area: "misc" }, "b")).toThrow(
+      /area must be one of/,
+    );
+  });
+
+  it("puts a case study with no order after the ordered ones", () => {
+    expect(toCaseStudy("f.mdx", data, "b").order).toBe(Number.MAX_SAFE_INTEGER);
+    expect(toCaseStudy("f.mdx", { ...data, order: "2" }, "b").order).toBe(2);
+  });
+
+  it("treats the impact chip as optional", () => {
+    expect(toCaseStudy("f.mdx", data, "b").impact).toBeUndefined();
+    const withImpact = { ...data, impact: "−80% tickets" };
+    expect(toCaseStudy("f.mdx", withImpact, "b").impact).toBe("−80% tickets");
+  });
+
+  it("defaults missing connections to none", () => {
+    expect(toCaseStudy("f.mdx", data, "b").connects).toEqual([]);
   });
 
   it("defaults a missing stack to empty rather than throwing", () => {

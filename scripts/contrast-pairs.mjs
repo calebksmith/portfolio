@@ -59,4 +59,10 @@ export const PAIRS = [
   // menus — and inline code. Muted fill, full-strength text: the emphasis is
   // the point, so it is measured rather than swapped for the muted foreground.
   ["muted", "foreground"],
+
+  // Diagrams sit on the figure's card surface and draw their verdicts in the
+  // verdict foregrounds directly — the code that reaches the other device, the
+  // link that doesn't. Text, so it is held to AA like any other text.
+  ["card", "positive-foreground"],
+  ["card", "destructive-foreground"],
 ];

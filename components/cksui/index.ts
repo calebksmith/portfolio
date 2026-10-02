@@ -35,6 +35,7 @@ export {
   type WorkItem,
 } from "./site-header";
 export { SpecList, SpecRow } from "./spec-list";
+export { Tabs } from "./tabs";
 export { StatusDot } from "./status-dot";
 export { ThemeSwitcher, type ThemeSwitcherLabels } from "./theme-switcher";
 export { cn } from "./lib/cn";

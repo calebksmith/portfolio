@@ -6,14 +6,13 @@ import { join } from "node:path";
 import { DEFAULT_LOCALE, LOCALES, type Locale } from "@/lib/i18n/config";
 
 import {
-  WEIGHTS,
+  AREAS,
   parseFrontmatter,
   toCaseStudy,
   type CaseStudy,
-  type Weight,
 } from "./frontmatter";
 
-export type { CaseStudy, Weight };
+export type { CaseStudy };
 
 /**
  * The case study content layer.
@@ -45,38 +44,53 @@ function load(locale: Locale): CaseStudy[] {
 }
 
 /**
- * Largest first, then alphabetically by the English title, so the order is
- * stable across machines (readdir order is not guaranteed) and identical in
- * every locale — sorting each locale by its own titles would reshuffle the
- * grid whenever a translation starts with a different letter.
+ * Ecosystem order: by area (the people each study serves, then the layers they
+ * all share), then each study's `order` within its area, then the English title
+ * as a tiebreak. Computed once from the default locale and applied to every locale,
+ * so a translation can never reshuffle the homepage, the Work menu, or the
+ * "more of my work" row.
  */
 function order(studies: CaseStudy[]): CaseStudy[] {
   return [...studies].sort(
     (a, b) =>
-      WEIGHTS.indexOf(a.weight) - WEIGHTS.indexOf(b.weight) ||
+      AREAS.indexOf(a.area) - AREAS.indexOf(b.area) ||
+      a.order - b.order ||
       a.title.localeCompare(b.title),
   );
 }
 
-/** Read once at module scope; the files cannot change between requests. */
-const slugOrder = order(load(DEFAULT_LOCALE)).map((study) => study.slug);
+function index(): Record<Locale, CaseStudy[]> {
+  const slugOrder = order(load(DEFAULT_LOCALE)).map((study) => study.slug);
 
-const byLocale = Object.fromEntries(
-  LOCALES.map((locale) => [
-    locale,
-    load(locale).sort(
-      (a, b) => slugOrder.indexOf(a.slug) - slugOrder.indexOf(b.slug),
-    ),
-  ]),
-) as Record<Locale, CaseStudy[]>;
+  return Object.fromEntries(
+    LOCALES.map((locale) => [
+      locale,
+      load(locale).sort(
+        (a, b) => slugOrder.indexOf(a.slug) - slugOrder.indexOf(b.slug),
+      ),
+    ]),
+  ) as Record<Locale, CaseStudy[]>;
+}
+
+/** Read once at module scope; in a build, the files cannot change. */
+const byLocale = index();
+
+/**
+ * In development the files do change — they are being edited — and the
+ * module-scope read would keep serving the old copy until a restart. So
+ * development reads them per call. A build still reads once.
+ */
+function studies(locale: Locale): CaseStudy[] {
+  return (process.env.NODE_ENV === "development" ? index() : byLocale)[locale];
+}
 
 export function getCaseStudies(locale: Locale): CaseStudy[] {
-  return byLocale[locale];
+  return studies(locale);
 }
 
 export function getCaseStudy(
   locale: Locale,
   slug: string,
 ): CaseStudy | undefined {
-  return byLocale[locale].find((study) => study.slug === slug);
+  return studies(locale).find((study) => study.slug === slug);
 }

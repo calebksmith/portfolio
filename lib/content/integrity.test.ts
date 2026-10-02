@@ -99,7 +99,7 @@ describe("case study files", () => {
 
 describe("every locale has every case study", () => {
   // A translation is the same study in another language: same slug, same
-  // badges, same weight in the grid. Titles and prose are the only things
+  // badges, same place in the ecosystem. Titles and prose are the only things
   // allowed to differ, so a missing file or a drifted badge fails here rather
   // than as a 404 or a grid that reshuffles when you switch language.
   const others: Locale[] = LOCALES.filter((l) => l !== DEFAULT_LOCALE);
@@ -117,7 +117,8 @@ describe("every locale has every case study", () => {
 
     for (const study of studies) {
       const other = translated.find((s) => s.slug === study.slug)!;
-      expect(other.weight, `${locale}/${study.slug} weight`).toBe(study.weight);
+      expect(other.area, `${locale}/${study.slug} area`).toBe(study.area);
+      expect(other.order, `${locale}/${study.slug} order`).toBe(study.order);
       expect(other.stack, `${locale}/${study.slug} stack`).toEqual(study.stack);
       expect(other.year, `${locale}/${study.slug} year`).toBe(study.year);
     }
@@ -133,6 +134,16 @@ describe("internal links resolve", () => {
           slugs.has(target),
           `${slug}.mdx links to /work/${target}, which does not exist`,
         ).toBe(true);
+      }
+    },
+  );
+
+  it.each(studies.map((s) => [s.slug, s] as const))(
+    "%s connects only to case studies that exist",
+    (slug, study) => {
+      for (const target of study.connects) {
+        expect(slugs.has(target), `${slug} connects to "${target}"`).toBe(true);
+        expect(target, `${slug} connects to itself`).not.toBe(slug);
       }
     },
   );
@@ -170,9 +181,14 @@ describe("internal links resolve", () => {
     (locale) => {
       // A slug can survive a retitle. This catches the other half — in each
       // language, against that language's own titles.
+      // Only case study links carry a case study title; a link to another
+      // page (the colophon) is checked by the /work/ link test above.
       const links = messages[locale].home.hero.prompts
         .map((prompt) => prompt.link)
-        .filter((link) => link !== null);
+        .filter(
+          (link): link is NonNullable<typeof link> =>
+            link !== null && link.href.startsWith("/work/"),
+        );
       expect(links.length).toBeGreaterThan(0);
 
       for (const link of links) {

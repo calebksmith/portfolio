@@ -1,99 +1,90 @@
 ---
-title: Challenges, getting utility workers moving
+title: Movement challenges: Leaderboards and targets that build a daily habit
 role: Product design, behavior change
 year: 2023–2024
 stack: [Web app, Mobile, Figma]
-summary: Daily 5 completions rose 65% — movement challenges built so a five-person crew can beat a fifty-person one, and so nobody has to be ranked to take part.
-weight: medium
+summary: Daily 5 completions rose 65% — scored so a five-person crew can beat a fifty-person one, and nobody has to be ranked to take part.
+user: A reason to come back to do the Daily 5 every day.
+business: More registrations, sign-ins, and Daily 5 completions — Vimocity's key engagement metric.
+connects: [challenge-admin, login]
+area: workers
+order: 1
+impact: +65% Daily 5 completions in challenges
 ---
 
 ## Problem
 
-The cornerstone of Vimocity is the Daily 5: a short full-body routine
-targeting the areas that get hurt when you use your body for a living. Done
-daily, it measurably reduces musculoskeletal injuries — sprains and strains, the
-things that take a utility worker off the job.
+The Daily 5 is a full-body routine of four or five moves, done in five minutes
+or less. It helps prevent injuries and keeps your body moving well for physical
+work. Completions are Vimocity's key engagement metric, and the routine works
+best done daily.
 
-Daily is the hard part. A routine that works only if you do it every day is a
-routine that fails on the days nobody feels like it. We needed something that
-made a Daily 5 worth doing on a Tuesday in February, without turning a health
-benefit into surveillance or a leaderboard nobody asked to be on.
+Engagement was inconsistent: on their own, people were less likely to make it a
+habit. The missing ingredient was competition. Many of our users are
+competitive, and a team up against coworkers on another team has a reason to do
+the Daily 5 on a Tuesday in February. It couldn't feel like surveillance,
+though, or put anyone on a leaderboard they didn't opt into.
+
+> **The call:** normalize leaderboard scores to completion rate, not totals. Totals
+> reward headcount: the biggest team wins by default, and a small crew has no
+> reason to join. So a team earns up to 100 points a day, the share of its
+> members who completed the Daily 5. Ten people, nine completions: 90.
 
 ## What I did
 
-- Tied challenges to the thing that already worked. Completing a Daily 5
-  earns credit toward whatever challenge you are in — the challenge does not add
-  a task, it gives the existing one a reason.
-- Designed three types, so stakeholders had options to choose which is best
-  for their team:
-  **personal targets** (you against your own count, earning raffle entries),
-  **team targets** (the same, pooled across a team), and
-  **leaderboards** (teams ranked against each other).
-- For the leaderboard challenge, worked out the team-size problem. A large team
-  wins any contest scored on totals, which makes joining a small crew pointless.
-  So a team scores up to 100 points a day, and the points are the share of its
-  members who completed a Daily 5 — ten people and nine completions is 90.
-  Team size stops deciding the winner; completion rate does.
-- Kept the door open for teams below the organization's minimum size, with the
-  ceiling handicapped in proportion: four people against a minimum of five can
-  earn 80 a day rather than 100. Small teams do have an edge — getting four
-  people to finish is easier than fifty — and the handicap is what stops that
-  edge being decisive.
-- Set join windows, so a challenge is a fixed period with a start and an end
-  rather than an open-ended obligation. They run from a week to over a month.
-- Designed for web and mobile as two specs rather than one stretched across
-  both. On our desktop app there is no challenge screen at all — but complete
-  four moves in a day and that counts toward your Daily 5, and toward any
-  challenge you have joined.
-- Tested with customers and non-customers, checking that the mechanics motivated
-  rather than pressured.
+- **Started with research.** It set the brief: a reason to do the Daily 5 every
+  day, without pressure. I tested each mechanic against that brief with
+  customers and non-customers.
+- **Built for competitive teams, with a way out.** The leaderboard puts teams
+  of coworkers against each other. Target challenges give everyone else, often
+  the people the Daily 5 helps most, a prize to play for without a ranking. Three
+  challenge types, and only one ranks anyone.
+- **Scored the existing habit.** A completed Daily 5 is the only thing that
+  counts, so a challenge adds a reason to do it, not a new task.
+- **Time-boxed every challenge.** Join windows run from a week to over a month,
+  so a challenge reads as an event, not an obligation.
 
-This was 0→1. There was no challenges feature to improve on — the mechanics, the
-scoring, the join windows and the three types were all decisions rather than
-inheritances, which is why the fairness problem had to be solved rather than
-tuned.
+<Segments title="Challenge types">
+<Segment value="leaderboard" label="Leaderboard">
+
+Teams of coworkers compete on one board, scored on completion rate. The top
+team wins a shared prize.
 
 <Figure
   ratio="700/300"
-  caption="Points are the share of a team that finished, not the count. Fifty people and forty-five completions scores less than five people and five — and the handicap below the minimum is what keeps a very small crew from simply being the easiest place to win."
+  caption="Points are the share of a team that completed the Daily 5: five of five beats forty-five of fifty. Crews under the five-person minimum play for a lower ceiling, so going small isn't a shortcut."
 >
   <TeamScoring />
 </Figure>
 
-> **What it cost.** A ceiling of 100 means every team that finishes gets the
-> same score, and committed crews finish — so ties turned out to be far more
-> common than we modelled. Ten teams tied is not unusual.
->
-> The tiebreaker is worse than the problem: largest team wins, and if they are
-> the same size the admin draws at random. That hands the result back to the
-> bigger team, which is the exact bias the percentage was built to remove — and
-> a coin toss is not an outcome anyone earns.
->
-> The answer is not a better tiebreaker. It is a harder ceiling: scoring needs
-> another layer of difficulty so that finishing is the entry price rather than
-> the maximum. That is the next change.
+</Segment>
+<Segment value="target" label="Target">
+
+No board, no ranking. A personal target is solo: complete as many Daily 5s as
+you can before the challenge ends, earning raffle tickets along the way. A team
+target is the same goal, shared by a group.
+
+</Segment>
+</Segments>
 
 ## Outcome
 
-- **Daily 5 completions rose 65%** among people in a challenge.
-- **25% more people registered** for Vimocity in order to take part in one.
-- Visitors who viewed a challenge signed in within a week at 10%, against 4%
-  for everyone else.
-- Months with a major challenge bring 61% more sign-ins.
-- Movement became a shared activity rather than an individual task, without
-  making participation conditional on being ranked.
-- The feature works across every platform from one set of rules.
+- **Engagement:** Daily 5 completions rose 65% among participants, and
+  leaderboard challenges drew the highest engagement of the three types.
+- **Adoption:** 25% more people registered for Vimocity to join a challenge.
+- **Re-engagement:** 10% of visitors who viewed a challenge signed in within a
+  week, against 4% of everyone else. Months with a major challenge bring 61%
+  more sign-ins.
+- **The catch:** outside a challenge window, Daily 5 engagement dropped.
+  Competition built the routine; between challenges, it didn't hold.
 
-> **Who did what:** I led design and UI. The frontend and backend logic were
-> written by our engineers, and the challenge mechanics were shaped collectively
-> with our entire team.
+> **What I'd change:** the 100-point cap. A crew where everyone completes the
+> Daily 5 maxes out, so committed crews tie and the tiebreaker decides: largest
+> team, then a random draw. That hands the win back to the bigger team, the bias
+> the percentage was meant to remove. Next iteration: make full completion the
+> entry price, not the max score.
 
-> **Design note:** the hardest decision was making competition optional.
-> Leaderboards motivate some people and alienate others, especially in a health and
-> safety context tied to work — and the people most likely to be alienated are the ones
-> the Daily 5 helps most. Personal targets let someone take part, earn the
-> same raffle entries, and never appear in a ranking.
-
-Organizations run these themselves rather than asking us to set one up. That
-took its own tool — see
-[the challenge admin tool](/work/challenge-admin).
+**Who did what:** I owned design end to end, from research through UI.
+Engineering built the frontend and backend, and we worked out the mechanics as a
+team. Admins run challenges in [challenge admin](/work/challenge-admin), and new
+participants sign up through [login and account creation](/work/login).
