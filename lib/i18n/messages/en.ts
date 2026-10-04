@@ -235,7 +235,7 @@ export const en = {
       heading: "Vimocity",
       /** What Vimocity is, and what the product team is working toward. */
       intro:
-        "I lead design at Vimocity, a workplace health and safety platform for utility companies. With product and engineering, I build the tools that get crews moving and help safety leaders keep their teams safe, so fewer people get hurt on the job.",
+        "I lead design at Vimocity, a workplace health and safety platform built for utility companies. We build the tools safety leaders use to keep their crews safe.",
       views: "View the work as",
       tabs: { map: "Product map", list: "Case studies" },
       ecosystem: {
