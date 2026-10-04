@@ -143,7 +143,7 @@ export const en = {
       prompts: [
         {
           id: "built",
-          question: "What have I built recently?",
+          question: "Built anything lately?",
           answer:
             "VimUI — Vimocity's design system. 50+ web components, fully tokenized with Tailwind CSS and documented in Storybook.",
           link: {
@@ -154,7 +154,7 @@ export const en = {
         },
         {
           id: "different",
-          question: "What makes me different?",
+          question: "Why a design engineer?",
           // The middle sentence says what someone else ends up with, not what the
           // work feels like. "There's nothing to interpret" described a quality of the
           // artefact and left the reader to work out why that was worth anything;
@@ -176,7 +176,7 @@ export const en = {
         },
         {
           id: "how",
-          question: "What's my process?",
+          question: "How do I work?",
           // Answers the question asked, in order, with the endpoints named. Earlier
           // drafts opened on a category ("most of the product development cycle",
           // "the front half of the double diamond") and made the reader decode the
@@ -205,7 +205,7 @@ export const en = {
         },
         {
           id: "overengineered",
-          question: "What's overengineered here?",
+          question: "Anything overengineered here?",
           // The one question that isn't about the job — and the answer is
           // literally true. The hero types itself, reserves its height so the
           // page never jumps, announces the finished sentence once to screen
@@ -235,10 +235,15 @@ export const en = {
       heading: "Vimocity",
       /** What Vimocity is, and what the product team is working toward. */
       intro:
-        "Where I lead design: workplace health and safety for utility companies. Our product team builds the tools that get crews moving and help safety leaders keep their teams safe, so fewer people get hurt on the job.",
+        "I lead design at Vimocity, a workplace health and safety platform for utility companies. With product and engineering, I build the tools that get crews moving and help safety leaders keep their teams safe, so fewer people get hurt on the job.",
       views: "View the work as",
       tabs: { map: "Product map", list: "Case studies" },
       ecosystem: {
+        /** Over the three persona columns, which read as one group with it. */
+        group: {
+          title: "Product ecosystem",
+          note: "Grouped by who each part serves",
+        },
         areas: {
           workers: { label: "Workers", note: "Move and recover" },
           "safety-leaders": {
@@ -273,13 +278,13 @@ export const en = {
         eyebrow: "Storybook",
         title: "VimUI, live",
         description:
-          "Vimocity's design system, public — 50+ web components on shared tokens.",
+          "Vimocity's public design system: 50+ components on shared tokens.",
       },
       practice: {
         eyebrow: "Practice",
         title: "Modern Trailhead",
         description:
-          "The consultancy I have run alongside full-time work since 2016 — client websites, and video and photo for brands including Brooks Running and Shake Shack.",
+          "My studio since 2016: websites, video, and photo for brands like Brooks Running and Shake Shack.",
       },
       colophon: {
         eyebrow: "About this site",
@@ -290,19 +295,18 @@ export const en = {
       source: {
         eyebrow: "About this site",
         title: "Source code",
-        description:
-          "The repository behind this site — the components, the tokens, and the checks that hold them.",
+        description: "The components, tokens, and checks behind this site.",
       },
       styleGuide: {
         eyebrow: "About this site",
         title: "Style guide",
         description:
-          "Tokens, type, and every component — measured live, in whichever theme you are viewing.",
+          "Every token and component, measured live in your current theme.",
       },
       linkedin: {
         eyebrow: "Profile",
         title: "LinkedIn",
-        description: "Background, roles, and the longer version of all this.",
+        description: "My background and roles, in full.",
       },
     },
     tldr: {
@@ -310,7 +314,7 @@ export const en = {
       // Vimocity comes first: VimUI is a system built *there*, not a product of
       // his own, and naming the employer is what makes that legible.
       paragraphs: [
-        "I’m a design engineer and product manager at Vimocity, a workplace health and safety platform based in Seattle. I lead design there. I built our design system — VimUI — and I maintain the standards and automated checks that keep our design and code in sync.",
+        "I’m a design engineer and product manager at Vimocity, a workplace health and safety platform based in Seattle. My biggest project: VimUI, the design system I built, and the standards and automated checks that keep our design and code in sync.",
         "Nine years in design, five writing production frontend.",
       ],
       cta: "My experience →",
