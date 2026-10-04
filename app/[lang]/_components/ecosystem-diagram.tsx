@@ -30,6 +30,14 @@ export async function EcosystemDiagram() {
 
   return (
     <div>
+      {/* Names the three columns as one group: the product, by who uses it.
+          The bands below name themselves. */}
+      <div className="mb-4">
+        <h3 className="font-display text-base font-semibold text-foreground">
+          {t.group.title}
+        </h3>
+        <p className="mt-1 text-sm text-muted-foreground">{t.group.note}</p>
+      </div>
       <div className="grid gap-4 lg:grid-cols-3">
         {PERSONAS.map((area) => (
           <Area key={area} id={area} {...t.areas[area]}>
