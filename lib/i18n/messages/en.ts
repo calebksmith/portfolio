@@ -143,7 +143,7 @@ export const en = {
       prompts: [
         {
           id: "built",
-          question: "Built anything lately?",
+          question: "What have I built lately?",
           answer:
             "VimUI, Vimocity’s design system: 50+ web components on shared tokens, documented where anyone can try them.",
           link: {
@@ -233,13 +233,14 @@ export const en = {
       /** What Vimocity is, and what the product team is working toward. */
       intro:
         "I lead design at Vimocity, a workplace health and safety platform built for utility companies. We build the tools safety leaders use to keep their crews safe.",
-      views: "View the work as",
-      tabs: { map: "Product map", list: "Case studies" },
+      /** Shown in front of the view switch, so it reads as two views of one set. */
+      views: "View case studies as",
+      tabs: { map: "Product map", list: "List" },
       ecosystem: {
         /** Over the three persona columns, which read as one group with it. */
         group: {
-          title: "Product ecosystem",
-          note: "Grouped by who each part serves",
+          title: "Vimocity, by who it serves",
+          note: "Each case study sits with the people it’s built for.",
         },
         areas: {
           workers: { label: "Workers", note: "Move and recover" },
@@ -255,19 +256,39 @@ export const en = {
           platform: { label: "Platform", note: "What all of it is built on" },
         },
         /**
-         * Parts of Vimocity that aren't case studies, drawn so the diagram
-         * shows the product's breadth rather than only the work written up.
-         * A `note` marks the one that matters most to the business.
+         * The Daily 5 isn't a case study, but the workers' column is built
+         * around it, so its node opens a short overview instead of a page.
          */
-        context: {
-          workers: [{ label: "Daily 5", note: "Key habit" }],
-          "safety-leaders": [
-            { label: "Content library" },
-            { label: "Safety campaigns" },
+        daily5: {
+          label: "Daily 5",
+          note: "Key habit",
+          eyebrow: "Key habit",
+          title: "The Daily 5",
+          lede: "A full-body movement routine of four or five moves that takes five minutes or less. It’s where workers see results from Vimocity: they feel better, and they come back.",
+          facts: [
+            {
+              label: "Why it matters",
+              value:
+                "Done consistently, it helps prevent injuries on the job, and the stiffness and soreness physical work causes.",
+            },
+            {
+              label: "How it’s done",
+              value:
+                "On your own, or with your crew, where one person logs it for everyone.",
+            },
+            {
+              label: "For Vimocity",
+              value: "Daily 5 completions are the key engagement metric.",
+            },
           ],
-          admins: [{ label: "User management" }],
-        } as Record<string, { label: string; note?: string }[]>,
-        legend: { study: "Case study", context: "Also part of Vimocity" },
+          related: "Where it shows up",
+          relatedNotes: {
+            challenges: "Every challenge is scored on it",
+            playlists: "Group logging records it for a whole crew",
+          } as Record<string, string>,
+          close: "Close",
+        },
+        legend: { study: "Case study", overview: "Feature overview" },
       },
     },
     pointers: {
@@ -420,8 +441,8 @@ export const en = {
     },
     teamScoring: {
       label:
-        "A crew of five with all five completing scores 100 for the day. A team of fifty with forty-five completing scores 90. A crew of four, below a minimum of five, scores at most 80.",
-      title: "ONE DAY OF A LEADERBOARD CHALLENGE",
+        "On an example day, a crew of five with all five completing scores 100. A team of fifty with forty-five completing scores 90. A crew of four, below a minimum of five, scores at most 80.",
+      title: "EXAMPLE DAY OF A LEADERBOARD CHALLENGE",
       crew5: "Crew of 5",
       completed5: "5 of 5 completed",
       team50: "Team of 50",
@@ -452,6 +473,7 @@ export const en = {
     businessValue: "Business value",
     stack: "Stack",
     connects: "Related case studies",
+    keyResult: "Key result",
   },
 
   experience: {
