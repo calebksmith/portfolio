@@ -77,7 +77,7 @@ export const en: Resume = {
           bullets: [
             "Built VimUI and lead its growth: 50+ web components on shared tokens, documented in Storybook. Color and type tokens carry across our iOS, Android, and Windows desktop apps.",
             "Raised reusable component use from about 10% to 80–90% of frontend code, and design token use from 0% to 99%.",
-            "Wrote the standards that govern the system — structure, tokens, typing, accessibility, documentation, and versioning — and maintain them as the reference the whole team builds against.",
+            "Wrote the standards that govern the system (structure, tokens, typing, accessibility, documentation, and versioning) and maintain them as the reference the whole team builds against.",
             "Ship the system as versioned releases, with a changelog entry per change and beta releases to the apps that use it before anything breaking ships.",
           ],
         },

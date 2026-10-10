@@ -103,7 +103,72 @@ const COPY_RULES = [
     pattern: /(?<=[A-Za-z])'(?=[A-Za-z])/g,
     message: "use a curly apostrophe (’)",
   },
+  {
+    id: "stock-phrasing",
+    // Words that say nothing specific, so readers skim past them. Each one
+    // has a plainer word or a concrete detail behind it.
+    pattern:
+      /\b(delv\w*|leverag\w*|seamless\w*|robust|streamlin\w*|elevat\w*|empower\w*|foster\w*|tapestry|realm|crucial|pivotal|intricate|holistic|synerg\w*|cutting-edge|game-?changer\w*|unlock\w*|harness\w*|journey|showcas\w*|testament|underscor\w*|meticulous\w*|nuanced|paramount|transformative|vibrant|bespoke|utiliz\w*|facilitat\w*|moreover|furthermore|additionally|notably|ultimately|effortless\w*|impactful|actionable|worth noting|in today’s)\b/gi,
+    message: "stock phrasing; say the specific thing",
+  },
+  {
+    id: "not-just",
+    pattern: /\bnot (just|only|merely)\b/gi,
+    message: '"not just X, but Y" is a formula; state Y',
+  },
 ];
+
+/**
+ * Em dashes, counted per string in the dictionary and the résumé and per
+ * paragraph in MDX. One is punctuation; two in the same breath is a habit
+ * readers notice. A period, a colon, or parentheses usually does the job.
+ */
+function* emDashRuns(path, text) {
+  const tooMany = (s) => (s.match(/—/g) ?? []).length > 1;
+
+  if (path.endsWith(".ts")) {
+    const lines = text.split("\n");
+    for (const [index, line] of lines.entries()) {
+      if (/^\s*(\/\/|\/?\*)/.test(line)) continue;
+      for (const match of line.matchAll(/"((?:[^"\\]|\\.)*)"/g)) {
+        if (tooMany(match[1])) yield { line: index + 1, text: match[1] };
+      }
+    }
+    return;
+  }
+
+  // MDX: prose paragraphs, plus each quoted attribute inside a JSX block.
+  let fenced = false;
+  let start = 0;
+  let paragraph = [];
+  const flush = () => {
+    const prose = paragraph.join(" ");
+    if (tooMany(prose)) return { line: start, text: prose };
+  };
+
+  for (const [index, line] of text.split("\n").entries()) {
+    if (line.trim().startsWith("```")) fenced = !fenced;
+    if (fenced) continue;
+
+    if (/^\s*(<|\/?>|[a-zA-Z]+=)/.test(line)) {
+      for (const match of line.matchAll(/"((?:[^"\\]|\\.)*)"/g)) {
+        if (tooMany(match[1])) yield { line: index + 1, text: match[1] };
+      }
+      continue;
+    }
+
+    if (line.trim() === "") {
+      const run = flush();
+      if (run) yield run;
+      paragraph = [];
+      continue;
+    }
+    if (paragraph.length === 0) start = index + 1;
+    paragraph.push(line);
+  }
+  const run = flush();
+  if (run) yield run;
+}
 
 /**
  * Nothing internal ships.
@@ -202,24 +267,30 @@ for (const root_ of COPY_ROOTS) {
   for (const path of walk(base)) {
     if (path.endsWith(".test.ts")) continue;
     const file = relative(root, path);
+    const text = readFileSync(path, "utf8");
     let fenced = false;
 
-    readFileSync(path, "utf8")
-      .split("\n")
-      .forEach((line, index) => {
-        const trimmed = line.trim();
-        if (trimmed.startsWith("```")) fenced = !fenced;
-        if (fenced || /^(\/\/|\/?\*)/.test(trimmed)) return;
+    for (const run of emDashRuns(path, text)) {
+      failures += 1;
+      console.log(
+        `  ${file}:${run.line}  more than one em dash — "${run.text.slice(0, 60)}…"`,
+      );
+    }
 
-        for (const rule of COPY_RULES) {
-          for (const match of line.matchAll(rule.pattern)) {
-            failures += 1;
-            console.log(
-              `  ${file}:${index + 1}  ${rule.message} — found "${match[0]}"`,
-            );
-          }
+    text.split("\n").forEach((line, index) => {
+      const trimmed = line.trim();
+      if (trimmed.startsWith("```")) fenced = !fenced;
+      if (fenced || /^(\/\/|\/?\*)/.test(trimmed)) return;
+
+      for (const rule of COPY_RULES) {
+        for (const match of line.matchAll(rule.pattern)) {
+          failures += 1;
+          console.log(
+            `  ${file}:${index + 1}  ${rule.message} — found "${match[0]}"`,
+          );
         }
-      });
+      }
+    });
   }
 }
 
