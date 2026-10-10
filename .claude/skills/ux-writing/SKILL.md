@@ -48,7 +48,7 @@ engineer who opened the colophon on purpose. Note where either would stop.
 - The register fits the surface: conversational on the homepage and 404,
   product team in case studies and the résumé, mechanism in the colophon and
   style guide.
-- No closing maxims. "X, not Y" only in The call. At most one em dash per
+- No closing maxims. "X, not Y" only in the design challenge. At most one em dash per
   paragraph. One light joke per page at most.
 - "I" for Caleb's decisions, "we" for the team's. No passive voice hiding who
   did it.
@@ -81,10 +81,14 @@ Generic copy is the copy a reader skims, and none of it is fixed by a word swap.
 
 **Shape** (case studies)
 
-- Problem in two or three sentences; one blockquoted call; three to five
-  "What I did" bullets, each a bold sentence then detail; outcomes with the
-  headline figure bold; one "Who did what" line; optionally "What I'd change".
+- Problem gives context, then the goal ("our goal was…"); one blockquoted
+  design challenge states the hardest problem plainly, then how it was solved;
+  three to five "What I did" bullets with explicit bold labels; outcomes as
+  stat tiles with caveats beside them; one "Who did what" line; optionally
+  "What I'd change", tied to a product or business goal.
 - User and business value are noun phrases, not sentences or instructions.
+- The key result in the frontmatter (`impact`) is the headline a skimmer
+  takes away. It should match the first stat tile.
 
 **Visuals**
 

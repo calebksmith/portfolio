@@ -15,9 +15,10 @@ impact: Reuse 10% → 80–90%
 ## Problem
 
 Vimocity’s web portal, mobile apps, and V-minder, the Windows app, had each
-drifted into their own patterns. VimUI started as a thorough Figma system, with
-published libraries, variables and modes, and versioned releases. But every
-change happened twice, in Figma and then in code, and the second pass pulled a
+drifted into their own patterns. Our goal was one system the whole product
+could be built from. VimUI started as a thorough Figma system, with published
+libraries, variables and modes, and versioned releases. But every change
+happened twice, in Figma and then in code, and the second pass pulled a
 developer off their work to translate the file.
 
 <Figure
@@ -33,29 +34,34 @@ developer off their work to translate the file.
   />
 </Figure>
 
-> **The call:** retire the Figma file. Once we prototyped in real components,
-> the file was a second copy of something that already existed. I knew Figma
-> well enough to see where it stopped paying.
+> **Design challenge:** keeping design and code in sync without making every
+> change twice. Once we prototyped in real components, the Figma file was a
+> second copy of something that already existed, so we retired it and made code
+> the source of truth. I knew Figma well enough to see where it stopped paying
+> off.
 
 ## What I did
 
-- **Built 50+ components.** They’re organized as atoms, molecules, and
-  organisms, starting from open-source foundations and rewritten where we
-  needed more.
+- **Built 50+ components in code.** They follow atomic design (atoms,
+  molecules, and organisms), starting from open-source foundations and
+  rewritten where we needed more.
 - **Tokenized color, type, spacing, and sizing.** Hardcoded values came out of
   the frontend.
-- **Built accessibility in.** Keyboard support, contrast in both modes, touch
-  targets, and reduced motion live in the components, so every feature
-  inherits them.
+- **Built accessibility into every component.** Keyboard support, contrast in
+  both modes, touch targets, and reduced motion come with the component, so
+  every feature inherits them.
 - **Released it in versions.** Apps can test a change before it lands.
-- **Bridged the gap while it lasted.** I fed designs to Claude Code through
-  Figma’s APIs, which sped up the handoff before it removed it.
+- **Used AI to speed up the handoff.** Until the Figma file was retired, I fed
+  designs to Claude Code through Figma’s APIs.
 
 ## Outcome
 
-- **Reusable component use rose from about 10% to 80–90%** of frontend code.
-- Token use went from 0% to 99%. The remaining 1% is deliberate overrides.
-- Changes happen once, in code.
+<Stats>
+  <Stat value="10% → 80–90%" label="of frontend code built from reusable components" />
+  <Stat value="0% → 99%" label="token use; the last 1% is deliberate overrides" />
+</Stats>
+
+Changes now happen once, in code.
 
 **Who did what:** I built VimUI and maintain it. The engineering team builds the
 web portal from it, and I review their frontend changes.

@@ -17,13 +17,15 @@ impact: Same output, leaner team
 The product team was shipping fast with AI, and nothing matched: different
 repositories, different component libraries, patterns invented on the spot.
 Even code built on VimUI used it wrong, with raw colors and type off the scale.
-The only check was me, reviewing everything, so design had become the
-bottleneck.
+The only check was me, reviewing everything, which made design the bottleneck.
+Our goal was a standard anyone could build to, whether they wrote the code or
+an agent did.
 
-> **The call:** stop reviewing for the standard and start enforcing it, in
-> three places, because a rule checked one way has a gap in it. Not every rule
-> is a hard failure. Some are warnings, because breaking a guideline on purpose
-> is sometimes the right design.
+> **Design challenge:** holding people and agents to one standard without a
+> designer reviewing every change. We stopped reviewing for the standard and
+> started enforcing it in three places, because a rule checked one way has a
+> gap in it. Not every rule is a hard failure: some are warnings, because
+> breaking a guideline on purpose is sometimes the right design.
 
 <Figure
   width="breakout"
@@ -35,25 +37,26 @@ bottleneck.
 
 ## What I did
 
-- **Loaded it into the agent.** Repository rules in CLAUDE.md, the file Claude
-  Code reads first, cover components, tokens, page structure, and
+- **Loaded the standard into the agent.** Repository rules in CLAUDE.md, the
+  file Claude Code reads first, cover components, tokens, page structure, and
   accessibility, so new pages start in the right shape.
-- **Made it checkable on demand.** A design-audit skill anyone can run
-  mid-build walks the checklist and says what to fix.
-- **Gated it before merge.** Lint rules run on every push, on generated and
-  hand-written code alike: tokens, breakpoints, loading states, and reuse. A
-  local component that gets reused is flagged for the library.
+- **Built an on-demand design audit.** It’s a skill anyone can run mid-build:
+  it walks the checklist and says what to fix.
+- **Added lint rules that gate every merge.** They run on every push, on
+  generated and hand-written code alike, and check tokens, breakpoints, loading
+  states, and reuse. A local component that gets reused is flagged for the
+  library.
 
 ## Outcome
 
-- **Same output, leaner team.** As the design engineer, I design and build the
-  frontend. The guardrails check the rules, so review no longer takes four steps
-  and two people.
-- **A release every sprint.** The old setup couldn’t hold a steady cadence. Now
-  every sprint ships.
-- Anyone on the team can build a page that meets the standard, which is what
-  made [rebuilding the web portal](/work/platform-rebuild) possible at that
-  speed.
+<Stats>
+  <Stat value="Every sprint" label="ships a release, a cadence the old setup couldn’t hold" />
+  <Stat value="Same output" label="from a leaner team, with one design engineer designing and building the frontend" />
+</Stats>
+
+Review no longer takes four steps and two people, and anyone on the team can
+build a page that meets the standard. That’s what made
+[rebuilding the web portal](/work/platform-rebuild) possible at that speed.
 
 **Who did what:** I wrote the agent rules, the design-audit skill, and the lint
 checks, for both the web portal and [VimUI](/work/vimui). The whole team builds

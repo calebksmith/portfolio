@@ -90,15 +90,18 @@ These are the same kind of guardrails I maintain on VimUI at work. Follow them.
   title, impact, user value, business value — tells the story on its own; the
   body backs it with one proof per point and leaves the depth for a
   conversation:
-  - **Problem** — two or three sentences: who it hurt, and why it mattered.
-  - **The call** — one blockquote right after the problem: the hardest decision,
-    what was weighed (customer needs first, business needs when they win), and
-    why. This is the one place a trade-off is argued; don't add more callouts.
+  - **Problem** — context, then the goal: what the thing is and who it hurt,
+    then "our goal was…". Short.
+  - **Design challenge** — one blockquote right after the problem: the hardest
+    problem, stated plainly, then how we solved it and what was weighed
+    (customer needs first, business needs when they win). This is the one place
+    a trade-off is argued; don't add more callouts.
   - **What I did** — three to five bullets, each opening with a bold lead-in.
     Where the work started with research, the first bullet says so in a line
     or two: what it found, specific to this feature. Most of these case studies
     started that way, so the process is never boilerplate repeated across them.
-  - **Outcome** — the approved figures, caveats attached.
+  - **Outcome** — the approved figures as stat tiles (`<Stats>` and `<Stat>`),
+    figure first, with caveats in the label or in one line beneath.
   - **Who did what** — one bold-labelled line. Every case study has one.
   - **Visuals** — every case study has at least one that every visitor sees:
     a diagram, or a screen anyone can open. A gated screenshot doesn't count on
@@ -178,7 +181,11 @@ style guide name the mechanism. The habits are the same in all three:
 
 - Say it once. An outcome doesn't repeat a bullet; a closing line doesn't
   restate the sentence before it.
-- "X, not Y" is for a real decision — in a case study, that's The call.
+- "X, not Y" is for a real decision — in a case study, that's the design
+  challenge.
+- Explicit over clever. A label says exactly what it is ("Made it easy to
+  compete", "Designed two challenge types"), and mechanics are described from
+  the user's side ("join a team or create your own").
 - At most one em dash per paragraph. A period or a colon usually does it.
 - One light, true joke per page at most. No closing maxims.
 - No "actually", "really", "exactly", or "fully".

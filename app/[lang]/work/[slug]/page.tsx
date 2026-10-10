@@ -86,19 +86,29 @@ export default async function CaseStudyPage({
               </span>
             </h1>
 
-            {/* The same chips as the card that led here, so the page opens on
-                the facts the reader clicked. */}
+            {/* The kind of work and when. The key result isn't a chip here:
+                it gets its own row below, where it can be read as a result. */}
             <CaseStudyChips
-              impact={study.impact}
               role={study.role}
               year={study.year}
               className="mt-5"
             />
 
-            {/* Who it helped and what it was worth, side by side: the user's
-                side first, the business's second. A definition list, because
-                each is a labelled answer. */}
+            {/* What happened, then who it helped and what it was worth: the
+                key result across the top, the user's side and the business's
+                side under it. A definition list, because each is a labelled
+                answer. */}
             <dl className="mt-8 grid rounded-lg border border-border bg-card text-card-foreground sm:grid-cols-2">
+              {study.impact ? (
+                <div className="border-b border-border p-5 sm:col-span-2 sm:p-6">
+                  <Eyebrow asChild tone="primary">
+                    <dt>{t.caseStudy.keyResult}</dt>
+                  </Eyebrow>
+                  <dd className="mt-2 font-display text-2xl leading-tight font-semibold tracking-[-0.02em] text-balance sm:text-3xl">
+                    {study.impact}
+                  </dd>
+                </div>
+              ) : null}
               <div className="p-5 sm:p-6">
                 <Eyebrow asChild tone="primary">
                   <dt>{t.caseStudy.userValue}</dt>

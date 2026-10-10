@@ -17,7 +17,8 @@ impact: −80% login support tickets
 Web, mobile, and desktop each had their own login, and getting in was our top
 support issue. Sign-up was worse: each organization has its own way in, like
 single sign-on, an email allowlist, or a registration code, and users didn’t
-know which was theirs.
+know which was theirs. Our goal was one sign-in that works the same everywhere
+and gets people back in when they forget something.
 
 <Figure
   width="breakout"
@@ -33,9 +34,11 @@ know which was theirs.
   />
 </Figure>
 
-> **The call:** a code, not a magic link. We designed the link first, but it
-> assumes the device reading the email is the device signing in, and for a
-> utility crew sharing a terminal, it usually isn’t.
+> **Design challenge:** signing in a utility crew on a shared terminal. We
+> designed a magic link first, but it assumes the device reading the email is
+> the device signing in, and for a crew sharing a terminal, it usually isn’t.
+> So we used a six-digit code, which can be read on one device and typed on
+> another.
 
 <Figure
   ratio="700/260"
@@ -49,14 +52,15 @@ know which was theirs.
 - **Started with research.** Interviews, support tickets, and the five whys
   showed people weren’t locked out by security. They forgot a password, or
   which email they’d signed up with. I tested each design with customers.
-- **Designed for forgetting.** “Remember me” keeps your email, and a forgotten
-  password gets a code by email instead of a reset.
-- **Asked “Who do you work for?”** instead of “Which registration type is
-  yours?” Pick your company and get its flow. The list stays empty until you
-  type three letters and includes decoys, so nobody can use it to list our
-  customers.
-- **Designed the admin side.** Admins see who hasn’t signed up and invite them.
-  About two in three active organizations used it in its first eight months.
+- **Designed for people who forget.** “Remember me” keeps your email, and a
+  forgotten password gets a code by email instead of a reset.
+- **Replaced registration types with a company search.** Users answer “Who do
+  you work for?” instead of “Which registration type is yours?”, and get their
+  company’s flow. The list stays empty until you type three letters and
+  includes decoys, so nobody can use it to list our customers.
+- **Gave admins a way to invite people.** Admins see who hasn’t signed up and
+  invite them. About two in three active organizations used it in its first
+  eight months.
 - **Designed one flow for every platform.** One web login runs in the mobile
   apps and in V-minder, the Windows app, through a webview. We traded a little
   native polish for one codebase instead of three, the right call for a small
@@ -72,11 +76,14 @@ know which was theirs.
 
 ## Outcome
 
-- **Login and account-access support tickets dropped 80%.**
-- Users hitting a broken password-reset link fell more than 90%, and sign-ins
-  held steady through the switch.
-- Security went up, with email verification and multi-factor authentication,
-  without adding steps to the common path.
+<Stats>
+  <Stat value="−80%" label="login and account-access support tickets" />
+  <Stat value="90%+" label="fewer users hitting a broken password-reset link" />
+</Stats>
+
+Sign-ins held steady through the switch. Security went up, with email
+verification and multi-factor authentication, without adding steps to the
+common path.
 
 **Who did what:** I led the UX research, customer interviews, and UI.
 Engineering built the flows and the service; product management and leadership
