@@ -40,8 +40,9 @@ static           per request,          gated per route
 ## Decisions
 
 **Server Components by default.** Nearly every page is a read of content the
-visitor didn't personalise. The landing and sign-in pages ship zero application
-JavaScript. Client components go at the leaf, when an interaction needs one.
+visitor didn't personalize, so pages render on the server. Client components go
+at the leaf, only where an interaction needs one: the hero that types its
+answers, the header's controls, the inspector.
 
 **Tailwind v4, configured in CSS.** Tokens and the utility namespace sit in one
 file, twelve lines apart, so they can't drift. Every color, radius, and duration
