@@ -368,7 +368,7 @@ export const recipes: Recipe[] = [
     description:
       "The small uppercase label — section headings, card kickers, spec terms, fieldset legends. The most-repeated text style on the site.",
     notes: [
-      "Before this existed the same style was written by hand 33 times in 10 spellings — four sizes, three tracking values, three colours. Two of those sizes were arbitrary values resolving to no token at all.",
+      "Before this existed the same style was written by hand 33 times in 10 spellings — four sizes, three tracking values, three colors. Two of those sizes were arbitrary values resolving to no token at all.",
       "asChild renders the child element instead of a <p>, because these need to be h2, h3, dt, legend and span depending on what they are labelling.",
     ],
     controls: [
