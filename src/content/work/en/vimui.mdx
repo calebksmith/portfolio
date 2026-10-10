@@ -1,11 +1,11 @@
 ---
-title: VimUI: Vimocity's design system, built in code
+title: VimUI: Vimocity’s design system, built in code
 role: Design systems
 year: 2022–present
 stack: [Storybook, Tailwind CSS, shadcn/ui, Radix]
-summary: 50+ web components on shared tokens — with Storybook, not Figma, as the source of truth.
-user: The same components, accessibility, and light and dark modes everywhere in the web app.
-business: Pages are assembled from parts that already exist, and a change ships once instead of twice.
+summary: 50+ web components on shared tokens, with code as the source of truth instead of a Figma file.
+user: The same components, accessibility, and light and dark modes across the web portal.
+business: Pages built from parts that already exist, and every change made once.
 connects: [guardrails, platform-rebuild, login]
 area: platform
 order: 1
@@ -14,15 +14,15 @@ impact: Reuse 10% → 80–90%
 
 ## Problem
 
-Vimocity ships web, iOS, Android, and Windows apps, and each had drifted into
-its own patterns. VimUI started as a thorough Figma system — published
-libraries, variables and modes, versioned releases. The cost wasn't the tool.
-Every change happened twice, in Figma and then in code, and the second half
-meant pulling a developer off their work to translate the file.
+Vimocity’s web portal, mobile apps, and V-minder, the Windows app, had each
+drifted into their own patterns. VimUI started as a thorough Figma system, with
+published libraries, variables and modes, and versioned releases. But every
+change happened twice, in Figma and then in code, and the second pass pulled a
+developer off their work to translate the file.
 
 <Figure
   ratio="1200/1072"
-  caption="Media Card in the Figma library, before it moved to code: horizontal and vertical variants, watch states, thumbnails, and its menu."
+  caption="The Media Card in the Figma library, before it moved to code. Every variant and state on this sheet also had to exist in code."
 >
   <img
     src="/media/vimui/media-card.webp"
@@ -34,39 +34,41 @@ meant pulling a developer off their work to translate the file.
 </Figure>
 
 > **The call:** retire the Figma file. Once we prototyped in real components,
-> it was a second copy of something that already existed. That was a decision
-> made from inside the tool, not an escape from it — knowing a tool well is what
-> tells you where it stops paying.
+> the file was a second copy of something that already existed. I knew Figma
+> well enough to see where it stopped paying.
 
 ## What I did
 
-- **Built 50+ components** as atoms, molecules, and organisms on shadcn/ui and
-  Radix — some close to the originals, some rewritten for what we needed.
-- **Tokenized color, type, spacing, and sizing**, and removed hardcoded values
-  from the frontend.
-- **Built accessibility into the components** — keyboard support, contrast in
-  both modes, touch targets, reduced motion — so every feature inherits it.
-- **Released it in versions**, so apps can test a change before it lands.
-- **Bridged the gap while it lasted:** fed designs to Claude Code through
-  Figma's APIs, which sped up the handoff before it removed it.
+- **Built 50+ components.** They’re organized as atoms, molecules, and
+  organisms, starting from open-source foundations and rewritten where we
+  needed more.
+- **Tokenized color, type, spacing, and sizing.** Hardcoded values came out of
+  the frontend.
+- **Built accessibility in.** Keyboard support, contrast in both modes, touch
+  targets, and reduced motion live in the components, so every feature
+  inherits them.
+- **Released it in versions.** Apps can test a change before it lands.
+- **Bridged the gap while it lasted.** I fed designs to Claude Code through
+  Figma’s APIs, which sped up the handoff before it removed it.
 
 ## Outcome
 
-- Reusable component use rose from about 10% to 80–90% of frontend code.
-- Token use went from 0% to 99%; the remaining 1% is deliberate overrides.
-- Changes happen once, in code. A new page is assembly, not construction.
+- **Reusable component use rose from about 10% to 80–90%** of frontend code.
+- Token use went from 0% to 99%. The remaining 1% is deliberate overrides.
+- Changes happen once, in code.
 
-## What it doesn't cover
+**Who did what:** I built VimUI and maintain it. The engineering team builds the
+web portal from it, and I review their frontend changes.
 
-The components are the web app's; mobile and desktop carry their own. Tokens
-reach all four platforms, but only the web app reads them directly — the others
-get them copied by hand, so consistency holds by discipline rather than by build
-step. Generating them from one file is the next move.
+> **What I’d change:** generate every platform’s tokens from one file. The
+> components are the web portal’s alone, and the other apps get the tokens
+> copied by hand, so consistency there holds by discipline rather than by a
+> build step.
 
 <Figure
   width="breakout"
   ratio="760/300"
-  caption="Tokens reach all four platforms; components reach one. Login runs in a webview, so it's the one place real VimUI renders everywhere."
+  caption="Tokens reach all four platforms; components reach one. Login runs in a webview, so it’s the one place real VimUI renders everywhere."
 >
   <SystemReach />
 </Figure>
