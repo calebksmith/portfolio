@@ -16,7 +16,7 @@
 export const en = {
   site: {
     role: "Design engineer",
-    lede: "I design products and write the frontend code they're built from.",
+    lede: "I design products and write the frontend code they’re built from.",
     /** Rendered in order, as written. */
     spec: [
       { label: "Focus", value: "Design systems, product design, frontend" },
@@ -103,7 +103,7 @@ export const en = {
       button:
         "Every variant pairs a surface with its foreground. Minimum target 44px, enforced in the component.",
       badge:
-        "Pairs only — a badge never sets a foreground its surface doesn't own.",
+        "Pairs only — a badge never sets a foreground its surface doesn’t own.",
       card: "Carries text-card-foreground with its background, so nested content inherits a legible color.",
       "card-title": "Display face, balanced wrapping, no color of its own.",
       "card-description": "muted-foreground on the card surface.",
@@ -113,7 +113,7 @@ export const en = {
       "status-dot":
         "Decorative: aria-hidden, visible at rest, no-op under reduced motion. The label carries the meaning.",
       "control-bar":
-        "Ghost by design — no border against the header's own rule. Grouped by proximity and announced once.",
+        "Ghost by design — no border against the header’s own rule. Grouped by proximity and announced once.",
       "control-button":
         "Instrument, not navigation. Inset focus ring so it never spills past the header.",
       "control-toggle":
@@ -145,11 +145,11 @@ export const en = {
           id: "built",
           question: "Built anything lately?",
           answer:
-            "VimUI — Vimocity's design system. 50+ web components, fully tokenized with Tailwind CSS and documented in Storybook.",
+            "VimUI, Vimocity’s design system: 50+ web components on shared tokens, documented where anyone can try them.",
           link: {
             href: "/work/vimui",
             kind: "Case study",
-            title: "VimUI: Vimocity's design system, built in code",
+            title: "VimUI: Vimocity’s design system, built in code",
           },
         },
         {
@@ -162,11 +162,11 @@ export const en = {
           // names the job that stops happening. Concrete, and checkable by anyone who
           // has done the rebuilding.
           //
-          // The 80% is the hit rate — how often a prototype ships — matching the
-          // résumé and the LinkedIn role description. It is a claim about judgment
-          // rather than about how far he takes the build.
+          // The 80% is the share of the frontend code he prototypes that reaches
+          // production, in the same words as the résumé. One number, one meaning:
+          // see CLAUDE.md.
           answer:
-            "I spent years in Figma and rarely open it now. I design in real components, so engineering gets working code rather than a spec to rebuild. About 80% of what I prototype ships.",
+            "I spent years in Figma and rarely open it now. I design in real components, so engineering gets working code rather than a spec to rebuild. About 80% of the frontend code I prototype reaches production.",
           link: {
             href: "/work/guardrails",
             kind: "Case study",
@@ -193,11 +193,8 @@ export const en = {
           // more accurate and stops "what gets built" and "worth building" from
           // saying the same thing twice.
           //
-          // "Other product managers" — he is one, per the TL;DR. One word, and it
-          // stops the sentence from reading as a designer consulting a different
-          // department.
           answer:
-            "I take features 0→1: research, strategy, testing with customers, then the frontend in working code — deciding what's worth building with other product managers, engineers, and leadership.",
+            "I take features 0→1: research, strategy, testing with customers, then the frontend in working code. I decide what’s worth building with product managers, engineers, and leadership.",
           link: null,
           // No link. Challenges is a case study about designing for repeat behavior,
           // which is not what this answer is about, and no other page argues this
@@ -226,7 +223,7 @@ export const en = {
         link: { href: string; kind: string; title: string } | null;
       }[],
     },
-    scrollCue: "Check out some of my work",
+    scrollCue: "See my work",
     /**
      * The work, two ways: where each case study sits in Vimocity, and all of
      * them as cards. Area keys match `area` in each case study's frontmatter.
@@ -278,10 +275,10 @@ export const en = {
         eyebrow: "Storybook",
         title: "VimUI, live",
         description:
-          "Vimocity's public design system: 50+ components on shared tokens.",
+          "Vimocity’s public design system: 50+ components on shared tokens.",
       },
       practice: {
-        eyebrow: "Practice",
+        eyebrow: "Studio",
         title: "Modern Trailhead",
         description:
           "My studio since 2016: websites, video, and photo for brands like Brooks Running and Shake Shack.",
@@ -312,9 +309,10 @@ export const en = {
     tldr: {
       heading: "TL;DR about me",
       // Vimocity comes first: VimUI is a system built *there*, not a product of
-      // his own, and naming the employer is what makes that legible.
+      // his own, and naming the employer is what makes that legible. What
+      // Vimocity is was said once already, in the work section's intro.
       paragraphs: [
-        "I’m a design engineer and product manager at Vimocity, a workplace health and safety platform based in Seattle. My biggest project: VimUI, the design system I built, and the standards and automated checks that keep our design and code in sync.",
+        "I’m a design engineer and product design manager at Vimocity. My biggest project is VimUI, the design system I built, with the standards and automated checks that keep our design and code in sync.",
         "Nine years in design, five writing production frontend.",
       ],
       cta: "My experience →",
@@ -336,10 +334,10 @@ export const en = {
     },
     systemReach: {
       label:
-        "Tokens reach all four platforms, but only the web app reads them directly — iOS, Android, and Windows get them copied by hand. The VimUI component library reaches the web app alone; the other three carry their own components. Login and account creation are the exception: they run in a webview, so real VimUI components render on all four platforms.",
+        "Tokens reach all four platforms, but only the web portal reads them directly; iOS, Android, and Windows get them copied by hand. The VimUI component library reaches the web portal alone, and the other three carry their own components. Login and account creation are the exception: they run in a webview, so real VimUI components render on all four platforms.",
       title: "WHAT REACHES WHICH PLATFORM",
       columns: {
-        web: "Web app",
+        web: "Web portal",
         ios: "iOS",
         android: "Android",
         windows: "Windows",
@@ -356,13 +354,13 @@ export const en = {
     },
     loginEverywhere: {
       label:
-        "The same Vimocity login screen in three places: the web portal in a browser, the iOS and Android apps through a webview, and V-minder, the Windows desktop app.",
+        "The same Vimocity login screen in three places: the web portal in a browser, the iOS and Android apps through a webview, and V-minder, the Windows app.",
       url: "portal.vimocity.com",
       appTitle: "V-minder",
       web: "Web portal",
       mobile: "iOS and Android apps",
       mobileNote: "through a webview",
-      desktop: "Windows desktop app",
+      desktop: "V-minder, the Windows app",
     },
     enforcement: {
       label:
@@ -473,12 +471,12 @@ export const en = {
     title: "That page doesn’t exist",
     body: "The link may be out of date, or I may have moved something. Neither is your fault.",
     home: "Back to the homepage →",
-    work: "Or read some work",
+    work: "Or see my work",
   },
 
   signIn: {
     title: "Sign in",
-    body: "This area is restricted to the site owner.",
+    body: "This part of the site is just for me.",
     github: "Continue with GitHub",
   },
 
@@ -530,12 +528,12 @@ export const en = {
       },
       heading: {
         label: "Heading · Archivo 600",
-        sample: "VimUI: Vimocity's design system, built in code",
+        sample: "VimUI: Vimocity’s design system, built in code",
       },
       body: {
         label: "Body · IBM Plex Mono 400",
         sample:
-          "I design products and write the frontend code they're built from.",
+          "I design products and write the frontend code they’re built from.",
       },
       label: {
         label: "Label · IBM Plex Mono 400, uppercase, 0.14em",
@@ -544,7 +542,7 @@ export const en = {
     },
     /** rich */
     motion:
-      "Three durations and one easing curve, read from the running page. Motion here is a property of the system rather than a decision per component — which is what makes it consistent, and what makes honouring <code>prefers-reduced-motion</code> a single rule instead of a promise repeated in forty places.",
+      "Three durations and one easing curve, read from the running page. Motion is set once for the whole system, so it stays consistent, and honoring <code>prefers-reduced-motion</code> is a single rule instead of a promise repeated in every component.",
     /** rich */
     components:
       "cksUI — this site’s component library. Built on shadcn/ui’s patterns as source copied in and owned, not as an installed dependency, with every value rewritten onto the tokens above. Every component declares a <code>data-slot</code>, the same convention VimUI uses.",
@@ -609,7 +607,7 @@ export const en = {
       },
       {
         title: "Every page scores 100",
-        why: "Accessibility, best practices, and SEO on Lighthouse's mobile profile, on every pull request.",
+        why: "Accessibility, best practices, and SEO on Lighthouse’s mobile profile, on every pull request.",
         check: "npm run lighthouse",
       },
     ],
@@ -667,11 +665,11 @@ export const en = {
         },
         base: {
           name: "Base",
-          use: "State changes you look at — a card's glow, a skeleton handing off.",
+          use: "State changes you look at: a card’s glow, a skeleton handing off.",
         },
         slow: {
           name: "Slow",
-          use: "Entrances. Content arriving has further to travel and more to say.",
+          use: "Entrances, where content travels furthest.",
         },
       },
       scale: "Duration scale",
@@ -679,14 +677,14 @@ export const en = {
       /** `{ease}` is replaced with the curve. */
       easingLabel: "The easing curve, {ease}, plotted against a straight line",
       easingNote:
-        "Steep early, settling late. Things leave quickly and arrive gently, which is what makes an interface feel answerable rather than sluggish. The dashed line is linear, for comparison.",
+        "Steep early, settling late: things move off quickly and arrive gently, so the interface answers at once without lurching. The dashed line is linear, for comparison.",
       reduced: "Reduced motion",
       reducedOn: "On — this browser is asking for less motion",
       reducedOff: "Off — this browser accepts motion",
       reducedBody:
-        "Every animation on this site collapses to its finished state when this is on. Not paused, and not hidden — the underline is drawn, the card is visible, the skeleton hands off without sliding. Content never depends on an animation to become readable.",
+        "When this is on, every animation on this site jumps to its finished state: the underline is drawn, the card is visible, and the skeleton hands off without sliding. Content never depends on an animation to become readable.",
       reducedHero:
-        "The typewriter in the hero is the case that matters most: it does not style the animation away, it never starts it. A timer firing forty times a second at someone who asked for stillness is still motion, even if nothing appears to move.",
+        "The typewriter in the hero matters most. Under reduced motion it never starts, because a timer firing forty times a second is still motion, even when nothing appears to move.",
     },
 
     playground: {
