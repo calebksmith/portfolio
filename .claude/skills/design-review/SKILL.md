@@ -77,7 +77,8 @@ Mark each pass, fail, or not applicable, with one plain sentence.
 - Interface copy is in `lib/i18n/messages/`; long-form copy is MDX in
   `src/content/`. Nothing user-facing is written into a component.
 - Voice: plain, specific, active, sentence case. Library-level terms only in
-  case study badges. "Frontend" is one word.
+  badges, the colophon, and the style guide. "Frontend" is one word. For a
+  change that adds or rewrites copy, run the `ux-writing` skill as well.
 - Metrics are approved figures, written as percentages, ratios, or multiples —
   never raw employer counts. Caveats stay attached to their numbers.
 
