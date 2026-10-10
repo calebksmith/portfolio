@@ -1,11 +1,11 @@
 ---
 title: Challenge admin: A self-serve tool for running challenges
-role: Product design, internal tools
+role: Product design, admin tools
 year: 2023–2024
-stack: [Web app, Figma]
-summary: Setup, the raffle draw, and every email, in the customer's hands — so running a challenge stops being a support request.
-user: Customers set up and run their own challenges, emails and prize draw included.
-business: A challenge no longer takes a support request, so it can run as often as customers want.
+stack: [Web portal, Figma]
+summary: Setup, the raffle draw, and every email in the admin’s hands, so running a challenge stops being a support request.
+user: Self-serve challenges, emails and prize draw included.
+business: Challenges that run as often as customers want, without a support request.
 connects: [challenges]
 area: admins
 order: 1
@@ -14,26 +14,33 @@ impact: +143% admin users in 2026
 
 ## Problem
 
-[Challenges](/work/challenges) worked; running one didn't. Every challenge meant
-a request to us — configure it, write the invitation, remember the reminders,
-work out who won. A feature that needs its vendor every time it runs is a
-feature that runs rarely, and a challenge's value is in repetition.
+[Challenges](/work/challenges) worked, but running one didn’t scale. Every
+challenge meant a request to us: configure it, write the invitation, remember
+the reminders, work out who won. Challenges pay off when they repeat, and every
+repeat waited on us.
 
 > **The call:** design it second, on purpose. The admin tool came after
-> challenges had run, so its shape came from watching real admins rather than
-> guessing. And it stayed web-only: setting up a challenge is a sit-down task
-> done once, not something worth making portable.
+> challenges had run, so its shape came from watching real admins instead of
+> guessing. It stayed web-only, because setting up a challenge is a sit-down
+> task, done once.
 
 ## What I did
 
-- **A creation flow customers' own leaders can use:** type, dates, prizes, and
-  the rules each type needs, like maximum team size.
-- **A raffle selector.** Entries build up per participant through the run; at
-  the end an admin draws a winner instead of exporting a spreadsheet and
+- **Designed setup for admins.** They choose the type, dates, and prizes, and
+  set the rules each type needs, like maximum team size.
+- **Tied the emails to the challenge.** Creating one sends the invitation,
+  reminders go out during the run, and a results email names the winner.
+- **Added a raffle draw.** Entries build up per participant through the run,
+  and at the end an admin draws a winner instead of exporting a spreadsheet and
   trusting it.
-- **Emails that run off the challenge itself.** Creating one sends the
-  invitation, reminders go out during the run, and a results email names the
-  winner.
+
+<Figure
+  width="breakout"
+  ratio="760/300"
+  caption="One challenge, start to finish. The admin steps in at the start and at the end; everything in between runs on its own."
+>
+  <ChallengeRun />
+</Figure>
 
 <GatedFigure
   src="challenge-admin/admin-tasks.webp"
@@ -41,16 +48,14 @@ feature that runs rarely, and a challenge's value is in repetition.
   width={768}
   height={720}
   alt="The Admin tasks panel for a challenge, two of four complete: participants added and the challenge published, with Draw raffle winners and Mark as complete available once the challenge ends."
-  caption="Running a challenge as a checklist: add participants and publish, then, once it ends, draw the raffle winners and mark it complete."
+  caption="The admin’s side of the same run, as a checklist: add participants and publish, then, once it ends, draw the raffle winners and mark it complete."
 />
 
 ## Outcome
 
-- Organizations have run more than three challenges each, on average, over two
-  years, and monthly admin users grew 143% between January and September 2026.
-- The emails go out whether or not anyone remembers them — which is what keeps a
-  month-long challenge alive in week three.
-- Prize selection is a button rather than a spreadsheet and a promise.
+- **Monthly admin users grew 143%** between January and September 2026, and
+  organizations have run more than three challenges each, on average, over two
+  years.
 
 **Who did what:** I led design and UI. Engineering built the tool and the
 automated sends; product management and leadership shaped what an admin can
