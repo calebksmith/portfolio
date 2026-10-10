@@ -436,10 +436,14 @@ export const en = {
     },
   },
 
-  /** In place of a screenshot from inside Vimocity's app, without access. */
+  /**
+   * Over a locked screenshot from inside Vimocity's app, for visitors without
+   * an access link. It should read as something worth asking for.
+   */
   gated: {
-    note: "Screens from inside Vimocity's app are shared on request.",
-    ask: "Ask on LinkedIn",
+    title: "Part of the full case study",
+    note: "I share screens from inside Vimocity’s app with hiring teams on request.",
+    ask: "Ask for access on LinkedIn",
   },
 
   caseStudy: {
