@@ -125,7 +125,7 @@ export const en = {
       "case-study-card":
         "Filled surface plus an accent label — the label survives the single-column collapse a border would not.",
       "pointer-card": "Unfilled, so navigation never reads as work.",
-      tabs: "Segmented tabs: arrow keys move between views, and every view stays in the page — hidden, not removed — so it still works without JavaScript.",
+      tabs: "Segmented tabs: arrow keys move between views, and every view stays in the page, hidden rather than removed, so it still works without JavaScript.",
       "bento-tile":
         "Span follows content weight; hierarchy also carried by type scale.",
     } as Record<string, string>,
@@ -602,7 +602,7 @@ export const en = {
       },
       {
         title: "One spelling, one number, nothing internal",
-        why: "House spellings and repeated figures stay consistent, and nothing private — a ticket key, a workspace link, an email — reaches this public repository.",
+        why: "House spellings and repeated figures stay consistent, stock phrasing is flagged, and nothing private reaches this public repository: no ticket keys, workspace links, or email addresses.",
         check: "npm run check:copy",
       },
       {
@@ -612,7 +612,7 @@ export const en = {
       },
     ],
     rulesReview:
-      "What a machine cannot judge — whether a token is the right one, whether a layout holds at a breakpoint, whether the empty and error states exist — is a checklist the design-review skill walks through before a change ships.",
+      "What a machine cannot judge is a checklist the design-review skill walks through before a change ships: whether a token is the right one, whether a layout holds at a breakpoint, and whether the empty and error states exist.",
     rulesSource: "Read the rules and the lint plugin on GitHub →",
 
     tokenTable: {

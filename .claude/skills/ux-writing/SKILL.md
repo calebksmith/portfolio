@@ -54,6 +54,24 @@ engineer who opened the colophon on purpose. Note where either would stop.
   did it.
 - Library names and acronyms only in badges, the colophon, and the style guide.
 
+**Specific, not stock**
+
+Generic copy is the copy a reader skims, and none of it is fixed by a word swap.
+
+- Stock words and "not just X, but Y" are caught by `check:copy`. Replace them
+  with the specific thing, not a synonym.
+- Vary the shape. Not every bullet opens with a bold sentence, not every list
+  has three items, not every sentence ends on ", so …". Two consequence
+  clauses and two colon reveals per case study is plenty.
+- Vary the length. A short sentence after a long one reads as a person
+  talking.
+- Prefer specifics to summaries: a figure, a name, a Tuesday in February. A
+  sentence that could close any case study is the one to cut.
+- Keep Caleb's own phrasing from dictation where the meaning is clear. It is
+  the least generic writing on the site.
+- Don't swap one formula for another. Forced slang or a new pet phrase reads
+  as generic as the habit it replaced.
+
 **One name per thing**
 
 - Every name matches CLAUDE.md's list: his title, Vimocity, the web portal,

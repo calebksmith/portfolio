@@ -185,6 +185,14 @@ style guide name the mechanism. The habits are the same in all three:
 - "I" for my decisions, "we" for the team's, and say which.
 - American spelling. Curly apostrophes and quotes in anything a reader sees.
 
+**Specific, not stock.** Readers skim past copy that could sit on any site:
+stock words (delve, leverage, seamless, robust), "not just X, but Y", em dashes
+in pairs, paragraphs that each end on a tidy consequence, lists that are all
+the same shape, sentences that are all the same length. The fix is specifics:
+the real figure, the real name, the detail only Caleb would know.
+`check:copy` catches the stock words, the formula, and doubled em dashes; the
+rhythm is the `ux-writing` skill's job. Don't swap one formula for another.
+
 **One name per thing.** Caleb is a design engineer; his title at Vimocity is
 Design Engineer, Product Design Manager. Vimocity is a workplace health and
 safety platform for utility companies. Its web app is the **web portal** (the
