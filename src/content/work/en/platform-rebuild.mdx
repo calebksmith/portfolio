@@ -1,11 +1,11 @@
 ---
-title: Web app rebuild: Migrating the Vimocity portal to one codebase
+title: Web portal rebuild: Migrating every page to one codebase
 role: Frontend, platform migration
 year: 2026
-stack: [Web app, Next.js, Tailwind CSS, VimUI]
-summary: Every page rebuilt on VimUI, with Claude Code reading the legacy logic page by page — and no migration dip.
-user: A portal that works on mobile web, with a searchable library — and no disruption on the way.
-business: One codebase instead of two, so an improvement reaches the whole portal.
+stack: [Web portal, Next.js, Tailwind CSS, VimUI]
+summary: Every page rebuilt on VimUI, with Claude Code reading the legacy logic page by page, and no migration dip.
+user: A web portal that works on mobile, with a searchable library and no disruption on the way.
+business: One codebase instead of two, so an improvement reaches the whole web portal.
 connects: [vimui, guardrails, playlists]
 area: platform
 order: 3
@@ -14,14 +14,14 @@ impact: No migration dip
 
 ## Problem
 
-New features were built in a new monorepo; the web portal still sat on the old
-one. Two frontends that looked like two products — and every improvement to the
-portal waited on a migration nobody had time for.
+New features were built in a new monorepo, but the web portal still sat on the
+old one. The two looked like different products, and every improvement to the
+web portal waited on a migration nobody had time for.
 
-> **The call:** functional equivalence first — same behavior, same data, new
+> **The call:** match the old behavior first, with the same data on a new
 > foundation. The exceptions were pages where porting a problem forward would
-> waste the migration: the content library became a searchable explore page, and
-> the homepage and settings were modernized.
+> waste the migration, so the content library became a searchable explore page,
+> and the homepage and settings were modernized.
 
 <GatedFigure
   src="platform-rebuild/content-library.webp"
@@ -34,21 +34,30 @@ portal waited on a migration nobody had time for.
 
 ## What I did
 
-- **Had Claude Code read the old platform page by page:** the logic, API calls,
-  and database links each page depended on. Working out what a legacy page
-  really does is most of a migration, and exactly what an agent is good at.
-- **Rebuilt each page from VimUI**, against the same APIs, held to the
-  [guardrails](/work/guardrails) automatically. The rules I'd written for people
-  turned out to be what made an agent's output reviewable.
-- **Handed every section to engineering to review and harden.** An agent
-  misreads things; review is what catches it.
+- **Had Claude Code map the old web portal, page by page.** It traced the
+  logic, API calls, and database links each page depended on, which is most of
+  the work in a migration.
+- **Rebuilt each page from VimUI.** Pages run against the same APIs and are held
+  to the [guardrails](/work/guardrails) automatically. The rules I’d written
+  for people turned out to make the agent’s output reviewable too.
+
+<Figure
+  width="breakout"
+  ratio="760/240"
+  caption="The loop, run once for every page: read the old page, rebuild it, check it, and hand it to engineering before moving on."
+>
+  <PageByPage />
+</Figure>
 
 ## Outcome
 
-- Every page is live on one codebase, with no migration dip: weekly web users
+- **No migration dip.** Every page is live on one codebase, weekly web users
   held steady, and week-1 return went from 74% to 75%.
 - Web video engagement rose 4–7 points year over year after the content library
   redesign.
-- About 80% of the frontend code I built survived review into production.
-- The portal works on mobile web, and a PM or engineer can change a page without
-  a designer in the loop.
+- The web portal works on mobile, and a product manager or engineer can change a
+  page without a designer in the loop.
+
+**Who did what:** I rebuilt every page from VimUI, with Claude Code reading the
+legacy code. Engineering reviewed and hardened each section before it shipped,
+which is where an agent’s misreadings get caught.
