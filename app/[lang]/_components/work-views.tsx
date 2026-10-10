@@ -24,6 +24,7 @@ export async function WorkViews() {
   return (
     <Tabs
       label={t.views}
+      showLabel
       defaultValue="map"
       header={
         <>
