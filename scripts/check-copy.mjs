@@ -59,6 +59,53 @@ const RULES = [
 ];
 
 /**
+ * The words a reader sees, held to CLAUDE.md's "One name per thing" and its
+ * house style. Scoped to the copy itself — the dictionary, the résumé, and the
+ * MDX — because code comments are written for whoever maintains the code, and
+ * a spelling rule that fired on them would be noise. Comment lines and code
+ * fences are skipped.
+ */
+const COPY_ROOTS = ["lib/i18n/messages", "lib/content/resume", "src/content"];
+
+const COPY_RULES = [
+  {
+    id: "web-portal",
+    // Vimocity's own word for its web app, so it isn't confused with the
+    // mobile app. "Web app", "web application", and "portal" had all crept in.
+    pattern: /\bweb app(lication)?s?\b/gi,
+    message: 'Vimocity\'s web app is the "web portal"',
+  },
+  {
+    id: "crew-leader",
+    pattern: /\bforem[ae]n\b/gi,
+    message: 'write "crew leader"',
+  },
+  {
+    id: "versioned-releases",
+    pattern: /\bsemver\b|\bsemantic versioning\b/gi,
+    message: 'write "versioned releases"',
+  },
+  {
+    id: "mfa",
+    pattern: /\bMFA\b/g,
+    message: 'spell out "multi-factor authentication"',
+  },
+  {
+    id: "american-spelling",
+    // Explicit stems rather than every "-ise", which would catch "promise",
+    // "exercise", and "otherwise".
+    pattern:
+      /\b(colour|honour|favour|behaviour|artefact|centre|catalogue|(?:personal|anonym|optim|organ|recogn|priorit|minim|maxim|normal|summar|custom|visual|standard|real|util|apolog|emphas|categor|special|modern|stabil|memor|critic)is(?:e|ed|es|ing|ation|ations))\w*/gi,
+    message: "American spelling",
+  },
+  {
+    id: "curly-apostrophe",
+    pattern: /(?<=[A-Za-z])'(?=[A-Za-z])/g,
+    message: "use a curly apostrophe (’)",
+  },
+];
+
+/**
  * Nothing internal ships.
  *
  * This repository is public, and it is written by someone whose day job has
@@ -141,6 +188,38 @@ for (const root_ of ROOTS) {
         }
       }
     });
+  }
+}
+
+for (const root_ of COPY_ROOTS) {
+  const base = join(root, root_);
+  try {
+    statSync(base);
+  } catch {
+    continue;
+  }
+
+  for (const path of walk(base)) {
+    if (path.endsWith(".test.ts")) continue;
+    const file = relative(root, path);
+    let fenced = false;
+
+    readFileSync(path, "utf8")
+      .split("\n")
+      .forEach((line, index) => {
+        const trimmed = line.trim();
+        if (trimmed.startsWith("```")) fenced = !fenced;
+        if (fenced || /^(\/\/|\/?\*)/.test(trimmed)) return;
+
+        for (const rule of COPY_RULES) {
+          for (const match of line.matchAll(rule.pattern)) {
+            failures += 1;
+            console.log(
+              `  ${file}:${index + 1}  ${rule.message} — found "${match[0]}"`,
+            );
+          }
+        }
+      });
   }
 }
 
