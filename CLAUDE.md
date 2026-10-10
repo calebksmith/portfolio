@@ -84,7 +84,12 @@ These are the same kind of guardrails I maintain on VimUI at work. Follow them.
   `user`, `business`, `connects`, `area`, `order`, `impact`. Titles are
   `Name: What it is` — the second part is its own line under the name, so it
   starts with a capital. They are written for a hiring manager skimming in about
-  a minute, at roughly 250–400 words:
+  a minute: about 300 words of prose is typical, but it's a guide, not a cap. A
+  study whose argument needs more can have it; one that runs long without
+  needing to is the problem. The header —
+  title, impact, user value, business value — tells the story on its own; the
+  body backs it with one proof per point and leaves the depth for a
+  conversation:
   - **Problem** — two or three sentences: who it hurt, and why it mattered.
   - **The call** — one blockquote right after the problem: the hardest decision,
     what was weighed (customer needs first, business needs when they win), and
@@ -94,8 +99,13 @@ These are the same kind of guardrails I maintain on VimUI at work. Follow them.
     or two: what it found, specific to this feature. Most of these case studies
     started that way, so the process is never boilerplate repeated across them.
   - **Outcome** — the approved figures, caveats attached.
-  - **Who did what** — one bold-labelled line.
-  - Optional: one "What I'd change" or "Trade-offs" blockquote at the end.
+  - **Who did what** — one bold-labelled line. Every case study has one.
+  - **Visuals** — every case study has at least one that every visitor sees:
+    a diagram, or a screen anyone can open. A gated screenshot doesn't count on
+    its own. Each visual sits right after the sentence that sets it up, and its
+    caption says what to look at. One visual per point, never a walkthrough.
+  - Optional: one "What I'd change" blockquote at the end — the next move, so
+    the page ends looking forward rather than summing up.
 - Structured records — the résumé, skills, selected work — live as typed data
   in `lib/content/resume/<locale>.ts`.
 - Adding a case study should mean adding a file, not editing components.
@@ -118,8 +128,9 @@ change the rule in the open.
 - `ck/no-literal-copy` — no words written into page or library markup.
 
 What the gate can't judge is the `design-review` skill
-(`.claude/skills/design-review/`). The same list is public on the style guide
-under Rules — keep the three in step when a rule changes.
+(`.claude/skills/design-review/`), and for copy, the `ux-writing` skill
+(`.claude/skills/ux-writing/`). The same list is public on the style guide
+under Rules — keep them in step when a rule changes.
 
 ### Reference material
 
@@ -156,6 +167,33 @@ Plain and specific. Active voice, sentence case. Say what a thing does rather
 than selling it. No filler adjectives. If a sentence could appear on any
 designer's portfolio, cut or rewrite it.
 
+**Just enough.** Give the reader enough to know this is real work, and stop
+before they feel they've seen everything. A page that leaves a question is one
+that gets a message; a page that answers all of them gets closed. Cut supporting
+detail rather than moving it lower.
+
+**One writer, three registers.** The homepage and 404 are conversational, the
+case studies and résumé talk shop like a product team, and the colophon and
+style guide name the mechanism. The habits are the same in all three:
+
+- Say it once. An outcome doesn't repeat a bullet; a closing line doesn't
+  restate the sentence before it.
+- "X, not Y" is for a real decision — in a case study, that's The call.
+- At most one em dash per paragraph. A period or a colon usually does it.
+- One light, true joke per page at most. No closing maxims.
+- No "actually", "really", "exactly", or "fully".
+- "I" for my decisions, "we" for the team's, and say which.
+- American spelling. Curly apostrophes and quotes in anything a reader sees.
+
+**One name per thing.** Caleb is a design engineer; his title at Vimocity is
+Design Engineer, Product Design Manager. Vimocity is a workplace health and
+safety platform for utility companies. Its web app is the **web portal** (the
+team's word, so it isn't confused with the mobile app); the Windows app is
+**V-minder**, introduced as "V-minder, the Windows app". People are **workers**,
+**crew leaders**, **safety leaders**, and **admins**; a **customer** is the
+organization that buys. Modern Trailhead is Caleb's **studio**. The Daily 5 is
+done, completed, or logged — never "come back to" or "finished".
+
 Fine to use: double diamond, atomic design, generative and evaluative research,
 design tokens, component library. Avoid `cva`, `semver`, and other library- or
 spec-level terms in user-facing copy — say "style variants," "versioned
@@ -165,6 +203,7 @@ Metrics in copy are approved and defensible. Do not invent or extrapolate.
 One number, one meaning: "about 80%" is always the share of prototyped frontend
 code that reaches production, wherever it appears. Product metrics are figures
 Caleb has approved for publication; keep their caveats attached to the numbers.
+No headcounts — not of users, and not of the team.
 
 **This repo is public.** Source material stays out of it: internal reports,
 analytics exports, raw data, and anything else from an employer. Only the
@@ -173,9 +212,11 @@ metrics appear as percentages, ratios, or multiples — never raw counts of
 users, organizations, or events. The one exception is the company-scale line
 on the résumé (~50,000 users across 75+ organizations).
 
-**Case study badges name the stack** — `Next.js`, `Storybook`, `shadcn/ui`. This
-is the one place library-level terms belong in user-facing copy, because naming
-the tool is the information. Everywhere else the rule above still holds.
+**Case study badges name the tools and platforms** — `Next.js`, `Storybook`,
+`Web portal`. Not features (SSO, MFA) or concepts (design tokens); those belong
+in the copy. Badges, the colophon, and the style guide are the places
+library-level terms belong, because there naming the tool is the information.
+Everywhere else the rule above still holds.
 
 **Frontend is one word.** Not "front-end", not "front end" — in body copy, labels,
 frontmatter, and spec rows alike. No exceptions — `npm run check:copy` enforces
