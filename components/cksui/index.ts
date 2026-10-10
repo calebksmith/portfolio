@@ -21,6 +21,7 @@ export {
   ControlLink,
   ControlToggle,
 } from "./control-bar";
+export { Dialog } from "./dialog";
 export { Eyebrow, type EyebrowProps } from "./eyebrow";
 export { Figure } from "./figure";
 export { Inspector, type InspectorLabels } from "./inspector";
@@ -35,6 +36,7 @@ export {
   type WorkItem,
 } from "./site-header";
 export { SpecList, SpecRow } from "./spec-list";
+export { Stat, StatGroup } from "./stat";
 export { Tabs } from "./tabs";
 export { StatusDot } from "./status-dot";
 export { ThemeSwitcher, type ThemeSwitcherLabels } from "./theme-switcher";

@@ -7,7 +7,7 @@ import {
   type ReactNode,
 } from "react";
 
-import { Eyebrow, Figure, Tabs } from "@/components/cksui";
+import { Eyebrow, Figure, Stat, StatGroup, Tabs } from "@/components/cksui";
 import { GatedFigure } from "@/components/gated-figure";
 import { ChallengeRun } from "@/components/diagrams/challenge-run";
 import { DeviceHandoff } from "@/components/diagrams/device-handoff";
@@ -173,6 +173,8 @@ const available = {
   GatedFigure,
   Segments,
   Segment,
+  Stats: StatGroup,
+  Stat,
   ChallengeRun,
   DeviceHandoff,
   Enforcement,

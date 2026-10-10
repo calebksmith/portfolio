@@ -28,10 +28,16 @@ export function Tabs({
   items,
   defaultValue,
   header,
+  showLabel = false,
   className,
 }: {
-  /** Names the set of tabs for assistive technology. */
+  /** Names the set of tabs. Shown before the control when `showLabel` is set. */
   label: string;
+  /**
+   * Print the label in front of the control — "View case studies as" — so
+   * the switch reads as two views of one thing rather than two sections.
+   */
+  showLabel?: boolean;
   items: {
     value: string;
     label: string;
@@ -78,40 +84,48 @@ export function Tabs({
 
       <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between lg:gap-10">
         {header ? <div className="min-w-0">{header}</div> : null}
-        <div
-          role="tablist"
-          aria-label={label}
-          className="inline-flex shrink-0 gap-1 self-start rounded-md border border-input p-1 lg:self-end"
-        >
-          {items.map((item, index) => {
-            const isSelected = item.value === selected;
-            return (
-              <button
-                key={item.value}
-                ref={(node) => {
-                  tabs.current[index] = node;
-                }}
-                type="button"
-                role="tab"
-                id={`${id}-tab-${item.value}`}
-                aria-selected={isSelected}
-                aria-controls={`${id}-panel-${item.value}`}
-                tabIndex={isSelected ? 0 : -1}
-                onClick={() => setSelected(item.value)}
-                onKeyDown={(event) => onKeyDown(event, index)}
-                className={cn(
-                  "inline-flex min-h-tap items-center gap-2 rounded-sm px-4 text-sm transition-colors",
-                  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
-                  isSelected
-                    ? "bg-accent font-medium text-accent-foreground"
-                    : "text-foreground hover:bg-muted hover:text-muted-foreground",
-                )}
-              >
-                {item.icon}
-                {item.label}
-              </button>
-            );
-          })}
+        <div className="flex shrink-0 flex-wrap items-center gap-x-3 gap-y-2 self-start lg:self-end">
+          {showLabel ? (
+            <span id={`${id}-label`} className="text-sm text-muted-foreground">
+              {label}
+            </span>
+          ) : null}
+          <div
+            role="tablist"
+            aria-label={showLabel ? undefined : label}
+            aria-labelledby={showLabel ? `${id}-label` : undefined}
+            className="inline-flex shrink-0 gap-1 rounded-md border border-input p-1"
+          >
+            {items.map((item, index) => {
+              const isSelected = item.value === selected;
+              return (
+                <button
+                  key={item.value}
+                  ref={(node) => {
+                    tabs.current[index] = node;
+                  }}
+                  type="button"
+                  role="tab"
+                  id={`${id}-tab-${item.value}`}
+                  aria-selected={isSelected}
+                  aria-controls={`${id}-panel-${item.value}`}
+                  tabIndex={isSelected ? 0 : -1}
+                  onClick={() => setSelected(item.value)}
+                  onKeyDown={(event) => onKeyDown(event, index)}
+                  className={cn(
+                    "inline-flex min-h-tap items-center gap-2 rounded-sm px-4 text-sm transition-colors",
+                    "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+                    isSelected
+                      ? "bg-accent font-medium text-accent-foreground"
+                      : "text-foreground hover:bg-muted hover:text-muted-foreground",
+                  )}
+                >
+                  {item.icon}
+                  {item.label}
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
 
