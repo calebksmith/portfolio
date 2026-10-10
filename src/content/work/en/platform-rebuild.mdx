@@ -16,12 +16,14 @@ impact: No migration dip
 
 New features were built in a new monorepo, but the web portal still sat on the
 old one. The two looked like different products, and every improvement to the
-web portal waited on a migration nobody had time for.
+web portal waited on a migration nobody had time for. Our goal was one
+codebase, without disrupting the people who use the web portal every day.
 
-> **The call:** match the old behavior first, with the same data on a new
-> foundation. The exceptions were pages where porting a problem forward would
-> waste the migration, so the content library became a searchable explore page,
-> and the homepage and settings were modernized.
+> **Design challenge:** migrating every page without a dip in use. We matched
+> the old behavior first, with the same data on a new foundation. The
+> exceptions were pages where porting a problem forward would waste the
+> migration, so the content library became a searchable explore page, and the
+> homepage and settings were modernized.
 
 <GatedFigure
   src="platform-rebuild/content-library.webp"
@@ -51,12 +53,13 @@ web portal waited on a migration nobody had time for.
 
 ## Outcome
 
-- **No migration dip.** Every page is live on one codebase, weekly web users
-  held steady, and week-1 return went from 74% to 75%.
-- Web video engagement rose 4–7 points year over year after the content library
-  redesign.
-- The web portal works on mobile, and a product manager or engineer can change a
-  page without a designer in the loop.
+<Stats>
+  <Stat value="74% → 75%" label="week-1 return, with weekly web users holding steady" />
+  <Stat value="+4–7 pts" label="web video engagement, year over year, after the content library redesign" />
+</Stats>
+
+Every page is live on one codebase. The web portal now works on mobile, and a
+product manager or engineer can change a page without a designer in the loop.
 
 **Who did what:** I rebuilt every page from VimUI, with Claude Code reading the
 legacy code. Engineering reviewed and hardened each section before it shipped,

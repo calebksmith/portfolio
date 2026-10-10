@@ -16,23 +16,24 @@ impact: +143% admin users in 2026
 
 [Challenges](/work/challenges) worked, but running one didn’t scale. Every
 challenge meant a request to us: configure it, write the invitation, remember
-the reminders, work out who won. Challenges pay off when they repeat, and every
-repeat waited on us.
+the reminders, work out who won. Challenges work best when they repeat, so our
+goal was for admins to run them on their own, as often as they want.
 
-> **The call:** design it second, on purpose. The admin tool came after
+> **Design challenge:** knowing what admins would need before any of them had
+> run a challenge. We designed the admin tool second, on purpose: it came after
 > challenges had run, so its shape came from watching real admins instead of
 > guessing. It stayed web-only, because setting up a challenge is a sit-down
 > task, done once.
 
 ## What I did
 
-- **Designed setup for admins.** They choose the type, dates, and prizes, and
-  set the rules each type needs, like maximum team size.
-- **Tied the emails to the challenge.** Creating one sends the invitation,
+- **Designed a setup flow for admins.** They choose the type, dates, and
+  prizes, and set the rules each type needs, like maximum team size.
+- **Automated the emails.** Creating a challenge sends the invitation,
   reminders go out during the run, and a results email names the winner.
-- **Added a raffle draw.** Entries build up per participant through the run,
-  and at the end an admin draws a winner instead of exporting a spreadsheet and
-  trusting it.
+- **Built in the raffle draw.** Entries build up per participant through the
+  run, and at the end an admin draws a winner instead of exporting a
+  spreadsheet and trusting it.
 
 <Figure
   width="breakout"
@@ -53,9 +54,10 @@ repeat waited on us.
 
 ## Outcome
 
-- **Monthly admin users grew 143%** between January and September 2026, and
-  organizations have run more than three challenges each, on average, over two
-  years.
+<Stats>
+  <Stat value="+143%" label="monthly admin users, January to September 2026" />
+  <Stat value="3+" label="challenges per organization, on average, over two years" />
+</Stats>
 
 **Who did what:** I led design and UI. Engineering built the tool and the
 automated sends; product management and leadership shaped what an admin can
