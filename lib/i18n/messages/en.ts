@@ -364,6 +364,62 @@ export const en = {
       mobileNote: "through a webview",
       desktop: "Windows desktop app",
     },
+    enforcement: {
+      label:
+        "One design standard, checked at three points in a change. While the code is written, the coding agent starts from the repository rules. Mid-build, anyone can run the design-audit skill, which says what to fix. Before merge, lint rules run on every push: errors block the merge, and warnings flag a deliberate exception for review.",
+      title: "WHERE THE STANDARD IS CHECKED",
+      change: "A change, from prompt to merge",
+      /** Each `note` is drawn as lines, about 26 characters each at most. */
+      stages: [
+        {
+          when: "While writing",
+          what: "Agent rules",
+          note: ["Rules the coding agent", "reads before it writes"],
+        },
+        {
+          when: "Mid-build",
+          what: "Design-audit skill",
+          note: ["A checklist anyone runs", "that says what to fix"],
+        },
+        {
+          when: "Before merge",
+          what: "Lint gate",
+          note: ["Every push, any author"],
+        },
+      ],
+      error: "Error: blocks merge",
+      warning: "Warning: flags for review",
+    },
+    challengeRun: {
+      label:
+        "One challenge, start to finish. The admin sets it up and publishes it, and the invitation goes out. While it runs, reminder emails go out on their own and raffle entries build up per participant. When it ends, the admin draws the raffle winner and marks it complete, and a results email names the winner.",
+      title: "ONE CHALLENGE, START TO FINISH",
+      admin: "Admin does",
+      automatic: "Happens on its own",
+      phases: { setup: "Setup", run: "Challenge runs", end: "Ends" },
+      setup: "Set up and publish",
+      draw: "Draw the raffle winner",
+      complete: "Mark complete",
+      invitation: "Invitation",
+      reminders: "Reminders",
+      results: "Results, with winner",
+      entries: "Raffle entries, per participant",
+    },
+    pageByPage: {
+      label:
+        "The web portal rebuild, one page at a time. Claude Code reads a legacy page’s logic, API calls, and data. The page is rebuilt from VimUI against the same APIs, checked by the guardrails, then reviewed and hardened by engineering before it goes live. Then the next page.",
+      title: "EVERY PAGE, ONE AT A TIME",
+      from: "Legacy web portal",
+      to: "One codebase",
+      next: "next page",
+      /** Each `note` is drawn as lines, about 18 characters each at most. */
+      steps: [
+        { what: "Read", note: ["Claude Code maps", "logic, APIs, data"] },
+        { what: "Rebuild", note: ["From VimUI,", "same APIs"] },
+        { what: "Check", note: ["Guardrails,", "automatically"] },
+        { what: "Review", note: ["Engineering", "hardens it"] },
+      ],
+    },
     teamScoring: {
       label:
         "A crew of five with all five completing scores 100 for the day. A team of fifty with forty-five completing scores 90. A crew of four, below a minimum of five, scores at most 80.",

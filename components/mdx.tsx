@@ -9,8 +9,11 @@ import {
 
 import { Eyebrow, Figure, Tabs } from "@/components/cksui";
 import { GatedFigure } from "@/components/gated-figure";
+import { ChallengeRun } from "@/components/diagrams/challenge-run";
 import { DeviceHandoff } from "@/components/diagrams/device-handoff";
+import { Enforcement } from "@/components/diagrams/enforcement";
 import { LoginEverywhere } from "@/components/diagrams/login-everywhere";
+import { PageByPage } from "@/components/diagrams/page-by-page";
 import { SystemReach } from "@/components/diagrams/system-reach";
 import { TeamScoring } from "@/components/diagrams/team-scoring";
 import { localizePath, type Locale } from "@/lib/i18n/config";
@@ -170,8 +173,11 @@ const available = {
   GatedFigure,
   Segments,
   Segment,
+  ChallengeRun,
   DeviceHandoff,
+  Enforcement,
   LoginEverywhere,
+  PageByPage,
   SystemReach,
   TeamScoring,
 };
