@@ -19,7 +19,7 @@ export const en: Resume = {
   ],
 
   summary:
-    "Product designer who works in code. I define what gets built — customer research, product briefs, prototypes — and build the frontend in React and TypeScript. I built the design system our web app runs on, and the automated checks that keep design and code in sync. Nine years in design, five writing production frontend.",
+    "I define what gets built, through customer research, product briefs, and prototypes, and build the frontend in React and TypeScript. I built the design system our web portal runs on, and the automated checks that keep design and code in sync. Nine years in design, five writing production frontend.",
 
   skills: [
     {
@@ -62,7 +62,7 @@ export const en: Resume = {
       org: "Vimocity",
       location: "Seattle, WA",
       period: "May 2021 – Present",
-      note: "Workplace health platform · ~50,000 users across 75+ organizations",
+      note: "Workplace health and safety platform for utility companies · ~50,000 users across 75+ organizations",
       roles: [
         {
           title: "Design Engineer, Product Design Manager",
@@ -78,7 +78,7 @@ export const en: Resume = {
             "Built VimUI and lead its growth: 50+ web components on shared tokens, documented in Storybook. Color and type tokens carry across our iOS, Android, and Windows desktop apps.",
             "Raised reusable component use from about 10% to 80–90% of frontend code, and design token use from 0% to 99%.",
             "Wrote the standards that govern the system — structure, tokens, typing, accessibility, documentation, and versioning — and maintain them as the reference the whole team builds against.",
-            "Run the system as a versioned package: semantic versioning, a changelog entry per change, and beta releases sent to the apps that consume it before anything breaking ships.",
+            "Ship the system as versioned releases, with a changelog entry per change and beta releases to the apps that use it before anything breaking ships.",
           ],
         },
         {
@@ -86,14 +86,14 @@ export const en: Resume = {
           bullets: [
             "Built automated checks that run before every merge, at two levels: rules governing how components are built in the design system, and rules governing how pages are built in the product — token use, accessibility, loading states, and responsive breakpoints.",
             "Loaded the same rules into our AI coding tools, so generated code follows the standards by default instead of being corrected afterward.",
-            "Result: design is no longer a bottleneck. The full seven-person team can build production-quality interfaces, and outside design help is rarely needed.",
+            "Result: design is no longer a bottleneck. The whole team can build production-quality interfaces, and outside design help is rarely needed.",
           ],
         },
         {
           heading: "Product",
           bullets: [
             "Define what gets built: synthesize customer feedback, write product briefs, and set direction with the leadership team.",
-            "Prototype in real components rather than mockups, so we test near-final work and iterate faster. About 80% of the frontend code I build in prototype reaches production.",
+            "Prototype in real components rather than mockups, so we test near-final work and iterate faster. About 80% of the frontend code I prototype reaches production.",
             "Interview customers and non-customers to check that features hold up beyond our existing base.",
             "Represent design and customer needs in company leadership meetings, reporting to the President/COO.",
           ],
@@ -102,8 +102,8 @@ export const en: Resume = {
           heading: "Design and delivery",
           bullets: [
             "Design and build features directly in the product codebase; review and approve frontend pull requests across the team.",
-            "Rebuilt the entire web application from a legacy codebase onto Next.js, TypeScript, and Tailwind, page by page, against the component library.",
-            "Set a distinct approach per platform: mobile-first web, React Native for iOS and Android, and a Windows app designed around native notifications.",
+            "Rebuilt the entire web portal from a legacy codebase onto Next.js, TypeScript, and Tailwind, page by page, against the component library.",
+            "Set a distinct approach per platform: mobile-first web, React Native for iOS and Android, and V-minder, a Windows app designed around native notifications.",
           ],
         },
       ],
@@ -115,7 +115,7 @@ export const en: Resume = {
       period: "Dec 2016 – Present",
       note: "Design Engineer & Digital Consultant | Owner (concurrent)",
       bullets: [
-        "Run an independent practice alongside full-time work: finding clients, scoping and pricing engagements, and owning delivery.",
+        "Run my own studio alongside full-time work: finding clients, scoping and pricing engagements, and owning delivery.",
         "Design and build client websites end to end in Webflow and WordPress — strategy, interface design, and build.",
         "Produce video and photo content for brands including Brooks Running, Shake Shack, Seabourn Cruise Lines, Chateau Ste. Michelle, and Car Toys.",
         "Subcontract and direct specialists on larger engagements, and work as a contractor inside other teams.",
@@ -148,18 +148,18 @@ export const en: Resume = {
     {
       title: "Safety campaigns",
       detail:
-        "Tools for safety leads to send targeted content across their organization. Improved content access 5x.",
+        "Tools for safety leaders to send targeted content across their organization. Improved content access 5x.",
     },
     {
-      title: "Challenges",
+      title: "Movement challenges",
       detail:
         "Personal, team, and leaderboard challenges across mobile, web, and desktop.",
       slug: "challenges",
     },
     {
-      title: "Desktop movement app",
+      title: "V-minder",
       detail:
-        "Windows app delivering personalized movement reminders on a schedule people set themselves.",
+        "A Windows app that sends personalized movement reminders on a schedule people set themselves.",
     },
     {
       title: "Playlists",
