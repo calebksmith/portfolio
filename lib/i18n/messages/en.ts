@@ -400,9 +400,9 @@ export const en = {
    * an access link. It should read as something worth asking for.
    */
   gated: {
-    title: "Part of the full case study",
-    note: "I share screens from inside Vimocity’s app with hiring teams on request.",
-    ask: "Ask for access on LinkedIn",
+    title: "This design is restricted",
+    note: "Available to hiring teams on request.",
+    ask: "Request access on LinkedIn",
   },
 
   caseStudy: {
