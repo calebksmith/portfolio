@@ -229,7 +229,7 @@ export const en = {
       heading: "Vimocity",
       /** What Vimocity is, and what the product team is working toward. */
       intro:
-        "We’re a workplace health and safety platform built for utility companies. I lead product design on the features and tools safety leaders use to keep their crews safe.",
+        "We are a workplace health and safety platform built for utility companies. I lead product design on the features and tools that safety leaders use to keep their crews safe.",
     },
     pointers: {
       vimui: {
