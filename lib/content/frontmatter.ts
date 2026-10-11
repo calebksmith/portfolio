@@ -10,11 +10,13 @@
 /**
  * Where a case study sits in the Vimocity ecosystem: the people it serves, or
  * the layers everyone shares. Different people use Vimocity for different jobs,
- * so the first three are personas; identity and platform run underneath all of
- * them. In display order.
+ * so the first four are personas, field and desk workers among them; identity
+ * and platform run underneath all of them. Each card shows its group as a small
+ * label. Display order is each study's own `order`, not this list.
  */
 export const AREAS = [
   "workers",
+  "desk-workers",
   "safety-leaders",
   "admins",
   "identity",

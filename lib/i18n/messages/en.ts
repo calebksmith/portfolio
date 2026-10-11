@@ -431,6 +431,7 @@ export const en = {
      */
     areas: {
       workers: "Workers",
+      "desk-workers": "Desk-based workers",
       "safety-leaders": "Safety leaders",
       admins: "Admins",
       identity: "Identity",
