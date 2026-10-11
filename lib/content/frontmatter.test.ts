@@ -165,6 +165,23 @@ describe("toCaseStudy", () => {
     );
   });
 
+  it("reads draft as true or false, and nothing else", () => {
+    expect(toCaseStudy("f.mdx", data, "b").draft).toBe(false);
+    expect(toCaseStudy("f.mdx", { ...data, draft: "true" }, "b").draft).toBe(
+      true,
+    );
+    expect(toCaseStudy("f.mdx", { ...data, draft: "false" }, "b").draft).toBe(
+      false,
+    );
+    // Anything else could be a draft someone meant to keep back, so it fails
+    // the build instead of publishing.
+    for (const value of ["yes", "True", "ture", ""]) {
+      expect(() =>
+        toCaseStudy("f.mdx", { ...data, draft: value }, "b"),
+      ).toThrow(/draft must be true or false/);
+    }
+  });
+
   it("puts a case study with no order after the ordered ones", () => {
     expect(toCaseStudy("f.mdx", data, "b").order).toBe(Number.MAX_SAFE_INTEGER);
     expect(toCaseStudy("f.mdx", { ...data, order: "2" }, "b").order).toBe(2);

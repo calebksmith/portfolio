@@ -49,6 +49,15 @@ const files = readdirSync(join(WORK_DIR, DEFAULT_LOCALE)).filter((f) =>
 const studies = byLocale[DEFAULT_LOCALE];
 const slugs = new Set(studies.map((s) => s.slug));
 
+/**
+ * What production builds. A draft is left out of every production build, so a
+ * published page that links to one 404s for a reader even though the file
+ * exists. Drafts themselves may link anywhere; they're only seen locally.
+ */
+const published = new Set(studies.filter((s) => !s.draft).map((s) => s.slug));
+const reachableFrom = (study: { draft: boolean }) =>
+  study.draft ? slugs : published;
+
 /** Every `/work/<slug>` reference in a file, wherever it appears. */
 function workLinks(source: string): string[] {
   return [...source.matchAll(/\/work\/([a-z0-9-]+)/g)].map((m) => m[1]);
@@ -132,8 +141,8 @@ describe("internal links resolve", () => {
     (slug, study) => {
       for (const target of workLinks(study.body)) {
         expect(
-          slugs.has(target),
-          `${slug}.mdx links to /work/${target}, which does not exist`,
+          reachableFrom(study).has(target),
+          `${slug}.mdx links to /work/${target}, which ${slugs.has(target) ? "is a draft" : "does not exist"}`,
         ).toBe(true);
       }
     },
@@ -143,7 +152,10 @@ describe("internal links resolve", () => {
     "%s connects only to case studies that exist",
     (slug, study) => {
       for (const target of study.connects) {
-        expect(slugs.has(target), `${slug} connects to "${target}"`).toBe(true);
+        expect(
+          reachableFrom(study).has(target),
+          `${slug} connects to "${target}"${slugs.has(target) ? ", a draft" : ""}`,
+        ).toBe(true);
         expect(target, `${slug} connects to itself`).not.toBe(slug);
       }
     },
@@ -170,8 +182,8 @@ describe("internal links resolve", () => {
       const source = readFileSync(join(process.cwd(), path), "utf8");
       for (const target of workLinks(source)) {
         expect(
-          slugs.has(target),
-          `${path} links to /work/${target}, which does not exist`,
+          published.has(target),
+          `${path} links to /work/${target}, which ${slugs.has(target) ? "is a draft" : "does not exist"}`,
         ).toBe(true);
       }
     }
