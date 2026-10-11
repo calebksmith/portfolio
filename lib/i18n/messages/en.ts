@@ -277,7 +277,7 @@ export const en = {
       heading: "How I got here",
       paragraphs: [
         "I started out designing and building websites, and shooting the photos and video for them. At Vimocity, I began in design, video, and motion graphics, then moved into designing and building the platform itself.",
-        "Outside work, I’m a dog and human dad in Seattle, and I love coffee, breweries, and travel. The last trip was Greece and Turkey; Scotland is next.",
+        "Outside work, I’m a dog and human dad in Seattle, and I love coffee, breweries, and travel. Our last trip was Greece and Turkey; Scotland is next.",
       ],
       cta: "My experience →",
     },
