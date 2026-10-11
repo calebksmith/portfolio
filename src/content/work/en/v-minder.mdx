@@ -2,27 +2,31 @@
 title: V-minder: A desktop app for movement breaks at work
 role: Product design, desktop
 year: Draft
-stack: [Windows, Figma]
-summary: One-minute, coach-led moves on a schedule people set themselves, each one counting toward their Daily 5.
-user: Movement during the workday, on a schedule people set themselves, without remembering to open anything.
-business: "Draft, needs your input: a result, such as adoption, moves per day, or Daily 5 completions from desktop."
-connects: [challenges, login]
+stack: [Windows, Electron, Figma]
+summary: A Windows app that brought Vimocity to desk-based utility workers, with movement breaks on a schedule they set themselves.
+user: Movement breaks that fit the workday, on a schedule each person sets for themselves.
+business: A new user base: desk-based workers at utility companies, from call centers to safety managers.
+connects: [vimui, login]
 area: workers
 order: 8
+impact: Highest engagement of any Vimocity product
 draft: true
 ---
 
 ## Problem
 
-> **Draft, needs your input:** what wasn’t working before V-minder, and for
-> whom? The comps suggest people at desks all day, where a once-a-day routine
-> with a crew doesn’t fit. Then the goal, as “Our goal was…”.
+Vimocity started with field crews, but utility companies also employ
+desk-based workers: call centers, safety managers, and the office staff who
+support the field. They still face stiffness, soreness, and potential injuries
+from sitting all day. Our goal was to give them movement suggestions throughout
+the workday, on a schedule that works for them.
 
-> **Design challenge:** getting people to move during the workday without
-> having to remember to open anything. We built V-minder around the
-> notification rather than the window: the move arrives on its own, on the
-> person’s schedule, with Watch, Snooze, and Dismiss on the notification
-> itself.
+> **Design challenge:** reaching desk workers on locked-down workstations. Call
+> centers restrict which programs and websites people can use, so we built a
+> Windows desktop app that IT departments could approve, which meant its
+> notifications would show up on those restricted machines. Some workstations
+> are also shared from day to day, so sign-in had to be quick, and V-minder had
+> to keep working for whoever signed in.
 
 <GatedFigure
   src="v-minder/notification.webp"
@@ -30,43 +34,72 @@ draft: true
   width={1100}
   height={782}
   alt="A desktop notification from V-minder introducing a move called The Heisman, with a video thumbnail and Watch, Snooze, and Dismiss buttons."
-  caption="The V-minder notification: a coach-led move, with Watch, Snooze, and Dismiss on it."
+  caption="A move arrives as a notification on the workstation, with Watch, Snooze, and Dismiss on it."
 />
 
 ## What I did
 
-- **Let people set their own schedule.** Days, hours, and how often turn into
-  an outcome as you set them: “your schedule will deliver 8 moves a day,” next
-  to the recommended 6–8.
-- **Made preferences show their effect.** Body areas, sitting or standing, and
-  equipment each update a live count of the videos that still match.
-- **Made every move count.** Four moves in a day complete your Daily 5, and
-  they count toward any challenge you’ve joined, without a challenge screen on
-  desktop at all.
-- **Reused the shared sign-in.** V-minder signs in through the same
-  [login](/work/login) webview as every other platform.
+- **Used the same sign-in as every other platform.** V-minder signs in through
+  the shared [login and account creation](/work/login) flow, so on a shared
+  workstation, each person signs in to their own schedule and preferences.
+- **Added content for desk work.** Users can mix in non-movement videos made
+  for office workers, like setting up a more ergonomic workstation, along with
+  other health and safety topics for office environments.
+- **Built customization around user feedback.** The biggest feedback we heard
+  was about content: some users can’t do standing moves. We added settings for
+  seated moves, standing moves, or both, and later for target areas, so people
+  with past injuries or restrictions can leave those areas out.
 
 <GatedFigure
-  src="v-minder/schedule.webp"
+  src="v-minder/preferences.webp"
   ratio="1088/768"
   width={1088}
   height={768}
-  alt="The V-minder schedule screen: weekdays selected, 9 AM to 5 PM, a reminder every hour with a 15-minute snooze, and a summary of 40 moves per week and 8 per day."
-  caption="The schedule turns settings into an outcome, 40 moves a week and 8 a day, beside the recommendation."
+  alt="The V-minder Move Preferences screen: body areas to focus on, from neck to ankle and foot; a choice of sitting and standing, standing only, or sitting only; optional equipment like a massage roller or ball; and a count of 93 videos that match."
+  caption="Move preferences: the body areas to focus on, seated or standing moves, and equipment, with a live count of the videos that match."
 />
+
+- **Let users set their own schedule.** They choose the days, the hours, and
+  how often a move arrives, and see what that adds up to, like 8 moves a day,
+  beside the recommended 6 to 8.
+- **Let users move on their own terms.** A move can be played off schedule
+  whenever someone is ready, and if the next one isn’t a move they want, they
+  can swap it for another.
+
+<Figure
+  width="breakout"
+  ratio="760/220"
+  caption="An example day on a schedule the user set: a move every hour, one snoozed for 15 minutes, and one played off schedule."
+>
+  <WorkdaySchedule />
+</Figure>
+
+- **Connected V-minder to the Daily 5.** Before, the Daily 5 only counted if
+  you marked it complete, or watched a Daily 5 video, in the web portal or the
+  phone app. V-minder has movements rather than Daily 5 videos, so we made
+  watching four of them earn Daily 5 credit, without switching over to the web
+  portal. That also lets V-minder users take part in
+  [challenges](/work/challenges) indirectly: V-minder shows which challenges
+  they’re in, and confirms when their Daily 5 credit counts toward one.
 
 <GatedFigure
   src="v-minder/home.webp"
   ratio="1088/768"
   width={1088}
   height={768}
-  alt="The V-minder home screen: the next scheduled move with Play now and New move, Daily 5 progress at three of four moves, and two challenges receiving Daily 5 credit."
-  caption="Home: the next move, Daily 5 progress, and the challenges that progress counts toward."
+  alt="The V-minder home screen: the next scheduled move with Play Now and New Move buttons, Daily 5 progress at three of four moves, and two challenges receiving Daily 5 credit."
+  caption="Home: the next move, Daily 5 progress at three of four moves, and the challenges that credit counts toward."
 />
 
 ## Outcome
 
-> **Draft, needs your input:** results as stat tiles (adoption, moves a day,
-> Daily 5 completions from desktop), a “Who did what” line, and a key result
-> for the frontmatter. It also needs one visual every visitor can see: all
-> three screens above are gated.
+<Stats>
+  <Stat value="Highest" label="engagement of any Vimocity product" />
+  <Stat
+    value="New user base"
+    label="desk-based workers at utility companies, with content made for their work"
+  />
+</Stats>
+
+> **Draft, needs your input:** a “Who did what” line, the year, and specific
+> metrics when you have them.
