@@ -206,6 +206,20 @@ export const en = {
           // particular point yet.
         },
         {
+          id: "before",
+          question: "What did I do before product design?",
+          // The video and motion background was only on the résumé and at the
+          // bottom of the page, and it is the first thing a creative-tools team
+          // would ask about. The facts are the résumé's: multimedia designer at
+          // Vimocity, and the studio's video and photo clients since 2016.
+          //
+          // No link. The studio has its own pointer below, and no case study is
+          // about video production.
+          answer:
+            "Video and motion graphics. I started at Vimocity editing its videos and adding the motion graphics, and my studio, Modern Trailhead, has produced video and photo for brands like Brooks Running and Shake Shack since 2016.",
+          link: null,
+        },
+        {
           id: "overengineered",
           question: "Anything overengineered here?",
           // The one question that isn't about the job — and the answer is
