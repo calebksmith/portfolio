@@ -21,7 +21,6 @@ export {
   ControlLink,
   ControlToggle,
 } from "./control-bar";
-export { Dialog } from "./dialog";
 export { Eyebrow, type EyebrowProps } from "./eyebrow";
 export { Figure } from "./figure";
 export { Inspector, type InspectorLabels } from "./inspector";

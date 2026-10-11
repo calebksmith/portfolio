@@ -1,16 +1,18 @@
 import Link from "next/link";
 
-import { cn } from "@/components/cksui";
+import { Eyebrow, cn } from "@/components/cksui";
 import type { CaseStudy } from "@/lib/content/work";
 import { localizePath } from "@/lib/i18n/config";
-import { getLocale } from "@/lib/i18n/server";
+import { getLocale, getMessages } from "@/lib/i18n/server";
 
 import { CaseStudyChips } from "./case-study-chips";
 
 /**
  * A case study card: what it is, the facts that help decide, and a way in.
  *
- * Name and what it is, then one row of chips: the headline result where there
+ * A small label first, naming who the work serves (Workers, Admins, Platform),
+ * so cards in ecosystem order read as groups without headings between them.
+ * Then name and what it is, then one row of chips: the headline result where there
  * is a number, the kind of work, and when. Chips rather than a sentence — a
  * sentence restated the descriptor, where chips answer the questions a reader
  * is actually asking ("did it work? what did he do? how recent?") at a glance.
@@ -35,6 +37,7 @@ export const STRETCH =
 export async function CaseStudyCard({
   as: Heading = "h3",
   slug,
+  area,
   name,
   descriptor,
   impact,
@@ -45,6 +48,7 @@ export async function CaseStudyCard({
   as?: "h3" | "h4";
 }) {
   const locale = await getLocale();
+  const areas = (await getMessages()).caseStudy.areas;
 
   return (
     <article
@@ -76,7 +80,9 @@ export async function CaseStudyCard({
         <path d="M3 8h10M9 4l4 4-4 4" />
       </svg>
 
-      <Heading className="pr-8 font-display text-base font-semibold tracking-[-0.01em] text-balance sm:text-lg">
+      <Eyebrow className="pr-8">{areas[area]}</Eyebrow>
+
+      <Heading className="-mt-1 pr-8 font-display text-base font-semibold tracking-[-0.01em] text-balance sm:text-lg">
         {/* No underline on hover. The stretched link covers the whole tile, so
             underlining the heading says the heading is the target when it is
             not — the card responds instead. */}
