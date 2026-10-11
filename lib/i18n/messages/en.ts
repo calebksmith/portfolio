@@ -379,6 +379,17 @@ export const en = {
         { what: "Review", note: ["Engineering", "hardens it"] },
       ],
     },
+    workday: {
+      label:
+        "An example workday with V-minder, weekdays from 9 AM to 5 PM with a move every hour: eight scheduled moves. The 11 AM move is snoozed for 15 minutes, and one extra move is played off schedule in the afternoon.",
+      title: "AN EXAMPLE WORKDAY",
+      setting: "Weekdays, 9 AM to 5 PM, a move every hour",
+      hours: ["9 AM", "11 AM", "1 PM", "3 PM", "5 PM"],
+      snoozed: "Snoozed 15 min",
+      offSchedule: "Played off schedule",
+      scheduled: "Scheduled move",
+      total: "8 moves a day, set by the user",
+    },
     teamScoring: {
       label:
         "On an example day, a crew of five with all five completing scores 100. A team of fifty with forty-five completing scores 90. A crew of four, below a minimum of five, scores at most 80.",
