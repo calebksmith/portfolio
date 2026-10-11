@@ -381,13 +381,14 @@ export const en = {
     },
     workday: {
       label:
-        "An example workday with V-minder, weekdays from 9 AM to 5 PM with a move every hour: eight scheduled moves. The 11 AM move is snoozed for 15 minutes, and one extra move is played off schedule in the afternoon.",
+        "An example workday with V-minder, weekdays from 9 AM to 5 PM with a move every hour: eight scheduled moves, standing and seated in turn. The 11 AM move is snoozed for 15 minutes, and one extra standing move is played off schedule in the afternoon.",
       title: "AN EXAMPLE WORKDAY",
       setting: "Weekdays, 9 AM to 5 PM, a move every hour",
       hours: ["9 AM", "11 AM", "1 PM", "3 PM", "5 PM"],
       snoozed: "Snoozed 15 min",
       offSchedule: "Played off schedule",
-      scheduled: "Scheduled move",
+      standing: "Standing move",
+      seated: "Seated move",
       total: "8 moves a day, set by the user",
     },
     teamScoring: {
