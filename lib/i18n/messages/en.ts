@@ -267,13 +267,17 @@ export const en = {
         description: "My background and roles, in full.",
       },
     },
+    /**
+     * The close of the homepage, and the lead-in to its one call to action:
+     * the path in brief, so "My experience" reads as the full version of it,
+     * then one line of who he is outside work. Nothing here repeats the page
+     * above it.
+     */
     tldr: {
-      heading: "TL;DR about me",
-      // Vimocity comes first: VimUI is a system built *there*, not a product of
-      // his own, and naming the employer is what makes that legible. What
-      // Vimocity is was said once already, in the work section's intro.
+      heading: "How I got here",
       paragraphs: [
-        "I lead product design at Vimocity, working cross-functionally to build features our customers love and promote our company’s goal to keep workforces safe. My background is in video production, motion graphics, and UX/UI design.",
+        "I started out designing and building websites in Webflow, and shooting the video and photos that went on them. I joined Vimocity as a designer, worked on our video production and motion graphics, then put my design and frontend background to work designing and building the platform itself.",
+        "Outside work, I’m a dog and human dad in Seattle who loves coffee, breweries, and travel. The last trip was Greece and Turkey; Scotland is next.",
       ],
       cta: "My experience →",
     },
