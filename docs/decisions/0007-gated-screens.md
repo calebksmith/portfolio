@@ -51,3 +51,9 @@ the image.
   handful of readers.
 - Development reads the same paths from the gitignored `private/media/`, so the
   whole flow runs locally without the store.
+
+**Amended 2026-10-11:** the one-line note became a locked frame. It keeps the
+screenshot's size and shows neutral shapes blurred past recognition under "This
+design is restricted" and a request-access button, so a reader without access
+sees part of the case study they're missing rather than an empty notice. The
+shapes are drawn, not taken from the image.

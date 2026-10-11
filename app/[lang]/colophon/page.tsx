@@ -282,6 +282,7 @@ const stack = [
   "Neon Postgres",
   "Auth.js",
   "Vercel",
+  "Vercel Blob",
 ];
 
 export default async function ColophonPage({

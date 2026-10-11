@@ -116,6 +116,19 @@ The trade-off: anyone with the link can read and forward it. It’s a letter wri
 
 </Decision>
 
+<Decision title="Screens from inside the product, behind a personal link">
+
+Most of the case studies are about work inside Vimocity’s app, and those screens aren’t this site’s to publish. So the files never enter the repository. They live in a private Blob store, and a hiring team sees them through a personal link: a signed token with an expiry, set as a cookie.
+
+<Verdict
+  chosen={{ what: "Signed links, checked per image", why: "No database and no accounts. The image route verifies the token before reading the store, and answers anything else with a 404." }}
+  rejected={{ what: "A shared password, or publishing the screens", why: "A password can’t be revoked for one person. Publishing would put an employer’s product in a public repository." }}
+/>
+
+Pages stay static: each gated figure renders both versions, and the theme script picks one before first paint. Without access, the frame keeps the screenshot’s size, with neutral shapes blurred past recognition and a request for access, so it reads as part of the case study rather than a gap.
+
+</Decision>
+
 <Decision title="View logging, minimal on purpose">
 
 “Did they open it” is useful, but the visitor is a counterparty in a hiring process who consented to nothing. No cookies, no fingerprinting, no third-party analytics. IP stored only as a salted hash; rotating the salt severs the link to everything logged — which is why the salt is secret, since hashing an IP isn’t strong anonymization. The write happens after the response is sent and swallows its errors.

@@ -57,7 +57,9 @@ CI runs all seven on every push and pull request, cheapest first.
 Three of them are the interesting ones. **`check:contrast`** parses
 `globals.css` and computes WCAG ratios, so the style guide and the gate read the
 same source and cannot disagree. **`check:copy`** catches what style guides lose
-to — one spelling of "frontend", one component count across eight files.
+to: one spelling of "frontend", one component count across eight files, the
+house names for things, and stock phrasing. What it can't judge, the
+`ux-writing` skill walks through.
 **The tests** cover the colour maths, a hand-written frontmatter parser, and the
 content's own integrity: every `/work/<slug>` link in the MDX _and in the
 components_ has to resolve, and the case study titles quoted in the homepage hero
@@ -102,8 +104,9 @@ npm run media:upload                           # private/media/ → the Blob sto
 
 Screens from inside Vimocity's app aren't in this repository. They sit in a
 private Blob store and are shown only to someone holding a personal link — a
-signed token, so no database and no form. Everyone else sees a short note in
-their place, and their browser never requests the image. ADR 0007 has the
+signed token, so no database and no form. Everyone else sees a locked frame
+in their place, the screenshot's size with neutral shapes blurred past
+recognition, and their browser never requests the image. ADR 0007 has the
 reasoning.
 
 ## Layout
@@ -153,8 +156,8 @@ no token is a violation, and the panel says so rather than hiding it.
 
 - **The dev server serves stale CSS after a `globals.css` change.** Verify CSS
   changes against `npm run build` output, not the dev server.
-- **Case studies are read at module scope.** Adding or renaming an `.mdx` file
-  needs a dev server restart to show up.
+- **A case study with `draft: true` shows only in development.** It's left out
+  of production builds, so check the live list with `npm run build`.
 - **Route types (`PageProps<>`, `LayoutProps<>`) are generated, not committed.**
   `npm run typecheck` runs `next typegen` first, so a fresh checkout or a
   moved route type-checks without a build. Bare `tsc --noEmit` does not.
@@ -166,7 +169,7 @@ no token is a violation, and the panel says so rather than hiding it.
 ## Stack
 
 Next.js 16 (App Router) · React 19 · TypeScript strict · Tailwind v4 ·
-Drizzle + Neon · Auth.js · deployed on Vercel from `main`.
+Drizzle + Neon · Auth.js · Vercel Blob · deployed on Vercel from `main`.
 
 Conventions and constraints are in `CLAUDE.md`, which is written for whoever
 works on this next — human or otherwise.
