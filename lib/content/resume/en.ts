@@ -19,7 +19,7 @@ export const en: Resume = {
   ],
 
   summary:
-    "I define what gets built, through customer research, product briefs, and prototypes, and build the frontend in React and TypeScript. I built the design system our web portal runs on, and the automated checks that keep design and code in sync. Nine years in design, five writing production frontend.",
+    "I lead product design at Vimocity, a workplace health and safety platform for utility companies, working cross-functionally to build features our customers love. My background spans video production, motion graphics, and UX/UI design, and I build what I design, from first prototype to the shipped product.",
 
   skills: [
     {
