@@ -123,8 +123,13 @@ export const en = {
       "theme-switcher":
         "Radio inputs, so arrow-key navigation and correct announcements come from the platform.",
       "case-study-card":
-        "Filled surface plus an accent label — the label survives the single-column collapse a border would not.",
+        "Filled, so it reads as work beside the unfilled pointer cards, even in one column. Its small label names who the work serves.",
       "pointer-card": "Unfilled, so navigation never reads as work.",
+      "stat-group":
+        "As many across as fit: two, three, or four results lay out evenly without a rule per count.",
+      stat: "Figure first, label second, on the card surface. The label carries any caveat the number needs.",
+      "gated-figure":
+        "Locked by default: the screenshot’s own frame, neutral shapes blurred past recognition, and a request for access. A browser without access never requests the image.",
       tabs: "Segmented tabs: arrow keys move between views, and every view stays in the page, hidden rather than removed, so it still works without JavaScript.",
       "bento-tile":
         "Span follows content weight; hierarchy also carried by type scale.",
@@ -601,7 +606,7 @@ export const en = {
       },
     ],
     rulesReview:
-      "What a machine cannot judge is a checklist the design-review skill walks through before a change ships: whether a token is the right one, whether a layout holds at a breakpoint, and whether the empty and error states exist.",
+      "What a machine cannot judge is a checklist the design-review skill walks through before a change ships: whether a token is the right one, whether a layout holds at a breakpoint, and whether the empty and error states exist. The ux-writing skill does the same for copy: voice, length, and one name per thing.",
     rulesSource: "Read the rules and the lint plugin on GitHub →",
 
     tokenTable: {

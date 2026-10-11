@@ -16,6 +16,8 @@ import {
   Eyebrow,
   SpecList,
   SpecRow,
+  Stat,
+  StatGroup,
   StatusDot,
 } from "@/components/cksui";
 
@@ -71,6 +73,8 @@ const REGISTRY: Record<string, ElementType> = {
   Eyebrow,
   SpecList,
   SpecRow,
+  Stat,
+  StatGroup,
   StatusDot,
 };
 
@@ -345,6 +349,37 @@ export const recipes: Recipe[] = [
             tag: "SpecRow",
             props: { label },
             children: [value],
+          })),
+      };
+    },
+  },
+  {
+    id: "stat",
+    name: "Stat",
+    slot: "stat-group",
+    description:
+      "A result, figure first. The figure is the largest thing in the tile and the label says what it counts, so a case study outcome reads as a number rather than a sentence with a number in it.",
+    notes: [
+      "Tiles sit as many across as fit, so two, three, or four results lay out evenly without a rule per count. A caveat goes in the label or the line after the group, never dropped.",
+    ],
+    controls: [
+      { name: "count", label: "Results", values: ["Two", "Three", "Four"] },
+    ],
+    build: (choices) => {
+      const count = { Two: 2, Three: 3, Four: 4 }[choices.count] ?? 2;
+
+      return {
+        tag: "StatGroup",
+        children: [
+          { value: "+65%", label: "Daily 5 completions in challenges" },
+          { value: "−80%", label: "login and account-access support tickets" },
+          { value: "4x+", label: "saves, from launch to the peak month" },
+          { value: "0% → 99%", label: "design token use" },
+        ]
+          .slice(0, count)
+          .map(({ value, label }) => ({
+            tag: "Stat",
+            props: { value, label },
           })),
       };
     },
