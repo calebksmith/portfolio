@@ -14,11 +14,16 @@ import {
   ControlButton,
   ControlToggle,
   Eyebrow,
+  Figure,
+  Monogram,
+  PrintButton,
+  Skeleton,
   SpecList,
   SpecRow,
   Stat,
   StatGroup,
   StatusDot,
+  Tabs,
 } from "@/components/cksui";
 
 /**
@@ -35,8 +40,12 @@ import {
  * the same object, printed.
  */
 
-/** A prop that has to be written as a JSX expression rather than a string. */
-type Expression = { expr: string; value: ReactNode };
+/**
+ * A prop that has to be written as a JSX expression rather than a string: an
+ * element, a number, or an array of items. `expr` is what the code panel
+ * prints; `value` is what the component receives.
+ */
+type Expression = { expr: string; value: unknown };
 
 export type PropValue = string | boolean | Expression;
 
@@ -71,11 +80,16 @@ const REGISTRY: Record<string, ElementType> = {
   ControlButton,
   ControlToggle,
   Eyebrow,
+  Figure,
+  Monogram,
+  PrintButton,
+  Skeleton,
   SpecList,
   SpecRow,
   Stat,
   StatGroup,
   StatusDot,
+  Tabs,
 };
 
 /* --- Projection one: the live component ----------------------------------- */
@@ -463,6 +477,137 @@ export const recipes: Recipe[] = [
             ]
           : []),
       ],
+    }),
+  },
+  {
+    id: "figure",
+    name: "Figure",
+    slot: "figure",
+    description:
+      "An image or diagram, framed and captioned. The ratio is required, so the frame holds its space before anything loads and the paragraph under it never jumps.",
+    notes: [
+      "Two widths and no others, inline and breakout, because the layout has two. Every case study screenshot and diagram sits in one.",
+    ],
+    controls: [
+      { name: "ratio", label: "Ratio", values: ["16/9", "4/3", "1/1"] },
+    ],
+    build: (choices) => ({
+      tag: "Figure",
+      props: {
+        ratio: choices.ratio,
+        caption: "The caption says what to look at.",
+      },
+      children: [
+        {
+          tag: "div",
+          props: {
+            className:
+              "grid h-full place-items-center text-sm text-muted-foreground",
+          },
+          children: [choices.ratio],
+        },
+      ],
+    }),
+  },
+  {
+    id: "tabs",
+    name: "Tabs",
+    slot: "tabs",
+    description:
+      "A segmented control for views of the same thing. Arrow keys move between tabs, and every panel stays in the page, hidden rather than removed, so it still works without JavaScript.",
+    notes: [
+      "The movement challenges case study uses it to switch between the two challenge types.",
+    ],
+    controls: [{ name: "tabs", label: "Tabs", values: ["Two", "Three"] }],
+    build: (choices) => {
+      const all = [
+        {
+          value: "leaderboard",
+          label: "Leaderboard",
+          content: "Teams compete for the top.",
+        },
+        {
+          value: "target",
+          label: "Individual target",
+          content: "Each person plays for a target.",
+        },
+        {
+          value: "group",
+          label: "Group",
+          content: "A crew logs it together.",
+        },
+      ];
+      const items = all.slice(0, choices.tabs === "Three" ? 3 : 2);
+      const expr = `[${items
+        .map(
+          (item) =>
+            `{ value: "${item.value}", label: "${item.label}", content: "${item.content}" }`,
+        )
+        .join(", ")}]`;
+
+      return {
+        tag: "Tabs",
+        props: {
+          label: "Challenge types",
+          items: { expr, value: items },
+        },
+      };
+    },
+  },
+  {
+    id: "skeleton",
+    name: "Skeleton",
+    slot: "skeleton",
+    description:
+      "A placeholder in the shape of the content arriving, so a loading page says what it’s waiting for and nothing jumps when it lands.",
+    notes: [
+      "The pulse is opacity only, and it stops under prefers-reduced-motion: a flashing block is worse than a still one for anyone it affects.",
+    ],
+    controls: [
+      { name: "lines", label: "Lines", values: ["Three", "Two", "One"] },
+    ],
+    build: (choices) => {
+      const widths = ["w-3/4", "w-full", "w-1/2"];
+      const count = { One: 1, Two: 2, Three: 3 }[choices.lines] ?? 3;
+
+      return {
+        tag: "div",
+        props: { className: "flex w-64 flex-col gap-2" },
+        children: widths.slice(0, count).map((width) => ({
+          tag: "Skeleton",
+          props: { className: `h-4 ${width}` },
+        })),
+      };
+    },
+  },
+  {
+    id: "monogram",
+    name: "Monogram",
+    slot: "monogram",
+    description:
+      "The mark: CS on an ink tile, in the display face. Fixed colors rather than theme tokens, because a logo that changes with the reader’s settings isn’t a logo.",
+    notes: [
+      "The 22% radius is shared with the favicon and the link preview image, so the three read as one object.",
+    ],
+    controls: [{ name: "size", label: "Size", values: ["32", "48", "24"] }],
+    build: (choices) => ({
+      tag: "Monogram",
+      props: { size: { expr: choices.size, value: Number(choices.size) } },
+    }),
+  },
+  {
+    id: "print-button",
+    name: "Print button",
+    slot: "print-button",
+    description:
+      "Opens the browser’s print dialog, which is also how the experience page saves as a PDF. Printing reads from the same data as the page, so the two can’t disagree.",
+    notes: [
+      "It hides itself in print: a Print button in a printout reads as carelessness on a résumé.",
+    ],
+    controls: [],
+    build: () => ({
+      tag: "PrintButton",
+      props: { label: "Print / Save as PDF" },
     }),
   },
 ];

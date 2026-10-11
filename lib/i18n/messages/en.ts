@@ -539,7 +539,7 @@ export const en = {
       "Three durations and one easing curve, read from the running page. Motion is set once for the whole system, so it stays consistent, and honoring <code>prefers-reduced-motion</code> is a single rule instead of a promise repeated in every component.",
     /** rich */
     components:
-      "cksUI — this site’s component library. Built on shadcn/ui’s patterns as source copied in and owned, not as an installed dependency, with every value rewritten onto the tokens above. Every component declares a <code>data-slot</code>, the same convention VimUI uses.",
+      "cksUI — this site’s component library. Built on shadcn/ui’s patterns as source copied in and owned, not as an installed dependency, with every value rewritten onto the tokens above. Every component declares a <code>data-slot</code>, the same convention VimUI uses. The header, footer, skip link, theme switcher, and inspector aren’t repeated as specimens: each is live on this page, and a second copy would fight the first.",
     inspectorEyebrow: "Try the inspector",
     /** rich */
     inspectorBody:

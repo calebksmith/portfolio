@@ -22,6 +22,7 @@ export function PrintButton({
 }) {
   return (
     <Button
+      data-slot="print-button"
       variant="outline"
       size="sm"
       className={className}
