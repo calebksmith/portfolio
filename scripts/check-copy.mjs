@@ -108,7 +108,7 @@ const COPY_RULES = [
     // Words that say nothing specific, so readers skim past them. Each one
     // has a plainer word or a concrete detail behind it.
     pattern:
-      /\b(delv\w*|leverag\w*|seamless\w*|robust|streamlin\w*|elevat\w*|empower\w*|foster\w*|tapestry|realm|crucial|pivotal|intricate|holistic|synerg\w*|cutting-edge|game-?changer\w*|unlock\w*|harness\w*|journey|showcas\w*|testament|underscor\w*|meticulous\w*|nuanced|paramount|transformative|vibrant|bespoke|utiliz\w*|facilitat\w*|moreover|furthermore|additionally|notably|ultimately|effortless\w*|impactful|actionable|worth noting|in today’s)\b/gi,
+      /\b(delv\w*|leverag\w*|seamless\w*|robust|streamlin\w*|empower\w*|foster\w*|tapestry|realm|crucial|pivotal|intricate|holistic|synerg\w*|cutting-edge|game-?changer\w*|unlock\w*|harness\w*|showcas\w*|testament|underscor\w*|meticulous\w*|nuanced|paramount|transformative|vibrant|bespoke|utiliz\w*|facilitat\w*|moreover|furthermore|additionally|notably|ultimately|effortless\w*|impactful|actionable|worth noting|in today’s)\b/gi,
     message: "stock phrasing; say the specific thing",
   },
   {
@@ -137,7 +137,9 @@ function* emDashRuns(path, text) {
     return;
   }
 
-  // MDX: prose paragraphs, plus each quoted attribute inside a JSX block.
+  // MDX: each frontmatter field on its own, prose paragraphs (blockquotes
+  // included), and each quoted attribute inside a JSX block.
+  const lines = text.split("\n");
   let fenced = false;
   let start = 0;
   let paragraph = [];
@@ -146,11 +148,26 @@ function* emDashRuns(path, text) {
     if (tooMany(prose)) return { line: start, text: prose };
   };
 
-  for (const [index, line] of text.split("\n").entries()) {
-    if (line.trim().startsWith("```")) fenced = !fenced;
+  // Frontmatter fields are separate values, not one paragraph.
+  let from = 0;
+  if (lines[0]?.trim() === "---") {
+    const end = lines.findIndex((line, i) => i > 0 && line.trim() === "---");
+    for (let i = 1; i < end; i += 1) {
+      if (tooMany(lines[i])) yield { line: i + 1, text: lines[i] };
+    }
+    from = end + 1;
+  }
+
+  for (const [offset, raw] of lines.slice(from).entries()) {
+    const index = from + offset;
+    if (raw.trim().startsWith("```")) fenced = !fenced;
     if (fenced) continue;
 
-    if (/^\s*(<|\/?>|[a-zA-Z]+=)/.test(line)) {
+    // A blockquote is prose: read it without its marker. A bare `>` is the
+    // blank line between two quoted paragraphs.
+    const line = raw.replace(/^\s*>\s?/, "");
+
+    if (/^\s*(<|\/>|[a-zA-Z]+=)/.test(line)) {
       for (const match of line.matchAll(/"((?:[^"\\]|\\.)*)"/g)) {
         if (tooMany(match[1])) yield { line: index + 1, text: match[1] };
       }
@@ -280,10 +297,18 @@ for (const root_ of COPY_ROOTS) {
     text.split("\n").forEach((line, index) => {
       const trimmed = line.trim();
       if (trimmed.startsWith("```")) fenced = !fenced;
-      if (fenced || /^(\/\/|\/?\*)/.test(trimmed)) return;
+      if (fenced) return;
+      // Comments only exist in the .ts files. In MDX a line starting with `*`
+      // is bold text, and it's copy like any other.
+      if (path.endsWith(".ts") && /^(\/\/|\/?\*)/.test(trimmed)) return;
+
+      // Code isn't prose: inline code spans and rich-text <code> are left out.
+      const prose = line
+        .replace(/`[^`]*`/g, "")
+        .replace(/<code>.*?<\/code>/g, "");
 
       for (const rule of COPY_RULES) {
-        for (const match of line.matchAll(rule.pattern)) {
+        for (const match of prose.matchAll(rule.pattern)) {
           failures += 1;
           console.log(
             `  ${file}:${index + 1}  ${rule.message} — found "${match[0]}"`,
