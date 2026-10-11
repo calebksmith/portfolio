@@ -144,6 +144,16 @@ export function toCaseStudy(
   const order = Number(data.order ?? Number.MAX_SAFE_INTEGER);
   const impact = data.impact;
 
+  // Fail closed. A draft has "needs your input" notes in it, so a value that
+  // isn't plainly true or false (`yes`, `True`, a typo) stops the build
+  // rather than quietly publishing it.
+  const draft = data.draft;
+  if (draft !== undefined && draft !== "true" && draft !== "false") {
+    throw new Error(
+      `${file}: draft must be true or false — got "${String(draft)}"`,
+    );
+  }
+
   // Titles inform rather than tease: a reader should know what the feature is
   // before clicking. So every title is `Name: What it is`, and a title that
   // isn't fails the build rather than reaching a card. The second part is shown
@@ -177,7 +187,7 @@ export function toCaseStudy(
     area: area as Area,
     impact: typeof impact === "string" && impact ? impact : undefined,
     order: Number.isFinite(order) ? order : Number.MAX_SAFE_INTEGER,
-    draft: data.draft === "true",
+    draft: draft === "true",
     body,
   } satisfies CaseStudy;
 }
