@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { Eyebrow, PrintButton } from "@/components/cksui";
+import { Badge, Eyebrow, PrintButton } from "@/components/cksui";
 import { getResume } from "@/lib/content/resume";
 import { isLocale, localizePath } from "@/lib/i18n/config";
 import { alternates } from "@/lib/i18n/metadata";
@@ -88,13 +88,23 @@ export default async function ExperiencePage({
       </Section>
 
       <Section title={t.experience.sections.skills}>
-        <dl className="grid gap-x-6 gap-y-2 sm:grid-cols-[10rem_1fr]">
+        {/* A row of pills per group: a recruiter scans these for keywords,
+            so a few words each, not a sentence. */}
+        <dl className="grid gap-x-6 gap-y-3 sm:grid-cols-[10rem_1fr] sm:items-baseline">
           {resume.skills.map((skill) => (
             <div key={skill.label} className="contents">
               <Eyebrow asChild>
                 <dt>{skill.label}</dt>
               </Eyebrow>
-              <dd className="text-pretty text-foreground">{skill.value}</dd>
+              <dd>
+                <ul className="flex flex-wrap gap-1.5">
+                  {skill.items.map((item) => (
+                    <li key={item}>
+                      <Badge>{item}</Badge>
+                    </li>
+                  ))}
+                </ul>
+              </dd>
             </div>
           ))}
         </dl>
