@@ -273,7 +273,7 @@ export const en = {
       // his own, and naming the employer is what makes that legible. What
       // Vimocity is was said once already, in the work section's intro.
       paragraphs: [
-        "I lead product design at Vimocity, working cross-functionally to build features our customers love and promote our company’s goal to keep workforces safe. My favorite projects are VimUI, our design system, and, more recently, the standards and automated checks that keep our design and code in sync.",
+        "I lead product design at Vimocity, working cross-functionally to build features our customers love and promote our company’s goal to keep workforces safe. My background is in video production, motion graphics, and UX/UI design.",
       ],
       cta: "My experience →",
     },
