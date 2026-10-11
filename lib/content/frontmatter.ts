@@ -45,9 +45,15 @@ export type CaseStudy = {
   business: string;
   /** Slugs of the case studies this one feeds or depends on. */
   connects: string[];
-  /** Where it sits in the ecosystem, and its place within that area. */
+  /** Where it sits in the ecosystem: the people it serves, or a shared layer. */
   area: Area;
+  /** Its place in the list of case studies, across all of them. */
   order: number;
+  /**
+   * Shown in development and left out of production builds, so a study can
+   * be reviewed locally before it's ready to publish.
+   */
+  draft: boolean;
   /**
    * The headline result as a chip on the card — "−80% login support
    * tickets". Short enough to scan; the full figure and its caveat are on the
@@ -169,6 +175,7 @@ export function toCaseStudy(
     area: area as Area,
     impact: typeof impact === "string" && impact ? impact : undefined,
     order: Number.isFinite(order) ? order : Number.MAX_SAFE_INTEGER,
+    draft: data.draft === "true",
     body,
   } satisfies CaseStudy;
 }
