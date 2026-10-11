@@ -186,7 +186,8 @@ export async function Bento() {
 
         {/*
           One grid, not two. The hierarchy is carried by the cards themselves —
-          case studies are filled surfaces with an accent "Case study" label and
+          case studies are filled surfaces with a small label for who the work
+          serves and
           a read affordance; pointers have no fill, a muted eyebrow, and no CTA.
           That difference survives the collapse to a single column on a phone,
           which is exactly where a section heading stops helping and starts
