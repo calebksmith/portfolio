@@ -6,7 +6,11 @@
  * Every webp under private/media/ goes up at the same path:
  * private/media/challenges/choose-team.webp becomes challenges/choose-team.webp,
  * which is what <GatedFigure src> names. Re-running replaces what's there.
- * Reads BLOB_READ_WRITE_TOKEN from .env.local.
+ *
+ * Credentials come from .env.local or .env.vercel: a BLOB_READ_WRITE_TOKEN
+ * from the store's page, or the BLOB_STORE_ID and VERCEL_OIDC_TOKEN that
+ * `npx vercel env pull .env.vercel` writes. The library finds whichever is
+ * there.
  */
 import { readdir, readFile } from "node:fs/promises";
 import { join, sep } from "node:path";
@@ -16,10 +20,10 @@ import { put } from "@vercel/blob";
 import { GATED_PATH } from "../lib/access.ts";
 
 const ROOT = join(process.cwd(), "private/media");
-const token = process.env.BLOB_READ_WRITE_TOKEN;
-if (!token) {
+const oidc = process.env.VERCEL_OIDC_TOKEN && process.env.BLOB_STORE_ID;
+if (!process.env.BLOB_READ_WRITE_TOKEN && !oidc) {
   console.error(
-    "BLOB_READ_WRITE_TOKEN isn't set. Copy it from the Blob store's page in Vercel into .env.local.",
+    "No Blob credentials. Run `npx vercel env pull .env.vercel`, or put the store's BLOB_READ_WRITE_TOKEN in .env.local.",
   );
   process.exit(1);
 }
@@ -35,7 +39,6 @@ for (const pathname of files) {
   }
   await put(pathname, await readFile(join(ROOT, pathname)), {
     access: "private",
-    token,
     contentType: "image/webp",
     addRandomSuffix: false,
     allowOverwrite: true,

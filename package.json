@@ -23,7 +23,7 @@
     "access:link": "node --env-file-if-exists=.env.local --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/access.mjs link",
     "access:list": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/access.mjs list",
     "access:revoke": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/access.mjs revoke",
-    "media:upload": "node --env-file-if-exists=.env.local --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/upload-private-media.mjs"
+    "media:upload": "node --env-file-if-exists=.env.local --env-file-if-exists=.env.vercel --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/upload-private-media.mjs"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.11.3",

@@ -74,10 +74,10 @@ async function read(
   }
 
   try {
-    const result = await get(pathname, {
-      access: "private",
-      token: env.blobToken,
-    });
+    // No token passed: the library finds the credential itself. A store
+    // connected to the project authenticates with its store id and the
+    // deployment's own OIDC token; an older read-write token still works.
+    const result = await get(pathname, { access: "private" });
     if (result?.statusCode !== 200) return null;
     return { body: result.stream, contentType: result.blob.contentType };
   } catch {
