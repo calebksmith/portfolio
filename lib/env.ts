@@ -88,12 +88,4 @@ export const env = {
       .map((id) => id.trim())
       .filter(Boolean);
   },
-
-  /** Read-write token for the private Blob store holding gated screenshots. */
-  get blobToken(): string {
-    return required(
-      "BLOB_READ_WRITE_TOKEN",
-      "Connect the private Blob store to the project in Vercel; its token appears in the project's environment variables.",
-    );
-  },
 } as const;
