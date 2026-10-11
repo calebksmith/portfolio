@@ -224,72 +224,12 @@ export const en = {
       }[],
     },
     scrollCue: "See my work",
-    /**
-     * The work, two ways: where each case study sits in Vimocity, and all of
-     * them as cards. Area keys match `area` in each case study's frontmatter.
-     */
+    /** The work section: what Vimocity is, then the case studies as cards. */
     work: {
       heading: "Vimocity",
       /** What Vimocity is, and what the product team is working toward. */
       intro:
-        "I lead design at Vimocity, a workplace health and safety platform built for utility companies. We build the tools safety leaders use to keep their crews safe.",
-      /** Shown in front of the view switch, so it reads as two views of one set. */
-      views: "View case studies as",
-      tabs: { map: "Product map", list: "List" },
-      ecosystem: {
-        /** Over the three persona columns, which read as one group with it. */
-        group: {
-          title: "Vimocity, by who it serves",
-          note: "Each case study sits with the people it’s built for.",
-        },
-        areas: {
-          workers: { label: "Workers", note: "Move and recover" },
-          "safety-leaders": {
-            label: "Safety leaders",
-            note: "Find and share safety content",
-          },
-          admins: { label: "Admins", note: "Run the program" },
-          identity: {
-            label: "Identity & access",
-            note: "One way in, for everyone",
-          },
-          platform: { label: "Platform", note: "What all of it is built on" },
-        },
-        /**
-         * The Daily 5 isn't a case study, but the workers' column is built
-         * around it, so its node opens a short overview instead of a page.
-         */
-        daily5: {
-          label: "Daily 5",
-          note: "Key habit",
-          eyebrow: "Key habit",
-          title: "The Daily 5",
-          lede: "A full-body movement routine of four or five moves that takes five minutes or less. It’s where workers see results from Vimocity: they feel better, and they come back.",
-          facts: [
-            {
-              label: "Why it matters",
-              value:
-                "Done consistently, it helps prevent injuries on the job, and the stiffness and soreness physical work causes.",
-            },
-            {
-              label: "How it’s done",
-              value:
-                "On your own, or with your crew, where one person logs it for everyone.",
-            },
-            {
-              label: "For Vimocity",
-              value: "Daily 5 completions are the key engagement metric.",
-            },
-          ],
-          related: "Where it shows up",
-          relatedNotes: {
-            challenges: "Every challenge is scored on it",
-            playlists: "Group logging records it for a whole crew",
-          } as Record<string, string>,
-          close: "Close",
-        },
-        legend: { study: "Case study", overview: "Feature overview" },
-      },
+        "We’re a workplace health and safety platform built for utility companies. I lead product design on the features and tools safety leaders use to keep their crews safe.",
     },
     pointers: {
       vimui: {
@@ -474,6 +414,17 @@ export const en = {
     stack: "Stack",
     connects: "Related case studies",
     keyResult: "Key result",
+    /**
+     * Who each case study serves, from its `area` frontmatter: shown as a
+     * small label on its card, so the cards read as groups without headings.
+     */
+    areas: {
+      workers: "Workers",
+      "safety-leaders": "Safety leaders",
+      admins: "Admins",
+      identity: "Identity",
+      platform: "Platform",
+    } as Record<string, string>,
   },
 
   experience: {

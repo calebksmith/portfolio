@@ -7,7 +7,7 @@ import { getLocale, getMessages } from "@/lib/i18n/server";
 import { site } from "@/lib/site";
 
 import { STRETCH } from "./case-study-card";
-import { WorkViews } from "./work-views";
+import { WorkList } from "./work-list";
 import { HeroPrompt } from "./hero-prompt";
 import { HeroRevealProvider } from "./hero-reveal";
 import { Reveal } from "./reveal";
@@ -197,9 +197,8 @@ export async function Bento() {
           aria-labelledby="work-heading"
           className="scroll-mt-20 pb-24"
         >
-          {/* The case studies: where each sits in Vimocity, or all of them as
-              cards — one control switches between the two. */}
-          <WorkViews />
+          {/* The case studies, as cards, grouped by who each one serves. */}
+          <WorkList />
 
           {/* Everything that isn't a case study: utility pages and outside
               proof. Three to a row, so six tiles fill two rows exactly. */}
