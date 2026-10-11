@@ -44,7 +44,8 @@ export type Resume = {
   location: string;
   contact: { label: string; href: string }[];
   summary: string;
-  skills: { label: string; value: string }[];
+  /** A few words per skill, shown as pills: scannable, not a sentence. */
+  skills: { label: string; items: string[] }[];
   experience: Position[];
   /** Ships alongside the Vimocity entry; kept separate so it can be reordered. */
   selectedWork: { title: string; detail: string; slug?: string }[];

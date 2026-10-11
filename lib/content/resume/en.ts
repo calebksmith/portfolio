@@ -23,37 +23,42 @@ export const en: Resume = {
 
   skills: [
     {
-      label: "Design systems",
-      value:
-        "component libraries, design tokens, documentation and standards, versioned releases, multi-platform systems",
-    },
-    {
-      label: "Figma",
-      value:
-        "published libraries with versioned releases, variables and modes, component APIs and nested instance properties, interactive prototypes with real state, Dev Mode and Code Connect, branching, accessibility annotations, REST and plugin API automation",
-    },
-    {
-      label: "Frontend",
-      value:
-        "TypeScript, React, Next.js, Tailwind, React Native, Storybook, Git, code review",
-    },
-    {
-      label: "AI tooling",
-      value:
-        "automated design rules, AI coding guardrails, design-to-code workflows",
+      label: "Design",
+      items: [
+        "Product design",
+        "UX/UI",
+        "Design systems",
+        "Prototyping",
+        "User research",
+        "Accessibility",
+      ],
     },
     {
       label: "Product",
-      value:
-        "product definition and briefs, customer research, prototyping, 0→1 features, roadmap input",
+      items: ["0→1 features", "Product briefs", "Roadmapping"],
+    },
+    {
+      label: "Frontend",
+      items: [
+        "TypeScript",
+        "React",
+        "Next.js",
+        "Tailwind",
+        "React Native",
+        "Storybook",
+      ],
+    },
+    {
+      label: "Tools and AI",
+      items: ["Figma", "Claude Code", "AI coding guardrails", "Design to code"],
+    },
+    {
+      label: "Video and motion",
+      items: ["Video production", "Motion graphics", "Photography"],
     },
     {
       label: "Platforms",
-      value: "mobile-first web, iOS, Android, Windows desktop",
-    },
-    {
-      label: "Accessibility",
-      value: "WCAG AA, keyboard operability, light and dark modes",
+      items: ["Web", "iOS", "Android", "Windows"],
     },
   ],
 
@@ -75,35 +80,39 @@ export const en: Resume = {
         {
           heading: "Design system",
           bullets: [
-            "Built VimUI and lead its growth: 50+ web components on shared tokens, documented in Storybook. Color and type tokens carry across our iOS, Android, and Windows desktop apps.",
+            "Built VimUI and lead its growth: 50+ web components on shared tokens, documented in Storybook, with color and type tokens shared across iOS, Android, and Windows.",
             "Raised reusable component use from about 10% to 80–90% of frontend code, and design token use from 0% to 99%.",
-            "Wrote the standards that govern the system (structure, tokens, typing, accessibility, documentation, and versioning) and maintain them as the reference the whole team builds against.",
-            "Ship the system as versioned releases, with a changelog entry per change and beta releases to the apps that use it before anything breaking ships.",
+            "Wrote and maintain the system’s standards, from tokens to accessibility, and ship it as versioned releases, with a beta before anything breaking.",
           ],
         },
         {
           heading: "Automation and AI tooling",
           bullets: [
-            "Built automated checks that run before every merge, at two levels: rules governing how components are built in the design system, and rules governing how pages are built in the product — token use, accessibility, loading states, and responsive breakpoints.",
-            "Loaded the same rules into our AI coding tools, so generated code follows the standards by default instead of being corrected afterward.",
-            "Result: design is no longer a bottleneck. The whole team can build production-quality interfaces, and outside design help is rarely needed.",
+            "Built automated checks that run before every merge, on the design system’s components and the product’s pages: tokens, accessibility, loading states, and breakpoints.",
+            "Loaded the same rules into our AI coding tools, so generated code follows the standards from the start.",
+            "Result: design is no longer a bottleneck, and the whole team can build production-quality interfaces.",
           ],
         },
         {
           heading: "Product",
           bullets: [
-            "Define what gets built: synthesize customer feedback, write product briefs, and set direction with the leadership team.",
-            "Prototype in real components rather than mockups, so we test near-final work and iterate faster. About 80% of the frontend code I prototype reaches production.",
+            "Define what gets built with the leadership team, reporting to the President/COO, from customer feedback to product briefs.",
             "Interview customers and non-customers to check that features hold up beyond our existing base.",
-            "Represent design and customer needs in company leadership meetings, reporting to the President/COO.",
+            "Prototype in real components, so we test near-final work. About 80% of the frontend code I prototype reaches production.",
           ],
         },
         {
           heading: "Design and delivery",
           bullets: [
-            "Design and build features directly in the product codebase; review and approve frontend pull requests across the team.",
-            "Rebuilt the entire web portal from a legacy codebase onto Next.js, TypeScript, and Tailwind, page by page, against the component library.",
-            "Set a distinct approach per platform: mobile-first web, React Native for iOS and Android, and V-minder, a Windows app designed around native notifications.",
+            "Design and build features in the product codebase, and review frontend pull requests across the team.",
+            "Rebuilt the web portal from a legacy codebase onto Next.js, TypeScript, and Tailwind, page by page, on VimUI.",
+            "Set the approach per platform: mobile-first web, React Native for iOS and Android, and V-minder, a Windows app built around notifications.",
+          ],
+        },
+        {
+          heading: "Video and motion",
+          bullets: [
+            "Started as the multimedia designer, producing, editing, and adding motion graphics to Vimocity’s videos.",
           ],
         },
       ],
@@ -113,12 +122,10 @@ export const en: Resume = {
       href: "https://www.moderntrailhead.com",
       location: "Seattle, WA",
       period: "Dec 2016 – Present",
-      note: "Design Engineer & Digital Consultant | Owner (concurrent)",
+      note: "Owner · design and digital consulting (concurrent)",
       bullets: [
-        "Run my own studio alongside full-time work: finding clients, scoping and pricing engagements, and owning delivery.",
-        "Design and build client websites end to end in Webflow and WordPress — strategy, interface design, and build.",
-        "Produce video and photo content for brands including Brooks Running, Shake Shack, Seabourn Cruise Lines, Chateau Ste. Michelle, and Car Toys.",
-        "Subcontract and direct specialists on larger engagements, and work as a contractor inside other teams.",
+        "Design and build client websites end to end, from strategy to launch.",
+        "Produce video and photo for brands including Brooks Running, Shake Shack, Seabourn Cruise Lines, Chateau Ste. Michelle, and Car Toys.",
       ],
     },
     {
@@ -137,34 +144,34 @@ export const en: Resume = {
     {
       title: "Login and account creation",
       detail:
-        "Replaced three platform-specific flows with one web-based flow, added multi-factor authentication. Cut login and account-access support tickets by 80%.",
+        "One sign-in for web, mobile, and desktop, with multi-factor authentication. Login and account-access support tickets fell 80%.",
       slug: "login",
     },
     {
       title: "Content discovery",
       detail:
-        "New browse page plus video and playlist detail pages. Improved content relevance by 35%.",
+        "New browse, video, and playlist pages. Content relevance improved 35%.",
     },
     {
       title: "Safety campaigns",
       detail:
-        "Tools for safety leaders to send targeted content across their organization. Improved content access 5x.",
+        "Targeted content that safety leaders send across their organization. Content access improved 5x.",
     },
     {
       title: "Movement challenges",
       detail:
-        "Personal, team, and leaderboard challenges across mobile, web, and desktop.",
+        "Leaderboard and individual target challenges across mobile, web, and desktop. Daily 5 completions rose 65% among participants.",
       slug: "challenges",
     },
     {
       title: "V-minder",
       detail:
-        "A Windows app that sends personalized movement reminders on a schedule people set themselves.",
+        "A Windows app with movement breaks on a schedule people set themselves, and the highest engagement of any Vimocity product.",
     },
     {
       title: "Playlists",
       detail:
-        "Custom content collections, shareable and embeddable in company intranets. Also used by sales to build industry-specific collections for prospects.",
+        "Shareable, embeddable video collections, also used by sales to pitch prospects. Saves grew more than 4x from launch to peak.",
       slug: "playlists",
     },
   ],
