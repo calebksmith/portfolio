@@ -36,8 +36,16 @@ describe("verifyToken", () => {
 
   it("refuses a token whose signature was edited", () => {
     const token = mintToken(SECRET, "Jane", 30, NOW);
-    const flipped = token.slice(0, -1) + (token.endsWith("A") ? "B" : "A");
-    expect(verifyToken(flipped, SECRET, [], NOW)).toBeNull();
+    const [body, signature] = token.split(".");
+    // Edit the middle, not the end. The last base64url character of a
+    // 32-byte signature carries two unused bits, so swapping it can leave the
+    // decoded bytes unchanged, and the test failed about one run in twenty.
+    const at = Math.floor(signature.length / 2);
+    const edited =
+      signature.slice(0, at) +
+      (signature[at] === "A" ? "B" : "A") +
+      signature.slice(at + 1);
+    expect(verifyToken(`${body}.${edited}`, SECRET, [], NOW)).toBeNull();
   });
 
   it("refuses a token once it has expired", () => {
