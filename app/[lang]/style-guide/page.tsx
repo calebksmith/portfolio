@@ -166,7 +166,7 @@ export default async function StyleGuidePage({
             </div>
 
             <div className="mt-8">
-              <Playground labels={t.playground} />
+              <Playground labels={t.playground} copy={t.recipes} />
             </div>
 
             <p className="mt-4 max-w-measure-wide text-pretty text-xs text-muted-foreground">

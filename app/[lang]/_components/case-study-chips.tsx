@@ -5,10 +5,11 @@ import type { CaseStudy } from "@/lib/content/work";
  * The facts that help someone decide whether to read a case study: the
  * headline result where there is a number, the kind of work, and when.
  *
- * One component for the card and the case study header, so the facts a reader
- * clicked on are the facts the page opens with. The kind of work is the lead
- * of the role — "Product design", "Design systems", "Frontend" — the part a
- * reader can compare across case studies.
+ * One component for the card and the case study header. The card shows all
+ * three; the header leaves out the result, because the page gives the key
+ * result a row of its own just below. The kind of work is the lead of the
+ * role — "Product design", "Design systems", "Frontend" — the part a reader
+ * can compare across case studies.
  */
 export function CaseStudyChips({
   impact,

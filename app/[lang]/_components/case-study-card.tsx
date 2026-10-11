@@ -11,7 +11,7 @@ import { CaseStudyChips } from "./case-study-chips";
  * A case study card: what it is, the facts that help decide, and a way in.
  *
  * A small label first, naming who the work serves (Workers, Admins, Platform),
- * so cards in ecosystem order read as groups without headings between them.
+ * so the grouping shows on the card itself, whatever order the cards are in.
  * Then name and what it is, then one row of chips: the headline result where there
  * is a number, the kind of work, and when. Chips rather than a sentence — a
  * sentence restated the descriptor, where chips answer the questions a reader

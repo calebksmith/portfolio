@@ -8,10 +8,10 @@ import { Reveal } from "./reveal";
  * The work at Vimocity, as cards.
  *
  * The section opens by saying what Vimocity is and what the team is working
- * toward, so the reader has context before the cards. The cards arrive in
- * ecosystem order — the people each study serves, then the layers they all
- * share — and each one names its group in a small label, so related work sits
- * together without headings breaking up the grid.
+ * toward, so the reader has context before the cards. The cards arrive in the
+ * hand-picked order set by each study's `order`, and each one names who the
+ * work serves in a small label, so the grouping shows without headings
+ * breaking up the grid.
  */
 export async function WorkList() {
   const locale = await getLocale();

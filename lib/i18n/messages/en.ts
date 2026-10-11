@@ -688,6 +688,211 @@ export const en = {
       source: "Source",
       nothingToConfigure: "Nothing to configure — see the note below.",
     },
+
+    /**
+     * The component playground's specimens, keyed by recipe id in
+     * app/[lang]/style-guide/_recipes.tsx: what each component is called, what
+     * it's for, the labels on its controls and their options, and the sample
+     * content it's shown with. Option keys are the recipe's own; only the
+     * labels here are shown.
+     */
+    recipes: {
+      button: {
+        name: "Button",
+        description:
+          "Four variants, each pairing a surface with its foreground so every one stays legible in all three themes.",
+        notes: [
+          "The 44px minimum height is enforced in the component, not remembered at call sites.",
+          "asChild renders the child element instead of a <button>, for wrapping a link.",
+        ],
+        controls: { variant: "Variant", size: "Size", state: "State" },
+        sample: "Read case study",
+      },
+      badge: {
+        name: "Badge",
+        description:
+          "A small label. Used for platforms and for pass/fail results.",
+        controls: { variant: "Variant", label: "Label" },
+        samples: ["Web", "iOS", "AA pass"],
+      },
+      card: {
+        name: "Card",
+        description:
+          "A surface that carries text-card-foreground with its background, so anything nested inherits a legible color without restating it.",
+        notes: [
+          "Changing the content option changes the shape of the tree, not a class, which is why the code below grows and shrinks with it.",
+        ],
+        controls: { content: "Content" },
+        options: {
+          content: {
+            title: "Title",
+            description: "With description",
+            body: "With body",
+          } as Record<string, string>,
+        },
+        sample: {
+          title: "VimUI: Vimocity’s design system, built in code",
+          description: "A design system, in code.",
+          body: "50+ components, one shared codebase.",
+        },
+      },
+      "spec-list": {
+        name: "Spec list",
+        description:
+          "Label and value pairs drawn with hairline rules. A <dl>, not a table: these are term and description pairs rather than tabular data, so a screen reader announces “Focus, design systems” instead of “row 1, column 1”.",
+        controls: { rows: "Rows" },
+        options: {
+          rows: { two: "Two", three: "Three", four: "Four" } as Record<
+            string,
+            string
+          >,
+        },
+        samples: [
+          { label: "Focus", value: "Design systems, product design, frontend" },
+          { label: "Stack", value: "TypeScript, React, Next.js, Tailwind" },
+          { label: "Platforms", value: "Web, iOS, Android, Desktop" },
+          { label: "Based", value: "Seattle, Washington" },
+        ],
+      },
+      stat: {
+        name: "Stat",
+        description:
+          "A result, figure first. The figure is the largest thing in the tile and the label says what it counts, so a case study outcome reads as a number rather than a sentence with a number in it.",
+        notes: [
+          "Tiles sit as many across as fit, so two, three, or four results lay out evenly without a rule per count. A caveat goes in the label or the line after the group, never dropped.",
+        ],
+        controls: { count: "Results" },
+        options: {
+          count: { two: "Two", three: "Three", four: "Four" } as Record<
+            string,
+            string
+          >,
+        },
+        samples: [
+          { value: "+65%", label: "Daily 5 completions in challenges" },
+          { value: "−80%", label: "login and account-access support tickets" },
+          { value: "4x+", label: "saves, from launch to the peak month" },
+          { value: "0% → 99%", label: "design token use" },
+        ],
+      },
+      "status-dot": {
+        name: "Status dot",
+        description:
+          "A pulsing marker. Decorative by design: aria-hidden, fully visible at rest, and a no-op under prefers-reduced-motion.",
+        notes: [
+          "Nothing to configure, and that is the design. A variant here would be a color carrying a meaning on its own; the adjacent label carries it instead.",
+        ],
+      },
+      eyebrow: {
+        name: "Eyebrow",
+        description:
+          "The small uppercase label for section headings, card kickers, spec terms, and fieldset legends. The most-repeated text style on the site.",
+        notes: [
+          "Before this existed the same style was written by hand 33 times in 10 spellings: four sizes, three tracking values, three colors. Two of those sizes were arbitrary values resolving to no token at all.",
+          "asChild renders the child element instead of a <p>, because these need to be h2, h3, dt, legend and span depending on what they are labelling.",
+        ],
+        controls: { tone: "Tone", size: "Size" },
+        sample: "Case study",
+      },
+      "control-bar": {
+        name: "Control bar",
+        description:
+          "The site control cluster in the header. One group so the instruments announce once rather than as loose buttons.",
+        notes: [
+          "ControlToggle uses aria-pressed, because it turns a page mode on rather than submitting a value.",
+          "This is the real cluster from the header: the Inspect button above is this component.",
+        ],
+        controls: { items: "Contents", inspect: "Inspect" },
+        options: {
+          items: {
+            appearance: "Appearance",
+            inspect: "Add inspect",
+            both: "Both toggles",
+          } as Record<string, string>,
+        },
+        sample: {
+          label: "Site controls",
+          appearance: "Appearance",
+          inspect: "Inspect",
+          grid: "Grid",
+        },
+      },
+      figure: {
+        name: "Figure",
+        description:
+          "An image or diagram, framed and captioned. The ratio is required, so the frame holds its space before anything loads and the paragraph under it never jumps.",
+        notes: [
+          "Two widths and no others, inline and breakout, because the layout has two. Every case study screenshot and diagram sits in one.",
+        ],
+        controls: { ratio: "Ratio" },
+        sample: "The caption says what to look at.",
+      },
+      tabs: {
+        name: "Tabs",
+        description:
+          "A segmented control for views of the same thing. Arrow keys move between tabs, and every panel stays in the page, hidden rather than removed, so it still works without JavaScript.",
+        notes: [
+          "The movement challenges case study uses it to switch between the two challenge types.",
+        ],
+        controls: { tabs: "Tabs" },
+        options: {
+          tabs: { two: "Two", three: "Three" } as Record<string, string>,
+        },
+        sample: {
+          label: "Challenge types",
+          items: [
+            {
+              value: "leaderboard",
+              label: "Leaderboard",
+              content: "Teams compete for the top.",
+            },
+            {
+              value: "target",
+              label: "Individual target",
+              content: "Each person plays for a target.",
+            },
+            {
+              value: "group",
+              label: "Group",
+              content: "A crew logs it together.",
+            },
+          ],
+        },
+      },
+      skeleton: {
+        name: "Skeleton",
+        description:
+          "A placeholder in the shape of the content arriving, so a loading page says what it’s waiting for and nothing jumps when it lands.",
+        notes: [
+          "The pulse is opacity only, and it stops under prefers-reduced-motion: a flashing block is worse than a still one for anyone it affects.",
+        ],
+        controls: { lines: "Lines" },
+        options: {
+          lines: { three: "Three", two: "Two", one: "One" } as Record<
+            string,
+            string
+          >,
+        },
+      },
+      monogram: {
+        name: "Monogram",
+        description:
+          "The mark: CS on an ink tile, in the display face. Fixed colors rather than theme tokens, because a logo that changes with the reader’s settings isn’t a logo.",
+        notes: [
+          "The 22% radius is shared with the favicon and the link preview image, so the three read as one object.",
+        ],
+        controls: { size: "Size" },
+      },
+      "print-button": {
+        name: "Print button",
+        description:
+          "Opens the browser’s print dialog, which is also how the experience page saves as a PDF. Printing reads from the same data as the page, so the two can’t disagree.",
+        notes: [
+          "It hides itself in print: a Print button in a printout reads as carelessness on a résumé.",
+        ],
+        sample: "Print / Save as PDF",
+      },
+    },
   },
 };
 

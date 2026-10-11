@@ -12,14 +12,15 @@ import { cn } from "./lib/cn";
  * the group, never dropped.
  *
  * `StatGroup` lays tiles out as many across as fit, so two, three, or four
- * results sit evenly without a per-count rule.
+ * results sit evenly without a per-count rule. It sets no outer margin or
+ * width: where the group sits is the caller's decision.
  */
 export function StatGroup({ className, ...props }: ComponentProps<"ul">) {
   return (
     <ul
       data-slot="stat-group"
       className={cn(
-        "mt-6 grid max-w-measure-wide grid-cols-[repeat(auto-fit,minmax(11rem,1fr))] gap-3",
+        "grid grid-cols-[repeat(auto-fit,minmax(11rem,1fr))] gap-3",
         className,
       )}
       {...props}

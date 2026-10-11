@@ -165,6 +165,15 @@ function Segments({ title, children }: { title: string; children: ReactNode }) {
 }
 
 /**
+ * A case study's outcome tiles. The spacing and width are the prose column's,
+ * set here rather than in the library component, which leaves layout to its
+ * caller.
+ */
+function Stats({ children }: { children: ReactNode }) {
+  return <StatGroup className="mt-6 max-w-measure-wide">{children}</StatGroup>;
+}
+
+/**
  * Components a case study may use directly. Diagrams are named here rather than
  * imported per file because MDX has no imports — the map is the whole surface.
  */
@@ -174,7 +183,7 @@ const available = {
   GatedFigure,
   Segments,
   Segment,
-  Stats: StatGroup,
+  Stats,
   Stat,
   ChallengeRun,
   DeviceHandoff,

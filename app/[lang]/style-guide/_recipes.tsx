@@ -2,6 +2,8 @@
 
 import { createElement, type ElementType, type ReactNode } from "react";
 
+import type { Messages } from "@/lib/i18n/messages";
+
 import {
   Badge,
   Button,
@@ -194,12 +196,20 @@ function emit(node: Child, depth: number, out: Token[]) {
 
 /* --- The recipes ---------------------------------------------------------- */
 
+/** The playground's copy: names, descriptions, labels, and sample content. */
+export type RecipeCopy = Messages["styleGuide"]["recipes"];
+
 export type Control = {
   /** Matches the key the recipe reads from `choices`. */
   name: string;
   label: string;
-  /** First value is the default. */
+  /** First value is the default. These are keys, never shown on their own. */
   values: readonly string[];
+  /**
+   * What each value is called on screen, when it isn't the value itself. A
+   * prop value like `primary` or `16/9` is shown as written.
+   */
+  options?: Record<string, string>;
 };
 
 export type Recipe = {
@@ -234,380 +244,372 @@ function DemoIcon() {
 /** The icon prop, written as the expression it is rather than as a string. */
 const ICON: Expression = { expr: "<Icon />", value: <DemoIcon /> };
 
-export const recipes: Recipe[] = [
-  {
-    id: "button",
-    name: "Button",
-    slot: "button",
-    description:
-      "Four variants, each pairing a surface with its foreground so every one stays legible in all three themes.",
-    notes: [
-      "The 44px minimum height is enforced in the component, not remembered at call sites.",
-      "asChild renders the child element instead of a <button>, for wrapping a link.",
-    ],
-    controls: [
-      {
-        name: "variant",
-        label: "Variant",
-        values: ["primary", "secondary", "outline", "ghost"],
-      },
-      { name: "size", label: "Size", values: ["md", "sm", "lg"] },
-      { name: "state", label: "State", values: ["default", "disabled"] },
-    ],
-    build: (choices) => ({
-      tag: "Button",
-      props: {
-        ...(choices.variant === "primary" ? {} : { variant: choices.variant }),
-        ...(choices.size === "md" ? {} : { size: choices.size }),
-        ...(choices.state === "disabled" ? { disabled: true } : {}),
-      },
-      children: ["Read case study"],
-    }),
-  },
-  {
-    id: "badge",
-    name: "Badge",
-    slot: "badge",
-    description: "A small label. Used for platforms and for pass/fail results.",
-    controls: [
-      {
-        name: "variant",
-        label: "Variant",
-        values: ["outline", "soft", "solid"],
-      },
-      { name: "label", label: "Label", values: ["Web", "iOS", "AA pass"] },
-    ],
-    build: (choices) => ({
-      tag: "Badge",
-      props: {
-        ...(choices.variant === "outline" ? {} : { variant: choices.variant }),
-      },
-      children: [choices.label],
-    }),
-  },
-  {
-    id: "card",
-    name: "Card",
-    slot: "card",
-    description:
-      "A surface that carries text-card-foreground with its background, so anything nested inherits a legible color without restating it.",
-    notes: [
-      "Changing the content option changes the shape of the tree, not a class — which is why the code below grows and shrinks with it.",
-    ],
-    controls: [
-      {
-        name: "content",
-        label: "Content",
-        values: ["Title", "With description", "With body"],
-      },
-    ],
-    build: (choices) => ({
-      tag: "Card",
-      children: [
-        {
-          tag: "CardHeader",
-          children: [
-            {
-              tag: "CardTitle",
-              children: ["VimUI: Vimocity's design system, built in code"],
-            },
-            ...(choices.content === "Title"
-              ? []
-              : [
-                  {
-                    tag: "CardDescription",
-                    children: ["A design system, in code."],
-                  },
-                ]),
-          ],
-        },
-        ...(choices.content === "With body"
-          ? [
-              {
-                tag: "CardContent",
-                children: [
-                  {
-                    tag: "p",
-                    props: { className: "text-sm text-muted-foreground" },
-                    children: ["50+ components, one shared codebase."],
-                  },
-                ],
-              },
-            ]
-          : []),
-      ],
-    }),
-  },
-  {
-    id: "spec-list",
-    name: "Spec list",
-    slot: "spec-list",
-    description:
-      "Label and value pairs drawn with hairline rules. A <dl>, not a table — these are term/description pairs rather than tabular data, so a screen reader announces “Focus, design systems” instead of “row 1, column 1”.",
-    controls: [
-      { name: "rows", label: "Rows", values: ["Two", "Three", "Four"] },
-    ],
-    build: (choices) => {
-      const count = { Two: 2, Three: 3, Four: 4 }[choices.rows] ?? 2;
+/** The words every recipe shows about itself, picked from its copy. */
+const text = ({
+  name,
+  description,
+  notes,
+}: {
+  name: string;
+  description: string;
+  notes?: string[];
+}) => ({ name, description, notes });
 
-      return {
-        tag: "SpecList",
+/** How many of a list a count option asks for. */
+const COUNT: Record<string, number> = {
+  one: 1,
+  two: 2,
+  three: 3,
+  four: 4,
+};
+
+/**
+ * Every specimen, with its words from the dictionary. The recipes own the
+ * structure (which component, which props, which choices); the copy owns what
+ * any of it says.
+ */
+export function makeRecipes(copy: RecipeCopy): Recipe[] {
+  return [
+    {
+      id: "button",
+      slot: "button",
+      ...text(copy.button),
+      controls: [
+        {
+          name: "variant",
+          label: copy.button.controls.variant,
+          values: ["primary", "secondary", "outline", "ghost"],
+        },
+        {
+          name: "size",
+          label: copy.button.controls.size,
+          values: ["md", "sm", "lg"],
+        },
+        {
+          name: "state",
+          label: copy.button.controls.state,
+          values: ["default", "disabled"],
+        },
+      ],
+      build: (choices) => ({
+        tag: "Button",
+        props: {
+          ...(choices.variant === "primary"
+            ? {}
+            : { variant: choices.variant }),
+          ...(choices.size === "md" ? {} : { size: choices.size }),
+          ...(choices.state === "disabled" ? { disabled: true } : {}),
+        },
+        children: [copy.button.sample],
+      }),
+    },
+    {
+      id: "badge",
+      slot: "badge",
+      ...text(copy.badge),
+      controls: [
+        {
+          name: "variant",
+          label: copy.badge.controls.variant,
+          values: ["outline", "soft", "solid"],
+        },
+        {
+          name: "label",
+          label: copy.badge.controls.label,
+          values: copy.badge.samples,
+        },
+      ],
+      build: (choices) => ({
+        tag: "Badge",
+        props: {
+          ...(choices.variant === "outline"
+            ? {}
+            : { variant: choices.variant }),
+        },
+        children: [choices.label],
+      }),
+    },
+    {
+      id: "card",
+      slot: "card",
+      ...text(copy.card),
+      controls: [
+        {
+          name: "content",
+          label: copy.card.controls.content,
+          values: ["title", "description", "body"],
+          options: copy.card.options.content,
+        },
+      ],
+      build: (choices) => ({
+        tag: "Card",
         children: [
-          { label: "Focus", value: "Design systems, product design, frontend" },
-          { label: "Stack", value: "TypeScript, React, Next.js, Tailwind" },
-          { label: "Platforms", value: "Web, iOS, Android, Desktop" },
-          { label: "Based", value: "Seattle, Washington" },
-        ]
-          .slice(0, count)
+          {
+            tag: "CardHeader",
+            children: [
+              { tag: "CardTitle", children: [copy.card.sample.title] },
+              ...(choices.content === "title"
+                ? []
+                : [
+                    {
+                      tag: "CardDescription",
+                      children: [copy.card.sample.description],
+                    },
+                  ]),
+            ],
+          },
+          ...(choices.content === "body"
+            ? [
+                {
+                  tag: "CardContent",
+                  children: [
+                    {
+                      tag: "p",
+                      props: { className: "text-sm text-muted-foreground" },
+                      children: [copy.card.sample.body],
+                    },
+                  ],
+                },
+              ]
+            : []),
+        ],
+      }),
+    },
+    {
+      id: "spec-list",
+      slot: "spec-list",
+      ...text(copy["spec-list"]),
+      controls: [
+        {
+          name: "rows",
+          label: copy["spec-list"].controls.rows,
+          values: ["two", "three", "four"],
+          options: copy["spec-list"].options.rows,
+        },
+      ],
+      build: (choices) => ({
+        tag: "SpecList",
+        children: copy["spec-list"].samples
+          .slice(0, COUNT[choices.rows] ?? 2)
           .map(({ label, value }) => ({
             tag: "SpecRow",
             props: { label },
             children: [value],
           })),
-      };
+      }),
     },
-  },
-  {
-    id: "stat",
-    name: "Stat",
-    slot: "stat-group",
-    description:
-      "A result, figure first. The figure is the largest thing in the tile and the label says what it counts, so a case study outcome reads as a number rather than a sentence with a number in it.",
-    notes: [
-      "Tiles sit as many across as fit, so two, three, or four results lay out evenly without a rule per count. A caveat goes in the label or the line after the group, never dropped.",
-    ],
-    controls: [
-      { name: "count", label: "Results", values: ["Two", "Three", "Four"] },
-    ],
-    build: (choices) => {
-      const count = { Two: 2, Three: 3, Four: 4 }[choices.count] ?? 2;
-
-      return {
+    {
+      id: "stat",
+      slot: "stat-group",
+      ...text(copy.stat),
+      controls: [
+        {
+          name: "count",
+          label: copy.stat.controls.count,
+          values: ["two", "three", "four"],
+          options: copy.stat.options.count,
+        },
+      ],
+      build: (choices) => ({
         tag: "StatGroup",
-        children: [
-          { value: "+65%", label: "Daily 5 completions in challenges" },
-          { value: "−80%", label: "login and account-access support tickets" },
-          { value: "4x+", label: "saves, from launch to the peak month" },
-          { value: "0% → 99%", label: "design token use" },
-        ]
-          .slice(0, count)
+        children: copy.stat.samples
+          .slice(0, COUNT[choices.count] ?? 2)
           .map(({ value, label }) => ({
             tag: "Stat",
             props: { value, label },
           })),
-      };
+      }),
     },
-  },
-  {
-    id: "status-dot",
-    name: "Status dot",
-    slot: "status-dot",
-    description:
-      "A pulsing marker. Decorative by design — aria-hidden, fully visible at rest, and a no-op under prefers-reduced-motion.",
-    notes: [
-      "Nothing to configure, and that is the design. A variant here would be a color carrying a meaning on its own; the adjacent label carries it instead.",
-    ],
-    controls: [],
-    build: () => ({ tag: "StatusDot" }),
-  },
-  {
-    id: "eyebrow",
-    name: "Eyebrow",
-    slot: "eyebrow",
-    description:
-      "The small uppercase label — section headings, card kickers, spec terms, fieldset legends. The most-repeated text style on the site.",
-    notes: [
-      "Before this existed the same style was written by hand 33 times in 10 spellings — four sizes, three tracking values, three colors. Two of those sizes were arbitrary values resolving to no token at all.",
-      "asChild renders the child element instead of a <p>, because these need to be h2, h3, dt, legend and span depending on what they are labelling.",
-    ],
-    controls: [
-      { name: "tone", label: "Tone", values: ["muted", "primary", "strong"] },
-      { name: "size", label: "Size", values: ["md", "sm"] },
-    ],
-    build: (choices) => ({
-      tag: "Eyebrow",
-      props: {
-        ...(choices.tone === "muted" ? {} : { tone: choices.tone }),
-        ...(choices.size === "md" ? {} : { size: choices.size }),
-      },
-      children: ["Case study"],
-    }),
-  },
-  {
-    id: "control-bar",
-    name: "Control bar",
-    slot: "control-bar",
-    description:
-      "The site control cluster in the header. One group so the instruments announce once rather than as loose buttons.",
-    notes: [
-      "ControlToggle uses aria-pressed, because it turns a page mode on rather than submitting a value.",
-      "This is the real cluster from the header — the Inspect button above is this component.",
-    ],
-    controls: [
-      {
-        name: "items",
-        label: "Contents",
-        values: ["Appearance", "Add inspect", "Both toggles"],
-      },
-      { name: "inspect", label: "Inspect", values: ["off", "on"] },
-    ],
-    build: (choices) => ({
-      tag: "ControlBar",
-      props: { label: "Site controls" },
-      children: [
-        { tag: "ControlButton", props: { icon: ICON, label: "Appearance" } },
-        ...(choices.items === "Appearance"
-          ? []
-          : [
-              {
-                tag: "ControlToggle",
-                props: {
-                  icon: ICON,
-                  label: "Inspect",
-                  ...(choices.inspect === "on" ? { pressed: true } : {}),
-                },
-              },
-            ]),
-        ...(choices.items === "Both toggles"
-          ? [
-              {
-                tag: "ControlToggle",
-                props: { icon: ICON, label: "Grid", pressed: true },
-              },
-            ]
-          : []),
-      ],
-    }),
-  },
-  {
-    id: "figure",
-    name: "Figure",
-    slot: "figure",
-    description:
-      "An image or diagram, framed and captioned. The ratio is required, so the frame holds its space before anything loads and the paragraph under it never jumps.",
-    notes: [
-      "Two widths and no others, inline and breakout, because the layout has two. Every case study screenshot and diagram sits in one.",
-    ],
-    controls: [
-      { name: "ratio", label: "Ratio", values: ["16/9", "4/3", "1/1"] },
-    ],
-    build: (choices) => ({
-      tag: "Figure",
-      props: {
-        ratio: choices.ratio,
-        caption: "The caption says what to look at.",
-      },
-      children: [
+    {
+      id: "status-dot",
+      slot: "status-dot",
+      ...text(copy["status-dot"]),
+      controls: [],
+      build: () => ({ tag: "StatusDot" }),
+    },
+    {
+      id: "eyebrow",
+      slot: "eyebrow",
+      ...text(copy.eyebrow),
+      controls: [
         {
-          tag: "div",
-          props: {
-            className:
-              "grid h-full place-items-center text-sm text-muted-foreground",
-          },
-          children: [choices.ratio],
+          name: "tone",
+          label: copy.eyebrow.controls.tone,
+          values: ["muted", "primary", "strong"],
+        },
+        {
+          name: "size",
+          label: copy.eyebrow.controls.size,
+          values: ["md", "sm"],
         },
       ],
-    }),
-  },
-  {
-    id: "tabs",
-    name: "Tabs",
-    slot: "tabs",
-    description:
-      "A segmented control for views of the same thing. Arrow keys move between tabs, and every panel stays in the page, hidden rather than removed, so it still works without JavaScript.",
-    notes: [
-      "The movement challenges case study uses it to switch between the two challenge types.",
-    ],
-    controls: [{ name: "tabs", label: "Tabs", values: ["Two", "Three"] }],
-    build: (choices) => {
-      const all = [
-        {
-          value: "leaderboard",
-          label: "Leaderboard",
-          content: "Teams compete for the top.",
-        },
-        {
-          value: "target",
-          label: "Individual target",
-          content: "Each person plays for a target.",
-        },
-        {
-          value: "group",
-          label: "Group",
-          content: "A crew logs it together.",
-        },
-      ];
-      const items = all.slice(0, choices.tabs === "Three" ? 3 : 2);
-      const expr = `[${items
-        .map(
-          (item) =>
-            `{ value: "${item.value}", label: "${item.label}", content: "${item.content}" }`,
-        )
-        .join(", ")}]`;
-
-      return {
-        tag: "Tabs",
+      build: (choices) => ({
+        tag: "Eyebrow",
         props: {
-          label: "Challenge types",
-          items: { expr, value: items },
+          ...(choices.tone === "muted" ? {} : { tone: choices.tone }),
+          ...(choices.size === "md" ? {} : { size: choices.size }),
         },
-      };
+        children: [copy.eyebrow.sample],
+      }),
     },
-  },
-  {
-    id: "skeleton",
-    name: "Skeleton",
-    slot: "skeleton",
-    description:
-      "A placeholder in the shape of the content arriving, so a loading page says what it’s waiting for and nothing jumps when it lands.",
-    notes: [
-      "The pulse is opacity only, and it stops under prefers-reduced-motion: a flashing block is worse than a still one for anyone it affects.",
-    ],
-    controls: [
-      { name: "lines", label: "Lines", values: ["Three", "Two", "One"] },
-    ],
-    build: (choices) => {
-      const widths = ["w-3/4", "w-full", "w-1/2"];
-      const count = { One: 1, Two: 2, Three: 3 }[choices.lines] ?? 3;
+    {
+      id: "control-bar",
+      slot: "control-bar",
+      ...text(copy["control-bar"]),
+      controls: [
+        {
+          name: "items",
+          label: copy["control-bar"].controls.items,
+          values: ["appearance", "inspect", "both"],
+          options: copy["control-bar"].options.items,
+        },
+        {
+          name: "inspect",
+          label: copy["control-bar"].controls.inspect,
+          values: ["off", "on"],
+        },
+      ],
+      build: (choices) => {
+        const sample = copy["control-bar"].sample;
 
-      return {
-        tag: "div",
-        props: { className: "flex w-64 flex-col gap-2" },
-        children: widths.slice(0, count).map((width) => ({
-          tag: "Skeleton",
-          props: { className: `h-4 ${width}` },
-        })),
-      };
+        return {
+          tag: "ControlBar",
+          props: { label: sample.label },
+          children: [
+            {
+              tag: "ControlButton",
+              props: { icon: ICON, label: sample.appearance },
+            },
+            ...(choices.items === "appearance"
+              ? []
+              : [
+                  {
+                    tag: "ControlToggle",
+                    props: {
+                      icon: ICON,
+                      label: sample.inspect,
+                      ...(choices.inspect === "on" ? { pressed: true } : {}),
+                    },
+                  },
+                ]),
+            ...(choices.items === "both"
+              ? [
+                  {
+                    tag: "ControlToggle",
+                    props: { icon: ICON, label: sample.grid, pressed: true },
+                  },
+                ]
+              : []),
+          ],
+        };
+      },
     },
-  },
-  {
-    id: "monogram",
-    name: "Monogram",
-    slot: "monogram",
-    description:
-      "The mark: CS on an ink tile, in the display face. Fixed colors rather than theme tokens, because a logo that changes with the reader’s settings isn’t a logo.",
-    notes: [
-      "The 22% radius is shared with the favicon and the link preview image, so the three read as one object.",
-    ],
-    controls: [{ name: "size", label: "Size", values: ["32", "48", "24"] }],
-    build: (choices) => ({
-      tag: "Monogram",
-      props: { size: { expr: choices.size, value: Number(choices.size) } },
-    }),
-  },
-  {
-    id: "print-button",
-    name: "Print button",
-    slot: "print-button",
-    description:
-      "Opens the browser’s print dialog, which is also how the experience page saves as a PDF. Printing reads from the same data as the page, so the two can’t disagree.",
-    notes: [
-      "It hides itself in print: a Print button in a printout reads as carelessness on a résumé.",
-    ],
-    controls: [],
-    build: () => ({
-      tag: "PrintButton",
-      props: { label: "Print / Save as PDF" },
-    }),
-  },
-];
+    {
+      id: "figure",
+      slot: "figure",
+      ...text(copy.figure),
+      controls: [
+        {
+          name: "ratio",
+          label: copy.figure.controls.ratio,
+          values: ["16/9", "4/3", "1/1"],
+        },
+      ],
+      build: (choices) => ({
+        tag: "Figure",
+        props: { ratio: choices.ratio, caption: copy.figure.sample },
+        children: [
+          {
+            tag: "div",
+            props: {
+              className:
+                "grid h-full place-items-center text-sm text-muted-foreground",
+            },
+            children: [choices.ratio],
+          },
+        ],
+      }),
+    },
+    {
+      id: "tabs",
+      slot: "tabs",
+      ...text(copy.tabs),
+      controls: [
+        {
+          name: "tabs",
+          label: copy.tabs.controls.tabs,
+          values: ["two", "three"],
+          options: copy.tabs.options.tabs,
+        },
+      ],
+      build: (choices) => {
+        const items = copy.tabs.sample.items.slice(0, COUNT[choices.tabs] ?? 2);
+        const expr = `[${items
+          .map(
+            (item) =>
+              `{ value: "${item.value}", label: "${item.label}", content: "${item.content}" }`,
+          )
+          .join(", ")}]`;
+
+        return {
+          tag: "Tabs",
+          props: {
+            label: copy.tabs.sample.label,
+            items: { expr, value: items },
+          },
+        };
+      },
+    },
+    {
+      id: "skeleton",
+      slot: "skeleton",
+      ...text(copy.skeleton),
+      controls: [
+        {
+          name: "lines",
+          label: copy.skeleton.controls.lines,
+          values: ["three", "two", "one"],
+          options: copy.skeleton.options.lines,
+        },
+      ],
+      build: (choices) => {
+        const widths = ["w-3/4", "w-full", "w-1/2"];
+
+        return {
+          tag: "div",
+          props: { className: "flex w-64 flex-col gap-2" },
+          children: widths.slice(0, COUNT[choices.lines] ?? 3).map((width) => ({
+            tag: "Skeleton",
+            props: { className: `h-4 ${width}` },
+          })),
+        };
+      },
+    },
+    {
+      id: "monogram",
+      slot: "monogram",
+      ...text(copy.monogram),
+      controls: [
+        {
+          name: "size",
+          label: copy.monogram.controls.size,
+          values: ["32", "48", "24"],
+        },
+      ],
+      build: (choices) => ({
+        tag: "Monogram",
+        props: { size: { expr: choices.size, value: Number(choices.size) } },
+      }),
+    },
+    {
+      id: "print-button",
+      slot: "print-button",
+      ...text(copy["print-button"]),
+      controls: [],
+      build: () => ({
+        tag: "PrintButton",
+        props: { label: copy["print-button"].sample },
+      }),
+    },
+  ];
+}

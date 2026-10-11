@@ -1,16 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { Badge, Eyebrow } from "@/components/cksui";
 import { usePrefersReducedMotion } from "@/components/cksui/lib/use-reduced-motion";
 
 import {
-  recipes,
+  makeRecipes,
   renderNode,
   tokenize,
   type Control,
   type Recipe,
+  type RecipeCopy,
   type Token,
 } from "./_recipes";
 import type { Messages } from "@/lib/i18n/messages";
@@ -47,10 +48,14 @@ const defaultsFor = (recipe: Recipe) =>
 
 export function Playground({
   labels,
+  copy,
 }: {
   labels: Messages["styleGuide"]["playground"];
+  /** Every specimen's name, description, labels, and sample content. */
+  copy: RecipeCopy;
 }) {
   const reduced = usePrefersReducedMotion();
+  const recipes = useMemo(() => makeRecipes(copy), [copy]);
 
   const [activeId, setActiveId] = useState(recipes[0].id);
   const [choices, setChoices] = useState<
@@ -287,6 +292,7 @@ function ControlRow({
       legend={control.label}
       name={`${recipeId}-${control.name}`}
       values={[...control.values]}
+      labels={control.options}
       value={value}
       onChange={onChange}
     />
@@ -297,6 +303,7 @@ function RadioRow({
   legend,
   name,
   values,
+  labels,
   value,
   onChange,
   prominent = false,
@@ -304,6 +311,8 @@ function RadioRow({
   legend: string;
   name: string;
   values: string[];
+  /** What each value is called on screen; a value without one shows as is. */
+  labels?: Record<string, string>;
   value: string;
   onChange: (value: string) => void;
   prominent?: boolean;
@@ -340,7 +349,7 @@ function RadioRow({
               onChange={() => onChange(option)}
               className="sr-only"
             />
-            {option}
+            {labels?.[option] ?? option}
           </label>
         ))}
       </div>
