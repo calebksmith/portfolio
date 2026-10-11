@@ -1,0 +1,72 @@
+---
+title: V-minder: A desktop app for movement breaks at work
+role: Product design, desktop
+year: Draft
+stack: [Windows, Figma]
+summary: One-minute, coach-led moves on a schedule people set themselves, each one counting toward their Daily 5.
+user: Movement during the workday, on a schedule people set themselves, without remembering to open anything.
+business: "Draft, needs your input: a result, such as adoption, moves per day, or Daily 5 completions from desktop."
+connects: [challenges, login]
+area: workers
+order: 8
+draft: true
+---
+
+## Problem
+
+> **Draft, needs your input:** what wasn’t working before V-minder, and for
+> whom? The comps suggest people at desks all day, where a once-a-day routine
+> with a crew doesn’t fit. Then the goal, as “Our goal was…”.
+
+> **Design challenge:** getting people to move during the workday without
+> having to remember to open anything. We built V-minder around the
+> notification rather than the window: the move arrives on its own, on the
+> person’s schedule, with Watch, Snooze, and Dismiss on the notification
+> itself.
+
+<GatedFigure
+  src="v-minder/notification.webp"
+  ratio="1100/782"
+  width={1100}
+  height={782}
+  alt="A desktop notification from V-minder introducing a move called The Heisman, with a video thumbnail and Watch, Snooze, and Dismiss buttons."
+  caption="The V-minder notification: a coach-led move, with Watch, Snooze, and Dismiss on it."
+/>
+
+## What I did
+
+- **Let people set their own schedule.** Days, hours, and how often turn into
+  an outcome as you set them: “your schedule will deliver 8 moves a day,” next
+  to the recommended 6–8.
+- **Made preferences show their effect.** Body areas, sitting or standing, and
+  equipment each update a live count of the videos that still match.
+- **Made every move count.** Four moves in a day complete your Daily 5, and
+  they count toward any challenge you’ve joined, without a challenge screen on
+  desktop at all.
+- **Reused the shared sign-in.** V-minder signs in through the same
+  [login](/work/login) webview as every other platform.
+
+<GatedFigure
+  src="v-minder/schedule.webp"
+  ratio="1088/768"
+  width={1088}
+  height={768}
+  alt="The V-minder schedule screen: weekdays selected, 9 AM to 5 PM, a reminder every hour with a 15-minute snooze, and a summary of 40 moves per week and 8 per day."
+  caption="The schedule turns settings into an outcome, 40 moves a week and 8 a day, beside the recommendation."
+/>
+
+<GatedFigure
+  src="v-minder/home.webp"
+  ratio="1088/768"
+  width={1088}
+  height={768}
+  alt="The V-minder home screen: the next scheduled move with Play now and New move, Daily 5 progress at three of four moves, and two challenges receiving Daily 5 credit."
+  caption="Home: the next move, Daily 5 progress, and the challenges that progress counts toward."
+/>
+
+## Outcome
+
+> **Draft, needs your input:** results as stat tiles (adoption, moves a day,
+> Daily 5 completions from desktop), a “Who did what” line, and a key result
+> for the frontmatter. It also needs one visual every visitor can see: all
+> three screens above are gated.
