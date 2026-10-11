@@ -81,7 +81,10 @@ These are the same kind of guardrails I maintain on VimUI at work. Follow them.
 - Only English is enabled. Do not add Spanish until asked — the content is
   being revised first.
 - Case studies have frontmatter — `title`, `role`, `year`, `stack`, `summary`,
-  `user`, `business`, `connects`, `area`, `order`, `impact`. Titles are
+  `user`, `business`, `connects`, `area`, `order`, `impact`. `order` is the
+  study's place in one hand-picked sequence across all of them. `draft: true`
+  shows a study in development and leaves it out of production builds, for
+  reviewing locally before it's ready. Titles are
   `Name: What it is` — the second part is its own line under the name, so it
   starts with a capital. They are written for a hiring manager skimming in about
   a minute: about 300 words of prose is typical, but it's a guide, not a cap. A

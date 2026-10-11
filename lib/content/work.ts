@@ -5,12 +5,7 @@ import { join } from "node:path";
 
 import { DEFAULT_LOCALE, LOCALES, type Locale } from "@/lib/i18n/config";
 
-import {
-  AREAS,
-  parseFrontmatter,
-  toCaseStudy,
-  type CaseStudy,
-} from "./frontmatter";
+import { parseFrontmatter, toCaseStudy, type CaseStudy } from "./frontmatter";
 
 export type { CaseStudy };
 
@@ -34,28 +29,30 @@ function load(locale: Locale): CaseStudy[] {
   const dir = join(WORK_DIR, locale);
   if (!existsSync(dir)) return [];
 
-  return readdirSync(dir)
-    .filter((name) => name.endsWith(".mdx"))
-    .map((file) => {
-      const source = readFileSync(join(dir, file), "utf8");
-      const { data, body } = parseFrontmatter(source, `${locale}/${file}`);
-      return toCaseStudy(file, data, body);
-    });
+  return (
+    readdirSync(dir)
+      .filter((name) => name.endsWith(".mdx"))
+      .map((file) => {
+        const source = readFileSync(join(dir, file), "utf8");
+        const { data, body } = parseFrontmatter(source, `${locale}/${file}`);
+        return toCaseStudy(file, data, body);
+      })
+      // A draft is reviewed locally and never ships: `draft: true` in its
+      // frontmatter keeps it out of every production build.
+      .filter((study) => !study.draft || process.env.NODE_ENV === "development")
+  );
 }
 
 /**
- * Ecosystem order: by area (the people each study serves, then the layers they
- * all share), then each study's `order` within its area, then the English title
- * as a tiebreak. Computed once from the default locale and applied to every locale,
- * so a translation can never reshuffle the homepage, the Work menu, or the
- * "more of my work" row.
+ * Display order: each study's `order`, then the English title as a tiebreak.
+ * One sequence across every study, chosen by hand, rather than grouped by area:
+ * the work leads with what says most about the role. Computed once from the
+ * default locale and applied to every locale, so a translation can never
+ * reshuffle the homepage, the Work menu, or the "more of my work" row.
  */
 function order(studies: CaseStudy[]): CaseStudy[] {
   return [...studies].sort(
-    (a, b) =>
-      AREAS.indexOf(a.area) - AREAS.indexOf(b.area) ||
-      a.order - b.order ||
-      a.title.localeCompare(b.title),
+    (a, b) => a.order - b.order || a.title.localeCompare(b.title),
   );
 }
 
