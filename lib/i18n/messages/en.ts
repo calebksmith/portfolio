@@ -273,7 +273,7 @@ export const en = {
       // his own, and naming the employer is what makes that legible. What
       // Vimocity is was said once already, in the work section's intro.
       paragraphs: [
-        "I’m a design engineer and product design manager at Vimocity. My biggest project is VimUI, the design system I built, with the standards and automated checks that keep our design and code in sync.",
+        "I’m a design engineer and product design manager at Vimocity. Over the past five years, I’ve built the foundation our platform needs to scale as the company grows. My favorite projects are VimUI, our design system, and, more recently, the standards and automated checks that keep our design and code in sync.",
         "Nine years in design, five writing production frontend.",
       ],
       cta: "My experience →",
