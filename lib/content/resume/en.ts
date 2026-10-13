@@ -166,7 +166,7 @@ export const en: Resume = {
     {
       title: "V-minder",
       detail:
-        "A Windows app with movement breaks on a schedule people set themselves, and the highest engagement of any Vimocity product.",
+        "A Windows app with movement breaks on a schedule people set themselves. Its users are 1.3x as likely to complete the Daily 5.",
       slug: "v-minder",
     },
     {
