@@ -1,5 +1,7 @@
 import { getMessages } from "@/lib/i18n/server";
 
+import { Diagram } from "./diagram";
+
 /**
  * How the web portal was rebuilt: one page at a time, the same four steps.
  *
@@ -8,12 +10,15 @@ import { getMessages } from "@/lib/i18n/server";
  * for the next page. The arrow above it is the direction of the whole thing,
  * from the legacy web portal to one codebase.
  *
- * Review is the accent pair because it is the step where people take over from
- * the agent and the checks. Everything else is structure.
+ * Review is the primary pair because it is the step where people take over from
+ * the agent and the checks. Everything else is structure. Each step is a
+ * numbered mark with its name beside it, never a box around words, which
+ * would read as a button.
  */
 
-const BOX = { w: 150, h: 76, y: 70 };
 const XS = [20, 210, 400, 590];
+const MARK = 12;
+const STEP_Y = 86;
 const LOOP_Y = 180;
 
 export async function PageByPage() {
@@ -21,13 +26,7 @@ export async function PageByPage() {
   const last = t.steps.length - 1;
 
   return (
-    <svg
-      viewBox="0 0 760 240"
-      role="img"
-      aria-label={t.label}
-      className="h-full w-full"
-      fill="none"
-    >
+    <Diagram width={760} height={240} label={t.label}>
       <defs>
         <marker
           id="pp-arrow"
@@ -84,39 +83,44 @@ export async function PageByPage() {
 
         return (
           <g key={step.what}>
-            <rect
-              x={x}
-              y={BOX.y}
-              width={BOX.w}
-              height={BOX.h}
-              rx="8"
+            {/* A numbered mark and the step beside it, not a box: words in a
+                box read as a button, and nothing here can be pressed. */}
+            <circle
+              cx={x + MARK}
+              cy={STEP_Y}
+              r={MARK}
               stroke="currentColor"
-              strokeWidth={review ? 0 : 1}
-              className={review ? "fill-accent" : "text-border"}
+              strokeWidth={review ? 0 : 1.25}
+              className={review ? "fill-primary" : "text-muted-foreground"}
             />
             <text
-              x={x + 14}
-              y={BOX.y + 26}
-              fontSize="14"
+              x={x + MARK}
+              y={STEP_Y + 4}
+              textAnchor="middle"
+              fontSize="11"
               className={
                 review
-                  ? "fill-current text-accent-foreground"
+                  ? "fill-current text-primary-foreground"
                   : "fill-current text-foreground"
               }
+            >
+              {i + 1}
+            </text>
+            <text
+              x={x + MARK * 2 + 10}
+              y={STEP_Y + 5}
+              fontSize="13"
+              className="fill-current text-foreground"
             >
               {step.what}
             </text>
             {step.note.map((line, n) => (
               <text
                 key={line}
-                x={x + 14}
-                y={BOX.y + 48 + n * 16}
+                x={x + MARK * 2 + 10}
+                y={STEP_Y + 28 + n * 16}
                 fontSize="11"
-                className={
-                  review
-                    ? "fill-current text-accent-foreground"
-                    : "fill-current text-muted-foreground"
-                }
+                className="fill-current text-muted-foreground"
               >
                 {line}
               </text>
@@ -124,7 +128,7 @@ export async function PageByPage() {
 
             {i < last ? (
               <path
-                d={`M${x + BOX.w + 6} ${BOX.y + BOX.h / 2} H ${XS[i + 1] - 6}`}
+                d={`M${x + 120} ${STEP_Y} H ${XS[i + 1] - 8}`}
                 stroke="currentColor"
                 strokeWidth="1.5"
                 markerEnd="url(#pp-arrow)"
@@ -137,9 +141,9 @@ export async function PageByPage() {
 
       {/* Back to the start, for the next page. */}
       <path
-        d={`M${XS[last] + BOX.w / 2} ${BOX.y + BOX.h + 6} V ${LOOP_Y} H ${
-          XS[0] + BOX.w / 2
-        } V ${BOX.y + BOX.h + 8}`}
+        d={`M${XS[last] + MARK} ${STEP_Y + MARK + 4} V ${LOOP_Y} H ${
+          XS[0] + MARK
+        } V ${STEP_Y + MARK + 6}`}
         stroke="currentColor"
         strokeWidth="1.5"
         strokeDasharray="4 4"
@@ -156,6 +160,6 @@ export async function PageByPage() {
       >
         {t.next}
       </text>
-    </svg>
+    </Diagram>
   );
 }

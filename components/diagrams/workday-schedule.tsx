@@ -1,5 +1,7 @@
 import { getMessages } from "@/lib/i18n/server";
 
+import { Diagram } from "./diagram";
+
 /**
  * One workday with V-minder, on the schedule a user set.
  *
@@ -130,13 +132,7 @@ export async function WorkdaySchedule() {
   const offSchedule = x(5.5);
 
   return (
-    <svg
-      viewBox="0 0 760 220"
-      role="img"
-      aria-label={t.label}
-      className="h-full w-full"
-      fill="none"
-    >
+    <Diagram width={760} height={220} label={t.label}>
       <defs>
         <marker
           id="wd-arrow"
@@ -258,6 +254,6 @@ export async function WorkdaySchedule() {
       </text>
       <KeyItem at={470} pose="standing" label={t.standing} />
       <KeyItem at={614} pose="seated" label={t.seated} />
-    </svg>
+    </Diagram>
   );
 }

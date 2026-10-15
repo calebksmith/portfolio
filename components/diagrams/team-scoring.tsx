@@ -1,5 +1,7 @@
 import { getMessages } from "@/lib/i18n/server";
 
+import { Diagram } from "./diagram";
+
 /**
  * Why a crew of five can beat a team of fifty.
  *
@@ -38,13 +40,7 @@ export async function TeamScoring() {
   }));
 
   return (
-    <svg
-      viewBox="0 0 700 300"
-      role="img"
-      aria-label={t.label}
-      className="h-full w-full"
-      fill="none"
-    >
+    <Diagram width={700} height={300} label={t.label}>
       <text
         x="24"
         y="28"
@@ -193,6 +189,6 @@ export async function TeamScoring() {
       >
         {t.max}
       </text>
-    </svg>
+    </Diagram>
   );
 }

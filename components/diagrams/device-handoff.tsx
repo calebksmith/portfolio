@@ -1,5 +1,7 @@
 import { getMessages } from "@/lib/i18n/server";
 
+import { Diagram } from "./diagram";
+
 /**
  * Why the login flow uses a code and not a magic link.
  *
@@ -17,13 +19,7 @@ export async function DeviceHandoff() {
   // units a character. Both devices sit 40 in from the edges and centre on the
   // same line, and each lane's label clears its arrow and the devices by 15.
   return (
-    <svg
-      viewBox="0 0 700 260"
-      role="img"
-      aria-label={t.label}
-      className="h-full w-full"
-      fill="none"
-    >
+    <Diagram width={700} height={260} label={t.label}>
       <defs>
         <marker
           id="dh-arrow"
@@ -166,6 +162,6 @@ export async function DeviceHandoff() {
           markerEnd="url(#dh-arrow)"
         />
       </g>
-    </svg>
+    </Diagram>
   );
 }

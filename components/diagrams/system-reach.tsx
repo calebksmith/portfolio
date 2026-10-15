@@ -1,5 +1,7 @@
 import { getMessages } from "@/lib/i18n/server";
 
+import { Diagram } from "./diagram";
+
 /**
  * How far VimUI actually reaches.
  *
@@ -16,16 +18,20 @@ import { getMessages } from "@/lib/i18n/server";
  */
 
 const COLS = [
-  { x: 306, key: "web" },
-  { x: 416, key: "ios" },
-  { x: 526, key: "android" },
+  { x: 240, key: "web" },
+  { x: 376, key: "ios" },
+  { x: 506, key: "android" },
   { x: 636, key: "windows" },
 ] as const;
 
-const W = 100;
-const SEAM = 411;
+const SEAM = 370;
+const LABEL_X = 220;
 
-/** A cell. `state` decides the fill, the border, and which foreground reads. */
+/**
+ * A cell: a mark and a word, not a box. Words in a box read as a button, and
+ * nothing in a diagram can be pressed. The mark carries the state: filled for
+ * VimUI, dashed for copied by hand, open for the platform's own.
+ */
 function Cell({
   x,
   y,
@@ -37,36 +43,34 @@ function Cell({
   state: "vimui" | "byHand" | "separate";
   children: string;
 }) {
-  const fill =
-    state === "vimui"
-      ? "fill-accent"
-      : state === "separate"
-        ? "fill-muted"
-        : "fill-none";
+  const cy = y + 26;
 
   return (
     <g>
-      <rect
-        x={x}
-        y={y}
-        width={W}
-        height="52"
-        rx="6"
-        stroke="currentColor"
-        strokeWidth="1"
-        strokeDasharray={state === "byHand" ? "3 3" : undefined}
-        // `border` is the decorative hairline. A dashed cell is carrying
-        // meaning, so it takes `input`, which is held to 3:1.
-        className={`${fill} ${state === "byHand" ? "text-input" : "text-border"}`}
-      />
+      {state === "vimui" ? (
+        <circle cx={x + 6} cy={cy} r="5.5" className="fill-primary" />
+      ) : (
+        <circle
+          cx={x + 6}
+          cy={cy}
+          r="5"
+          stroke="currentColor"
+          strokeWidth="1.25"
+          strokeDasharray={state === "byHand" ? "2 2" : undefined}
+          // A dashed mark carries meaning, so it takes `input`, which is held
+          // to 3:1; the plain one is structure.
+          className={
+            state === "byHand" ? "text-input" : "text-muted-foreground"
+          }
+        />
+      )}
       <text
-        x={x + W / 2}
-        y={y + 31}
-        textAnchor="middle"
+        x={x + 18}
+        y={cy + 4}
         fontSize="12"
         className={
           state === "vimui"
-            ? "fill-current text-accent-foreground"
+            ? "fill-current text-foreground"
             : "fill-current text-muted-foreground"
         }
       >
@@ -89,7 +93,7 @@ function RowLabel({
   return (
     <g>
       <text
-        x="296"
+        x={LABEL_X}
         y={y + 22}
         textAnchor="end"
         fontSize="13"
@@ -98,7 +102,7 @@ function RowLabel({
         {name}
       </text>
       <text
-        x="296"
+        x={LABEL_X}
         y={y + 40}
         textAnchor="end"
         fontSize="11"
@@ -114,13 +118,7 @@ export async function SystemReach() {
   const t = (await getMessages()).diagrams.systemReach;
 
   return (
-    <svg
-      viewBox="0 0 760 300"
-      role="img"
-      aria-label={t.label}
-      className="h-full w-full"
-      fill="none"
-    >
+    <Diagram width={760} height={300} label={t.label}>
       <text
         x="24"
         y="20"
@@ -134,9 +132,8 @@ export async function SystemReach() {
       {COLS.map((c) => (
         <text
           key={c.key}
-          x={c.x + W / 2}
+          x={c.x}
           y="48"
-          textAnchor="middle"
           fontSize="12"
           className="fill-current text-foreground"
         >
@@ -200,6 +197,6 @@ export async function SystemReach() {
           {t.vimui}
         </Cell>
       ))}
-    </svg>
+    </Diagram>
   );
 }
