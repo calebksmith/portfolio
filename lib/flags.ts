@@ -22,9 +22,10 @@ export function showPortfolio(): boolean {
  * Sign-in, admin, and shared cover letters.
  *
  * These need `DATABASE_URL` and a GitHub OAuth app. Gating on the presence of
- * the connection string rather than on a hardcoded flag means production lights
- * them up the moment the environment is configured, with no code change and no
- * chance of publishing a sign-in page that leads nowhere.
+ * both rather than on a hardcoded flag means production lights them up the
+ * moment the environment is configured, with no code change and no chance of
+ * publishing a sign-in page that leads nowhere. Both, because the database
+ * arrives first for the visitor log (ADR 0008), before any OAuth app exists.
  *
  * Development is exempt so the routes can be worked on; without a database they
  * fail with the deliberate error from lib/env.ts, which is the correct behavior
@@ -32,6 +33,7 @@ export function showPortfolio(): boolean {
  */
 export function showLetters(): boolean {
   return (
-    Boolean(process.env.DATABASE_URL) || process.env.NODE_ENV === "development"
+    Boolean(process.env.DATABASE_URL && process.env.AUTH_GITHUB_ID) ||
+    process.env.NODE_ENV === "development"
   );
 }

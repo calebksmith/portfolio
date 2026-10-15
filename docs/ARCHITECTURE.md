@@ -129,6 +129,11 @@ hash; rotating the salt severs the link to everything logged. Hashing an IP
 isn't strong anonymisation — which is why the salt is secret. The write happens
 after the response is sent and swallows its errors.
 
+The portfolio's own visitor log follows the same rules (ADR 0008): a beacon
+per page, a daily salted hash instead of an IP, the location Vercel's edge
+already infers, and access link opens counted by link id. It is read from the
+terminal with `npm run analytics:report`, never from a page on the site.
+
 ## Deliberately not built
 
 Stated explicitly, because unfinished and overlooked look identical from

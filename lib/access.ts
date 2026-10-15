@@ -59,6 +59,21 @@ export function verifyToken(
   revoked: readonly string[] = [],
   now = Date.now(),
 ): Grant | null {
+  const read = readToken(token, secret, revoked, now);
+  return read?.state === "active" ? read.grant : null;
+}
+
+/**
+ * A genuine token's grant and whether it still works, or null if it isn't one
+ * of ours. For the visitor log only, which counts an expired link being opened
+ * as well as a live one. Access is always decided by `verifyToken`.
+ */
+export function readToken(
+  token: string,
+  secret: string,
+  revoked: readonly string[] = [],
+  now = Date.now(),
+): { grant: Grant; state: "active" | "expired" | "revoked" } | null {
   const parts = token.split(".");
   if (parts.length !== 2) return null;
   const [body, signature] = parts;
@@ -78,9 +93,9 @@ export function verifyToken(
     return null;
   }
   if (!isGrant(grant)) return null;
-  if (grant.exp * 1000 <= now) return null;
-  if (revoked.includes(grant.id)) return null;
-  return grant;
+  if (revoked.includes(grant.id)) return { grant, state: "revoked" };
+  if (grant.exp * 1000 <= now) return { grant, state: "expired" };
+  return { grant, state: "active" };
 }
 
 function isGrant(value: unknown): value is Grant {
