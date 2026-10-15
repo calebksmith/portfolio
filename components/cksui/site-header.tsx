@@ -20,6 +20,8 @@ import {
   ControlLink,
   ControlToggle,
 } from "./control-bar";
+import { Icon } from "./icon";
+import { Medal, type MedalName } from "./medal";
 import { Monogram } from "./monogram";
 import { cn } from "./lib/cn";
 import { useHtmlAttribute } from "./lib/use-html-attribute";
@@ -73,7 +75,12 @@ function closeOnFollow(id: string) {
 }
 
 /** A case study as the header needs it: `name` for crumbs, both for the menu. */
-export type WorkItem = { slug: string; name: string; descriptor: string };
+export type WorkItem = {
+  slug: string;
+  name: string;
+  descriptor: string;
+  medal: MedalName;
+};
 
 /** Every visible string, passed in — this is a library component. */
 export type SiteHeaderLabels = Messages["header"];
@@ -105,6 +112,16 @@ function buildCrumbs(
   // the same object in every header, and it buys back the horizontal space that
   // "CALEB SMITH" was taking from the path on a phone.
   const crumbs: Crumb[] = [{ kind: "mark", label: "CS", href: home }];
+
+  // On a case study the Work menu is the whole trail after the mark: its
+  // trigger names the study you're on, and opening it lists the rest. A
+  // separate "/ Name" crumb after a menu that already lists every name said
+  // the same thing twice.
+  if (segments[0] === "work" && segments.length === 2) {
+    const current = work.find((item) => item.slug === segments[1]);
+    crumbs.push({ kind: "menu", label: current?.name ?? labels.work });
+    return crumbs;
+  }
 
   segments.forEach((segment, index) => {
     const isLast = index === segments.length - 1;
@@ -216,6 +233,7 @@ export function SiteHeader({
                   </Link>
                 ) : crumb.kind === "menu" ? (
                   <WorkMenu
+                    label={crumb.label}
                     work={work}
                     currentSlug={currentSlug}
                     locale={locale}
@@ -256,11 +274,14 @@ export function SiteHeader({
 }
 
 function WorkMenu({
+  label,
   work,
   currentSlug,
   locale,
   labels,
 }: {
+  /** "Work", or the case study you're on, which the menu also lists. */
+  label: string;
   work: WorkItem[];
   currentSlug: string | null;
   locale: Locale;
@@ -283,10 +304,17 @@ function WorkMenu({
           "gap-1 rounded-sm px-1.5 underline-offset-4 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
           open
             ? "bg-muted text-foreground"
-            : "text-muted-foreground hover:bg-muted hover:text-foreground",
+            : label !== labels.work
+              ? "text-foreground hover:bg-muted"
+              : "text-muted-foreground hover:bg-muted hover:text-foreground",
         )}
       >
-        {labels.work}
+        {/* On a case study the trigger shows its name, so the button says
+            which menu it opens before the name. */}
+        {label !== labels.work ? (
+          <span className="sr-only">{labels.work}: </span>
+        ) : null}
+        <span className="max-w-[55vw] truncate sm:max-w-none">{label}</span>
         <Chevron open={open} />
       </button>
 
@@ -326,14 +354,22 @@ function WorkMenu({
                       : "hover:bg-muted hover:text-muted-foreground",
                   )}
                 >
-                  <span>
+                  <Medal name={item.medal} size="sm" />
+                  <span className="flex-1">
                     <span className="block">{item.name}</span>
                     <span className="sr-only">: </span>
                     <span className="block text-xs text-muted-foreground">
                       {item.descriptor}
                     </span>
                   </span>
-                  {current ? <CurrentDot /> : <ArrowRight />}
+                  {current ? (
+                    <CurrentDot />
+                  ) : (
+                    <Icon
+                      name="arrow-right"
+                      className="size-3.5 text-muted-foreground transition-transform group-hover:translate-x-0.5"
+                    />
+                  )}
                 </Link>
               </li>
             );
@@ -356,7 +392,7 @@ function InspectToggle({ label }: { label: string }) {
 
   return (
     <ControlToggle
-      icon={<CrosshairIcon />}
+      icon={<Icon name="crosshair" />}
       label={label}
       pressed={active}
       onClick={() => {
@@ -383,7 +419,7 @@ function AppearanceMenu({
     <>
       <ControlButton
         popoverTarget="ck-settings"
-        icon={<SlidersIcon />}
+        icon={<Icon name="sliders" />}
         label={labels.appearance}
         active={open}
       />
@@ -487,61 +523,5 @@ function CurrentDot() {
       aria-hidden="true"
       className="size-1.5 shrink-0 rounded-full bg-primary"
     />
-  );
-}
-
-/** Marks each menu row as a destination. Decorative — the link says the rest. */
-function ArrowRight() {
-  return (
-    <svg
-      aria-hidden="true"
-      focusable="false"
-      viewBox="0 0 16 16"
-      className="size-3.5 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M3 8h10M9 4l4 4-4 4" />
-    </svg>
-  );
-}
-
-function CrosshairIcon() {
-  return (
-    <svg
-      aria-hidden="true"
-      focusable="false"
-      viewBox="0 0 16 16"
-      className="size-4"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.4"
-      strokeLinecap="round"
-    >
-      <circle cx="8" cy="8" r="4.25" />
-      <path d="M8 .75v2.5M8 12.75v2.5M.75 8h2.5M12.75 8h2.5" />
-    </svg>
-  );
-}
-
-function SlidersIcon() {
-  return (
-    <svg
-      aria-hidden="true"
-      focusable="false"
-      viewBox="0 0 16 16"
-      className="size-4"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.4"
-      strokeLinecap="round"
-    >
-      <path d="M2 4.5h5M11 4.5h3M2 11.5h3M9 11.5h5" />
-      <circle cx="9" cy="4.5" r="1.75" />
-      <circle cx="7" cy="11.5" r="1.75" />
-    </svg>
   );
 }

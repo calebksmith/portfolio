@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { Badge, Eyebrow, PrintButton } from "@/components/cksui";
+import { Badge, Eyebrow, PrintButton, PageTitle } from "@/components/cksui";
 import { getResume } from "@/lib/content/resume";
 import { isLocale, localizePath } from "@/lib/i18n/config";
 import { alternates } from "@/lib/i18n/metadata";
@@ -49,14 +49,12 @@ export default async function ExperiencePage({
     <main
       id="main"
       tabIndex={-1}
-      className="mx-auto w-full max-w-page px-6 py-14 sm:px-10 print:px-0 print:py-0"
+      className="w-full max-w-page px-6 py-14 sm:px-10 print:px-0 print:py-0"
     >
       <header className="border-b border-border pb-8">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <h1 className="font-display text-[clamp(2rem,6vw,3rem)] font-semibold leading-[1.03] tracking-[-0.03em] text-foreground">
-              {resume.name}
-            </h1>
+            <PageTitle>{resume.name}</PageTitle>
             <Eyebrow tone="primary" className="mt-2">
               {resume.title}
             </Eyebrow>

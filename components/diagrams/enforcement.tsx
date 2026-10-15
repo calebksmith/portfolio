@@ -1,5 +1,7 @@
 import { getMessages } from "@/lib/i18n/server";
 
+import { Diagram } from "./diagram";
+
 /**
  * Where the guardrails check the standard.
  *
@@ -13,7 +15,7 @@ import { getMessages } from "@/lib/i18n/server";
  * that blocks. A warning blocks nothing, so it stays muted.
  */
 
-const CARD = { w: 232, h: 140, y: 40 };
+const CARD = { y: 40 };
 const XS = [20, 264, 508];
 const LINE_Y = 228;
 
@@ -21,13 +23,7 @@ export async function Enforcement() {
   const t = (await getMessages()).diagrams.enforcement;
 
   return (
-    <svg
-      viewBox="0 0 760 280"
-      role="img"
-      aria-label={t.label}
-      className="h-full w-full"
-      fill="none"
-    >
+    <Diagram width={760} height={280} label={t.label}>
       <defs>
         <marker
           id="en-arrow"
@@ -54,22 +50,20 @@ export async function Enforcement() {
 
       {t.stages.map((stage, i) => {
         const x = XS[i];
-        const mid = x + CARD.w / 2;
         const gate = i === t.stages.length - 1;
 
         return (
           <g key={stage.what}>
-            <rect
-              x={x}
-              y={CARD.y}
-              width={CARD.w}
-              height={CARD.h}
-              rx="8"
+            {/* A rule down the left of each stage, not a box around it:
+                words in a box read as a button, and nothing here can be
+                pressed. The gate's rule is the control boundary (`input`, held
+                to 3:1), because it's the one check that can refuse. */}
+            <path
+              d={`M${x} ${CARD.y} V ${LINE_Y}`}
               stroke="currentColor"
-              strokeWidth="1"
-              // The gate is the one that can refuse, so its edge is a control
-              // boundary (`input`, held to 3:1) rather than a hairline.
-              className={gate ? "text-input" : "text-border"}
+              strokeWidth={gate ? 2 : 1}
+              strokeDasharray={gate ? undefined : "3 3"}
+              className={gate ? "text-input" : "text-muted-foreground"}
             />
             <text
               x={x + 16}
@@ -83,7 +77,7 @@ export async function Enforcement() {
             <text
               x={x + 16}
               y={CARD.y + 52}
-              fontSize="15"
+              fontSize="13"
               className="fill-current text-foreground"
             >
               {stage.what}
@@ -101,15 +95,8 @@ export async function Enforcement() {
             ))}
 
             {/* Where this check sits on the change. */}
-            <path
-              d={`M${mid} ${CARD.y + CARD.h} V ${LINE_Y}`}
-              stroke="currentColor"
-              strokeWidth="1"
-              strokeDasharray="3 3"
-              className="text-muted-foreground"
-            />
             <circle
-              cx={mid}
+              cx={x}
               cy={LINE_Y}
               r="4"
               className="fill-current text-foreground"
@@ -169,6 +156,6 @@ export async function Enforcement() {
       >
         {t.change}
       </text>
-    </svg>
+    </Diagram>
   );
 }

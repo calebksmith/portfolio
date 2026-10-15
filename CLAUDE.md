@@ -81,7 +81,8 @@ These are the same kind of guardrails I maintain on VimUI at work. Follow them.
 - Only English is enabled. Do not add Spanish until asked — the content is
   being revised first.
 - Case studies have frontmatter — `title`, `role`, `year`, `stack`, `summary`,
-  `user`, `business`, `connects`, `area`, `order`, `impact`. `order` is the
+  `user`, `business`, `connects`, `area`, `medal`, `order`, `impact`. `medal` is
+  one of cksUI's medals, and no two studies share one. `order` is the
   study's place in one hand-picked sequence across all of them. `draft: true`
   shows a study in development and leaves it out of production builds, for
   reviewing locally before it's ready. Titles are

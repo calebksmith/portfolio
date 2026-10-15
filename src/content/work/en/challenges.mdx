@@ -8,6 +8,7 @@ user: A reason to do the Daily 5 every day.
 business: More registrations, sign-ins, and Daily 5 completions, Vimocity’s key engagement metric.
 connects: [challenge-admin, login]
 area: workers
+medal: podium
 order: 4
 impact: +65% Daily 5 completions in challenges
 ---
@@ -30,7 +31,6 @@ coworkers head-to-head.
 > Daily 5.
 
 <Figure
-  ratio="700/300"
   caption="An example day on the leaderboard: five of five beats forty-five of fifty. Crews under the five-person minimum play for a lower ceiling, so going small isn’t a shortcut."
 >
   <TeamScoring />
@@ -49,37 +49,47 @@ coworkers head-to-head.
   challenge for individuals. A third type, team targets, was retired after low
   participation.
 
-<Segments title="Challenge types">
-<Segment value="leaderboard" label="Leaderboard">
+### Leaderboard
 
-Teams of coworkers compete for the top of the leaderboard. The team with the
-most points when the challenge ends wins.
+Teams of coworkers compete for the top of the leaderboard, and the team on top
+when it ends wins.
 
 <GatedFigure
-  src="challenges/choose-team.webp"
-  ratio="600/540"
-  width={600}
-  height={540}
-  alt="The Choose Your Team dialog over a leaderboard challenge: four teams to join, each showing members and points, and a button to create a new team."
-  caption="Joining a leaderboard challenge: join a team or create your own."
+  src="challenges/leaderboard-desktop.webp"
+  dark="challenges/leaderboard-desktop-dark.webp"
+  width={2560}
+  height={1600}
+  alt="A leaderboard challenge in the Vimocity web portal: the worker’s team, Product Team, ranked first, a warning that a team needs at least five players to earn the full 100 daily points, today’s progress, and total team points."
+  phone={{
+    src: "challenges/leaderboard-phone.webp",
+    dark: "challenges/leaderboard-phone-dark.webp",
+    width: 750,
+    height: 1624,
+    alt: "The same leaderboard challenge on a phone: the challenge header, then the Daily 5 to watch for credit, then the team’s progress.",
+  }}
+  caption="A leaderboard challenge from a worker’s side. Today’s progress counts the share of the team that logged the Daily 5, and the warning says why a crew under five can’t reach 100 points."
 />
 
-</Segment>
-<Segment value="target" label="Individual target">
+### Individual target
 
 No leaderboard and no ranking. Each person works toward their own target.
 
 <GatedFigure
-  src="challenges/target-invited.webp"
-  ratio="1/1"
-  width={600}
-  height={600}
-  alt="The October Target Challenge page in the Vimocity web portal: invited and starting in three days, with how it works (log your Daily 5, keep moving up, win big), a raffle prize, and Join and Decline buttons."
-  caption="A target challenge before it starts: log your Daily 5, earn raffle tickets, and win in the end-of-challenge draw."
+  src="challenges/target-desktop.webp"
+  dark="challenges/target-desktop-dark.webp"
+  width={2560}
+  height={1600}
+  alt="The October Target Challenge in the Vimocity web portal: one Daily 5 logged, zero of seven raffle tickets earned, a progress track with a ticket every three sessions, and how the challenge works."
+  phone={{
+    src: "challenges/target-phone.webp",
+    dark: "challenges/target-phone-dark.webp",
+    width: 750,
+    height: 1624,
+    alt: "The same target challenge on a phone, with the progress track and raffle tickets stacked under the header.",
+  }}
+  caption="A target challenge in progress: every three Daily 5s earns a raffle ticket, and the track shows how far it is to the next one."
 />
 
-</Segment>
-</Segments>
 
 ## Outcome
 

@@ -28,7 +28,7 @@ export default async function Loading() {
       <main
         id="main"
         tabIndex={-1}
-        className="mx-auto w-full max-w-page px-6 py-14 sm:px-10"
+        className="w-full max-w-page px-6 py-14 sm:px-10"
       >
         {/* Announced once, rather than each block claiming to be busy. */}
         <p role="status" className="sr-only">

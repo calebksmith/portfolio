@@ -3,7 +3,14 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ViewTransition } from "react";
 
-import { Badge, Eyebrow, SpecList, SpecRow } from "@/components/cksui";
+import {
+  Badge,
+  Eyebrow,
+  Medal,
+  PageTitle,
+  SpecList,
+  SpecRow,
+} from "@/components/cksui";
 import { Mdx } from "@/components/mdx";
 import { getCaseStudies, getCaseStudy } from "@/lib/content/work";
 import { LOCALES, isLocale, localizePath } from "@/lib/i18n/config";
@@ -11,7 +18,7 @@ import { alternates } from "@/lib/i18n/metadata";
 import { messages } from "@/lib/i18n/messages";
 
 import { CaseStudyCard } from "../../_components/case-study-card";
-import { CaseStudyChips } from "../../_components/case-study-chips";
+import { CaseStudyTags } from "../../_components/case-study-chips";
 import { Reveal } from "../../_components/reveal";
 
 /**
@@ -67,10 +74,13 @@ export default async function CaseStudyPage({
        the real content arrives from below, rather than one popping in where
        the other was. */
     <ViewTransition enter="reveal-in" default="none">
+      {/* Left-aligned rather than centred: on a wide screen the content keeps
+          the header's gutter, so the page, the logo, and every heading share
+          one left edge. The max width still caps how far it runs. */}
       <main
         id="main"
         tabIndex={-1}
-        className="mx-auto w-full max-w-page px-6 py-14 sm:px-10"
+        className="w-full max-w-page px-6 py-14 sm:px-10"
       >
         <article>
           {/* The header answers, in order: what is it, did it work, and why it
@@ -78,21 +88,30 @@ export default async function CaseStudyPage({
               subheading; the summary sits in the page description instead,
               where search results and link previews read it. */}
           <header>
-            <h1 className="font-display text-[clamp(2rem,6vw,3rem)] font-semibold leading-[1.03] tracking-[-0.03em] text-balance text-foreground">
-              {study.name}
-              <span className="sr-only">: </span>
-              <span className="mt-2 block text-xl font-normal tracking-[-0.01em] text-muted-foreground sm:text-2xl">
-                {study.descriptor}
-              </span>
-            </h1>
+            {/* The medal sits beside the title like an award beside a name:
+                the same one this study wears on its card, at full size. The
+                tags share the title's row, at the right, so the key result
+                starts higher; on a narrower screen they drop under it. */}
+            <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between lg:gap-10">
+              <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
+                <Medal name={study.medal} size="lg" />
+                <PageTitle>
+                  {study.name}
+                  <span className="sr-only">: </span>
+                  <span className="mt-2 block text-xl font-normal tracking-[-0.01em] text-muted-foreground sm:text-2xl">
+                    {study.descriptor}
+                  </span>
+                </PageTitle>
+              </div>
 
-            {/* The kind of work and when. The key result isn't a chip here:
-                it gets its own row below, where it can be read as a result. */}
-            <CaseStudyChips
-              role={study.role}
-              year={study.year}
-              className="mt-5"
-            />
+              <CaseStudyTags
+                area={t.caseStudy.areas[study.area]}
+                role={study.role}
+                year={study.year}
+                wrap
+                className="lg:max-w-xs lg:shrink-0 lg:justify-end lg:pt-2"
+              />
+            </div>
 
             {/* What happened, then who it helped and what it was worth: the
                 key result across the top, the user's side and the business's
@@ -129,7 +148,7 @@ export default async function CaseStudyPage({
                 first value even when the links are tap-height or wrap; the
                 label column is widened so "Related case studies" stays on one
                 line. */}
-            <SpecList className="mt-8">
+            <SpecList ruled={false} className="mt-6">
               {study.stack.length > 0 ? (
                 <SpecRow
                   label={t.caseStudy.stack}

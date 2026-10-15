@@ -229,6 +229,7 @@ const PUBLIC_MEDIA = [
   "login/mobile-login.webp",
   "login/web-login-wide.webp",
   "playlists/shared-page.webp",
+  "playlists/shared-page-dark.webp",
   "vimui/media-card.webp",
 ];
 
@@ -252,6 +253,11 @@ describe("screenshots", () => {
     }
   });
 
+  it("no two case studies share a medal", () => {
+    const medals = studies.map((study) => study.medal);
+    expect(new Set(medals).size).toBe(medals.length);
+  });
+
   it("public/media holds only screens that are public anyway", () => {
     const present = readdirSync(join(process.cwd(), "public/media"), {
       recursive: true,
@@ -264,8 +270,12 @@ describe("screenshots", () => {
   it("every gated figure names a path in the private store", () => {
     const srcs = LOCALES.flatMap((locale) =>
       byLocale[locale].flatMap((study) =>
-        [...study.body.matchAll(/<GatedFigure[^>]*?\ssrc="([^"]+)"/g)].map(
-          (match) => match[1],
+        // The desktop screen, its dark twin, and the phone's pair inside
+        // `phone={{ src: "…", dark: "…" }}`.
+        [...study.body.matchAll(/<GatedFigure[\s\S]*?\/>/g)].flatMap((figure) =>
+          [...figure[0].matchAll(/\b(?:src|dark)(?:=|:\s*)"([^"]+)"/g)].map(
+            (match) => match[1],
+          ),
         ),
       ),
     );

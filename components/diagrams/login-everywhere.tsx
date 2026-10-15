@@ -1,5 +1,7 @@
 import { getMessages } from "@/lib/i18n/server";
 
+import { Diagram } from "./diagram";
+
 /**
  * One login, three surfaces.
  *
@@ -20,13 +22,7 @@ export async function LoginEverywhere() {
   const t = (await getMessages()).diagrams.loginEverywhere;
 
   return (
-    <svg
-      viewBox="0 0 900 400"
-      role="img"
-      aria-label={t.label}
-      className="h-full w-full"
-      fill="none"
-    >
+    <Diagram width={900} height={400} label={t.label}>
       <defs>
         <clipPath id="login-everywhere-browser">
           <rect x="21" y="67" width="328" height="262" rx="0" />
@@ -181,6 +177,6 @@ export async function LoginEverywhere() {
           {t.mobileNote}
         </text>
       </g>
-    </svg>
+    </Diagram>
   );
 }

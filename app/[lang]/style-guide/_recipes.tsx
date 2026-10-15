@@ -15,9 +15,13 @@ import {
   ControlBar,
   ControlButton,
   ControlToggle,
+  DeviceFigure,
   Eyebrow,
   Figure,
+  Icon,
+  Medal,
   Monogram,
+  PageTitle,
   PrintButton,
   Skeleton,
   SpecList,
@@ -25,6 +29,12 @@ import {
   Stat,
   StatGroup,
   StatusDot,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
   Tabs,
 } from "@/components/cksui";
 
@@ -81,9 +91,13 @@ const REGISTRY: Record<string, ElementType> = {
   ControlBar,
   ControlButton,
   ControlToggle,
+  DeviceFigure,
   Eyebrow,
   Figure,
+  Icon,
+  Medal,
   Monogram,
+  PageTitle,
   PrintButton,
   Skeleton,
   SpecList,
@@ -91,6 +105,12 @@ const REGISTRY: Record<string, ElementType> = {
   Stat,
   StatGroup,
   StatusDot,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
   Tabs,
 };
 
@@ -222,27 +242,11 @@ export type Recipe = {
   build: (choices: Record<string, string>) => Element;
 };
 
-function DemoIcon() {
-  return (
-    <svg
-      aria-hidden="true"
-      focusable="false"
-      viewBox="0 0 16 16"
-      className="size-4"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.4"
-      strokeLinecap="round"
-    >
-      <path d="M2 4.5h5M11 4.5h3M2 11.5h3M9 11.5h5" />
-      <circle cx="9" cy="4.5" r="1.75" />
-      <circle cx="7" cy="11.5" r="1.75" />
-    </svg>
-  );
-}
-
 /** The icon prop, written as the expression it is rather than as a string. */
-const ICON: Expression = { expr: "<Icon />", value: <DemoIcon /> };
+const ICON: Expression = {
+  expr: '<Icon name="sliders" />',
+  value: <Icon name="sliders" />,
+};
 
 /** The words every recipe shows about itself, picked from its copy. */
 const text = ({
@@ -468,13 +472,23 @@ export function makeRecipes(copy: RecipeCopy): Recipe[] {
           label: copy["control-bar"].controls.inspect,
           values: ["off", "on"],
         },
+        {
+          name: "variant",
+          label: copy["control-bar"].controls.variant,
+          values: ["bare", "segmented"],
+        },
       ],
       build: (choices) => {
         const sample = copy["control-bar"].sample;
 
         return {
           tag: "ControlBar",
-          props: { label: sample.label },
+          props: {
+            label: sample.label,
+            ...(choices.variant === "segmented"
+              ? { variant: "segmented" }
+              : {}),
+          },
           children: [
             {
               tag: "ControlButton",
@@ -610,6 +624,164 @@ export function makeRecipes(copy: RecipeCopy): Recipe[] {
         tag: "PrintButton",
         props: { label: copy["print-button"].sample },
       }),
+    },
+    {
+      id: "page-title",
+      slot: "page-title",
+      ...text(copy["page-title"]),
+      controls: [],
+      build: () => ({
+        tag: "PageTitle",
+        children: [copy["page-title"].sample],
+      }),
+    },
+    {
+      id: "icon",
+      slot: "icon",
+      ...text(copy.icon),
+      controls: [
+        {
+          name: "name",
+          label: copy.icon.controls.name,
+          values: [
+            "arrow-right",
+            "arrow-down",
+            "external",
+            "lock",
+            "sun",
+            "moon",
+            "crosshair",
+            "sliders",
+          ],
+        },
+      ],
+      build: (choices) => ({
+        tag: "Icon",
+        props: { name: choices.name, className: "size-6" },
+      }),
+    },
+    {
+      id: "table",
+      slot: "table",
+      ...text(copy.table),
+      controls: [
+        {
+          name: "rows",
+          label: copy.table.controls.rows,
+          values: ["three", "two", "one"],
+        },
+      ],
+      build: (choices) => {
+        const sample = copy.table.sample;
+        return {
+          tag: "Table",
+          props: { "aria-label": sample.label },
+          children: [
+            {
+              tag: "TableHeader",
+              children: [
+                {
+                  tag: "TableRow",
+                  children: [
+                    sample.platform,
+                    sample.tokens,
+                    sample.components,
+                  ].map((head) => ({
+                    tag: "TableHead",
+                    props: { scope: "col" },
+                    children: [head],
+                  })),
+                },
+              ],
+            },
+            {
+              tag: "TableBody",
+              children: sample.rows
+                .slice(0, COUNT[choices.rows] ?? 3)
+                .map(([platform, tokens, components]) => ({
+                  tag: "TableRow",
+                  children: [
+                    {
+                      tag: "TableHead",
+                      props: { scope: "row" },
+                      children: [platform],
+                    },
+                    { tag: "TableCell", children: [tokens] },
+                    { tag: "TableCell", children: [components] },
+                  ],
+                })),
+            },
+          ],
+        };
+      },
+    },
+    {
+      id: "medal",
+      slot: "medal",
+      ...text(copy.medal),
+      controls: [
+        {
+          name: "name",
+          label: copy.medal.controls.name,
+          values: [
+            "podium",
+            "checklist",
+            "layers",
+            "playlist",
+            "key",
+            "components",
+            "rails",
+            "bell",
+          ],
+        },
+        {
+          name: "size",
+          label: copy.medal.controls.size,
+          values: ["lg", "md", "sm"],
+        },
+      ],
+      build: (choices) => ({
+        tag: "Medal",
+        props: { name: choices.name, size: choices.size },
+      }),
+    },
+    {
+      id: "device-figure",
+      slot: "device-figure",
+      ...text(copy["device-figure"]),
+      controls: [],
+      build: () => {
+        const screen = (label: string): Element => ({
+          tag: "div",
+          props: {
+            className:
+              "grid h-full place-items-center text-xs text-muted-foreground",
+          },
+          children: [label],
+        });
+        return {
+          tag: "div",
+          props: { className: "w-full max-w-xl" },
+          children: [
+            {
+              tag: "DeviceFigure",
+              props: {
+                desktopRatio: "16/10",
+                phoneRatio: "375/812",
+                caption: copy["device-figure"].sample,
+                desktop: {
+                  expr: "<img … />",
+                  value: renderNode(screen("1280")),
+                },
+                phone: {
+                  expr: "<img … />",
+                  value: renderNode(screen("375")),
+                },
+              },
+            },
+          ],
+        };
+      },
     },
   ];
 }

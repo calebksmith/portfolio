@@ -1,22 +1,25 @@
 import Link from "next/link";
 
-import { Eyebrow, cn } from "@/components/cksui";
+import { Icon, Medal, cn } from "@/components/cksui";
 import type { CaseStudy } from "@/lib/content/work";
 import { localizePath } from "@/lib/i18n/config";
 import { getLocale, getMessages } from "@/lib/i18n/server";
 
-import { CaseStudyChips } from "./case-study-chips";
+import { CaseStudyResult, CaseStudyTags } from "./case-study-chips";
 
 /**
  * A case study card: what it is, the facts that help decide, and a way in.
  *
- * A small label first, naming who the work serves (Workers, Admins, Platform),
+ * A small label first, naming who the work serves (Field-based workers, Admins, Platform),
  * so the grouping shows on the card itself, whatever order the cards are in.
  * Then name and what it is, then one row of chips: the headline result where there
  * is a number, the kind of work, and when. Chips rather than a sentence — a
  * sentence restated the descriptor, where chips answer the questions a reader
  * is actually asking ("did it work? what did he do? how recent?") at a glance.
  * The summary, role, and stack are on the case study page.
+ *
+ * Its medal comes first, so a grid of cards can be told apart before any of
+ * them is read.
  *
  * The arrow is the only call to action, and it is an icon: the whole card is
  * the link, so a label would only repeat what the card already is.
@@ -43,6 +46,7 @@ export async function CaseStudyCard({
   impact,
   role,
   year,
+  medal,
 }: CaseStudy & {
   /** The card's heading level, so the page outline stays in order. */
   as?: "h3" | "h4";
@@ -57,7 +61,7 @@ export async function CaseStudyCard({
       // Grid placement lives on the Reveal wrapper, since that is what the grid
       // actually lays out. `h-full` keeps the card filling its cell.
       className={cn(
-        "group relative flex h-full cursor-pointer flex-col gap-3 rounded-lg border border-border bg-card p-6 text-card-foreground",
+        "group @container relative flex h-full cursor-pointer flex-col gap-3 rounded-lg border border-border bg-card p-6 text-card-foreground",
         // The lift is transform and shadow, so it is named explicitly —
         // `transition-colors` would animate the fill and snap the movement.
         "transition-[color,background-color,border-color,transform,box-shadow] hover:-translate-y-0.5 hover:shadow-lift focus-within:-translate-y-0.5 focus-within:shadow-lift",
@@ -66,21 +70,24 @@ export async function CaseStudyCard({
         "has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-ring",
       )}
     >
-      <svg
-        aria-hidden="true"
-        focusable="false"
-        viewBox="0 0 16 16"
-        className="absolute top-6 right-6 size-4 text-primary transition-transform group-hover:translate-x-0.5"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M3 8h10M9 4l4 4-4 4" />
-      </svg>
+      <Icon
+        name="arrow-right"
+        className="absolute top-6 right-6 text-primary transition-transform group-hover:translate-x-0.5"
+      />
 
-      <Eyebrow className="pr-8">{areas[area]}</Eyebrow>
+      {/* The medal first: in a grid of cards it's what tells them apart
+          before any word is read. */}
+      <Medal name={medal} size="md" />
+
+      {/* Who it serves, the kind of work, and when, as tags on one line. The
+          right padding keeps them clear of the arrow. */}
+      <CaseStudyTags
+        area={areas[area]}
+        role={role}
+        year={year}
+        compact
+        className="pr-8"
+      />
 
       <Heading className="-mt-1 pr-8 font-display text-base font-semibold tracking-[-0.01em] text-balance sm:text-lg">
         {/* No underline on hover. The stretched link covers the whole tile, so
@@ -97,12 +104,7 @@ export async function CaseStudyCard({
         </Link>
       </Heading>
 
-      <CaseStudyChips
-        impact={impact}
-        role={role}
-        year={year}
-        className="mt-auto pt-1"
-      />
+      <CaseStudyResult impact={impact} className="mt-auto pt-1" />
     </article>
   );
 }

@@ -2,22 +2,25 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import {
   Children,
   isValidElement,
+  type ComponentProps,
   type ComponentType,
   type ReactElement,
   type ReactNode,
 } from "react";
 
-import { Eyebrow, Figure, Stat, StatGroup, Tabs } from "@/components/cksui";
+import { cn, Eyebrow, Figure, Stat, StatGroup, Tabs } from "@/components/cksui";
 import { GatedFigure } from "@/components/gated-figure";
+import { ScreenFigureClient } from "@/components/screen-figure";
 import { ChallengeRun } from "@/components/diagrams/challenge-run";
 import { DeviceHandoff } from "@/components/diagrams/device-handoff";
 import { Enforcement } from "@/components/diagrams/enforcement";
 import { LoginEverywhere } from "@/components/diagrams/login-everywhere";
 import { PageByPage } from "@/components/diagrams/page-by-page";
-import { SystemReach } from "@/components/diagrams/system-reach";
+import { SystemReach } from "@/components/tables/system-reach";
 import { TeamScoring } from "@/components/diagrams/team-scoring";
 import { WorkdaySchedule } from "@/components/diagrams/workday-schedule";
 import { localizePath, type Locale } from "@/lib/i18n/config";
+import { getMessages } from "@/lib/i18n/server";
 
 /**
  * Renders MDX: case studies and the colophon from `src/content/`, and cover
@@ -165,12 +168,53 @@ function Segments({ title, children }: { title: string; children: ReactNode }) {
 }
 
 /**
- * A case study's outcome tiles. The spacing and width are the prose column's,
- * set here rather than in the library component, which leaves layout to its
- * caller.
+ * A case study's outcome tiles, across the content width: the grid fits as
+ * many as there are and wraps only when the screen runs out. The spacing and
+ * width are set here rather than in the library component, which leaves
+ * layout to its caller.
  */
-function Stats({ children }: { children: ReactNode }) {
-  return <StatGroup className="mt-6 max-w-measure-wide">{children}</StatGroup>;
+function Stats({
+  width = "breakout",
+  children,
+}: {
+  width?: "inline" | "breakout";
+  children: ReactNode;
+}) {
+  return (
+    <StatGroup
+      className={cn(
+        "mt-6",
+        width === "breakout" ? "max-w-none" : "max-w-measure-wide",
+      )}
+    >
+      {children}
+    </StatGroup>
+  );
+}
+
+/**
+ * A public screenshot in the product's light and dark modes, with a switch.
+ * The switch's words come from the dictionary, so the MDX names only the
+ * images.
+ */
+async function ScreenFigure(
+  props: Omit<ComponentProps<typeof ScreenFigureClient>, "labels">,
+) {
+  const labels = (await getMessages()).screenModes;
+  return <ScreenFigureClient {...props} labels={labels} />;
+}
+
+/**
+ * Figures in a case study span the content width by default, so a screenshot
+ * gets the room its detail needs while the prose beside it holds to the
+ * measure. A diagram still hugs its own width inside the frame.
+ */
+function CaseFigure(props: ComponentProps<typeof Figure>) {
+  return <Figure width="breakout" {...props} />;
+}
+
+function CaseGatedFigure(props: ComponentProps<typeof GatedFigure>) {
+  return <GatedFigure frame="breakout" {...props} />;
 }
 
 /**
@@ -179,8 +223,9 @@ function Stats({ children }: { children: ReactNode }) {
  */
 const available = {
   ...components,
-  Figure,
-  GatedFigure,
+  Figure: CaseFigure,
+  GatedFigure: CaseGatedFigure,
+  ScreenFigure,
   Segments,
   Segment,
   Stats,

@@ -1,41 +1,56 @@
 import { getMessages } from "@/lib/i18n/server";
 
+import { Diagram } from "./diagram";
+
 /**
  * What an admin does to run a challenge, and what runs without them.
  *
  * The case study's point is that a challenge stopped being a support request,
- * so the drawing is one challenge on a timeline with two lanes: the admin's
- * steps above it, at the start and the end, and everything that happens on its
- * own below it. The middle of the admin lane is empty on purpose — that gap is
- * the feature.
+ * so the drawing is one challenge on a line from start to end, with each
+ * phase's steps listed under it. Every step is marked as one of two kinds: a
+ * filled mark with a person in it where the admin acts, an open mark with a
+ * clock where it happens on its own. The middle phase has no filled marks, and
+ * that gap is the feature: once it's published, the admin isn't needed until
+ * it ends.
  *
- * The admin's steps are the accent pair, the one place a person acts. Emails
- * and entries are structure, in `currentColor`.
+ * Steps are text beside a mark, never text in a box: a box with words in it
+ * reads as a button, and nothing in a diagram can be pressed.
+ *
+ * The admin's mark is the primary pair, the one place a person acts. The rest
+ * is structure, in `currentColor`.
  */
 
 const LEFT = 20;
 const RIGHT = 740;
-const SETUP_END = 200;
-const RUN_END = 560;
-const TIMELINE_Y = 132;
+const COLUMN = 240;
+const LINE_Y = 52;
+const TOP = 108;
+const ROW = 30;
 
-/** A small envelope, top-left at (x, y). */
-function Envelope({ x, y }: { x: number; y: number }) {
-  return (
-    <g className="text-muted-foreground">
-      <rect
-        x={x}
-        y={y}
-        width="22"
-        height="15"
-        rx="2"
+type Step = { label: string; admin?: boolean };
+
+/** A step's mark: a person for the admin, a clock for what runs on its own. */
+function Mark({ x, y, admin }: { x: number; y: number; admin?: boolean }) {
+  return admin ? (
+    <g>
+      <circle cx={x} cy={y} r="9" className="fill-primary" />
+      <g
         stroke="currentColor"
-        strokeWidth="1.25"
-      />
+        strokeWidth="1.4"
+        strokeLinecap="round"
+        className="text-primary-foreground"
+      >
+        <circle cx={x} cy={y - 2.5} r="2.2" />
+        <path d={`M${x - 4.5} ${y + 5} a4.5 4 0 0 1 9 0`} />
+      </g>
+    </g>
+  ) : (
+    <g stroke="currentColor" className="text-muted-foreground">
+      <circle cx={x} cy={y} r="8.5" strokeWidth="1.25" />
       <path
-        d={`M${x + 1} ${y + 1} L${x + 11} ${y + 9} L${x + 21} ${y + 1}`}
-        stroke="currentColor"
-        strokeWidth="1.25"
+        d={`M${x} ${y - 4.5} V ${y} l3 2`}
+        strokeWidth="1.4"
+        strokeLinecap="round"
         strokeLinejoin="round"
       />
     </g>
@@ -45,20 +60,27 @@ function Envelope({ x, y }: { x: number; y: number }) {
 export async function ChallengeRun() {
   const t = (await getMessages()).diagrams.challengeRun;
 
-  // Entries build through the run: one bar per stretch of days, rising.
-  const entries = Array.from({ length: 14 }, (_, i) => ({
-    x: 272 + i * 20,
-    h: 3 + i * 1.5,
-  }));
+  const columns: { phase: string; steps: Step[] }[] = [
+    {
+      phase: t.phases.setup,
+      steps: [{ label: t.setup, admin: true }, { label: t.invitation }],
+    },
+    {
+      phase: t.phases.run,
+      steps: [{ label: t.reminders }, { label: t.entries }],
+    },
+    {
+      phase: t.phases.end,
+      steps: [
+        { label: t.draw, admin: true },
+        { label: t.complete, admin: true },
+        { label: t.results },
+      ],
+    },
+  ];
 
   return (
-    <svg
-      viewBox="0 0 760 300"
-      role="img"
-      aria-label={t.label}
-      className="h-full w-full"
-      fill="none"
-    >
+    <Diagram width={760} height={222} label={t.label}>
       <defs>
         <marker
           id="cr-arrow"
@@ -83,159 +105,73 @@ export async function ChallengeRun() {
         {t.title}
       </text>
 
-      {/* The admin's lane: the start and the end, nothing in between. */}
-      <text
-        x={LEFT}
-        y="44"
-        fontSize="11"
-        className="fill-current text-muted-foreground"
-      >
-        {t.admin}
-      </text>
-      <g>
-        <rect
-          x={LEFT}
-          y="54"
-          width="176"
-          height="52"
-          rx="6"
-          className="fill-accent"
-        />
-        <text
-          x={LEFT + 88}
-          y="84"
-          textAnchor="middle"
-          fontSize="12"
-          className="fill-current text-accent-foreground"
-        >
-          {t.setup}
-        </text>
-      </g>
-      <g>
-        <rect
-          x={RIGHT - 176}
-          y="54"
-          width="176"
-          height="52"
-          rx="6"
-          className="fill-accent"
-        />
-        <text
-          x={RIGHT - 88}
-          y="76"
-          textAnchor="middle"
-          fontSize="12"
-          className="fill-current text-accent-foreground"
-        >
-          {t.draw}
-        </text>
-        <text
-          x={RIGHT - 88}
-          y="94"
-          textAnchor="middle"
-          fontSize="12"
-          className="fill-current text-accent-foreground"
-        >
-          {t.complete}
-        </text>
-      </g>
-
-      {/* The challenge itself, left to right, with its three phases. */}
+      {/* The challenge itself, start to end. */}
       <path
-        d={`M${LEFT} ${TIMELINE_Y} H ${RIGHT - 4}`}
+        d={`M${LEFT} ${LINE_Y} H ${RIGHT - 4}`}
         stroke="currentColor"
         strokeWidth="1.5"
         strokeLinecap="round"
         markerEnd="url(#cr-arrow)"
         className="text-foreground"
       />
-      {[SETUP_END, RUN_END].map((x) => (
-        <path
-          key={x}
-          d={`M${x} ${TIMELINE_Y - 7} V ${TIMELINE_Y + 7}`}
-          stroke="currentColor"
-          strokeWidth="1.5"
-          className="text-foreground"
-        />
-      ))}
-      {[
-        { x: (LEFT + SETUP_END) / 2, label: t.phases.setup },
-        { x: (SETUP_END + RUN_END) / 2, label: t.phases.run },
-        { x: (RUN_END + RIGHT) / 2, label: t.phases.end },
-      ].map((phase) => (
-        <text
-          key={phase.label}
-          x={phase.x}
-          y={TIMELINE_Y + 22}
-          textAnchor="middle"
-          fontSize="11"
-          className="fill-current text-muted-foreground"
-        >
-          {phase.label}
-        </text>
-      ))}
 
-      {/* Everything that happens on its own. */}
+      {columns.map((column, c) => {
+        const x = LEFT + c * COLUMN;
+        return (
+          <g key={column.phase}>
+            <circle
+              cx={x + 4}
+              cy={LINE_Y}
+              r="4"
+              className="fill-current text-foreground"
+            />
+            <text
+              x={x}
+              y={LINE_Y + 30}
+              fontSize="13"
+              className="fill-current text-foreground"
+            >
+              {column.phase}
+            </text>
+            {column.steps.map((step, s) => {
+              const y = TOP + s * ROW;
+              return (
+                <g key={step.label}>
+                  <Mark x={x + 9} y={y - 4} admin={step.admin} />
+                  <text
+                    x={x + 28}
+                    y={y}
+                    fontSize="12"
+                    className="fill-current text-foreground"
+                  >
+                    {step.label}
+                  </text>
+                </g>
+              );
+            })}
+          </g>
+        );
+      })}
+
+      {/* The key: the same two marks, named. */}
+      <Mark x={LEFT + 9} y={202} admin />
       <text
-        x={LEFT}
-        y="186"
+        x={LEFT + 28}
+        y="206"
+        fontSize="11"
+        className="fill-current text-muted-foreground"
+      >
+        {t.admin}
+      </text>
+      <Mark x={LEFT + 169} y={202} />
+      <text
+        x={LEFT + 188}
+        y="206"
         fontSize="11"
         className="fill-current text-muted-foreground"
       >
         {t.automatic}
       </text>
-
-      <Envelope x={SETUP_END + 4} y={202} />
-      <text
-        x={SETUP_END + 34}
-        y="214"
-        fontSize="12"
-        className="fill-current text-foreground"
-      >
-        {t.invitation}
-      </text>
-
-      {[330, 362, 394].map((x) => (
-        <Envelope key={x} x={x} y={202} />
-      ))}
-      <text
-        x="426"
-        y="214"
-        fontSize="12"
-        className="fill-current text-foreground"
-      >
-        {t.reminders}
-      </text>
-
-      <Envelope x={RUN_END + 4} y={202} />
-      <text
-        x={RUN_END + 34}
-        y="214"
-        fontSize="12"
-        className="fill-current text-foreground"
-      >
-        {t.results}
-      </text>
-
-      <text
-        x={LEFT}
-        y="270"
-        fontSize="11"
-        className="fill-current text-muted-foreground"
-      >
-        {t.entries}
-      </text>
-      {entries.map((bar) => (
-        <rect
-          key={bar.x}
-          x={bar.x}
-          y={274 - bar.h}
-          width="12"
-          height={bar.h}
-          rx="1"
-          className="fill-current text-muted-foreground"
-        />
-      ))}
-    </svg>
+    </Diagram>
   );
 }

@@ -8,6 +8,7 @@ user: A web portal that works on mobile, with a searchable library and no disrup
 business: One codebase instead of two, so an improvement reaches the whole web portal.
 connects: [vimui, guardrails, playlists]
 area: platform
+medal: layers
 order: 3
 impact: No migration dip
 ---
@@ -26,12 +27,19 @@ codebase, without disrupting the people who use the web portal every day.
 > homepage and settings were modernized.
 
 <GatedFigure
-  src="platform-rebuild/content-library.webp"
-  ratio="600/390"
-  width={600}
-  height={390}
+  src="platform-rebuild/content-library-desktop.webp"
+  dark="platform-rebuild/content-library-desktop-dark.webp"
+  width={2560}
+  height={1600}
   alt="The Vimocity content library: a search bar for videos, documents, and collections above topic cards, starting with Getting Started and Individual Moves."
-  caption="The content library, one of the pages redesigned rather than ported: search first, then browse by topic."
+  phone={{
+    src: "platform-rebuild/content-library-phone.webp",
+    dark: "platform-rebuild/content-library-phone-dark.webp",
+    width: 750,
+    height: 1624,
+    alt: "The same content library on a phone: the search bar first, then topic cards one per row.",
+  }}
+  caption="The content library, one of the pages redesigned rather than ported: search first, then browse by topic, on a desktop and a phone from the same code."
 />
 
 ## What I did
@@ -44,8 +52,6 @@ codebase, without disrupting the people who use the web portal every day.
   for people turned out to make the agent’s output reviewable too.
 
 <Figure
-  width="breakout"
-  ratio="760/240"
   caption="The loop, run once for every page: read the old page, rebuild it, check it, and hand it to engineering before moving on."
 >
   <PageByPage />

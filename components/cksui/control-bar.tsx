@@ -13,14 +13,22 @@ import { cn } from "./lib/cn";
  * not part of the path."
  *
  * `role="group"` with a label means a screen reader announces the cluster once
- * rather than leaving two unrelated buttons floating in the header.
+ * rather than leaving two unrelated buttons floating in the header. *
+ * `segmented` is for a set of toggles that pick one of a few states, like a
+ * screenshot's light and dark: a faint hairline around them says they are one
+ * control with a choice in it, not separate buttons. The header's cluster
+ * stays bare, because there the header's own rule already does that job.
  */
 export function ControlBar({
   className,
   children,
   label = "Site controls",
+  variant = "bare",
   ...props
-}: ComponentProps<"div"> & { label?: string }) {
+}: ComponentProps<"div"> & {
+  label?: string;
+  variant?: "bare" | "segmented";
+}) {
   return (
     <div
       data-slot="control-bar"
@@ -32,6 +40,10 @@ export function ControlBar({
         // second barrier stacked on it. Grouping comes from proximity and the
         // shared hover treatment, which is enough for a handful of controls.
         "flex items-stretch gap-1",
+        // No padding: the toggles sit flush inside the hairline, so the
+        // control is no taller than its buttons plus the border.
+        variant === "segmented" &&
+          "gap-0 rounded-md border border-border bg-background text-foreground",
         className,
       )}
       {...props}
@@ -128,27 +140,43 @@ export function ControlToggle({
   icon,
   label,
   pressed,
+  iconOnly = false,
   className,
   ...props
 }: ComponentProps<"button"> & {
   icon: ReactNode;
   label: string;
   pressed: boolean;
+  /**
+   * The label stays for screen readers and as a tooltip, at every width.
+   * For a switch whose icons say it all, like light and dark, sitting over a
+   * figure where words would cover it.
+   */
+  iconOnly?: boolean;
 }) {
   return (
     <button
       type="button"
       data-slot="control-toggle"
       aria-pressed={pressed}
+      title={iconOnly ? label : undefined}
       className={cn(
         CONTROL_ITEM,
         pressed ? CONTROL_ACTIVE : CONTROL_REST,
+        // Drawn at 40 × 36 so it sits with the page's type rather than
+        // towering over it, but still a 44px target: the invisible `after`
+        // box grows the hit area 4px up, down, and outward. Toggles in a set
+        // touch, so the inner sides don't grow and no two targets overlap.
+        iconOnly &&
+          "relative h-9 min-h-0 w-10 px-0 after:absolute after:-inset-y-1 after:inset-x-0 first:after:-left-1 last:after:-right-1 sm:px-0",
         className,
       )}
       {...props}
     >
       {icon}
-      <span className="sr-only sm:not-sr-only">{label}</span>
+      <span className={iconOnly ? "sr-only" : "sr-only sm:not-sr-only"}>
+        {label}
+      </span>
     </button>
   );
 }

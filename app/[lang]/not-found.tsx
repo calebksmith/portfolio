@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { Button, Eyebrow } from "@/components/cksui";
+import { Button, Eyebrow, PageTitle } from "@/components/cksui";
 import { getCaseStudies } from "@/lib/content/work";
 import { localizePath } from "@/lib/i18n/config";
 import { getLocale, getMessages } from "@/lib/i18n/server";
@@ -29,13 +29,11 @@ export default async function NotFound() {
     <main
       id="main"
       tabIndex={-1}
-      className="mx-auto flex w-full max-w-page flex-1 flex-col justify-center px-6 py-20 sm:px-10"
+      className="flex w-full max-w-page flex-1 flex-col justify-center px-6 py-20 sm:px-10"
     >
       <Eyebrow tone="primary">{t.eyebrow}</Eyebrow>
 
-      <h1 className="mt-3 font-display text-[clamp(2rem,6vw,3rem)] font-semibold leading-[1.03] tracking-[-0.03em] text-balance text-foreground">
-        {t.title}
-      </h1>
+      <PageTitle className="mt-3">{t.title}</PageTitle>
 
       <p className="mt-5 max-w-measure text-pretty text-muted-foreground">
         {t.body}

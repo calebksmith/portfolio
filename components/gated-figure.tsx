@@ -1,8 +1,9 @@
-import { Button, Figure } from "@/components/cksui";
+import { Button, DeviceFigure, Figure, Icon } from "@/components/cksui";
 import { getMessages } from "@/lib/i18n/server";
 import { site } from "@/lib/site";
 
 import { GatedImage } from "./gated-image";
+import { GatedScreens, type Screen } from "./gated-screens";
 
 /**
  * A screenshot from inside Vimocity's app, for people I've sent an access
@@ -24,6 +25,11 @@ import { GatedImage } from "./gated-image";
  * `src` is the image's path in the private store, e.g.
  * `challenges/choose-team.webp`; the file itself lives in `private/media/`
  * and is uploaded with `npm run media:upload`.
+ *
+ * Pass `phone` too and the figure becomes a pair: the same state captured at
+ * desktop and phone width, drawn in a monitor and a phone (`DeviceFigure`).
+ * Each screen's ratio comes from its own width and height. Give each screen
+ * a `dark` path as well and the pair gets a light and dark switch.
  */
 export async function GatedFigure({
   src,
@@ -33,21 +39,76 @@ export async function GatedFigure({
   ratio,
   caption,
   frame = "inline",
+  dark,
+  phone,
 }: {
   src: string;
   alt: string;
   width: number;
   height: number;
-  ratio: string;
+  ratio?: string;
   caption: string;
   frame?: "inline" | "breakout";
+  /** The desktop screen in the product's dark mode. */
+  dark?: string;
+  phone?: Screen;
 }) {
-  const t = (await getMessages()).gated;
+  const messages = await getMessages();
+  const t = messages.gated;
+
+  const request = (
+    <div className="flex max-w-xs flex-col items-center gap-2 rounded-lg border border-border bg-card px-5 py-4 text-center text-card-foreground shadow-lift">
+      <p className="flex items-center gap-2 text-sm font-semibold">
+        <Icon name="lock" className="text-muted-foreground" />
+        {t.title}
+      </p>
+      {/* On a phone the frame is short; the title, the button, and the
+          caption beneath already say enough, and the screen behind is what
+          makes it read as locked. */}
+      <p className="hidden text-xs text-pretty text-muted-foreground sm:block">
+        {t.note}
+      </p>
+      <Button asChild size="sm" className="mt-1">
+        <a href={site.links.linkedin}>{t.ask}</a>
+      </Button>
+    </div>
+  );
+
+  if (phone) {
+    const desktopRatio = `${width}/${height}`;
+    const phoneRatio = `${phone.width}/${phone.height}`;
+
+    return (
+      <div data-slot="gated-figure">
+        <GatedScreens
+          className="hidden access:block"
+          caption={caption}
+          desktop={{ src, dark, alt, width, height }}
+          phone={phone}
+          labels={messages.screenModes}
+        />
+
+        <DeviceFigure
+          className="access:hidden"
+          caption={caption}
+          desktopRatio={desktopRatio}
+          phoneRatio={phoneRatio}
+          desktop={<ObscuredScreen />}
+          phone={<ObscuredScreen />}
+          overlay={
+            <div className="absolute inset-0 flex items-center justify-center p-4">
+              {request}
+            </div>
+          }
+        />
+      </div>
+    );
+  }
 
   return (
     <div data-slot="gated-figure">
       <Figure
-        ratio={ratio}
+        ratio={ratio ?? `${width}/${height}`}
         caption={caption}
         width={frame}
         className="hidden access:block"
@@ -61,7 +122,7 @@ export async function GatedFigure({
       </Figure>
 
       <Figure
-        ratio={ratio}
+        ratio={ratio ?? `${width}/${height}`}
         caption={caption}
         width={frame}
         className="access:hidden"
@@ -69,21 +130,7 @@ export async function GatedFigure({
         <div className="relative h-full w-full">
           <Obscured />
           <div className="absolute inset-0 flex items-center justify-center p-4">
-            <div className="flex max-w-xs flex-col items-center gap-2 rounded-lg border border-border bg-card px-5 py-4 text-center text-card-foreground shadow-lift">
-              <p className="flex items-center gap-2 text-sm font-semibold">
-                <LockIcon />
-                {t.title}
-              </p>
-              {/* On a phone the frame is short; the title, the button, and the
-                  caption beneath already say enough, and the screen behind
-                  is what makes it read as locked. */}
-              <p className="hidden text-xs text-pretty text-muted-foreground sm:block">
-                {t.note}
-              </p>
-              <Button asChild size="sm" className="mt-1">
-                <a href={site.links.linkedin}>{t.ask}</a>
-              </Button>
-            </div>
+            {request}
           </div>
         </div>
       </Figure>
@@ -138,21 +185,11 @@ function Obscured() {
   );
 }
 
-function LockIcon() {
+/** The same blur, clipped to one device's screen. */
+function ObscuredScreen() {
   return (
-    <svg
-      aria-hidden="true"
-      focusable="false"
-      viewBox="0 0 16 16"
-      className="size-4 shrink-0 text-muted-foreground"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <rect x="3" y="7" width="10" height="7" rx="1.5" />
-      <path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" />
-    </svg>
+    <div className="relative h-full w-full overflow-hidden">
+      <Obscured />
+    </div>
   );
 }

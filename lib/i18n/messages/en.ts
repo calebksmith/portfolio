@@ -130,6 +130,17 @@ export const en = {
       stat: "Figure first, label second, on the card surface. The label carries any caveat the number needs.",
       "gated-figure":
         "Locked by default: the screenshot’s own frame, neutral shapes blurred past recognition, and a request for access. A browser without access never requests the image.",
+      "device-figure":
+        "A monitor and a phone showing the same state. Each screen holds its space from its own ratio, so nothing moves as the images load.",
+      "gated-screens":
+        "What someone with an access link sees in a gated pair, with the light and dark switch. Only the chosen mode’s images are requested.",
+      table:
+        "A grid of facts as a real table: header cells name their column, and the first cell of each row names its row.",
+      medal:
+        "The case study’s medal, on the logo’s tile and in the mark’s colors. Decorative; the name beside it is what’s read.",
+      icon: "Decorative: aria-hidden, in currentColor. The control or link around it carries the name.",
+      "page-title":
+        "The page’s one <h1>, in the display face at a size that scales with the window.",
       tabs: "Segmented tabs: arrow keys move between views, and every view stays in the page, hidden rather than removed, so it still works without JavaScript.",
       "bento-tile":
         "Span follows content weight; hierarchy also carried by type scale.",
@@ -285,7 +296,7 @@ export const en = {
         android: "Android",
         windows: "Windows",
       },
-      separateCodebases: "React Native and Electron — separate codebases",
+      separateCodebases: "React Native and Electron: separate codebases",
       oneCodebase: "one codebase",
       sourceOfTruth: "source of truth",
       copiedByHand: "copied by hand",
@@ -333,18 +344,18 @@ export const en = {
     },
     challengeRun: {
       label:
-        "One challenge, start to finish. The admin sets it up and publishes it, and the invitation goes out. While it runs, reminder emails go out on their own and raffle entries build up per participant. When it ends, the admin draws the raffle winner and marks it complete, and a results email names the winner.",
+        "One challenge, start to finish. At the start, the admin sets it up and publishes it, and the invitation is emailed on its own. While it runs, reminders are emailed and raffle entries add up, with nothing for the admin to do. At the end, the admin draws the raffle winner and marks it complete, and the results are emailed.",
       title: "ONE CHALLENGE, START TO FINISH",
-      admin: "Admin does",
+      admin: "Admin does it",
       automatic: "Happens on its own",
-      phases: { setup: "Setup", run: "Challenge runs", end: "Ends" },
+      phases: { setup: "Start", run: "While it runs", end: "End" },
       setup: "Set up and publish",
       draw: "Draw the raffle winner",
       complete: "Mark complete",
-      invitation: "Invitation",
-      reminders: "Reminders",
-      results: "Results, with winner",
-      entries: "Raffle entries, per participant",
+      invitation: "Invitation emailed",
+      reminders: "Reminders emailed",
+      results: "Results emailed",
+      entries: "Raffle entries add up",
     },
     pageByPage: {
       label:
@@ -399,6 +410,13 @@ export const en = {
     ask: "Request access on LinkedIn",
   },
 
+  /** The light and dark switch over a screenshot captured in both modes. */
+  screenModes: {
+    group: "Screenshot color mode",
+    light: "Light",
+    dark: "Dark",
+  },
+
   caseStudy: {
     moreWork: "More of my work",
     loading: "Loading case study",
@@ -413,7 +431,7 @@ export const en = {
      * small label on its card, so the cards read as groups without headings.
      */
     areas: {
-      workers: "Workers",
+      workers: "Field-based workers",
       "desk-workers": "Desk-based workers",
       "safety-leaders": "Safety leaders",
       admins: "Admins",
@@ -775,8 +793,9 @@ export const en = {
         notes: [
           "ControlToggle uses aria-pressed, because it turns a page mode on rather than submitting a value.",
           "This is the real cluster from the header: the Inspect button above is this component.",
+          "Segmented adds a faint hairline, for toggles that pick one of a few states, like a screenshot’s light and dark. The header’s cluster stays bare.",
         ],
-        controls: { items: "Contents", inspect: "Inspect" },
+        controls: { items: "Contents", inspect: "Inspect", variant: "Variant" },
         options: {
           items: {
             appearance: "Appearance",
@@ -865,6 +884,61 @@ export const en = {
           "It hides itself in print: a Print button in a printout reads as carelessness on a résumé.",
         ],
         sample: "Print / Save as PDF",
+      },
+      "page-title": {
+        name: "Page title",
+        description:
+          "Each page’s one heading, in the display face at a size that scales with the window. Five pages set it, from one definition.",
+        sample: "Movement challenges",
+      },
+      icon: {
+        name: "Icon",
+        description:
+          "The site’s icons, from Heroicons’ outline set: a 24-unit grid, a 1.5 stroke, and round ends, the same thin line as the rest of the site. They draw in the color of the text beside them and are hidden from screen readers, because the control around them carries the name.",
+        notes: [
+          "The paths are copied in, not installed: a new icon is its outline path from Heroicons added to the set.",
+        ],
+        controls: { name: "Name" },
+      },
+      table: {
+        name: "Table",
+        description:
+          "Real table markup for a grid of facts, so rows and columns are announced as rows and columns, at the page’s own type size. It scrolls sideways on a narrow screen rather than breaking its words.",
+        notes: [
+          "Reach for it before drawing a grid in a diagram: VimUI’s reach map was a drawing until it was clear it was a table.",
+        ],
+        controls: { rows: "Rows" },
+        sample: {
+          label: "Platforms and what they share",
+          platform: "Platform",
+          tokens: "Tokens",
+          components: "Components",
+          rows: [
+            ["Web portal", "Source of truth", "VimUI"],
+            ["iOS", "Copied by hand", "Its own"],
+            ["Windows", "Copied by hand", "Its own"],
+          ],
+        },
+      },
+      medal: {
+        name: "Medal",
+        description:
+          "One per case study, so a list of them can be told apart before it’s read. Drawn on the logo’s tile, in the mark’s colors, with one glyph where the monogram has its letters.",
+        notes: [
+          "A case study names its medal in its frontmatter, and no two share one.",
+          "Decorative: the name beside it carries the meaning.",
+        ],
+        controls: { name: "Medal", size: "Size" },
+      },
+      "device-figure": {
+        name: "Device figure",
+        description:
+          "One screen shown twice: in a monitor at desktop width and on a phone, from the same state. Each screen reserves its space from its own ratio, so nothing moves as the images load.",
+        notes: [
+          "The phone overlaps the monitor’s corner on a wide layout and stacks under it on a narrow one, where a small phone would be unreadable.",
+          "Case studies use it for screens behind the access link, with a light and dark switch when both were captured.",
+        ],
+        sample: "The caption says what to look at, at both sizes.",
       },
     },
   },

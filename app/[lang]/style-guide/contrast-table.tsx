@@ -2,7 +2,15 @@
 
 import { useEffect, useState } from "react";
 
-import { Badge } from "@/components/cksui";
+import {
+  Badge,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/cksui";
 import { format } from "@/components/rich-text";
 import { CONTRAST_PAIRS, contrastRatio, grade } from "@/lib/contrast";
 import type { Messages } from "@/lib/i18n/messages";
@@ -85,34 +93,28 @@ export function ContrastTable({
   }
 
   return (
-    <div className="mt-6 overflow-x-auto">
-      <table className="w-full border-collapse text-sm">
+    <div className="mt-6">
+      <Table>
         <caption className="sr-only">{labels.caption}</caption>
-        <thead>
-          <tr className="border-b border-input text-left">
-            <th scope="col" className="py-2 pr-4 font-medium">
-              {labels.pair}
-            </th>
-            <th
-              scope="col"
-              className="py-2 pr-4 text-right font-medium tabular-nums"
-            >
+        <TableHeader>
+          <TableRow>
+            <TableHead scope="col">{labels.pair}</TableHead>
+            <TableHead scope="col" className="text-right tabular-nums">
               {labels.ratio}
-            </th>
-            <th scope="col" className="py-2 pr-4 font-medium">
-              AA
-            </th>
-            <th scope="col" className="py-2 font-medium">
-              AAA
-            </th>
-          </tr>
-        </thead>
-        <tbody>
+            </TableHead>
+            <TableHead scope="col">AA</TableHead>
+            <TableHead scope="col">AAA</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {rows.map((row) => {
             const result = row.ratio ? grade(row.ratio, row.nonText) : null;
             return (
-              <tr key={row.label} className="border-b border-border">
-                <th scope="row" className="py-3 pr-4 font-normal">
+              <TableRow key={row.label}>
+                <TableHead
+                  scope="row"
+                  className="py-3 align-middle text-sm normal-case tracking-normal whitespace-normal text-foreground"
+                >
                   <span className="flex items-center gap-2.5">
                     {/*
                       Text pairs get letters; non-text pairs get a boundary.
@@ -146,11 +148,11 @@ export function ContrastTable({
                       </span>
                     </span>
                   </span>
-                </th>
-                <td className="py-3 pr-4 text-right tabular-nums">
+                </TableHead>
+                <TableCell className="text-right tabular-nums">
                   {row.ratio ? `${row.ratio.toFixed(2)}:1` : "—"}
-                </td>
-                <td className="py-3 pr-4">
+                </TableCell>
+                <TableCell>
                   {result ? (
                     <Badge variant={result.aa ? "soft" : "solid"}>
                       {result.aa
@@ -162,8 +164,8 @@ export function ContrastTable({
                   ) : (
                     "—"
                   )}
-                </td>
-                <td className="py-3">
+                </TableCell>
+                <TableCell>
                   {result ? (
                     <Badge variant={result.aaa ? "soft" : "outline"}>
                       {result.aaa ? labels.pass : "—"}
@@ -171,12 +173,12 @@ export function ContrastTable({
                   ) : (
                     "—"
                   )}
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             );
           })}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   );
 }

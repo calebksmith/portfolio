@@ -60,6 +60,22 @@
   --ck-radius-sm: 2px;
   --ck-radius-md: 4px;
   --ck-radius-lg: 8px;
+  /* Device frames around screenshots. Nested corners follow one rule: the
+     inner radius is the outer radius less the space between them (the bezel
+     and the frame's 1px border), so the two curves stay concentric.
+
+     The monitor starts from its body and works in: the screenshot's corner is
+     what's left. The phone starts from its screen and works out, because the
+     bezel is too thin to leave a usable inner curve from a rounder body. */
+  --ck-device-bezel: 8px;
+  --ck-radius-monitor: 12px;
+  --ck-radius-monitor-screen: calc(
+    var(--ck-radius-monitor) - var(--ck-device-bezel) - 1px
+  );
+  --ck-radius-phone-screen: 14px;
+  --ck-radius-phone: calc(
+    var(--ck-radius-phone-screen) + var(--ck-device-bezel) + 1px
+  );
 
   /* Hover and press feedback. Fast enough not to lag the pointer, slow enough
      to read as a fade rather than a switch. Every interactive surface uses it. */
@@ -95,10 +111,10 @@
   --ck-measure: 62ch;
   --ck-measure-wide: 75ch;
 
-  /* The page container. Content ran to the window's full width, which on a wide
-     monitor left every page hugging the left gutter with a field of empty space
-     to the right — the measure capped the line length but nothing centred it,
-     so the result read as unfinished rather than as restraint.
+  /* The page container: how far content runs, not where it sits. Pages are
+     left-aligned on the header's gutter, so the logo, every heading, and every
+     figure share one left edge at any window width. Centring the container
+     was tried and moved that edge on wide screens, away from the navigation.
 
      72rem holds a six-column bento at a sensible card size and leaves prose at
      roughly two thirds of it, which is the relationship a page wants: headings
@@ -377,6 +393,10 @@
   --radius-sm: var(--ck-radius-sm);
   --radius-md: var(--ck-radius-md);
   --radius-lg: var(--ck-radius-lg);
+  --radius-monitor: var(--ck-radius-monitor);
+  --radius-monitor-screen: var(--ck-radius-monitor-screen);
+  --radius-phone: var(--ck-radius-phone);
+  --radius-phone-screen: var(--ck-radius-phone-screen);
 
   /* Type. The label sizes and tracking exist so the site's most-repeated text
      style has one definition rather than ten. Tailwind's `--text-*` and
