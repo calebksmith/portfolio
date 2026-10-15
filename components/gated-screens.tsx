@@ -2,7 +2,12 @@
 
 import { useState, useSyncExternalStore } from "react";
 
-import { ControlBar, ControlToggle, DeviceFigure } from "@/components/cksui";
+import {
+  ControlBar,
+  ControlToggle,
+  DeviceFigure,
+  Icon,
+} from "@/components/cksui";
 
 import { GatedImage } from "./gated-image";
 
@@ -76,7 +81,7 @@ export function GatedScreens({
               {(["light", "dark"] as const).map((m) => (
                 <ControlToggle
                   key={m}
-                  icon={m === "light" ? <SunIcon /> : <MoonIcon />}
+                  icon={<Icon name={m === "light" ? "sun" : "moon"} />}
                   label={labels[m]}
                   pressed={mode === m}
                   onClick={() => setChosen(m)}
@@ -87,41 +92,5 @@ export function GatedScreens({
         }
       />
     </div>
-  );
-}
-
-function SunIcon() {
-  return (
-    <svg
-      aria-hidden="true"
-      focusable="false"
-      viewBox="0 0 16 16"
-      className="size-4 shrink-0"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-    >
-      <circle cx="8" cy="8" r="3" />
-      <path d="M8 1.5v1.5M8 13v1.5M1.5 8H3M13 8h1.5M3.4 3.4l1 1M11.6 11.6l1 1M3.4 12.6l1-1M11.6 4.4l1-1" />
-    </svg>
-  );
-}
-
-function MoonIcon() {
-  return (
-    <svg
-      aria-hidden="true"
-      focusable="false"
-      viewBox="0 0 16 16"
-      className="size-4 shrink-0"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M13.5 9.5A5.5 5.5 0 1 1 6.5 2.5a4.5 4.5 0 0 0 7 7Z" />
-    </svg>
   );
 }

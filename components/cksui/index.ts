@@ -24,8 +24,10 @@ export {
 export { Eyebrow, type EyebrowProps } from "./eyebrow";
 export { DeviceFigure } from "./device-figure";
 export { Figure } from "./figure";
+export { Icon, type IconName } from "./icon";
 export { Inspector, type InspectorLabels } from "./inspector";
 export { Monogram } from "./monogram";
+export { PageTitle } from "./page-title";
 export { PrintButton } from "./print-button";
 export { SiteFooter } from "./site-footer";
 export { Skeleton } from "./skeleton";

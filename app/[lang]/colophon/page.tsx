@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { Eyebrow } from "@/components/cksui";
+import { Badge, Eyebrow, PageTitle } from "@/components/cksui";
 import { Mdx } from "@/components/mdx";
 import { getPageSource } from "@/lib/content/pages";
 import { isLocale } from "@/lib/i18n/config";
@@ -302,19 +302,14 @@ export default async function ColophonPage({
         <Eyebrow className="mb-5">
           {t.eyebrow} · {site.name}
         </Eyebrow>
-        <h1 className="font-display text-[clamp(2rem,6vw,3rem)] font-semibold leading-[1.03] tracking-[-0.03em] text-balance text-foreground">
-          {t.title}
-        </h1>
+        <PageTitle>{t.title}</PageTitle>
         <p className="mt-5 max-w-measure-wide text-pretty text-muted-foreground">
           {t.intro}
         </p>
         <ul className="mt-7 flex flex-wrap gap-1.5">
           {stack.map((item) => (
-            <li
-              key={item}
-              className="rounded-sm border border-border px-1.5 py-0.5 text-xs text-muted-foreground"
-            >
-              {item}
+            <li key={item}>
+              <Badge>{item}</Badge>
             </li>
           ))}
         </ul>

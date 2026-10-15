@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { Button, Eyebrow, cn } from "@/components/cksui";
+import { Button, Eyebrow, Icon, cn } from "@/components/cksui";
 import { localizePath, type Locale } from "@/lib/i18n/config";
 import type { Messages } from "@/lib/i18n/messages";
 import { getLocale, getMessages } from "@/lib/i18n/server";
@@ -30,24 +30,6 @@ import { ScrollCue } from "./scroll-cue";
  * Span collapses to one column on a phone, so a layout leaning on span alone
  * flattens to identical boxes exactly where reading order matters most.
  */
-
-function ExternalIcon() {
-  return (
-    <svg
-      aria-hidden="true"
-      focusable="false"
-      viewBox="0 0 16 16"
-      className="size-3.5 shrink-0"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M6 3h7v7M13 3 4 12" />
-    </svg>
-  );
-}
 
 /**
  * A pointer to somewhere else — a utility page on this site, or an outside
@@ -101,7 +83,7 @@ function PointerCard({
             {title}
           </Link>
         )}
-        {external ? <ExternalIcon /> : null}
+        {external ? <Icon name="external" className="size-3.5" /> : null}
       </h3>
 
       <p className="text-sm text-pretty text-muted-foreground">{description}</p>

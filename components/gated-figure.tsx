@@ -1,4 +1,4 @@
-import { Button, DeviceFigure, Figure } from "@/components/cksui";
+import { Button, DeviceFigure, Figure, Icon } from "@/components/cksui";
 import { getMessages } from "@/lib/i18n/server";
 import { site } from "@/lib/site";
 
@@ -58,7 +58,7 @@ export async function GatedFigure({
   const request = (
     <div className="flex max-w-xs flex-col items-center gap-2 rounded-lg border border-border bg-card px-5 py-4 text-center text-card-foreground shadow-lift">
       <p className="flex items-center gap-2 text-sm font-semibold">
-        <LockIcon />
+        <Icon name="lock" className="text-muted-foreground" />
         {t.title}
       </p>
       {/* On a phone the frame is short; the title, the button, and the
@@ -190,24 +190,5 @@ function ObscuredScreen() {
     <div className="relative h-full w-full overflow-hidden">
       <Obscured />
     </div>
-  );
-}
-
-function LockIcon() {
-  return (
-    <svg
-      aria-hidden="true"
-      focusable="false"
-      viewBox="0 0 16 16"
-      className="size-4 shrink-0 text-muted-foreground"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <rect x="3" y="7" width="10" height="7" rx="1.5" />
-      <path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" />
-    </svg>
   );
 }

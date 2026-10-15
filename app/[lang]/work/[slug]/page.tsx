@@ -3,7 +3,13 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ViewTransition } from "react";
 
-import { Badge, Eyebrow, SpecList, SpecRow } from "@/components/cksui";
+import {
+  Badge,
+  Eyebrow,
+  SpecList,
+  SpecRow,
+  PageTitle,
+} from "@/components/cksui";
 import { Mdx } from "@/components/mdx";
 import { getCaseStudies, getCaseStudy } from "@/lib/content/work";
 import { LOCALES, isLocale, localizePath } from "@/lib/i18n/config";
@@ -81,13 +87,13 @@ export default async function CaseStudyPage({
               subheading; the summary sits in the page description instead,
               where search results and link previews read it. */}
           <header>
-            <h1 className="font-display text-[clamp(2rem,6vw,3rem)] font-semibold leading-[1.03] tracking-[-0.03em] text-balance text-foreground">
+            <PageTitle>
               {study.name}
               <span className="sr-only">: </span>
               <span className="mt-2 block text-xl font-normal tracking-[-0.01em] text-muted-foreground sm:text-2xl">
                 {study.descriptor}
               </span>
-            </h1>
+            </PageTitle>
 
             {/* The kind of work and when. The key result isn't a chip here:
                 it gets its own row below, where it can be read as a result. */}

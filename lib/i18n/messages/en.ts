@@ -130,6 +130,13 @@ export const en = {
       stat: "Figure first, label second, on the card surface. The label carries any caveat the number needs.",
       "gated-figure":
         "Locked by default: the screenshot’s own frame, neutral shapes blurred past recognition, and a request for access. A browser without access never requests the image.",
+      "device-figure":
+        "A monitor and a phone showing the same state. Each screen holds its space from its own ratio, so nothing moves as the images load.",
+      "gated-screens":
+        "What someone with an access link sees in a gated pair, with the light and dark switch. Only the chosen mode’s images are requested.",
+      icon: "Decorative: aria-hidden, in currentColor. The control or link around it carries the name.",
+      "page-title":
+        "The page’s one <h1>, in the display face at a size that scales with the window.",
       tabs: "Segmented tabs: arrow keys move between views, and every view stays in the page, hidden rather than removed, so it still works without JavaScript.",
       "bento-tile":
         "Span follows content weight; hierarchy also carried by type scale.",
@@ -896,6 +903,31 @@ export const en = {
           "It hides itself in print: a Print button in a printout reads as carelessness on a résumé.",
         ],
         sample: "Print / Save as PDF",
+      },
+      "page-title": {
+        name: "Page title",
+        description:
+          "Each page’s one heading, in the display face at a size that scales with the window. Five pages set it, from one definition.",
+        sample: "Movement challenges",
+      },
+      icon: {
+        name: "Icon",
+        description:
+          "The site’s icons, on one sixteen-unit grid with one stroke. They draw in the color of the text beside them and are hidden from screen readers, because the control around them carries the name.",
+        notes: [
+          "A new icon is a path added to the set, not another copy of the wrapper.",
+        ],
+        controls: { name: "Name" },
+      },
+      "device-figure": {
+        name: "Device figure",
+        description:
+          "One screen shown twice: in a monitor at desktop width and on a phone, from the same state. Each screen reserves its space from its own ratio, so nothing moves as the images load.",
+        notes: [
+          "The phone overlaps the monitor’s corner on a wide layout and stacks under it on a narrow one, where a small phone would be unreadable.",
+          "Case studies use it for screens behind the access link, with a light and dark switch when both were captured.",
+        ],
+        sample: "The caption says what to look at, at both sizes.",
       },
     },
   },

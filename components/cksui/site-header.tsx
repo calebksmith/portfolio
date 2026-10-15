@@ -20,6 +20,7 @@ import {
   ControlLink,
   ControlToggle,
 } from "./control-bar";
+import { Icon } from "./icon";
 import { Monogram } from "./monogram";
 import { cn } from "./lib/cn";
 import { useHtmlAttribute } from "./lib/use-html-attribute";
@@ -333,7 +334,14 @@ function WorkMenu({
                       {item.descriptor}
                     </span>
                   </span>
-                  {current ? <CurrentDot /> : <ArrowRight />}
+                  {current ? (
+                    <CurrentDot />
+                  ) : (
+                    <Icon
+                      name="arrow-right"
+                      className="size-3.5 text-muted-foreground transition-transform group-hover:translate-x-0.5"
+                    />
+                  )}
                 </Link>
               </li>
             );
@@ -356,7 +364,7 @@ function InspectToggle({ label }: { label: string }) {
 
   return (
     <ControlToggle
-      icon={<CrosshairIcon />}
+      icon={<Icon name="crosshair" />}
       label={label}
       pressed={active}
       onClick={() => {
@@ -383,7 +391,7 @@ function AppearanceMenu({
     <>
       <ControlButton
         popoverTarget="ck-settings"
-        icon={<SlidersIcon />}
+        icon={<Icon name="sliders" />}
         label={labels.appearance}
         active={open}
       />
@@ -487,61 +495,5 @@ function CurrentDot() {
       aria-hidden="true"
       className="size-1.5 shrink-0 rounded-full bg-primary"
     />
-  );
-}
-
-/** Marks each menu row as a destination. Decorative — the link says the rest. */
-function ArrowRight() {
-  return (
-    <svg
-      aria-hidden="true"
-      focusable="false"
-      viewBox="0 0 16 16"
-      className="size-3.5 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M3 8h10M9 4l4 4-4 4" />
-    </svg>
-  );
-}
-
-function CrosshairIcon() {
-  return (
-    <svg
-      aria-hidden="true"
-      focusable="false"
-      viewBox="0 0 16 16"
-      className="size-4"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.4"
-      strokeLinecap="round"
-    >
-      <circle cx="8" cy="8" r="4.25" />
-      <path d="M8 .75v2.5M8 12.75v2.5M.75 8h2.5M12.75 8h2.5" />
-    </svg>
-  );
-}
-
-function SlidersIcon() {
-  return (
-    <svg
-      aria-hidden="true"
-      focusable="false"
-      viewBox="0 0 16 16"
-      className="size-4"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.4"
-      strokeLinecap="round"
-    >
-      <path d="M2 4.5h5M11 4.5h3M2 11.5h3M9 11.5h5" />
-      <circle cx="9" cy="4.5" r="1.75" />
-      <circle cx="7" cy="11.5" r="1.75" />
-    </svg>
   );
 }

@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { Eyebrow, cn } from "@/components/cksui";
+import { Eyebrow, Icon, cn } from "@/components/cksui";
 import type { CaseStudy } from "@/lib/content/work";
 import { localizePath } from "@/lib/i18n/config";
 import { getLocale, getMessages } from "@/lib/i18n/server";
@@ -66,19 +66,10 @@ export async function CaseStudyCard({
         "has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-ring",
       )}
     >
-      <svg
-        aria-hidden="true"
-        focusable="false"
-        viewBox="0 0 16 16"
-        className="absolute top-6 right-6 size-4 text-primary transition-transform group-hover:translate-x-0.5"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M3 8h10M9 4l4 4-4 4" />
-      </svg>
+      <Icon
+        name="arrow-right"
+        className="absolute top-6 right-6 text-primary transition-transform group-hover:translate-x-0.5"
+      />
 
       <Eyebrow className="pr-8">{areas[area]}</Eyebrow>
 

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { Eyebrow, ThemeSwitcher } from "@/components/cksui";
+import { Eyebrow, ThemeSwitcher, PageTitle } from "@/components/cksui";
 import { RichText } from "@/components/rich-text";
 import { isLocale } from "@/lib/i18n/config";
 import { alternates } from "@/lib/i18n/metadata";
@@ -83,9 +83,7 @@ export default async function StyleGuidePage({
       className="w-full max-w-page px-6 py-14 sm:px-10"
     >
       <header className="border-b border-border pb-8">
-        <h1 className="font-display text-[clamp(2rem,6vw,3rem)] font-semibold leading-[1.03] tracking-[-0.03em] text-balance text-foreground">
-          {t.title}
-        </h1>
+        <PageTitle>{t.title}</PageTitle>
         <p className="mt-5 max-w-measure-wide text-pretty text-muted-foreground">
           {t.intro}
         </p>

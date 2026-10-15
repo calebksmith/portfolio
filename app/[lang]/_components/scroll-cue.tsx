@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 
+import { Icon } from "@/components/cksui";
 import { usePrefersReducedMotion } from "@/components/cksui/lib/use-reduced-motion";
 
 import { useHeroReveal } from "./hero-reveal";
@@ -57,19 +58,7 @@ export function ScrollCue({ label }: { label: string }) {
         className="group inline-flex min-h-tap flex-col items-center gap-2 rounded-md px-4 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
       >
         {label}
-        <svg
-          aria-hidden="true"
-          focusable="false"
-          viewBox="0 0 16 16"
-          className="ck-scroll-cue size-4"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M8 2.5v11M3.5 9.5 8 14l4.5-4.5" />
-        </svg>
+        <Icon name="arrow-down" className="ck-scroll-cue" />
       </a>
     </div>
   );
