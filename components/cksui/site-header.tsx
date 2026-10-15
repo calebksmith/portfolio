@@ -113,6 +113,16 @@ function buildCrumbs(
   // "CALEB SMITH" was taking from the path on a phone.
   const crumbs: Crumb[] = [{ kind: "mark", label: "CS", href: home }];
 
+  // On a case study the Work menu is the whole trail after the mark: its
+  // trigger names the study you're on, and opening it lists the rest. A
+  // separate "/ Name" crumb after a menu that already lists every name said
+  // the same thing twice.
+  if (segments[0] === "work" && segments.length === 2) {
+    const current = work.find((item) => item.slug === segments[1]);
+    crumbs.push({ kind: "menu", label: current?.name ?? labels.work });
+    return crumbs;
+  }
+
   segments.forEach((segment, index) => {
     const isLast = index === segments.length - 1;
 
@@ -223,6 +233,7 @@ export function SiteHeader({
                   </Link>
                 ) : crumb.kind === "menu" ? (
                   <WorkMenu
+                    label={crumb.label}
                     work={work}
                     currentSlug={currentSlug}
                     locale={locale}
@@ -263,11 +274,14 @@ export function SiteHeader({
 }
 
 function WorkMenu({
+  label,
   work,
   currentSlug,
   locale,
   labels,
 }: {
+  /** "Work", or the case study you're on, which the menu also lists. */
+  label: string;
   work: WorkItem[];
   currentSlug: string | null;
   locale: Locale;
@@ -290,10 +304,17 @@ function WorkMenu({
           "gap-1 rounded-sm px-1.5 underline-offset-4 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
           open
             ? "bg-muted text-foreground"
-            : "text-muted-foreground hover:bg-muted hover:text-foreground",
+            : label !== labels.work
+              ? "text-foreground hover:bg-muted"
+              : "text-muted-foreground hover:bg-muted hover:text-foreground",
         )}
       >
-        {labels.work}
+        {/* On a case study the trigger shows its name, so the button says
+            which menu it opens before the name. */}
+        {label !== labels.work ? (
+          <span className="sr-only">{labels.work}: </span>
+        ) : null}
+        <span className="max-w-[55vw] truncate sm:max-w-none">{label}</span>
         <Chevron open={open} />
       </button>
 
