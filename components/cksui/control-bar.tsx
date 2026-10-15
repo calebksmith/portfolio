@@ -40,7 +40,8 @@ export function ControlBar({
         // second barrier stacked on it. Grouping comes from proximity and the
         // shared hover treatment, which is enough for a handful of controls.
         "flex items-stretch gap-1",
-        variant === "segmented" && "rounded-md border border-border p-0.5",
+        variant === "segmented" &&
+          "rounded-md border border-border bg-background p-0.5 text-foreground",
         className,
       )}
       {...props}
@@ -137,27 +138,38 @@ export function ControlToggle({
   icon,
   label,
   pressed,
+  iconOnly = false,
   className,
   ...props
 }: ComponentProps<"button"> & {
   icon: ReactNode;
   label: string;
   pressed: boolean;
+  /**
+   * The label stays for screen readers and as a tooltip, at every width.
+   * For a switch whose icons say it all, like light and dark, sitting over a
+   * figure where words would cover it.
+   */
+  iconOnly?: boolean;
 }) {
   return (
     <button
       type="button"
       data-slot="control-toggle"
       aria-pressed={pressed}
+      title={iconOnly ? label : undefined}
       className={cn(
         CONTROL_ITEM,
         pressed ? CONTROL_ACTIVE : CONTROL_REST,
+        iconOnly && "min-w-tap px-0 sm:px-0",
         className,
       )}
       {...props}
     >
       {icon}
-      <span className="sr-only sm:not-sr-only">{label}</span>
+      <span className={iconOnly ? "sr-only" : "sr-only sm:not-sr-only"}>
+        {label}
+      </span>
     </button>
   );
 }

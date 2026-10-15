@@ -39,19 +39,27 @@ export function Figure({
    * Leave it out only for content that has its size on first paint.
    */
   ratio?: string;
-  /** On the caption's row, at the right: anything that acts on the figure. */
+  /** Over the frame's top-right corner: anything that acts on the figure. */
   controls?: ReactNode;
 }) {
   return (
     <figure
       data-slot="figure"
       className={cn(
-        "mt-8",
+        "relative mt-8",
         width === "breakout" ? "max-w-none" : "max-w-measure-wide",
         className,
       )}
       {...props}
     >
+      {/* Controls straddle the frame's top edge at the right on a wide screen,
+          so they overlap the figure without covering what's in it; on a
+          narrow one they sit above it. */}
+      {controls ? (
+        <div className="mb-3 flex justify-end sm:absolute sm:-top-6 sm:right-4 sm:z-10 sm:mb-0">
+          {controls}
+        </div>
+      ) : null}
       <div
         style={ratio ? { aspectRatio: ratio } : undefined}
         className={cn(
@@ -62,15 +70,9 @@ export function Figure({
         {children}
       </div>
 
-      {/* The caption and anything that acts on the figure share one row:
-          the words at the left, the controls at the far right, in the space
-          the caption's measure leaves. They stack on a narrow screen. */}
-      <div className="mt-3 flex flex-col-reverse gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <figcaption className="max-w-measure text-sm text-pretty text-muted-foreground">
-          {caption}
-        </figcaption>
-        {controls ? <div className="shrink-0">{controls}</div> : null}
-      </div>
+      <figcaption className="mt-3 max-w-measure text-sm text-pretty text-muted-foreground">
+        {caption}
+      </figcaption>
     </figure>
   );
 }

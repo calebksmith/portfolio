@@ -27,7 +27,10 @@ export function useScreenMode() {
   return [chosen ?? initial, setChosen] as const;
 }
 
-/** The light and dark switch over a screenshot captured in both modes. */
+/**
+ * The light and dark switch over a screenshot captured in both modes: a sun
+ * and a moon, with their names for screen readers and as tooltips.
+ */
 export function ScreenModeSwitch({
   mode,
   onChange,
@@ -45,6 +48,7 @@ export function ScreenModeSwitch({
           icon={<Icon name={m === "light" ? "sun" : "moon"} />}
           label={labels[m]}
           pressed={mode === m}
+          iconOnly
           onClick={() => onChange(m)}
         />
       ))}
