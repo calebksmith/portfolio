@@ -264,8 +264,12 @@ describe("screenshots", () => {
   it("every gated figure names a path in the private store", () => {
     const srcs = LOCALES.flatMap((locale) =>
       byLocale[locale].flatMap((study) =>
-        [...study.body.matchAll(/<GatedFigure[^>]*?\ssrc="([^"]+)"/g)].map(
-          (match) => match[1],
+        // The desktop screen, its dark twin, and the phone's pair inside
+        // `phone={{ src: "…", dark: "…" }}`.
+        [...study.body.matchAll(/<GatedFigure[\s\S]*?\/>/g)].flatMap((figure) =>
+          [...figure[0].matchAll(/\b(?:src|dark)(?:=|:\s*)"([^"]+)"/g)].map(
+            (match) => match[1],
+          ),
         ),
       ),
     );

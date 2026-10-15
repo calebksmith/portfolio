@@ -22,6 +22,7 @@ export {
   ControlToggle,
 } from "./control-bar";
 export { Eyebrow, type EyebrowProps } from "./eyebrow";
+export { DeviceFigure } from "./device-figure";
 export { Figure } from "./figure";
 export { Inspector, type InspectorLabels } from "./inspector";
 export { Monogram } from "./monogram";

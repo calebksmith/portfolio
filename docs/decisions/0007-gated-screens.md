@@ -57,3 +57,9 @@ screenshot's size and shows neutral shapes blurred past recognition under "This
 design is restricted" and a request-access button, so a reader without access
 sees part of the case study they're missing rather than an empty notice. The
 shapes are drawn, not taken from the image.
+
+**Amended 2026-10-15:** a gated figure can be a pair: the same state captured
+at desktop (1280 wide) and phone (375 wide) width, drawn in a monitor and a
+phone (`DeviceFigure`). Where both modes were captured, a light and dark switch
+swaps the pair; only the chosen mode's images are requested. The locked version
+keeps both frames, blurred, so it holds the same space.

@@ -31,11 +31,14 @@ export function GatedImage({
   alt,
   width,
   height,
+  fit = "contain",
 }: {
   src: string;
   alt: string;
   width: number;
   height: number;
+  /** `cover` fills a device screen from the top, as the screen would. */
+  fit?: "contain" | "cover";
 }) {
   const show = useSyncExternalStore(subscribe, granted, onServer);
   if (!show) return null;
@@ -52,7 +55,11 @@ export function GatedImage({
       height={height}
       decoding="async"
       onError={fallBack}
-      className="h-full w-full object-contain"
+      className={
+        fit === "cover"
+          ? "h-full w-full object-cover object-top"
+          : "h-full w-full object-contain"
+      }
     />
   );
 }

@@ -423,6 +423,11 @@ export const en = {
     title: "This design is restricted",
     note: "Available to hiring teams on request.",
     ask: "Request access on LinkedIn",
+    modes: {
+      group: "Screenshot color mode",
+      light: "Light",
+      dark: "Dark",
+    },
   },
 
   caseStudy: {

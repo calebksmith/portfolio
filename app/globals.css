@@ -60,6 +60,10 @@
   --ck-radius-sm: 2px;
   --ck-radius-md: 4px;
   --ck-radius-lg: 8px;
+  /* Device frames around screenshots: a monitor's screen corner and a phone's
+     body. Rounder than any card on purpose, so a frame reads as hardware. */
+  --ck-radius-screen: 12px;
+  --ck-radius-phone: 28px;
 
   /* Hover and press feedback. Fast enough not to lag the pointer, slow enough
      to read as a fade rather than a switch. Every interactive surface uses it. */
@@ -377,6 +381,8 @@
   --radius-sm: var(--ck-radius-sm);
   --radius-md: var(--ck-radius-md);
   --radius-lg: var(--ck-radius-lg);
+  --radius-screen: var(--ck-radius-screen);
+  --radius-phone: var(--ck-radius-phone);
 
   /* Type. The label sizes and tracking exist so the site's most-repeated text
      style has one definition rather than ten. Tailwind's `--text-*` and
