@@ -61,7 +61,7 @@ export async function CaseStudyCard({
       // Grid placement lives on the Reveal wrapper, since that is what the grid
       // actually lays out. `h-full` keeps the card filling its cell.
       className={cn(
-        "group relative flex h-full cursor-pointer flex-col gap-3 rounded-lg border border-border bg-card p-6 text-card-foreground",
+        "group @container relative flex h-full cursor-pointer flex-col gap-3 rounded-lg border border-border bg-card p-6 text-card-foreground",
         // The lift is transform and shadow, so it is named explicitly —
         // `transition-colors` would animate the fill and snap the movement.
         "transition-[color,background-color,border-color,transform,box-shadow] hover:-translate-y-0.5 hover:shadow-lift focus-within:-translate-y-0.5 focus-within:shadow-lift",
@@ -85,6 +85,7 @@ export async function CaseStudyCard({
         area={areas[area]}
         role={role}
         year={year}
+        compact
         className="pr-8"
       />
 
