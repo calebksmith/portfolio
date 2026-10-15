@@ -9,8 +9,9 @@ import { cn } from "@/components/cksui";
  * grew its 11- and 12-unit labels to 16 and 17 pixels, larger than the prose
  * beside it. Capped at its own viewBox width, one unit is never more than one
  * pixel: the title sits at the eyebrow's size and the labels at the caption's,
- * and on a narrower screen the drawing scales down as a whole. It sits at the
- * frame's left edge, like everything else on the page.
+ * and on a narrower screen the drawing scales down as a whole. The frame
+ * hugs it rather than stretching to the page, so a small drawing gets a small
+ * frame.
  *
  * The type scale, in viewBox units: 11 with tracking for the title (the
  * eyebrow), 11 for notes, 12 for labels, 13 for the names that lead a group.
@@ -34,8 +35,8 @@ export function Diagram({
       viewBox={`0 0 ${width} ${height}`}
       role="img"
       aria-label={label}
-      style={{ maxWidth: width }}
-      className={cn("block h-auto w-full", className)}
+      style={{ width, maxWidth: "100%" }}
+      className={cn("block h-auto", className)}
       fill="none"
       {...props}
     >

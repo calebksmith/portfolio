@@ -59,7 +59,7 @@ export function Figure({
         style={ratio ? { aspectRatio: ratio } : undefined}
         className={cn(
           "overflow-hidden rounded-lg border border-border bg-card",
-          !ratio && "p-4 sm:p-6",
+          !ratio && "w-fit max-w-full p-4 sm:p-6",
         )}
       >
         {children}
