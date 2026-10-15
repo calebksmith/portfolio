@@ -128,20 +128,8 @@ function Segment({ children }: SegmentProps) {
  * cksUI's Tabs owns the behavior: the keyboard, the roles, and the no-script
  * fallback that shows every view stacked. Held to the prose measure, so the
  * control sits over the column it switches rather than at the page's edge.
- *
- * `width="breakout"` lets the views span the content width, so a figure in
- * one can too, and the control moves to the content's edge with them. The
- * prose inside stays at the measure.
  */
-function Segments({
-  title,
-  width = "inline",
-  children,
-}: {
-  title: string;
-  width?: "inline" | "breakout";
-  children: ReactNode;
-}) {
+function Segments({ title, children }: { title: string; children: ReactNode }) {
   const items = Children.toArray(children)
     .filter(
       (child): child is ReactElement<SegmentProps> =>
@@ -166,11 +154,7 @@ function Segments({
     <Tabs
       label={title}
       items={items}
-      className={cn(
-        "mt-10",
-        width === "breakout" ? "max-w-none" : "max-w-measure-wide",
-      )}
-      barClassName={width === "breakout" ? undefined : "max-w-measure-wide"}
+      className="mt-10 max-w-measure-wide"
       header={
         <Eyebrow asChild>
           <h3>{title}</h3>
