@@ -431,7 +431,7 @@ export const en = {
      * small label on its card, so the cards read as groups without headings.
      */
     areas: {
-      workers: "Workers",
+      workers: "Field-based workers",
       "desk-workers": "Desk-based workers",
       "safety-leaders": "Safety leaders",
       admins: "Admins",
@@ -894,9 +894,9 @@ export const en = {
       icon: {
         name: "Icon",
         description:
-          "The site’s icons, on one sixteen-unit grid with one stroke. They draw in the color of the text beside them and are hidden from screen readers, because the control around them carries the name.",
+          "The site’s icons, from Heroicons’ outline set: a 24-unit grid, a 1.5 stroke, and round ends, the same thin line as the rest of the site. They draw in the color of the text beside them and are hidden from screen readers, because the control around them carries the name.",
         notes: [
-          "A new icon is a path added to the set, not another copy of the wrapper.",
+          "The paths are copied in, not installed: a new icon is its outline path from Heroicons added to the set.",
         ],
         controls: { name: "Name" },
       },

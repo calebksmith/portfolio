@@ -5,7 +5,7 @@ import type { CaseStudy } from "@/lib/content/work";
  * Tags first, then the result, as two separate rows.
  *
  * The tags say what kind of work it is and where it sits: who it serves
- * (Workers, Admins, Platform), the kind of work — the lead of the role,
+ * (Field-based workers, Admins, Platform), the kind of work — the lead of the role,
  * "Product design", "Frontend" — and when. The result is the headline figure,
  * kept apart so it reads as an outcome rather than one more label.
  *
@@ -24,7 +24,7 @@ export function CaseStudyTags({
   wrap = false,
   className,
 }: Pick<CaseStudy, "role" | "year"> & {
-  /** The area's label, e.g. "Workers". */
+  /** The area's label, e.g. "Field-based workers". */
   area: string;
   /** Wrap onto more lines, where there's room for them (the page header). */
   wrap?: boolean;
