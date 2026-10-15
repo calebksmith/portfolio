@@ -189,32 +189,6 @@ export const en = {
           },
         },
         {
-          id: "how",
-          question: "How do I work?",
-          // Answers the question asked, in order, with the endpoints named. Earlier
-          // drafts opened on a category ("most of the product development cycle",
-          // "the front half of the double diamond") and made the reader decode the
-          // label before reaching the content. "From idea to working code" is the
-          // same claim as a thing you can picture.
-          //
-          // The closing line names who else is in it. A list of everything one person
-          // covers reads as a lone operator without it, which is the wrong impression
-          // to leave with a hiring manager and not what actually happens.
-          //
-          // "Deciding what gets built" moved out of the list and into that sentence.
-          // It was sitting among the steps he executes, but it is the one thing here
-          // he does not do alone — putting it in the collaboration clause is both
-          // more accurate and stops "what gets built" and "worth building" from
-          // saying the same thing twice.
-          //
-          answer:
-            "I take features 0→1: research, strategy, testing with customers, then the frontend in working code. I decide what’s worth building with product managers, engineers, and leadership.",
-          link: null,
-          // No link. Challenges is a case study about designing for repeat behavior,
-          // which is not what this answer is about, and no other page argues this
-          // particular point yet.
-        },
-        {
           id: "overengineered",
           question: "Anything overengineered here?",
           // The one question that isn't about the job — and the answer is

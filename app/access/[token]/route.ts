@@ -9,16 +9,20 @@ import { env } from "@/lib/env";
  *
  * A valid token becomes two cookies — the token itself, httpOnly, and a
  * readable flag that only tells the page which version of a gated figure to
- * show — and the visitor lands on the work. An invalid or expired link lands
- * in the same place with nothing set: no error page confirming that the link
- * format exists, and nothing a guess can learn from.
+ * show — and the visitor lands on the homepage, at the top. An invalid or
+ * expired link lands in the same place with nothing set: no error page
+ * confirming that the link format exists, and nothing a guess can learn from.
+ *
+ * No `#work` fragment. It opened the page scrolled past the hero to the first
+ * case study, so the first thing a reader saw was the middle of the page.
+ * Someone opening a link they were sent starts where every other visitor does.
  */
 export async function GET(
   request: NextRequest,
   ctx: RouteContext<"/access/[token]">,
 ) {
   const { token } = await ctx.params;
-  const response = NextResponse.redirect(new URL("/#work", request.url), 303);
+  const response = NextResponse.redirect(new URL("/", request.url), 303);
 
   // It sets a credential, so it is never cached; and the token is in this
   // URL, so it never travels on in a Referer.
