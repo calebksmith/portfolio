@@ -18,7 +18,7 @@ import { alternates } from "@/lib/i18n/metadata";
 import { messages } from "@/lib/i18n/messages";
 
 import { CaseStudyCard } from "../../_components/case-study-card";
-import { CaseStudyChips } from "../../_components/case-study-chips";
+import { CaseStudyTags } from "../../_components/case-study-chips";
 import { Reveal } from "../../_components/reveal";
 
 /**
@@ -89,25 +89,29 @@ export default async function CaseStudyPage({
               where search results and link previews read it. */}
           <header>
             {/* The medal sits beside the title like an award beside a name:
-                the same one this study wears on its card, at full size. */}
-            <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
-              <Medal name={study.medal} size="lg" />
-              <PageTitle>
-                {study.name}
-                <span className="sr-only">: </span>
-                <span className="mt-2 block text-xl font-normal tracking-[-0.01em] text-muted-foreground sm:text-2xl">
-                  {study.descriptor}
-                </span>
-              </PageTitle>
-            </div>
+                the same one this study wears on its card, at full size. The
+                tags share the title's row, at the right, so the key result
+                starts higher; on a narrower screen they drop under it. */}
+            <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between lg:gap-10">
+              <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
+                <Medal name={study.medal} size="lg" />
+                <PageTitle>
+                  {study.name}
+                  <span className="sr-only">: </span>
+                  <span className="mt-2 block text-xl font-normal tracking-[-0.01em] text-muted-foreground sm:text-2xl">
+                    {study.descriptor}
+                  </span>
+                </PageTitle>
+              </div>
 
-            {/* The kind of work and when. The key result isn't a chip here:
-                it gets its own row below, where it can be read as a result. */}
-            <CaseStudyChips
-              role={study.role}
-              year={study.year}
-              className="mt-5"
-            />
+              <CaseStudyTags
+                area={t.caseStudy.areas[study.area]}
+                role={study.role}
+                year={study.year}
+                wrap
+                className="lg:max-w-xs lg:shrink-0 lg:justify-end lg:pt-2"
+              />
+            </div>
 
             {/* What happened, then who it helped and what it was worth: the
                 key result across the top, the user's side and the business's

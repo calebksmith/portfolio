@@ -1,11 +1,11 @@
 import Link from "next/link";
 
-import { Eyebrow, Icon, Medal, cn } from "@/components/cksui";
+import { Icon, Medal, cn } from "@/components/cksui";
 import type { CaseStudy } from "@/lib/content/work";
 import { localizePath } from "@/lib/i18n/config";
 import { getLocale, getMessages } from "@/lib/i18n/server";
 
-import { CaseStudyChips } from "./case-study-chips";
+import { CaseStudyResult, CaseStudyTags } from "./case-study-chips";
 
 /**
  * A case study card: what it is, the facts that help decide, and a way in.
@@ -79,7 +79,14 @@ export async function CaseStudyCard({
           before any word is read. */}
       <Medal name={medal} size="md" />
 
-      <Eyebrow className="pr-8">{areas[area]}</Eyebrow>
+      {/* Who it serves, the kind of work, and when, as tags on one line. The
+          right padding keeps them clear of the arrow. */}
+      <CaseStudyTags
+        area={areas[area]}
+        role={role}
+        year={year}
+        className="pr-8"
+      />
 
       <Heading className="-mt-1 pr-8 font-display text-base font-semibold tracking-[-0.01em] text-balance sm:text-lg">
         {/* No underline on hover. The stretched link covers the whole tile, so
@@ -96,12 +103,7 @@ export async function CaseStudyCard({
         </Link>
       </Heading>
 
-      <CaseStudyChips
-        impact={impact}
-        role={role}
-        year={year}
-        className="mt-auto pt-1"
-      />
+      <CaseStudyResult impact={impact} className="mt-auto pt-1" />
     </article>
   );
 }
