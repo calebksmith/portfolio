@@ -16,7 +16,7 @@ import { DeviceHandoff } from "@/components/diagrams/device-handoff";
 import { Enforcement } from "@/components/diagrams/enforcement";
 import { LoginEverywhere } from "@/components/diagrams/login-everywhere";
 import { PageByPage } from "@/components/diagrams/page-by-page";
-import { SystemReach } from "@/components/diagrams/system-reach";
+import { SystemReach } from "@/components/tables/system-reach";
 import { TeamScoring } from "@/components/diagrams/team-scoring";
 import { WorkdaySchedule } from "@/components/diagrams/workday-schedule";
 import { localizePath, type Locale } from "@/lib/i18n/config";

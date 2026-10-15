@@ -40,6 +40,14 @@ export {
 } from "./site-header";
 export { SpecList, SpecRow } from "./spec-list";
 export { Stat, StatGroup } from "./stat";
+export {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "./table";
 export { Tabs } from "./tabs";
 export { StatusDot } from "./status-dot";
 export { ThemeSwitcher, type ThemeSwitcherLabels } from "./theme-switcher";

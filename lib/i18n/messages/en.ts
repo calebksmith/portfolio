@@ -134,6 +134,8 @@ export const en = {
         "A monitor and a phone showing the same state. Each screen holds its space from its own ratio, so nothing moves as the images load.",
       "gated-screens":
         "What someone with an access link sees in a gated pair, with the light and dark switch. Only the chosen mode’s images are requested.",
+      table:
+        "A grid of facts as a real table: header cells name their column, and the first cell of each row names its row.",
       medal:
         "The case study’s medal, on the logo’s tile and in the mark’s colors. Decorative; the name beside it is what’s read.",
       icon: "Decorative: aria-hidden, in currentColor. The control or link around it carries the name.",
@@ -294,7 +296,7 @@ export const en = {
         android: "Android",
         windows: "Windows",
       },
-      separateCodebases: "React Native and Electron — separate codebases",
+      separateCodebases: "React Native and Electron: separate codebases",
       oneCodebase: "one codebase",
       sourceOfTruth: "source of truth",
       copiedByHand: "copied by hand",
@@ -897,6 +899,26 @@ export const en = {
           "A new icon is a path added to the set, not another copy of the wrapper.",
         ],
         controls: { name: "Name" },
+      },
+      table: {
+        name: "Table",
+        description:
+          "Real table markup for a grid of facts, so rows and columns are announced as rows and columns, at the page’s own type size. It scrolls sideways on a narrow screen rather than breaking its words.",
+        notes: [
+          "Reach for it before drawing a grid in a diagram: VimUI’s reach map was a drawing until it was clear it was a table.",
+        ],
+        controls: { rows: "Rows" },
+        sample: {
+          label: "Platforms and what they share",
+          platform: "Platform",
+          tokens: "Tokens",
+          components: "Components",
+          rows: [
+            ["Web portal", "Source of truth", "VimUI"],
+            ["iOS", "Copied by hand", "Its own"],
+            ["Windows", "Copied by hand", "Its own"],
+          ],
+        },
       },
       medal: {
         name: "Medal",

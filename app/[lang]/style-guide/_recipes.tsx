@@ -29,6 +29,12 @@ import {
   Stat,
   StatGroup,
   StatusDot,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
   Tabs,
 } from "@/components/cksui";
 
@@ -99,6 +105,12 @@ const REGISTRY: Record<string, ElementType> = {
   Stat,
   StatGroup,
   StatusDot,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
   Tabs,
 };
 
@@ -647,6 +659,61 @@ export function makeRecipes(copy: RecipeCopy): Recipe[] {
         tag: "Icon",
         props: { name: choices.name, className: "size-6" },
       }),
+    },
+    {
+      id: "table",
+      slot: "table",
+      ...text(copy.table),
+      controls: [
+        {
+          name: "rows",
+          label: copy.table.controls.rows,
+          values: ["three", "two", "one"],
+        },
+      ],
+      build: (choices) => {
+        const sample = copy.table.sample;
+        return {
+          tag: "Table",
+          props: { "aria-label": sample.label },
+          children: [
+            {
+              tag: "TableHeader",
+              children: [
+                {
+                  tag: "TableRow",
+                  children: [
+                    sample.platform,
+                    sample.tokens,
+                    sample.components,
+                  ].map((head) => ({
+                    tag: "TableHead",
+                    props: { scope: "col" },
+                    children: [head],
+                  })),
+                },
+              ],
+            },
+            {
+              tag: "TableBody",
+              children: sample.rows
+                .slice(0, COUNT[choices.rows] ?? 3)
+                .map(([platform, tokens, components]) => ({
+                  tag: "TableRow",
+                  children: [
+                    {
+                      tag: "TableHead",
+                      props: { scope: "row" },
+                      children: [platform],
+                    },
+                    { tag: "TableCell", children: [tokens] },
+                    { tag: "TableCell", children: [components] },
+                  ],
+                })),
+            },
+          ],
+        };
+      },
     },
     {
       id: "medal",
