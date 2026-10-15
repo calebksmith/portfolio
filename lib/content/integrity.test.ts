@@ -229,6 +229,7 @@ const PUBLIC_MEDIA = [
   "login/mobile-login.webp",
   "login/web-login-wide.webp",
   "playlists/shared-page.webp",
+  "playlists/shared-page-dark.webp",
   "vimui/media-card.webp",
 ];
 

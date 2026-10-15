@@ -1,15 +1,13 @@
 "use client";
 
-import { useState, useSyncExternalStore } from "react";
-
-import {
-  ControlBar,
-  ControlToggle,
-  DeviceFigure,
-  Icon,
-} from "@/components/cksui";
+import { DeviceFigure } from "@/components/cksui";
 
 import { GatedImage } from "./gated-image";
+import {
+  ScreenModeSwitch,
+  useScreenMode,
+  type ScreenModeLabels,
+} from "./screen-mode";
 
 export type Screen = {
   src: string;
@@ -19,17 +17,6 @@ export type Screen = {
   width: number;
   height: number;
 };
-
-type ScreenMode = "light" | "dark";
-
-/** The site's own mode, so a reader in dark mode starts on the dark screens. */
-const subscribe = () => () => {};
-const siteMode = (): ScreenMode => {
-  const set = document.documentElement.getAttribute("data-mode");
-  if (set === "light" || set === "dark") return set;
-  return matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-};
-const onServer = (): ScreenMode => "light";
 
 /**
  * The granted half of a gated device pair: a monitor and a phone showing the
@@ -48,12 +35,10 @@ export function GatedScreens({
   desktop: Screen;
   phone: Screen;
   caption: string;
-  labels: { group: string; light: string; dark: string };
+  labels: ScreenModeLabels;
   className?: string;
 }) {
-  const initial = useSyncExternalStore(subscribe, siteMode, onServer);
-  const [chosen, setChosen] = useState<ScreenMode | null>(null);
-  const mode = chosen ?? initial;
+  const [mode, setMode] = useScreenMode();
   const toggles = Boolean(desktop.dark && phone.dark);
 
   const image = (screen: Screen) => (
@@ -77,17 +62,7 @@ export function GatedScreens({
         phone={image(phone)}
         controls={
           toggles ? (
-            <ControlBar label={labels.group}>
-              {(["light", "dark"] as const).map((m) => (
-                <ControlToggle
-                  key={m}
-                  icon={<Icon name={m === "light" ? "sun" : "moon"} />}
-                  label={labels[m]}
-                  pressed={mode === m}
-                  onClick={() => setChosen(m)}
-                />
-              ))}
-            </ControlBar>
+            <ScreenModeSwitch mode={mode} onChange={setMode} labels={labels} />
           ) : null
         }
       />

@@ -460,13 +460,23 @@ export function makeRecipes(copy: RecipeCopy): Recipe[] {
           label: copy["control-bar"].controls.inspect,
           values: ["off", "on"],
         },
+        {
+          name: "variant",
+          label: copy["control-bar"].controls.variant,
+          values: ["bare", "segmented"],
+        },
       ],
       build: (choices) => {
         const sample = copy["control-bar"].sample;
 
         return {
           tag: "ControlBar",
-          props: { label: sample.label },
+          props: {
+            label: sample.label,
+            ...(choices.variant === "segmented"
+              ? { variant: "segmented" }
+              : {}),
+          },
           children: [
             {
               tag: "ControlButton",

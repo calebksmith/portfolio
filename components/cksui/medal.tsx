@@ -1,4 +1,4 @@
-import { useId, type ReactNode } from "react";
+import type { ReactNode } from "react";
 
 import { cn } from "./lib/cn";
 
@@ -6,43 +6,18 @@ import { cn } from "./lib/cn";
  * A medal for a piece of work: one per case study, so a list of them can be
  * told apart at a glance instead of read line by line.
  *
- * Built the way an award in a fitness app is: a shaped body, a soft gradient
- * across it, an inset ring, a sheen on the top half, and one glyph. Each medal
- * differs in two ways at once, its outline and its glyph, so two never read as
- * the same even at the smallest size, where the glyph is a few pixels across.
+ * Drawn as the logo is drawn: a tile with the same 22% radius, in the mark's
+ * ground and ink, with one glyph where the monogram has its letters. A medal
+ * then reads as part of the same family as the mark in the corner, the way an
+ * app's icons share one tile shape and differ only in what's on them. The
+ * glyph is what tells two apart, so each is a distinct silhouette that holds
+ * at the smallest size.
  *
- * Everything is drawn in the primary pair, so it follows the theme and the
- * mode like the rest of the site; the glyph is the primary foreground the
- * contrast gate measures against it. The medal is decorative: the name beside
- * it carries the meaning, so it's hidden from screen readers.
+ * The medal is decorative: the name beside it carries the meaning, so it's
+ * hidden from screen readers.
  *
- * A new medal is an entry in `MEDALS`: a shape from `SHAPES` and a glyph.
+ * A new medal is a glyph added to `GLYPHS` and named in `MEDALS`.
  */
-
-/** Outlines, on a 64-unit grid centred at 32,32. */
-const SHAPES = {
-  circle: "M32 2a30 30 0 1 1 0 60a30 30 0 1 1 0-60Z",
-  hexagon: "M32 2 58 17v30L32 62 6 47V17Z",
-  octagon: "M20.5 4h23L60 20.5v23L43.5 60h-23L4 43.5v-23Z",
-  shield: "M32 2 58 11v19c0 16-12 27-26 32C18 57 6 46 6 30V11Z",
-  squircle: "M32 2c22 0 30 8 30 30s-8 30-30 30S2 54 2 32 10 2 32 2Z",
-  diamond: "M32 1.5 62.5 32 32 62.5 1.5 32Z",
-  rosette: rosette(),
-} as const;
-
-/** A seal's scalloped edge: 24 points, alternating between two radii. */
-function rosette() {
-  const points = Array.from({ length: 24 }, (_, i) => {
-    const angle = (i * Math.PI) / 12 - Math.PI / 2;
-    const radius = i % 2 === 0 ? 30.5 : 26.5;
-    const x = 32 + radius * Math.cos(angle);
-    const y = 32 + radius * Math.sin(angle);
-    return `${x.toFixed(2)} ${y.toFixed(2)}`;
-  });
-  return `M${points.join("L")}Z`;
-}
-
-type Shape = keyof typeof SHAPES;
 
 /** Glyphs, drawn in strokes on the same grid, inside roughly 18–46. */
 const GLYPHS = {
@@ -96,20 +71,17 @@ const GLYPHS = {
   ),
 } satisfies Record<string, ReactNode>;
 
-/** Every medal: its outline and its glyph. Case studies name one of these. */
+/** Every medal a case study can name. */
 export const MEDALS = {
-  podium: { shape: "rosette", glyph: "podium" },
-  checklist: { shape: "shield", glyph: "checklist" },
-  layers: { shape: "hexagon", glyph: "layers" },
-  playlist: { shape: "circle", glyph: "playlist" },
-  key: { shape: "octagon", glyph: "key" },
-  components: { shape: "squircle", glyph: "components" },
-  rails: { shape: "diamond", glyph: "rails" },
-  bell: { shape: "circle", glyph: "bell" },
-} as const satisfies Record<
-  string,
-  { shape: Shape; glyph: keyof typeof GLYPHS }
->;
+  podium: "podium",
+  checklist: "checklist",
+  layers: "layers",
+  playlist: "playlist",
+  key: "key",
+  components: "components",
+  rails: "rails",
+  bell: "bell",
+} as const satisfies Record<string, keyof typeof GLYPHS>;
 
 export type MedalName = keyof typeof MEDALS;
 
@@ -129,12 +101,6 @@ export function Medal({
   size?: keyof typeof SIZES;
   className?: string;
 }) {
-  const { shape, glyph } = MEDALS[name];
-  const outline = SHAPES[shape];
-  // One id per instance, not per medal: a gradient defined inside a hidden
-  // menu doesn't paint, so a shared id would blank every other copy of it.
-  const id = `ck-medal-${useId().replace(/[^\w-]/g, "")}`;
-
   return (
     <svg
       data-slot="medal"
@@ -143,60 +109,17 @@ export function Medal({
       viewBox="0 0 64 64"
       className={cn("shrink-0", SIZES[size], className)}
     >
-      <defs>
-        <linearGradient id={`${id}-fill`} x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="currentColor" className="text-primary" />
-          <stop
-            offset="1"
-            stopColor="currentColor"
-            className="text-primary-hover"
-          />
-        </linearGradient>
-        <linearGradient id={`${id}-sheen`} x1="0" y1="0" x2="0" y2="1">
-          <stop
-            offset="0"
-            stopColor="currentColor"
-            stopOpacity="0.28"
-            className="text-primary-foreground"
-          />
-          <stop
-            offset="0.55"
-            stopColor="currentColor"
-            stopOpacity="0"
-            className="text-primary-foreground"
-          />
-        </linearGradient>
-        <clipPath id={`${id}-clip`}>
-          <path d={outline} />
-        </clipPath>
-      </defs>
-
-      <path d={outline} fill={`url(#${id}-fill)`} />
-      <rect
-        width="64"
-        height="40"
-        fill={`url(#${id}-sheen)`}
-        clipPath={`url(#${id}-clip)`}
-      />
-      {/* The inset ring: the outline again, a step smaller. */}
-      <path
-        d={outline}
-        transform="translate(32 32) scale(0.84) translate(-32 -32)"
-        fill="none"
-        stroke="currentColor"
-        strokeOpacity="0.4"
-        strokeWidth="1.5"
-        className="text-primary-foreground"
-      />
+      {/* The logo's tile: 22% of 64 is the corner radius. */}
+      <rect width="64" height="64" rx="14" className="fill-mark-ground" />
       <g
         fill="none"
         stroke="currentColor"
         strokeWidth="3"
         strokeLinecap="round"
         strokeLinejoin="round"
-        className="text-primary-foreground"
+        className="text-mark-ink"
       >
-        {GLYPHS[glyph]}
+        {GLYPHS[MEDALS[name]]}
       </g>
     </svg>
   );

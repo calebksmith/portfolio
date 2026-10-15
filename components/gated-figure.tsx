@@ -53,7 +53,8 @@ export async function GatedFigure({
   dark?: string;
   phone?: Screen;
 }) {
-  const t = (await getMessages()).gated;
+  const messages = await getMessages();
+  const t = messages.gated;
 
   const request = (
     <div className="flex max-w-xs flex-col items-center gap-2 rounded-lg border border-border bg-card px-5 py-4 text-center text-card-foreground shadow-lift">
@@ -84,7 +85,7 @@ export async function GatedFigure({
           caption={caption}
           desktop={{ src, dark, alt, width, height }}
           phone={phone}
-          labels={t.modes}
+          labels={messages.screenModes}
         />
 
         <DeviceFigure

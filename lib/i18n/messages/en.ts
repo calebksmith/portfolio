@@ -135,7 +135,7 @@ export const en = {
       "gated-screens":
         "What someone with an access link sees in a gated pair, with the light and dark switch. Only the chosen mode’s images are requested.",
       medal:
-        "The case study’s medal: outline and glyph both differ, in the primary pair. Decorative; the name beside it is what’s read.",
+        "The case study’s medal, on the logo’s tile and in the mark’s colors. Decorative; the name beside it is what’s read.",
       icon: "Decorative: aria-hidden, in currentColor. The control or link around it carries the name.",
       "page-title":
         "The page’s one <h1>, in the display face at a size that scales with the window.",
@@ -432,11 +432,13 @@ export const en = {
     title: "This design is restricted",
     note: "Available to hiring teams on request.",
     ask: "Request access on LinkedIn",
-    modes: {
-      group: "Screenshot color mode",
-      light: "Light",
-      dark: "Dark",
-    },
+  },
+
+  /** The light and dark switch over a screenshot captured in both modes. */
+  screenModes: {
+    group: "Screenshot color mode",
+    light: "Light",
+    dark: "Dark",
   },
 
   caseStudy: {
@@ -815,8 +817,9 @@ export const en = {
         notes: [
           "ControlToggle uses aria-pressed, because it turns a page mode on rather than submitting a value.",
           "This is the real cluster from the header: the Inspect button above is this component.",
+          "Segmented adds a faint hairline, for toggles that pick one of a few states, like a screenshot’s light and dark. The header’s cluster stays bare.",
         ],
-        controls: { items: "Contents", inspect: "Inspect" },
+        controls: { items: "Contents", inspect: "Inspect", variant: "Variant" },
         options: {
           items: {
             appearance: "Appearance",
@@ -924,7 +927,7 @@ export const en = {
       medal: {
         name: "Medal",
         description:
-          "One per case study, so a list of them can be told apart before it’s read. Each differs in outline and glyph at once, and all are drawn in the primary pair, so they follow the theme.",
+          "One per case study, so a list of them can be told apart before it’s read. Drawn on the logo’s tile, in the mark’s colors, with one glyph where the monogram has its letters.",
         notes: [
           "A case study names its medal in its frontmatter, and no two share one.",
           "Decorative: the name beside it carries the meaning.",

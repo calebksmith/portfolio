@@ -2,6 +2,7 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import {
   Children,
   isValidElement,
+  type ComponentProps,
   type ComponentType,
   type ReactElement,
   type ReactNode,
@@ -9,6 +10,7 @@ import {
 
 import { cn, Eyebrow, Figure, Stat, StatGroup, Tabs } from "@/components/cksui";
 import { GatedFigure } from "@/components/gated-figure";
+import { ScreenFigureClient } from "@/components/screen-figure";
 import { ChallengeRun } from "@/components/diagrams/challenge-run";
 import { DeviceHandoff } from "@/components/diagrams/device-handoff";
 import { Enforcement } from "@/components/diagrams/enforcement";
@@ -18,6 +20,7 @@ import { SystemReach } from "@/components/diagrams/system-reach";
 import { TeamScoring } from "@/components/diagrams/team-scoring";
 import { WorkdaySchedule } from "@/components/diagrams/workday-schedule";
 import { localizePath, type Locale } from "@/lib/i18n/config";
+import { getMessages } from "@/lib/i18n/server";
 
 /**
  * Renders MDX: case studies and the colophon from `src/content/`, and cover
@@ -189,6 +192,18 @@ function Stats({
 }
 
 /**
+ * A public screenshot in the product's light and dark modes, with a switch.
+ * The switch's words come from the dictionary, so the MDX names only the
+ * images.
+ */
+async function ScreenFigure(
+  props: Omit<ComponentProps<typeof ScreenFigureClient>, "labels">,
+) {
+  const labels = (await getMessages()).screenModes;
+  return <ScreenFigureClient {...props} labels={labels} />;
+}
+
+/**
  * Components a case study may use directly. Diagrams are named here rather than
  * imported per file because MDX has no imports — the map is the whole surface.
  */
@@ -196,6 +211,7 @@ const available = {
   ...components,
   Figure,
   GatedFigure,
+  ScreenFigure,
   Segments,
   Segment,
   Stats,

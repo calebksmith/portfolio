@@ -13,14 +13,22 @@ import { cn } from "./lib/cn";
  * not part of the path."
  *
  * `role="group"` with a label means a screen reader announces the cluster once
- * rather than leaving two unrelated buttons floating in the header.
+ * rather than leaving two unrelated buttons floating in the header. *
+ * `segmented` is for a set of toggles that pick one of a few states, like a
+ * screenshot's light and dark: a faint hairline around them says they are one
+ * control with a choice in it, not separate buttons. The header's cluster
+ * stays bare, because there the header's own rule already does that job.
  */
 export function ControlBar({
   className,
   children,
   label = "Site controls",
+  variant = "bare",
   ...props
-}: ComponentProps<"div"> & { label?: string }) {
+}: ComponentProps<"div"> & {
+  label?: string;
+  variant?: "bare" | "segmented";
+}) {
   return (
     <div
       data-slot="control-bar"
@@ -32,6 +40,7 @@ export function ControlBar({
         // second barrier stacked on it. Grouping comes from proximity and the
         // shared hover treatment, which is enough for a handful of controls.
         "flex items-stretch gap-1",
+        variant === "segmented" && "rounded-md border border-border p-0.5",
         className,
       )}
       {...props}

@@ -23,6 +23,7 @@ export function Figure({
   caption,
   width = "inline",
   ratio,
+  controls,
   className,
   ...props
 }: Omit<ComponentProps<"figure">, "children"> & {
@@ -32,6 +33,8 @@ export function Figure({
   width?: "inline" | "breakout";
   /** CSS aspect-ratio, e.g. "16/7". Reserves the space before anything loads. */
   ratio: string;
+  /** Above the frame, at the right: anything that acts on what's in it. */
+  controls?: ReactNode;
 }) {
   return (
     <figure
@@ -43,6 +46,9 @@ export function Figure({
       )}
       {...props}
     >
+      {controls ? (
+        <div className="mb-3 flex justify-end">{controls}</div>
+      ) : null}
       <div
         style={{ aspectRatio: ratio }}
         className="overflow-hidden rounded-lg border border-border bg-card"
