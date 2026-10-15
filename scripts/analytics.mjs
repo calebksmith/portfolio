@@ -1,5 +1,7 @@
 /**
- * Read the visitor log: page views, where visitors are, and access link opens.
+ * Read the visitor log: case study and page views, where visitors are and
+ * came from, visitors per day, and access link opens with what each link's
+ * holder went on to read.
  *
  *   npm run analytics:report                 the last 30 days, as Markdown
  *   npm run analytics:report -- 90           the last 90 days
@@ -13,7 +15,7 @@
  * who comes back on three days counts three times. "Unique views" count each
  * visitor once per page per day.
  */
-import { readFile } from "node:fs/promises";
+import { readdir, readFile } from "node:fs/promises";
 import { join } from "node:path";
 
 import { neon } from "@neondatabase/serverless";
@@ -40,7 +42,31 @@ async function registry() {
   }
 }
 
-const [[totals], pages, places, opens, linkVisits, links] = await Promise.all([
+/** Case study names by slug, from the first half of each title. */
+async function caseStudies() {
+  const dir = join(process.cwd(), "src/content/work/en");
+  const names = new Map();
+  for (const file of await readdir(dir)) {
+    if (!file.endsWith(".mdx")) continue;
+    const source = await readFile(join(dir, file), "utf8");
+    const title = source.match(/^title: (.*)$/m)?.[1] ?? file;
+    names.set(file.replace(/\.mdx$/, ""), title.split(":")[0].trim());
+  }
+  return names;
+}
+
+const [
+  [totals],
+  pages,
+  places,
+  opens,
+  linkVisits,
+  referrers,
+  daily,
+  linkStudies,
+  links,
+  studyNames,
+] = await Promise.all([
   sql.query(
     `select count(*)::int as views,
             count(distinct (visitor_hash, path, viewed_at::date))::int as unique_views,
@@ -82,12 +108,51 @@ const [[totals], pages, places, opens, linkVisits, links] = await Promise.all([
       group by access_link_id`,
     [since],
   ),
+  sql.query(
+    `select referrer, count(distinct visitor_hash)::int as visitors
+       from page_view where viewed_at >= $1 and referrer is not null
+      group by referrer order by visitors desc`,
+    [since],
+  ),
+  sql.query(
+    `select viewed_at::date::text as day,
+            count(distinct visitor_hash)::int as visitors,
+            count(*)::int as views
+       from page_view where viewed_at >= $1
+      group by 1 order by 1`,
+    [since],
+  ),
+  sql.query(
+    `select access_link_id as link_id,
+            string_agg(distinct substr(path, 7), ', ') as slugs
+       from page_view
+      where viewed_at >= $1 and access_link_id is not null
+        and path like '/work/%'
+      group by access_link_id`,
+    [since],
+  ),
   registry(),
+  caseStudies(),
 ]);
+
+// English paths only: /work/<slug>, or /<locale>/work/<slug>.
+const studies = [...studyNames].map(([slug, name]) => {
+  const rows = pages.filter((p) =>
+    new RegExp(`^(/[a-z]{2})?/work/${slug}/?$`).test(p.path),
+  );
+  return {
+    slug,
+    name,
+    uniqueViews: rows.reduce((n, p) => n + p.unique_views, 0),
+    views: rows.reduce((n, p) => n + p.views, 0),
+  };
+});
+studies.sort((a, b) => b.uniqueViews - a.uniqueViews || b.views - a.views);
 
 const byId = (rows) => new Map(rows.map((row) => [row.link_id, row]));
 const openRows = byId(opens);
 const visitRows = byId(linkVisits);
+const studyRows = byId(linkStudies);
 const ids = new Set([
   ...links.map((l) => l.id),
   ...openRows.keys(),
@@ -107,6 +172,10 @@ const accessLinks = [...ids].map((id) => {
     openedFrom: open?.places ?? null,
     visitorsWithLink: visit?.visitors ?? 0,
     pagesViewedWithLink: visit?.views ?? 0,
+    caseStudiesViewed: (studyRows.get(id)?.slugs ?? "")
+      .split(", ")
+      .filter(Boolean)
+      .map((slug) => studyNames.get(slug.replace(/\/$/, "")) ?? slug),
   };
 });
 
@@ -115,8 +184,11 @@ const report = {
   since: since.toISOString(),
   days,
   totals,
+  caseStudies: studies,
   pages,
   places,
+  referrers,
+  daily,
   accessLinks,
 };
 
@@ -140,6 +212,13 @@ Since ${day(report.since)} · generated ${report.generatedAt}
 
 ${totals.views} page views · ${totals.unique_views} unique · ${totals.visitors} visitors
 
+## Case studies
+
+${table(
+  ["Case study", "Unique views", "Views"],
+  studies.map((s) => [s.name, s.uniqueViews, s.views]),
+)}
+
 ## Pages
 
 ${table(
@@ -152,6 +231,20 @@ ${table(
 ${table(
   ["Country", "Region", "City", "Visitors", "Views"],
   places.map((p) => [p.country, p.region, p.city, p.visitors, p.views]),
+)}
+
+## Where visitors came from
+
+${table(
+  ["Site", "Visitors"],
+  referrers.map((r) => [r.referrer, r.visitors]),
+)}
+
+## By day
+
+${table(
+  ["Day", "Visitors", "Views"],
+  daily.map((d) => [d.day, d.visitors, d.views]),
 )}
 
 ## Access links
@@ -167,6 +260,7 @@ ${table(
     "Opened from",
     "Visitors",
     "Pages viewed",
+    "Case studies viewed",
   ],
   accessLinks.map((l) => [
     l.to,
@@ -178,5 +272,6 @@ ${table(
     l.openedFrom ?? "—",
     l.visitorsWithLink,
     l.pagesViewedWithLink,
+    l.caseStudiesViewed.join(", ") || "—",
   ]),
 )}`);

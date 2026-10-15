@@ -163,9 +163,9 @@ This version differs from older App Router code in ways that matter:
 ## What is published
 
 `lib/flags.ts` decides. The whole portfolio is published. The cover-letter
-system (sign-in, admin, letters) turns on only where `DATABASE_URL` is set, and
-in development; elsewhere those routes call `notFound()`. Screenshots from
-inside Vimocity's app are shown only to people with a personal access link
+system (sign-in, admin, letters) turns on only where `DATABASE_URL` and a
+GitHub OAuth app are set, and in development; elsewhere those routes call
+`notFound()`. Screenshots from inside Vimocity's app are shown only to people with a personal access link
 (`npm run access:link`); everyone else sees a note in their place.
 
 ## Voice
