@@ -168,12 +168,13 @@ function Segments({ title, children }: { title: string; children: ReactNode }) {
 }
 
 /**
- * A case study's outcome tiles. The spacing and width are the prose column's,
- * set here rather than in the library component, which leaves layout to its
- * caller.
+ * A case study's outcome tiles, across the content width: the grid fits as
+ * many as there are and wraps only when the screen runs out. The spacing and
+ * width are set here rather than in the library component, which leaves
+ * layout to its caller.
  */
 function Stats({
-  width = "inline",
+  width = "breakout",
   children,
 }: {
   width?: "inline" | "breakout";
@@ -204,13 +205,26 @@ async function ScreenFigure(
 }
 
 /**
+ * Figures in a case study span the content width by default, so a screenshot
+ * gets the room its detail needs while the prose beside it holds to the
+ * measure. A diagram still hugs its own width inside the frame.
+ */
+function CaseFigure(props: ComponentProps<typeof Figure>) {
+  return <Figure width="breakout" {...props} />;
+}
+
+function CaseGatedFigure(props: ComponentProps<typeof GatedFigure>) {
+  return <GatedFigure frame="breakout" {...props} />;
+}
+
+/**
  * Components a case study may use directly. Diagrams are named here rather than
  * imported per file because MDX has no imports — the map is the whole surface.
  */
 const available = {
   ...components,
-  Figure,
-  GatedFigure,
+  Figure: CaseFigure,
+  GatedFigure: CaseGatedFigure,
   ScreenFigure,
   Segments,
   Segment,

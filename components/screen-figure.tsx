@@ -36,6 +36,7 @@ export function ScreenFigureClient({
 
   return (
     <Figure
+      width="breakout"
       ratio={`${width}/${height}`}
       caption={caption}
       controls={
