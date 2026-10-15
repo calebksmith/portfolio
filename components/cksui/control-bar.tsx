@@ -43,7 +43,7 @@ export function ControlBar({
         // No padding: the toggles sit flush inside the hairline, so the
         // control is no taller than its buttons plus the border.
         variant === "segmented" &&
-          "gap-2 rounded-md border border-border bg-background text-foreground",
+          "gap-0 rounded-md border border-border bg-background text-foreground",
         className,
       )}
       {...props}
@@ -163,12 +163,12 @@ export function ControlToggle({
       className={cn(
         CONTROL_ITEM,
         pressed ? CONTROL_ACTIVE : CONTROL_REST,
-        // Drawn at 36px so it sits with the page's type rather than towering
-        // over it, but still a 44px target: the invisible `after` box grows
-        // the hit area by 4px on every side. The pair is 8px apart, so the
-        // two targets meet in the middle without overlapping.
+        // Drawn at 40 × 36 so it sits with the page's type rather than
+        // towering over it, but still a 44px target: the invisible `after`
+        // box grows the hit area 4px up, down, and outward. Toggles in a set
+        // touch, so the inner sides don't grow and no two targets overlap.
         iconOnly &&
-          "relative size-9 min-h-0 px-0 after:absolute after:-inset-1 sm:px-0",
+          "relative h-9 min-h-0 w-10 px-0 after:absolute after:-inset-y-1 after:inset-x-0 first:after:-left-1 last:after:-right-1 sm:px-0",
         className,
       )}
       {...props}
