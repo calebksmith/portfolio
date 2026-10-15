@@ -4,40 +4,52 @@ import { getMessages } from "@/lib/i18n/server";
  * What an admin does to run a challenge, and what runs without them.
  *
  * The case study's point is that a challenge stopped being a support request,
- * so the drawing is one challenge on a timeline with two lanes: the admin's
- * steps above it, at the start and the end, and everything that happens on its
- * own below it. The middle of the admin lane is empty on purpose — that gap is
- * the feature.
+ * so the drawing is three columns, start to end, and every step in them is one
+ * of two kinds: filled where the admin acts, outlined where it happens on its
+ * own. The middle column has nothing filled in it, and that gap is the
+ * feature: once it's published, the admin isn't needed until it ends.
  *
- * The admin's steps are the accent pair, the one place a person acts. Emails
- * and entries are structure, in `currentColor`.
+ * The admin's steps are the accent pair, the one place a person acts. The
+ * automatic ones are structure, in `currentColor`.
  */
 
 const LEFT = 20;
-const RIGHT = 740;
-const SETUP_END = 200;
-const RUN_END = 560;
-const TIMELINE_Y = 132;
+const COLUMN = 213;
+const GAP = 40;
+const TOP = 74;
+const ROW = 46;
+const PILL = 36;
 
-/** A small envelope, top-left at (x, y). */
-function Envelope({ x, y }: { x: number; y: number }) {
+type Step = { label: string; admin?: boolean };
+
+function Pill({ x, y, step }: { x: number; y: number; step: Step }) {
   return (
-    <g className="text-muted-foreground">
+    <g>
       <rect
         x={x}
         y={y}
-        width="22"
-        height="15"
-        rx="2"
-        stroke="currentColor"
+        width={COLUMN}
+        height={PILL}
+        rx="6"
         strokeWidth="1.25"
+        stroke={step.admin ? undefined : "currentColor"}
+        className={
+          step.admin ? "fill-accent" : "fill-none text-muted-foreground"
+        }
       />
-      <path
-        d={`M${x + 1} ${y + 1} L${x + 11} ${y + 9} L${x + 21} ${y + 1}`}
-        stroke="currentColor"
-        strokeWidth="1.25"
-        strokeLinejoin="round"
-      />
+      <text
+        x={x + COLUMN / 2}
+        y={y + PILL / 2 + 4}
+        textAnchor="middle"
+        fontSize="12"
+        className={
+          step.admin
+            ? "fill-current text-accent-foreground"
+            : "fill-current text-foreground"
+        }
+      >
+        {step.label}
+      </text>
     </g>
   );
 }
@@ -45,15 +57,28 @@ function Envelope({ x, y }: { x: number; y: number }) {
 export async function ChallengeRun() {
   const t = (await getMessages()).diagrams.challengeRun;
 
-  // Entries build through the run: one bar per stretch of days, rising.
-  const entries = Array.from({ length: 14 }, (_, i) => ({
-    x: 272 + i * 20,
-    h: 3 + i * 1.5,
-  }));
+  const columns: { phase: string; steps: Step[] }[] = [
+    {
+      phase: t.phases.setup,
+      steps: [{ label: t.setup, admin: true }, { label: t.invitation }],
+    },
+    {
+      phase: t.phases.run,
+      steps: [{ label: t.reminders }, { label: t.entries }],
+    },
+    {
+      phase: t.phases.end,
+      steps: [
+        { label: t.draw, admin: true },
+        { label: t.complete, admin: true },
+        { label: t.results },
+      ],
+    },
+  ];
 
   return (
     <svg
-      viewBox="0 0 760 300"
+      viewBox="0 0 760 270"
       role="img"
       aria-label={t.label}
       className="h-full w-full"
@@ -83,159 +108,73 @@ export async function ChallengeRun() {
         {t.title}
       </text>
 
-      {/* The admin's lane: the start and the end, nothing in between. */}
-      <text
-        x={LEFT}
-        y="44"
-        fontSize="11"
-        className="fill-current text-muted-foreground"
-      >
-        {t.admin}
-      </text>
+      {columns.map((column, c) => {
+        const x = LEFT + c * (COLUMN + GAP);
+        return (
+          <g key={column.phase}>
+            <text
+              x={x}
+              y="58"
+              fontSize="13"
+              fontWeight="600"
+              className="fill-current text-foreground"
+            >
+              {column.phase}
+            </text>
+            {column.steps.map((step, s) => (
+              <Pill key={step.label} x={x} y={TOP + s * ROW} step={step} />
+            ))}
+            {c < columns.length - 1 ? (
+              <path
+                d={`M${x + COLUMN + 8} ${TOP + PILL / 2} H ${x + COLUMN + GAP - 8}`}
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                markerEnd="url(#cr-arrow)"
+                className="text-muted-foreground"
+              />
+            ) : null}
+          </g>
+        );
+      })}
+
+      {/* The key: which steps are the admin's. */}
       <g>
         <rect
           x={LEFT}
-          y="54"
-          width="176"
-          height="52"
-          rx="6"
+          y="240"
+          width="14"
+          height="14"
+          rx="3"
           className="fill-accent"
         />
         <text
-          x={LEFT + 88}
-          y="84"
-          textAnchor="middle"
-          fontSize="12"
-          className="fill-current text-accent-foreground"
-        >
-          {t.setup}
-        </text>
-      </g>
-      <g>
-        <rect
-          x={RIGHT - 176}
-          y="54"
-          width="176"
-          height="52"
-          rx="6"
-          className="fill-accent"
-        />
-        <text
-          x={RIGHT - 88}
-          y="76"
-          textAnchor="middle"
-          fontSize="12"
-          className="fill-current text-accent-foreground"
-        >
-          {t.draw}
-        </text>
-        <text
-          x={RIGHT - 88}
-          y="94"
-          textAnchor="middle"
-          fontSize="12"
-          className="fill-current text-accent-foreground"
-        >
-          {t.complete}
-        </text>
-      </g>
-
-      {/* The challenge itself, left to right, with its three phases. */}
-      <path
-        d={`M${LEFT} ${TIMELINE_Y} H ${RIGHT - 4}`}
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        markerEnd="url(#cr-arrow)"
-        className="text-foreground"
-      />
-      {[SETUP_END, RUN_END].map((x) => (
-        <path
-          key={x}
-          d={`M${x} ${TIMELINE_Y - 7} V ${TIMELINE_Y + 7}`}
-          stroke="currentColor"
-          strokeWidth="1.5"
-          className="text-foreground"
-        />
-      ))}
-      {[
-        { x: (LEFT + SETUP_END) / 2, label: t.phases.setup },
-        { x: (SETUP_END + RUN_END) / 2, label: t.phases.run },
-        { x: (RUN_END + RIGHT) / 2, label: t.phases.end },
-      ].map((phase) => (
-        <text
-          key={phase.label}
-          x={phase.x}
-          y={TIMELINE_Y + 22}
-          textAnchor="middle"
+          x={LEFT + 22}
+          y="251"
           fontSize="11"
           className="fill-current text-muted-foreground"
         >
-          {phase.label}
+          {t.admin}
         </text>
-      ))}
-
-      {/* Everything that happens on its own. */}
-      <text
-        x={LEFT}
-        y="186"
-        fontSize="11"
-        className="fill-current text-muted-foreground"
-      >
-        {t.automatic}
-      </text>
-
-      <Envelope x={SETUP_END + 4} y={202} />
-      <text
-        x={SETUP_END + 34}
-        y="214"
-        fontSize="12"
-        className="fill-current text-foreground"
-      >
-        {t.invitation}
-      </text>
-
-      {[330, 362, 394].map((x) => (
-        <Envelope key={x} x={x} y={202} />
-      ))}
-      <text
-        x="426"
-        y="214"
-        fontSize="12"
-        className="fill-current text-foreground"
-      >
-        {t.reminders}
-      </text>
-
-      <Envelope x={RUN_END + 4} y={202} />
-      <text
-        x={RUN_END + 34}
-        y="214"
-        fontSize="12"
-        className="fill-current text-foreground"
-      >
-        {t.results}
-      </text>
-
-      <text
-        x={LEFT}
-        y="270"
-        fontSize="11"
-        className="fill-current text-muted-foreground"
-      >
-        {t.entries}
-      </text>
-      {entries.map((bar) => (
         <rect
-          key={bar.x}
-          x={bar.x}
-          y={274 - bar.h}
-          width="12"
-          height={bar.h}
-          rx="1"
-          className="fill-current text-muted-foreground"
+          x={LEFT + 140}
+          y="240"
+          width="14"
+          height="14"
+          rx="3"
+          stroke="currentColor"
+          strokeWidth="1.25"
+          className="fill-none text-muted-foreground"
         />
-      ))}
+        <text
+          x={LEFT + 162}
+          y="251"
+          fontSize="11"
+          className="fill-current text-muted-foreground"
+        >
+          {t.automatic}
+        </text>
+      </g>
     </svg>
   );
 }

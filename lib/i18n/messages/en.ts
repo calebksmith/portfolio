@@ -359,18 +359,18 @@ export const en = {
     },
     challengeRun: {
       label:
-        "One challenge, start to finish. The admin sets it up and publishes it, and the invitation goes out. While it runs, reminder emails go out on their own and raffle entries build up per participant. When it ends, the admin draws the raffle winner and marks it complete, and a results email names the winner.",
+        "One challenge, start to finish. At the start, the admin sets it up and publishes it, and the invitation is emailed on its own. While it runs, reminders are emailed and raffle entries add up, with nothing for the admin to do. At the end, the admin draws the raffle winner and marks it complete, and the results are emailed.",
       title: "ONE CHALLENGE, START TO FINISH",
-      admin: "Admin does",
+      admin: "Admin does it",
       automatic: "Happens on its own",
-      phases: { setup: "Setup", run: "Challenge runs", end: "Ends" },
+      phases: { setup: "Start", run: "While it runs", end: "End" },
       setup: "Set up and publish",
       draw: "Draw the raffle winner",
       complete: "Mark complete",
-      invitation: "Invitation",
-      reminders: "Reminders",
-      results: "Results, with winner",
-      entries: "Raffle entries, per participant",
+      invitation: "Invitation emailed",
+      reminders: "Reminders emailed",
+      results: "Results emailed",
+      entries: "Raffle entries add up",
     },
     pageByPage: {
       label:
