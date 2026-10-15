@@ -31,7 +31,7 @@ export function SiteFooter({
       className={cn("mt-auto px-6 pb-12 pt-10 sm:px-10", className)}
       {...props}
     >
-      <p className="text-center text-xs text-muted-foreground">{children}</p>
+      <p className="text-xs text-muted-foreground">{children}</p>
     </footer>
   );
 }

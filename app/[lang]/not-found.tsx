@@ -29,7 +29,7 @@ export default async function NotFound() {
     <main
       id="main"
       tabIndex={-1}
-      className="mx-auto flex w-full max-w-page flex-1 flex-col justify-center px-6 py-20 sm:px-10"
+      className="flex w-full max-w-page flex-1 flex-col justify-center px-6 py-20 sm:px-10"
     >
       <Eyebrow tone="primary">{t.eyebrow}</Eyebrow>
 

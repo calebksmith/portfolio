@@ -139,11 +139,7 @@ export async function Bento() {
        paragraphs below, not a wrapper around everything. A container sets one
        width for prose, grids, and headings alike, which is one decision doing
        three jobs. */
-    <main
-      id="main"
-      tabIndex={-1}
-      className="mx-auto w-full max-w-page px-6 sm:px-10"
-    >
+    <main id="main" tabIndex={-1} className="w-full max-w-page px-6 sm:px-10">
       <HeroRevealProvider>
         {/*
           The first screen, exactly: the sticky header plus this and nothing
@@ -222,7 +218,7 @@ export async function Bento() {
           most likely to want the résumé. */}
       <section
         aria-labelledby="more-about-me"
-        className="border-t border-border py-20 text-center"
+        className="border-t border-border py-20"
       >
         <h2
           id="more-about-me"
@@ -235,7 +231,7 @@ export async function Bento() {
           <p
             key={index}
             className={cn(
-              "mx-auto max-w-[58ch] text-pretty text-muted-foreground",
+              "max-w-[58ch] text-pretty text-muted-foreground",
               index === 0 ? "mt-4" : "mt-3",
             )}
           >
@@ -246,7 +242,7 @@ export async function Bento() {
         {/* Names the destination rather than its size. "The long version" was
             the other half of the TL;DR joke, but it prices the click — telling
             someone a page is long is a reason not to open it. */}
-        <div className="mt-8 flex justify-center">
+        <div className="mt-8 flex">
           <Button asChild size="lg">
             <Link href={localizePath(locale, "/experience")}>
               {t.home.tldr.cta}

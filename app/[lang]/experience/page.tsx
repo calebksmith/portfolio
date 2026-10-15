@@ -49,7 +49,7 @@ export default async function ExperiencePage({
     <main
       id="main"
       tabIndex={-1}
-      className="mx-auto w-full max-w-page px-6 py-14 sm:px-10 print:px-0 print:py-0"
+      className="w-full max-w-page px-6 py-14 sm:px-10 print:px-0 print:py-0"
     >
       <header className="border-b border-border pb-8">
         <div className="flex flex-wrap items-start justify-between gap-4">

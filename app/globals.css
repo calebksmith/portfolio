@@ -99,10 +99,10 @@
   --ck-measure: 62ch;
   --ck-measure-wide: 75ch;
 
-  /* The page container. Content ran to the window's full width, which on a wide
-     monitor left every page hugging the left gutter with a field of empty space
-     to the right — the measure capped the line length but nothing centred it,
-     so the result read as unfinished rather than as restraint.
+  /* The page container: how far content runs, not where it sits. Pages are
+     left-aligned on the header's gutter, so the logo, every heading, and every
+     figure share one left edge at any window width. Centring the container
+     was tried and moved that edge on wide screens, away from the navigation.
 
      72rem holds a six-column bento at a sensible card size and leaves prose at
      roughly two thirds of it, which is the relationship a page wants: headings
