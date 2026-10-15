@@ -130,7 +130,8 @@ function Segment({ children }: SegmentProps) {
  * control sits over the column it switches rather than at the page's edge.
  *
  * `width="breakout"` lets the views span the content width, so a figure in
- * one can too. The control and the prose stay at the measure either way.
+ * one can too, and the control moves to the content's edge with them. The
+ * prose inside stays at the measure.
  */
 function Segments({
   title,
@@ -169,7 +170,7 @@ function Segments({
         "mt-10",
         width === "breakout" ? "max-w-none" : "max-w-measure-wide",
       )}
-      barClassName="max-w-measure-wide"
+      barClassName={width === "breakout" ? undefined : "max-w-measure-wide"}
       header={
         <Eyebrow asChild>
           <h3>{title}</h3>
@@ -184,8 +185,23 @@ function Segments({
  * set here rather than in the library component, which leaves layout to its
  * caller.
  */
-function Stats({ children }: { children: ReactNode }) {
-  return <StatGroup className="mt-6 max-w-measure-wide">{children}</StatGroup>;
+function Stats({
+  width = "inline",
+  children,
+}: {
+  width?: "inline" | "breakout";
+  children: ReactNode;
+}) {
+  return (
+    <StatGroup
+      className={cn(
+        "mt-6",
+        width === "breakout" ? "max-w-none" : "max-w-measure-wide",
+      )}
+    >
+      {children}
+    </StatGroup>
+  );
 }
 
 /**
