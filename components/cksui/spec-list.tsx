@@ -9,12 +9,24 @@ import { Eyebrow } from "./eyebrow";
  * A <dl> rather than a table, because these are term/description pairs and not
  * tabular data — a screen reader should announce "Focus, design systems", not
  * "row 1, column 1".
+ *
+ * `ruled={false}` drops the hairlines, for a short list that sits in a
+ * header where spacing already separates the rows.
  */
-export function SpecList({ className, ...props }: ComponentProps<"dl">) {
+export function SpecList({
+  ruled = true,
+  className,
+  ...props
+}: ComponentProps<"dl"> & { ruled?: boolean }) {
   return (
     <dl
       data-slot="spec-list"
-      className={cn("border-t border-border", className)}
+      className={cn(
+        ruled
+          ? "border-t border-border"
+          : "[&>[data-slot=spec-row]]:border-b-0 [&>[data-slot=spec-row]]:py-2",
+        className,
+      )}
       {...props}
     />
   );

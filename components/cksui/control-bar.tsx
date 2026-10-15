@@ -40,8 +40,10 @@ export function ControlBar({
         // second barrier stacked on it. Grouping comes from proximity and the
         // shared hover treatment, which is enough for a handful of controls.
         "flex items-stretch gap-1",
+        // No padding: the toggles sit flush inside the hairline, so the
+        // control is no taller than its buttons plus the border.
         variant === "segmented" &&
-          "rounded-md border border-border bg-background p-0.5 text-foreground",
+          "gap-2 rounded-md border border-border bg-background text-foreground",
         className,
       )}
       {...props}
@@ -161,7 +163,12 @@ export function ControlToggle({
       className={cn(
         CONTROL_ITEM,
         pressed ? CONTROL_ACTIVE : CONTROL_REST,
-        iconOnly && "min-w-tap px-0 sm:px-0",
+        // Drawn at 36px so it sits with the page's type rather than towering
+        // over it, but still a 44px target: the invisible `after` box grows
+        // the hit area by 4px on every side. The pair is 8px apart, so the
+        // two targets meet in the middle without overlapping.
+        iconOnly &&
+          "relative size-9 min-h-0 px-0 after:absolute after:-inset-1 sm:px-0",
         className,
       )}
       {...props}

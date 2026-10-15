@@ -148,7 +148,7 @@ export default async function CaseStudyPage({
                 first value even when the links are tap-height or wrap; the
                 label column is widened so "Related case studies" stays on one
                 line. */}
-            <SpecList className="mt-8">
+            <SpecList ruled={false} className="mt-6">
               {study.stack.length > 0 ? (
                 <SpecRow
                   label={t.caseStudy.stack}
