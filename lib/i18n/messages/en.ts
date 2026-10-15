@@ -134,6 +134,8 @@ export const en = {
         "A monitor and a phone showing the same state. Each screen holds its space from its own ratio, so nothing moves as the images load.",
       "gated-screens":
         "What someone with an access link sees in a gated pair, with the light and dark switch. Only the chosen mode’s images are requested.",
+      medal:
+        "The case study’s medal: outline and glyph both differ, in the primary pair. Decorative; the name beside it is what’s read.",
       icon: "Decorative: aria-hidden, in currentColor. The control or link around it carries the name.",
       "page-title":
         "The page’s one <h1>, in the display face at a size that scales with the window.",
@@ -918,6 +920,16 @@ export const en = {
           "A new icon is a path added to the set, not another copy of the wrapper.",
         ],
         controls: { name: "Name" },
+      },
+      medal: {
+        name: "Medal",
+        description:
+          "One per case study, so a list of them can be told apart before it’s read. Each differs in outline and glyph at once, and all are drawn in the primary pair, so they follow the theme.",
+        notes: [
+          "A case study names its medal in its frontmatter, and no two share one.",
+          "Decorative: the name beside it carries the meaning.",
+        ],
+        controls: { name: "Medal", size: "Size" },
       },
       "device-figure": {
         name: "Device figure",

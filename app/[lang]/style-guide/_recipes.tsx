@@ -19,6 +19,7 @@ import {
   Eyebrow,
   Figure,
   Icon,
+  Medal,
   Monogram,
   PageTitle,
   PrintButton,
@@ -88,6 +89,7 @@ const REGISTRY: Record<string, ElementType> = {
   Eyebrow,
   Figure,
   Icon,
+  Medal,
   Monogram,
   PageTitle,
   PrintButton,
@@ -634,6 +636,36 @@ export function makeRecipes(copy: RecipeCopy): Recipe[] {
       build: (choices) => ({
         tag: "Icon",
         props: { name: choices.name, className: "size-6" },
+      }),
+    },
+    {
+      id: "medal",
+      slot: "medal",
+      ...text(copy.medal),
+      controls: [
+        {
+          name: "name",
+          label: copy.medal.controls.name,
+          values: [
+            "podium",
+            "checklist",
+            "layers",
+            "playlist",
+            "key",
+            "components",
+            "rails",
+            "bell",
+          ],
+        },
+        {
+          name: "size",
+          label: copy.medal.controls.size,
+          values: ["lg", "md", "sm"],
+        },
+      ],
+      build: (choices) => ({
+        tag: "Medal",
+        props: { name: choices.name, size: choices.size },
       }),
     },
     {

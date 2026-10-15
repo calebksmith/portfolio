@@ -26,6 +26,7 @@ export { DeviceFigure } from "./device-figure";
 export { Figure } from "./figure";
 export { Icon, type IconName } from "./icon";
 export { Inspector, type InspectorLabels } from "./inspector";
+export { Medal, MEDALS, type MedalName } from "./medal";
 export { Monogram } from "./monogram";
 export { PageTitle } from "./page-title";
 export { PrintButton } from "./print-button";

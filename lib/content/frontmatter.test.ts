@@ -115,7 +115,17 @@ describe("toCaseStudy", () => {
     business: "B",
     area: "identity",
     stack: ["A"],
+    medal: "key",
   };
+
+  it("needs a medal it knows how to draw", () => {
+    expect(() =>
+      toCaseStudy("f.mdx", { ...data, medal: "trophy" }, "b"),
+    ).toThrow(/medal must be one of/);
+    expect(() => toCaseStudy("f.mdx", { ...data, medal: "" }, "b")).toThrow(
+      /medal/,
+    );
+  });
 
   it("derives the slug from the filename", () => {
     expect(toCaseStudy("platform-rebuild.mdx", data, "body").slug).toBe(

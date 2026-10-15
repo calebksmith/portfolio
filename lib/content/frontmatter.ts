@@ -7,6 +7,8 @@
  * that nothing can exercise is a hand-written parser nobody should trust.
  */
 
+import { MEDALS, type MedalName } from "@/components/cksui/medal";
+
 /**
  * Where a case study sits in the Vimocity ecosystem: the people it serves, or
  * the layers everyone shares. Different people use Vimocity for different jobs,
@@ -62,6 +64,11 @@ export type CaseStudy = {
    * page. Optional: not every case study has a number to show.
    */
   impact?: string;
+  /**
+   * Its medal, so it can be told apart from the others at a glance: one of
+   * cksUI's `MEDALS`. Required, and no two case studies share one.
+   */
+  medal: MedalName;
   /** The MDX body, compiled at render time by components/mdx.tsx. */
   body: string;
 };
@@ -141,6 +148,12 @@ export function toCaseStudy(
       `${file}: area must be one of ${AREAS.join(", ")} — got "${area}"`,
     );
   }
+  const medal = required(data, "medal", file);
+  if (!(medal in MEDALS)) {
+    throw new Error(
+      `${file}: medal must be one of ${Object.keys(MEDALS).join(", ")} — got "${medal}"`,
+    );
+  }
   const order = Number(data.order ?? Number.MAX_SAFE_INTEGER);
   const impact = data.impact;
 
@@ -188,6 +201,7 @@ export function toCaseStudy(
     impact: typeof impact === "string" && impact ? impact : undefined,
     order: Number.isFinite(order) ? order : Number.MAX_SAFE_INTEGER,
     draft: draft === "true",
+    medal: medal as MedalName,
     body,
   } satisfies CaseStudy;
 }

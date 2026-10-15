@@ -21,6 +21,7 @@ import {
   ControlToggle,
 } from "./control-bar";
 import { Icon } from "./icon";
+import { Medal, type MedalName } from "./medal";
 import { Monogram } from "./monogram";
 import { cn } from "./lib/cn";
 import { useHtmlAttribute } from "./lib/use-html-attribute";
@@ -74,7 +75,12 @@ function closeOnFollow(id: string) {
 }
 
 /** A case study as the header needs it: `name` for crumbs, both for the menu. */
-export type WorkItem = { slug: string; name: string; descriptor: string };
+export type WorkItem = {
+  slug: string;
+  name: string;
+  descriptor: string;
+  medal: MedalName;
+};
 
 /** Every visible string, passed in — this is a library component. */
 export type SiteHeaderLabels = Messages["header"];
@@ -327,7 +333,8 @@ function WorkMenu({
                       : "hover:bg-muted hover:text-muted-foreground",
                   )}
                 >
-                  <span>
+                  <Medal name={item.medal} size="sm" />
+                  <span className="flex-1">
                     <span className="block">{item.name}</span>
                     <span className="sr-only">: </span>
                     <span className="block text-xs text-muted-foreground">

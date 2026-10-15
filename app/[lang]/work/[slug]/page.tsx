@@ -6,9 +6,10 @@ import { ViewTransition } from "react";
 import {
   Badge,
   Eyebrow,
+  Medal,
+  PageTitle,
   SpecList,
   SpecRow,
-  PageTitle,
 } from "@/components/cksui";
 import { Mdx } from "@/components/mdx";
 import { getCaseStudies, getCaseStudy } from "@/lib/content/work";
@@ -87,13 +88,18 @@ export default async function CaseStudyPage({
               subheading; the summary sits in the page description instead,
               where search results and link previews read it. */}
           <header>
-            <PageTitle>
-              {study.name}
-              <span className="sr-only">: </span>
-              <span className="mt-2 block text-xl font-normal tracking-[-0.01em] text-muted-foreground sm:text-2xl">
-                {study.descriptor}
-              </span>
-            </PageTitle>
+            {/* The medal sits beside the title like an award beside a name:
+                the same one this study wears on its card, at full size. */}
+            <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
+              <Medal name={study.medal} size="lg" />
+              <PageTitle>
+                {study.name}
+                <span className="sr-only">: </span>
+                <span className="mt-2 block text-xl font-normal tracking-[-0.01em] text-muted-foreground sm:text-2xl">
+                  {study.descriptor}
+                </span>
+              </PageTitle>
+            </div>
 
             {/* The kind of work and when. The key result isn't a chip here:
                 it gets its own row below, where it can be read as a result. */}

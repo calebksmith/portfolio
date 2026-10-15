@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { Eyebrow, Icon, cn } from "@/components/cksui";
+import { Eyebrow, Icon, Medal, cn } from "@/components/cksui";
 import type { CaseStudy } from "@/lib/content/work";
 import { localizePath } from "@/lib/i18n/config";
 import { getLocale, getMessages } from "@/lib/i18n/server";
@@ -17,6 +17,9 @@ import { CaseStudyChips } from "./case-study-chips";
  * sentence restated the descriptor, where chips answer the questions a reader
  * is actually asking ("did it work? what did he do? how recent?") at a glance.
  * The summary, role, and stack are on the case study page.
+ *
+ * Its medal comes first, so a grid of cards can be told apart before any of
+ * them is read.
  *
  * The arrow is the only call to action, and it is an icon: the whole card is
  * the link, so a label would only repeat what the card already is.
@@ -43,6 +46,7 @@ export async function CaseStudyCard({
   impact,
   role,
   year,
+  medal,
 }: CaseStudy & {
   /** The card's heading level, so the page outline stays in order. */
   as?: "h3" | "h4";
@@ -70,6 +74,10 @@ export async function CaseStudyCard({
         name="arrow-right"
         className="absolute top-6 right-6 text-primary transition-transform group-hover:translate-x-0.5"
       />
+
+      {/* The medal first: in a grid of cards it's what tells them apart
+          before any word is read. */}
+      <Medal name={medal} size="md" />
 
       <Eyebrow className="pr-8">{areas[area]}</Eyebrow>
 
