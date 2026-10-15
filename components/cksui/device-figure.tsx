@@ -17,8 +17,9 @@ import { cn } from "./lib/cn";
  * the room it needs.
  *
  * `overlay` sits over the whole composition. The locked version of a gated
- * figure uses it for the request for access. `controls` sit above it, at the
- * right, for anything that acts on the screens, like a light and dark switch.
+ * figure uses it for the request for access. `controls` sit on the caption's
+ * row, at the right, for anything that acts on the screens, like a light and
+ * dark switch.
  */
 export function DeviceFigure({
   desktop,
@@ -47,9 +48,6 @@ export function DeviceFigure({
       data-slot="device-figure"
       className={cn("mt-8 max-w-none", className)}
     >
-      {controls ? (
-        <div className="mb-3 flex justify-end">{controls}</div>
-      ) : null}
       <div className="relative flex flex-col items-center gap-6 sm:flex-row sm:items-end sm:gap-0">
         <div data-slot="device-desktop" className="w-full sm:w-4/5">
           <div className="rounded-screen border border-input bg-muted p-2 text-muted-foreground shadow-lift">
@@ -89,9 +87,15 @@ export function DeviceFigure({
         {overlay}
       </div>
 
-      <figcaption className="mt-3 max-w-measure text-sm text-pretty text-muted-foreground">
-        {caption}
-      </figcaption>
+      {/* The caption and anything that acts on the figure share one row:
+          the words at the left, the controls at the far right, in the space
+          the caption's measure leaves. They stack on a narrow screen. */}
+      <div className="mt-3 flex flex-col-reverse gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <figcaption className="max-w-measure text-sm text-pretty text-muted-foreground">
+          {caption}
+        </figcaption>
+        {controls ? <div className="shrink-0">{controls}</div> : null}
+      </div>
     </figure>
   );
 }

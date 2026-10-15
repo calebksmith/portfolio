@@ -39,7 +39,7 @@ export function Figure({
    * Leave it out only for content that has its size on first paint.
    */
   ratio?: string;
-  /** Above the frame, at the right: anything that acts on what's in it. */
+  /** On the caption's row, at the right: anything that acts on the figure. */
   controls?: ReactNode;
 }) {
   return (
@@ -52,9 +52,6 @@ export function Figure({
       )}
       {...props}
     >
-      {controls ? (
-        <div className="mb-3 flex justify-end">{controls}</div>
-      ) : null}
       <div
         style={ratio ? { aspectRatio: ratio } : undefined}
         className={cn(
@@ -65,9 +62,15 @@ export function Figure({
         {children}
       </div>
 
-      <figcaption className="mt-3 max-w-measure text-sm text-pretty text-muted-foreground">
-        {caption}
-      </figcaption>
+      {/* The caption and anything that acts on the figure share one row:
+          the words at the left, the controls at the far right, in the space
+          the caption's measure leaves. They stack on a narrow screen. */}
+      <div className="mt-3 flex flex-col-reverse gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <figcaption className="max-w-measure text-sm text-pretty text-muted-foreground">
+          {caption}
+        </figcaption>
+        {controls ? <div className="shrink-0">{controls}</div> : null}
+      </div>
     </figure>
   );
 }
