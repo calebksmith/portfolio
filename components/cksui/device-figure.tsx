@@ -58,10 +58,10 @@ export function DeviceFigure({
       ) : null}
       <div className="relative flex flex-col items-center gap-6 sm:flex-row sm:items-end sm:gap-0">
         <div data-slot="device-desktop" className="w-full sm:w-4/5">
-          <div className="rounded-screen border border-input bg-muted p-2 text-muted-foreground shadow-lift">
+          <div className="rounded-monitor border border-input bg-muted p-(--ck-device-bezel) text-muted-foreground shadow-lift">
             <div
               style={{ aspectRatio: desktopRatio }}
-              className="overflow-hidden rounded-md bg-card text-card-foreground"
+              className="overflow-hidden rounded-monitor-screen bg-card text-card-foreground"
             >
               {desktop}
             </div>
@@ -82,10 +82,10 @@ export function DeviceFigure({
           data-slot="device-phone"
           className="relative w-1/2 max-w-xs sm:-ml-12 sm:w-1/4 lg:w-1/5"
         >
-          <div className="rounded-phone border border-input bg-muted p-2 text-muted-foreground shadow-lift">
+          <div className="rounded-phone border border-input bg-muted p-(--ck-device-bezel) text-muted-foreground shadow-lift">
             <div
               style={{ aspectRatio: phoneRatio }}
-              className="overflow-hidden rounded-screen bg-card text-card-foreground"
+              className="overflow-hidden rounded-phone-screen bg-card text-card-foreground"
             >
               {phone}
             </div>
