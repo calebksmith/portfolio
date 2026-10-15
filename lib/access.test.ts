@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { GATED_PATH, mintToken, verifyToken } from "./access";
+import { GATED_PATH, mintToken, readToken, verifyToken } from "./access";
 
 /**
  * The access links are the only thing between the gated screenshots and the
@@ -84,5 +84,23 @@ describe("GATED_PATH", () => {
     "/challenges/choose-team.webp",
   ])("refuses %j", (path) => {
     expect(GATED_PATH.test(path)).toBe(false);
+  });
+});
+
+describe("readToken", () => {
+  it("says whether a genuine token is active, expired or revoked", () => {
+    const token = mintToken(SECRET, "Jane", 30, NOW);
+    const id = verifyToken(token, SECRET, [], NOW)!.id;
+    expect(readToken(token, SECRET, [], NOW)?.state).toBe("active");
+    expect(readToken(token, SECRET, [], NOW + 31 * 864e5)?.state).toBe(
+      "expired",
+    );
+    expect(readToken(token, SECRET, [id], NOW)?.state).toBe("revoked");
+  });
+
+  it("knows nothing about a token that isn't ours", () => {
+    const token = mintToken("another-secret", "Jane", 30, NOW);
+    expect(readToken(token, SECRET, [], NOW)).toBeNull();
+    expect(readToken("not-a-token", SECRET, [], NOW)).toBeNull();
   });
 });

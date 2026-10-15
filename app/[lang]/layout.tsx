@@ -13,6 +13,7 @@ import { LOCALES, isLocale } from "@/lib/i18n/config";
 import { messages } from "@/lib/i18n/messages";
 import { site } from "@/lib/site";
 
+import { PageViewBeacon } from "./_components/page-view-beacon";
 import { SmoothAnchors } from "./_components/smooth-anchors";
 
 /** The footer's two links: contact, and the public source. Tap-sized. */
@@ -114,6 +115,7 @@ export default async function SiteLayout({
 
         <Inspector labels={t.inspector} />
       </div>
+      <PageViewBeacon />
     </Document>
   );
 }

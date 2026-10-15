@@ -1,8 +1,10 @@
-import { NextResponse, type NextRequest } from "next/server";
+import { after, NextResponse, type NextRequest } from "next/server";
 
-import { verifyToken } from "@/lib/access";
+import { readToken } from "@/lib/access";
 import { ACCESS_COOKIE, ACCESS_FLAG_COOKIE } from "@/lib/access-cookies";
 import { env } from "@/lib/env";
+import { recordAccessLinkOpen } from "@/lib/repositories/analytics";
+import { isBot, visitorFromHeaders } from "@/lib/visitor";
 
 /**
  * Opening a personal access link.
@@ -30,13 +32,28 @@ export async function GET(
   response.headers.set("Referrer-Policy", "no-referrer");
   response.headers.set("X-Robots-Tag", "noindex");
 
-  let grant = null;
+  let read = null;
   try {
-    grant = verifyToken(token, env.accessSecret, env.accessRevoked);
+    read = readToken(token, env.accessSecret, env.accessRevoked);
   } catch {
     // No secret configured: no link can be valid.
   }
-  if (!grant) return response;
+  if (!read) return response;
+
+  // Counted after the redirect is sent, including opens of a link that has
+  // run out. Link previews in chat apps and mail scanners fetch it too; they
+  // aren't someone opening it, so they aren't counted. See ADR 0008.
+  const salt = process.env.VISITOR_HASH_SALT;
+  if (salt && !isBot(request.headers.get("user-agent"))) {
+    const visitor = visitorFromHeaders(request.headers, salt);
+    const { grant, state } = read;
+    after(() =>
+      recordAccessLinkOpen({ ...visitor, linkId: grant.id, outcome: state }),
+    );
+  }
+
+  if (read.state !== "active") return response;
+  const { grant } = read;
 
   const cookie = {
     path: "/",
