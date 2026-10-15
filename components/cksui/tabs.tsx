@@ -28,6 +28,7 @@ export function Tabs({
   items,
   defaultValue,
   header,
+  barClassName,
   className,
 }: {
   /** Names the set of tabs for assistive technology. */
@@ -41,6 +42,8 @@ export function Tabs({
   defaultValue?: string;
   /** What the tabs are views of: shown beside the control. */
   header?: ReactNode;
+  /** The header and control row, e.g. held to a measure when the views are wider. */
+  barClassName?: string;
   className?: string;
 }) {
   const id = useId();
@@ -76,7 +79,12 @@ export function Tabs({
         </style>
       </noscript>
 
-      <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between lg:gap-10">
+      <div
+        className={cn(
+          "flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between lg:gap-10",
+          barClassName,
+        )}
+      >
         {header ? <div className="min-w-0">{header}</div> : null}
         <div
           role="tablist"

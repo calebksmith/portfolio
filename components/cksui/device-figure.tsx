@@ -74,7 +74,7 @@ export function DeviceFigure({
 
         <div
           data-slot="device-phone"
-          className="relative w-1/2 max-w-xs sm:-ml-12 sm:w-1/4"
+          className="relative w-1/2 max-w-xs sm:-ml-12 sm:w-1/4 lg:w-1/5"
         >
           <div className="rounded-phone border border-input bg-muted p-2 text-muted-foreground shadow-lift">
             <div
