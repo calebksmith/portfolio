@@ -67,10 +67,13 @@ export default async function CaseStudyPage({
        the real content arrives from below, rather than one popping in where
        the other was. */
     <ViewTransition enter="reveal-in" default="none">
+      {/* Left-aligned rather than centred: on a wide screen the content keeps
+          the header's gutter, so the page, the logo, and every heading share
+          one left edge. The max width still caps how far it runs. */}
       <main
         id="main"
         tabIndex={-1}
-        className="mx-auto w-full max-w-page px-6 py-14 sm:px-10"
+        className="w-full max-w-page px-6 py-14 sm:px-10"
       >
         <article>
           {/* The header answers, in order: what is it, did it work, and why it
